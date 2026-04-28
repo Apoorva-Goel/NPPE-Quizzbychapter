@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice — Chapter 3: Disciplinary Powers &amp; Procedures</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f6f3ee;--card:#fff;--border:#ddd5c8;
+  --ink:#1a1612;--muted:#6b6054;--accent:#b04a2f;--accent-light:#f4e8e3;
+  --accent2:#b8860b;--text:#1a1612;
+  --correct:#2e7d32;--correct-bg:#e8f5e9;--wrong:#c62828;--wrong-bg:#fce4ec;
+  --radius:10px;--shadow:0 2px 12px rgba(0,0,0,.06);
+  --font-body:'DM Sans',sans-serif;--font-head:'IBM Plex Serif',serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.6;min-height:100vh}
+
+/* HEADER */
+.hero{background:var(--ink);color:var(--bg);padding:2.5rem 1.5rem;text-align:center}
+.hero h1{font-family:var(--font-head);font-size:clamp(1.4rem,3.5vw,2rem);font-weight:600;letter-spacing:-.02em;margin-bottom:.35rem}
+.hero p{font-size:.95rem;color:#b5ad9e;max-width:640px;margin:0 auto}
+
+/* CONTROLS BAR */
+.controls{max-width:820px;margin:0 auto;padding:1rem 1.5rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between}
+.controls .pill{font-family:var(--font-body);font-size:.82rem;font-weight:600;padding:.45rem 1.1rem;border-radius:99px;border:2px solid var(--border);background:var(--card);cursor:pointer;transition:.2s}
+.controls .pill:hover{border-color:var(--accent);color:var(--accent)}
+.controls .pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.stats-group{display:flex;flex-wrap:wrap;gap:.85rem;align-items:center}
+.stat{font-size:.82rem;font-weight:600;color:var(--muted);white-space:nowrap}
+.stat b{font-family:var(--font-head);font-weight:600;color:var(--ink);margin-left:.25rem;display:inline-block;min-width:1ch}
+.score-label{font-size:.85rem;font-weight:600;color:var(--muted)}
+.progress-wrap{width:100%;height:6px;background:var(--border);border-radius:9px;overflow:hidden;margin-top:.25rem}
+.progress-bar{height:100%;background:var(--accent);border-radius:9px;transition:width .4s ease}
+
+/* QUESTION CARD */
+.container{max-width:820px;margin:0 auto;padding:0 1.5rem 3rem}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem 1.75rem 1.5rem;margin-bottom:1.25rem;box-shadow:var(--shadow);transition:border-color .3s}
+.q-card.answered-correct{border-color:var(--correct)}
+.q-card.answered-wrong{border-color:var(--wrong)}
+.q-num{font-family:var(--font-head);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.5rem}
+.q-text{font-size:1rem;font-weight:500;margin-bottom:1.1rem;line-height:1.55}
+.options{display:flex;flex-direction:column;gap:.55rem}
+.opt-btn{text-align:left;font-family:var(--font-body);font-size:.93rem;padding:.7rem 1rem;border:2px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;transition:.2s;line-height:1.45}
+.opt-btn:hover:not(.locked){border-color:var(--accent);background:var(--accent-light)}
+.opt-btn.selected{border-color:var(--accent);background:var(--accent-light);font-weight:600}
+.opt-btn.correct-reveal{border-color:var(--correct);background:var(--correct-bg);font-weight:600}
+.opt-btn.wrong-reveal{border-color:var(--wrong);background:var(--wrong-bg)}
+.opt-btn.locked{cursor:default}
+.explanation{margin-top:1rem;padding:1rem;border-radius:8px;font-size:.88rem;line-height:1.55;display:none}
+.explanation.show{display:block}
+.explanation.right{background:var(--correct-bg);color:var(--correct)}
+.explanation.wrong{background:var(--wrong-bg);color:var(--wrong)}
+
+/* SCOREBOARD */
+.scoreboard{max-width:820px;margin:0 auto;padding:2rem 1.5rem;text-align:center;display:none}
+.scoreboard h2{font-family:var(--font-head);font-size:1.6rem;margin-bottom:.5rem}
+.score-ring{width:160px;height:160px;margin:1.5rem auto}
+.score-ring svg{width:100%;height:100%}
+.score-ring text{font-family:var(--font-head);font-weight:700;fill:var(--ink)}
+.score-detail{font-size:.95rem;color:var(--muted);margin:.75rem 0}
+.btn-restart{font-family:var(--font-body);font-size:.95rem;font-weight:600;padding:.65rem 2rem;border:none;border-radius:99px;background:var(--accent);color:#fff;cursor:pointer;margin-top:1rem;transition:.2s}
+.btn-restart:hover{opacity:.85}
+
+/* NAV DOTS */
+.dot-nav{max-width:820px;margin:1rem auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;background:var(--card)}
+.dot.cur{border-color:var(--accent);color:var(--accent)}
+.dot.c{background:var(--correct-bg);border-color:var(--correct);color:var(--correct)}
+.dot.w{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong)}
+
+/* INTRO */
+.intro{max-width:820px;margin:0 auto;padding:.5rem 1.5rem 0;font-size:.88rem;color:var(--muted);line-height:1.55}
+.intro b{color:var(--ink)}
+
+/* CELEBRATION FX */
+#fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.float-pts{position:fixed;font-family:'DM Serif Display',serif;font-weight:700;font-size:1.7rem;color:var(--accent2);pointer-events:none;z-index:10000;text-shadow:0 2px 12px rgba(184,134,11,.6),0 0 24px rgba(251,191,36,.4);animation:floatUp 1.5s cubic-bezier(.2,.6,.3,1) forwards;white-space:nowrap}
+@keyframes floatUp{
+  0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+  18%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+  30%{transform:translate(-50%,-22px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-100px) scale(.95)}
+}
+.streak-fire{display:inline-block;animation:flameDance 1.4s ease-in-out infinite}
+@keyframes flameDance{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.12)}}
+.streak-stat.pulse b{animation:streakPulse .65s ease}
+@keyframes streakPulse{
+  0%,100%{transform:scale(1);color:var(--text)}
+  40%{transform:scale(1.45);color:var(--accent2);text-shadow:0 0 12px rgba(251,191,36,.6)}
+}
+.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{
+  10%,90%{transform:translateX(-2px)}
+  20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)}
+  40%,60%{transform:translateX(7px)}
+}
+.opt-btn.correct-reveal{animation:correctGlow 1s ease-out}
+@keyframes correctGlow{
+  0%{box-shadow:0 0 0 0 rgba(46,125,50,.7),0 0 30px 0 rgba(46,125,50,.4)}
+  60%{box-shadow:0 0 0 14px rgba(46,125,50,0),0 0 30px 8px rgba(46,125,50,.2)}
+  100%{box-shadow:0 0 0 0 rgba(46,125,50,0)}
+}
+.milestone-banner{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--accent) 0%,#2a5380 50%,var(--accent2) 100%);color:#fff;padding:1.4rem 2.6rem;border-radius:6px;font-family:'DM Serif Display',serif;font-size:1.7rem;text-align:center;z-index:10001;box-shadow:0 25px 70px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none;animation:bannerPop 2.4s cubic-bezier(.34,1.4,.64,1) forwards;border:1px solid rgba(251,191,36,.4)}
+.milestone-banner .small{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:.5rem;opacity:.9;color:#fde68a}
+@keyframes bannerPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}
+  28%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+  82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(.92) rotate(0)}
+}
+.streak-stat{transition:color .3s,text-shadow .3s}
+.streak-stat.hot b{color:var(--accent2);text-shadow:0 0 8px rgba(251,191,36,.5)}
+
+@media(max-width:600px){
+  .q-card{padding:1.25rem}
+  .hero{padding:1.75rem 1rem}
+  .stats-group{gap:.6rem}
+  .stat{font-size:.78rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>NPPE Practice Exam — Chapter 3</h1>
+  <p>Disciplinary Powers &amp; Procedures · 50 Questions</p>
+</div>
+
+<div class="controls" id="controls">
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+    <button class="pill active" onclick="setMode('practice')">Practice Mode</button>
+    <button class="pill" onclick="setMode('exam')">Exam Mode</button>
+    <button class="pill" onclick="shuffleAll()">Shuffle</button>
+    <button class="pill" onclick="resetAll()">Reset</button>
+  </div>
+  <div class="stats-group">
+    <span class="stat" id="pointsStat">Points <b id="points">0</b></span>
+    <span class="stat streak-stat" id="streakStat">Streak <span class="streak-fire">🔥</span> <b id="streak">0</b></span>
+    <span class="score-label" id="scoreLabel">0 / 50</span>
+  </div>
+</div>
+<div class="controls" style="padding-top:0"><div class="progress-wrap"><div class="progress-bar" id="progBar" style="width:0%"></div></div></div>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="intro">
+  <b>How to use this exam.</b> Click an answer to lock it in — correct picks turn green and trigger fireworks; wrong picks turn red. Each correct answer earns 10 points, plus a streak bonus (+2 per consecutive correct, capped at +20). Hit streaks of 5, 10, or 20 for milestone celebrations. Your progress, points, and streak save automatically in this browser. The NPPE typically requires roughly 65% to pass — aim for 80%+ in practice.
+</div>
+
+<div class="dot-nav" id="dotNav"></div>
+
+<div class="container" id="quizArea"></div>
+<div class="scoreboard" id="scoreboard">
+  <h2 id="sbTitle"></h2>
+  <div class="score-ring" id="scoreRing"></div>
+  <p class="score-detail" id="sbDetail"></p>
+  <button class="btn-restart" onclick="restart()">Try Again</button>
+</div>
+
+<script>
+const DATA=[
+{q:"What is the PRIMARY purpose of self-regulating professions as described in Chapter 3?",o:["To increase the income of licensed practitioners","To protect the public by ensuring competence and disciplining unethical practitioners","To limit the number of practitioners in the field","To promote competition among practitioners"],a:1,e:"Self-regulating professions protect the public by ensuring practitioners are competent and by disciplining those who prove to be unethical or inept."},
+{q:"Which of the following is an offence under a typical engineering/geoscience licensing Act for an UNLICENSED person?",o:["Attending engineering lectures at a university","Reading engineering journals","Practising professional engineering without a licence","Applying for a licence to practise"],a:2,e:"Typical Acts state it is an offence for an unlicensed person to practise professional engineering or geoscience, use a protected title, or use a seal implying licensure."},
+{q:"In Ontario, what is the maximum fine for a FIRST offence of unlawfully using an engineering title?",o:["$5,000","$10,000","$25,000","$50,000"],a:1,e:"Ontario's fines are $10,000 for the first offence of unlawfully using an engineering title ($25,000 for a second offence)."},
+{q:"In Ontario, what is the maximum fine for practising engineering WITHOUT a licence on a first offence?",o:["$10,000","$15,000","$25,000","$50,000"],a:2,e:"Ontario's fine is $25,000 for practising without a licence on a first offence ($50,000 for a second offence)."},
+{q:"Who typically prosecutes unlicensed practitioners in court?",o:["The federal government","A lawyer hired by the Association","The complainant directly","The RCMP"],a:1,e:"With the help of a lawyer hired by the Association, the unlicensed offender is prosecuted in court. A trial judge presides."},
+{q:"Which of the following is NOT listed as a typical cause for disciplinary action under the licensing Acts?",o:["Professional misconduct","Negligence","Failure to pay Association fees","Physical or mental incapacity"],a:2,e:"The six listed causes are: professional misconduct, incompetence, negligence, breach of Code of Ethics, physical or mental incapacity, and conviction of a serious offence. Failure to pay fees is not among them."},
+{q:"How is 'professional misconduct' generally defined in Alberta's Act?",o:["Conduct that results in financial loss to clients","Any conduct detrimental to the best interests of the public or that harms the standing of the profession","Failure to attend professional development courses","Any technical error in an engineering design"],a:1,e:"Alberta's Act defines unprofessional conduct as any conduct detrimental to the best interests of the public or that harms the standing of the profession generally."},
+{q:"How does Ontario define 'professional misconduct' differently from most other provinces?",o:["Ontario does not define it at all","Ontario includes very specific acts such as signing or sealing a drawing not prepared or checked by the practitioner","Ontario leaves it entirely to court interpretation","Ontario only considers criminal convictions"],a:1,e:"Ontario's definition includes very specific acts, such as signing or sealing a final drawing not actually prepared or checked by the practitioner."},
+{q:"What does 'incompetence' mean in the context of disciplinary proceedings?",o:["Intentional wrongdoing","A temporary lapse in judgment during a single project","A lack of knowledge, skill, or judgment demonstrating unfitness to carry out professional duties","Disagreement with a client's preferred approach"],a:2,e:"Incompetence is a lack of knowledge, skill, or judgment that demonstrates the member is unfit to carry out duties as a professional."},
+{q:"What is the most common scenario leading to incompetence charges?",o:["A practitioner making a single arithmetic error","A practitioner entering a new field without adequate training","A practitioner disagreeing with a colleague","A practitioner charging excessive fees"],a:1,e:"Discipline cases often arise when people fully competent in one field are judged incompetent when they enter a new field without adequate training."},
+{q:"In the disciplinary context, what does 'negligence' primarily mean?",o:["Intentional fraud","Carelessness or work below accepted standard","Failure to collect fees","Disagreement with a building code"],a:1,e:"Negligence means carelessness, or carrying out work below the accepted standard or lacking adequate thoroughness."},
+{q:"In which provinces is a breach of the Code of Ethics specifically defined in the Act as equivalent to professional misconduct?",o:["Ontario, British Columbia, Manitoba, and Quebec","Alberta, New Brunswick, Newfoundland and Labrador, and Nova Scotia","Saskatchewan, Manitoba, and Prince Edward Island","All provinces treat it identically"],a:1,e:"In Alberta, New Brunswick, Newfoundland and Labrador, and Nova Scotia, breach of the Code of Ethics is specifically equivalent to professional misconduct under the Act."},
+{q:"How does the Ontario (PEO) Code of Ethics differ from all other provincial codes?",o:["It is the most strictly enforced","It is specifically NOT enforceable under the Act","It includes criminal law provisions","It applies only to consulting engineers"],a:1,e:"The PEO Code of Ethics is specifically not enforceable under the Act. Instead, a separate detailed definition of professional misconduct in Ontario Regulation 941 identifies the lower limit of acceptable behaviour."},
+{q:"Under what circumstances can a conviction of a criminal offence lead to disciplinary action by the Association?",o:["Any criminal conviction automatically leads to licence revocation","Only if the conviction is for a violent crime","If the nature of the offence affects the person's suitability to practise","Only if the conviction leads to imprisonment"],a:2,e:"Disciplinary action can be taken if a practitioner is convicted of an offence and the nature of the offence affects the person's suitability to practise."},
+{q:"Which of the following would NOT typically lead to disciplinary action based on 'conviction of an offence'?",o:["Fraud","Embezzlement","A minor traffic violation","Possession of child pornography"],a:2,e:"Convictions for minor offences such as traffic violations do not affect one's suitability to practise. Serious offences involving trust or ethics would."},
+{q:"How many stages are there in the typical disciplinary process described in the chapter?",o:["Two","Three","Four","Five"],a:1,e:"A serious complaint sets in motion a three-stage disciplinary process."},
+{q:"Which stage of the disciplinary process is generally open to the public?",o:["Stage 1 — Gathering Evidence","Stage 2 — Investigation and Review","Stage 3 — The Discipline Hearing","All stages are open to the public"],a:2,e:"The first two stages are confidential, but the third stage — a formal Disciplinary Hearing — is generally open to the public."},
+{q:"Why are the three stages of the disciplinary process carried out by three different groups of people?",o:["To reduce the workload on any single committee","To ensure complete impartiality","To speed up the process","Because each stage requires different legal expertise"],a:1,e:"To ensure complete impartiality, the three stages are normally carried out by three different groups. No one who participates at an earlier stage is permitted to participate in the final hearing and judgment."},
+{q:"During Stage 1, what happens if the evidence does not support a formal complaint?",o:["The complaint is automatically referred to the Discipline Committee","Staff may suggest other solutions such as civil court","The practitioner's licence is automatically suspended","The complainant is penalized"],a:1,e:"If the evidence does not support a formal complaint, staff may suggest other solutions. For example, commercial disputes should be resolved by the civil courts."},
+{q:"What is the role of the Investigative Committee (Stage 2)?",o:["To conduct the formal hearing","To review and evaluate every signed complaint","To assign penalties","To prosecute the accused in court"],a:1,e:"The Investigative Committee reviews and evaluates every signed complaint, deciding how the case should proceed."},
+{q:"Which of the following is NOT an option available to the Investigative Committee?",o:["Refer the complaint to the Discipline Committee for hearing","Dismiss a frivolous complaint","Revoke the practitioner's licence","Send a letter of advice to the practitioner"],a:2,e:"The Investigative Committee cannot revoke a licence. That power belongs to the Discipline Committee after a formal hearing."},
+{q:"What is a 'stipulated order' (also called a 'consent' or 'recommended' order)?",o:["An order issued by a criminal court","An order that results when the practitioner admits guilt and signs a voluntary undertaking","A court order requiring the Association to investigate","An automatic penalty for any complaint"],a:1,e:"When a practitioner admits guilt and signs a voluntary undertaking, the complaint is referred to the Discipline Committee for approval of the penalty via a stipulated/consent order."},
+{q:"In a formal Discipline Hearing (Stage 3), who acts as the prosecutor?",o:["The original complainant","A delegate from the Investigative Committee","A government-appointed judge","The Association's registrar"],a:1,e:"A delegate from the Investigative Committee acts as prosecutor and presents the case against the accused practitioner."},
+{q:"Is the accused practitioner entitled to legal counsel during a Discipline Hearing?",o:["No, legal counsel is not permitted","Yes, the practitioner is entitled to a lawyer or adviser","Only if the Association agrees to it","Only in criminal cases"],a:1,e:"In keeping with basic concepts of justice, the accused practitioner is entitled to legal counsel (a lawyer or adviser)."},
+{q:"Which of the following is a maximum penalty that a Discipline Committee can typically impose?",o:["Imprisonment of the practitioner","Revocation of the practitioner's licence","Requirement that the practitioner change employers","Public shaming through media advertising"],a:1,e:"The Discipline Committee can revoke the licence, suspend it, impose restrictions, require remedial education, require payment of costs, or impose fines."},
+{q:"What is the maximum fine the Discipline Committee can impose in Ontario?",o:["$2,500","$5,000","$10,000","$15,000"],a:1,e:"The maximum fine is $5,000 in Ontario. Saskatchewan has the highest at $15,000."},
+{q:"Which province allows the highest maximum fine by the Discipline Committee?",o:["Ontario ($5,000)","Alberta ($10,000)","Quebec ($12,500)","Saskatchewan ($15,000)"],a:3,e:"Saskatchewan permits the highest fine at $15,000, followed by Quebec at $12,500, Alberta at $10,000, and Ontario at $5,000."},
+{q:"What is Alternative Dispute Resolution (ADR) in the context of professional engineering?",o:["A criminal court proceeding","A confidential mediated negotiation to resolve disputes","A method of bypassing the disciplinary process entirely","An alternative to licensing examinations"],a:1,e:"ADR involves a confidential mediated negotiation that may lead to a solution satisfactory to all concerned, unlike civil courts or disciplinary hearings which usually result in win-lose outcomes."},
+{q:"What happens if mediation during ADR reveals evidence of professional misconduct?",o:["The mediation continues regardless","The ADR stops and a formal complaint is considered","The mediator issues a penalty directly","The case is automatically dismissed"],a:1,e:"If the mediation reveals evidence of professional misconduct, the ADR stops, and a formal complaint is considered in order to protect the public interest."},
+{q:"In what capacity does Ontario (PEO) specifically establish a committee to resolve fee disputes?",o:["The Fees Mediation Committee","The Financial Review Board","The Billing Arbitration Panel","The Cost Recovery Committee"],a:0,e:"The Ontario Professional Engineers Act specifically establishes a Fees Mediation Committee with the power to mediate and arbitrate fee disputes."},
+{q:"Approximately how many formal complaints does PEO receive per year?",o:["Around 10","Around 70","Around 500","Around 1,000"],a:1,e:"PEO receives around 70 formal complaints per year, even though PEO has more than 85,000 licence and certificate holders."},
+{q:"Of those complaints received by PEO annually, approximately how many proceed to a formal Discipline Hearing?",o:["About 1 to 2","About 5 to 7","About 20 to 30","About 50"],a:1,e:"Only about five to seven complaints go to the Discipline Committee each year for a formal disciplinary hearing."},
+{q:"In the Elliot Lake mall collapse (Case History 3.1), what was the direct cause of the roof collapse?",o:["An earthquake","Excessive snow loading","Severe corrosion of a welded connection between a beam and column","A design error in the concrete deck"],a:2,e:"The failure was due to severe corrosion of a welded connection between a beam and a column, caused by salty water leaking into the roof for more than 30 years."},
+{q:"For how many years did the Algo Centre Mall roof leak before the collapse?",o:["About 5 years","About 15 years","About 30 years","About 50 years"],a:2,e:"Water leaked through cracks and expansion joints for more than 30 years since the mall's construction in 1979–80."},
+{q:"In the Elliot Lake case, what did Commissioner Bélanger conclude was the real story behind the collapse?",o:["Material failure due to defective steel","Human failure, not material failure","An unavoidable natural disaster","Inadequate building codes"],a:1,e:"Commissioner Bélanger concluded that the real story was one of human, not material, failure—ranging from apathy and neglect to greed and duplicity."},
+{q:"In the Elliot Lake case, what did the mall owners do when faced with significant repair bills?",o:["They immediately hired structural engineers to fix the problems","They chose cheap and ineffective repairs or attempted to sell the mall","They closed the mall to the public","They contacted the provincial government for assistance"],a:1,e:"Owners chose cheap and ineffective repairs or opted to sell the Mall when faced with significant repair bills, and actively concealed the parking deck's condition."},
+{q:"What happened to Robert Wood's engineering licence BEFORE the mall collapse?",o:["It was upgraded to a senior licence","It was suspended in November 2011 and revoked in 2012","It remained in good standing","He voluntarily surrendered it in 2013"],a:1,e:"Wood's licence was suspended in November 2011 and revoked in 2012, before the June 2012 collapse."},
+{q:"In the Elliot Lake case, what did Gregory Saunders do that led to his discipline by PEO?",o:["He designed the original faulty waterproofing system","He reviewed and signed Wood's report after a brief meeting without properly checking it","He forged Wood's engineering seal","He refused to inspect the building"],a:1,e:"Saunders reviewed and signed Wood's report after a 45-minute meeting but did not affix his engineering seal. Wood subsequently altered the report without Saunders' knowledge."},
+{q:"What was the outcome of Robert Wood's criminal trial for negligence causing death?",o:["He was convicted and imprisoned","He was acquitted due to insufficient evidence","He pleaded guilty","The charges were dropped before trial"],a:1,e:"Wood was acquitted of all charges on June 1, 2017, by Superior Court Justice Gareau, who cited insufficient evidence to convict him."},
+{q:"What program did PEO launch in March 2017 to monitor continuing professional development?",o:["The Professional Competence Assessment (PCA)","The Practice Evaluation and Knowledge (PEAK) program","The Continuing Education Requirements (CER) program","The Annual Technical Review (ATR)"],a:1,e:"The voluntary PEAK (Practice Evaluation and Knowledge) program was launched in March 2017 to monitor the continuing professional development of Ontario engineers."},
+{q:"In Case History 3.2, what was the issue with the Microsoft Certified Software Engineer (MCSE) title in Canada?",o:["MCSE holders were practising structural engineering","The term 'engineer' is restricted to licensed professionals under Canadian law","Microsoft refused to offer the course in Canada","MCSE holders were charging engineering fees"],a:1,e:"Canadian laws clearly restrict the term 'engineer' to licensed professional engineers. The MCSE title contravened this restriction."},
+{q:"Which province prosecuted Microsoft Canada over the MCSE title?",o:["Ontario","British Columbia","Alberta","Quebec"],a:3,e:"The Ordre des ingénieurs du Québec (OIQ) filed penal proceedings against Microsoft Canada."},
+{q:"What was the outcome of the Quebec prosecution of Microsoft Canada?",o:["Microsoft was found not guilty","The court ruled Microsoft contravened the professional code; a small fine was levied","The case was dismissed","Microsoft agreed to stop offering the course in Canada"],a:1,e:"Judge Claude Millette ruled that Microsoft Canada contravened a provincial professional code by using the word 'engineer.' A small fine was levied. Microsoft's appeal was also rejected."},
+{q:"In Case History 3.3, what happened when Engineer Kappa's sealed tank design was constructed?",o:["The tank performed flawlessly","The tank failed catastrophically when filled with water","The tank leaked slowly over several years","The tank was never constructed"],a:1,e:"When the huge tank was filled with water, it was unable to resist the hydrostatic forces and failed catastrophically."},
+{q:"What key information was MISSING from Engineer Kappa's sealed drawings?",o:["The client's name","Code/standard references, weld sizes, material specs, seismic loads, and other basic details","The colour specifications","The manufacturing location"],a:1,e:"Missing information included code or standard for design, band spacing dimensions, strut locations, weld sizes, material specs, and seismic/wind load data."},
+{q:"What penalty was ultimately imposed on Engineer Kappa after he failed to meet the Discipline Committee's requirements?",o:["A $500 fine","A written warning","Indefinite suspension of his membership (licence)","A one-week suspension"],a:2,e:"Kappa failed to meet some requirements, and in 2005, APEGBC suspended his membership (licence) indefinitely."},
+{q:"In Case History 3.4, what was Engineer Omega's main failing?",o:["He falsified data to benefit his client","He practised outside his area of competence without adequate training","He refused to write reports","He deliberately used incorrect units to save time"],a:1,e:"Engineer Omega had only minimal experience with conductivity measurements, no training in the equipment, and lacked the experience to ensure valid data."},
+{q:"In Case History 3.5, what did Engineer Alpha do that constituted a breach of the Code of Ethics?",o:["He leaked proprietary technology to a competitor","He used confidential information from a merger meeting to conduct insider trading","He refused to evaluate Company B's reserves","He overcharged Company A for his services"],a:1,e:"Engineer Alpha used confidential knowledge from a merger meeting to purchase shares, making a profit of approximately $28,000 through illegal insider trading."},
+{q:"What securities penalty did Engineer Alpha receive for insider trading?",o:["A $5,000 fine only","A $30,000 administrative penalty, $8,000 in investigation costs, and a two-year trading ban","Five years in prison","Permanent ban from all securities trading"],a:1,e:"Engineer Alpha paid a $30,000 administrative penalty, $8,000 for investigation costs, and ceased trading in securities for two years."},
+{q:"In Case History 3.6, why was Engineer Delta's criminal conviction relevant to his suitability to practise engineering?",o:["Because the conviction was related to engineering design errors","Because he used his university computer to commit the crime, linking work environment to behaviour, and the offence revealed a defect of character","Because he failed a technical competency test","Because he was convicted of a construction safety violation"],a:1,e:"The Discipline Committee noted Delta used his university computer for the crime (linking work to behaviour), and the conviction revealed a fundamental defect of character undermining public perception of PEO."},
+{q:"What penalty did the Discipline Committee impose on Engineer Delta?",o:["A written reprimand and a fine","Suspension for one year","Revocation of his engineering licence and $2,500 in costs","Mandatory retraining and community service"],a:2,e:"The panel revoked Delta's engineering licence and ordered him to pay $2,500 in costs."},
+];
+
+let questions=[...DATA];
+const STORAGE_KEY='nppe_ch3_state_v2';
+
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem(STORAGE_KEY))||{};
+    return {
+      answers:s.answers||{},
+      points:s.points||0,
+      streak:s.streak||0,
+      maxStreak:s.maxStreak||0
+    };
+  }catch(e){return {answers:{},points:0,streak:0,maxStreak:0};}
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({answers,points,streak,maxStreak}));}catch(e){}
+}
+function clearStoredState(){
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+}
+
+const _initial=loadState();
+let answers=_initial.answers;
+let points=_initial.points;
+let streak=_initial.streak;
+let maxStreak=_initial.maxStreak;
+let mode='practice'; // 'practice' or 'exam'
+
+function render(){
+  const area=document.getElementById('quizArea');
+  area.innerHTML='';
+  questions.forEach((q,i)=>{
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id='qcard-'+i;
+    let optHtml=q.o.map((o,j)=>`<button class="opt-btn" data-qi="${i}" data-oi="${j}" onclick="pick(${i},${j})">${String.fromCharCode(65+j)}.&ensp;${o}</button>`).join('');
+    card.innerHTML=`<div class="q-num">Question ${i+1} of ${questions.length}</div><div class="q-text">${q.q}</div><div class="options">${optHtml}</div><div class="explanation" id="exp-${i}"></div>`;
+    area.appendChild(card);
+  });
+  buildDots();
+
+  // Restore previously answered states (without firing celebrations)
+  Object.entries(answers).forEach(([qi,oi])=>{
+    const qiNum=parseInt(qi,10);
+    const oiNum=parseInt(oi,10);
+    if(qiNum>=questions.length) return;
+    const correct=questions[qiNum].a;
+    const card=document.getElementById('qcard-'+qiNum);
+    if(!card) return;
+    const btns=card.querySelectorAll('.opt-btn');
+    btns.forEach(b=>{b.classList.add('locked');b.disabled=true;});
+    if(mode==='practice'){
+      // Suppress glow animation on restore by removing then forcing reflow
+      btns[correct].classList.add('correct-reveal');
+      btns[correct].style.animation='none';
+      if(oiNum!==correct) btns[oiNum].classList.add('wrong-reveal');
+      card.classList.add(oiNum===correct?'answered-correct':'answered-wrong');
+      const exp=document.getElementById('exp-'+qiNum);
+      exp.className='explanation show '+(oiNum===correct?'right':'wrong');
+      exp.innerHTML=(oiNum===correct?'✓ Correct. ':'✗ Incorrect. ')+questions[qiNum].e;
+    } else {
+      btns[oiNum].classList.add('selected');
+    }
+    updateDot(qiNum,oiNum===correct);
+  });
+
+  updateScore();
+}
+
+function buildDots(){
+  const nav=document.getElementById('dotNav');
+  nav.innerHTML='';
+  questions.forEach((_,i)=>{
+    const d=document.createElement('span');
+    d.className='dot';
+    d.textContent=i+1;
+    d.onclick=()=>document.getElementById('qcard-'+i).scrollIntoView({behavior:'smooth',block:'center'});
+    d.id='dot-'+i;
+    nav.appendChild(d);
+  });
+}
+
+function pick(qi,oi){
+  if(answers[qi]!==undefined) return;
+  answers[qi]=oi;
+  const correct=questions[qi].a;
+  const isCorrect=oi===correct;
+
+  // Update points and streak
+  let pointsEarned=0;
+  if(isCorrect){
+    streak+=1;
+    if(streak>maxStreak) maxStreak=streak;
+    const bonus=Math.min((streak-1)*2,20);
+    pointsEarned=10+bonus;
+    points+=pointsEarned;
+  } else {
+    streak=0;
+  }
+  saveState();
+
+  const card=document.getElementById('qcard-'+qi);
+  const btns=card.querySelectorAll('.opt-btn');
+  btns.forEach(b=>{b.classList.add('locked');b.disabled=true;});
+
+  if(mode==='practice'){
+    revealAnswer(qi,oi,correct,card,btns);
+  } else {
+    btns[oi].classList.add('selected');
+  }
+  updateScore();
+  updateDot(qi,isCorrect);
+
+  // Trigger celebrations only in practice mode (where the result is immediately visible)
+  if(mode==='practice'){
+    requestAnimationFrame(()=>{
+      const optEl=btns[oi];
+      if(isCorrect) celebrate(optEl,pointsEarned,streak);
+      else shakeWrong(optEl);
+    });
+    if(Object.keys(answers).length===questions.length){
+      setTimeout(()=>completionCelebration(),900);
+    }
+  }
+}
+
+function revealAnswer(qi,oi,correct,card,btns){
+  btns[correct].classList.add('correct-reveal');
+  if(oi!==correct) btns[oi].classList.add('wrong-reveal');
+  card.classList.add(oi===correct?'answered-correct':'answered-wrong');
+  const exp=document.getElementById('exp-'+qi);
+  exp.className='explanation show '+(oi===correct?'right':'wrong');
+  exp.innerHTML=(oi===correct?'✓ Correct. ':'✗ Incorrect. ')+questions[qi].e;
+}
+
+function updateDot(qi,isCorrect){
+  const d=document.getElementById('dot-'+qi);
+  if(!d) return;
+  if(mode==='practice'){d.classList.add(isCorrect?'c':'w');}
+  else{d.classList.add('cur');}
+}
+
+function updateScore(){
+  const total=Object.keys(answers).length;
+  const right=Object.entries(answers).filter(([qi,oi])=>oi===questions[qi].a).length;
+  const scoreLabelEl=document.getElementById('scoreLabel');
+  if(scoreLabelEl) scoreLabelEl.textContent=`${right} / ${questions.length}`;
+  const progBarEl=document.getElementById('progBar');
+  if(progBarEl) progBarEl.style.width=((total/questions.length)*100)+'%';
+  const pointsEl=document.getElementById('points');
+  if(pointsEl) pointsEl.textContent=points;
+  const streakEl=document.getElementById('streak');
+  if(streakEl) streakEl.textContent=streak;
+  const streakStat=document.getElementById('streakStat');
+  if(streakStat){
+    if(streak>=3) streakStat.classList.add('hot');
+    else streakStat.classList.remove('hot');
+  }
+
+  if(mode==='exam' && total===questions.length) showExamResults();
+}
+
+function showExamResults(){
+  // reveal all answers
+  questions.forEach((_,i)=>{
+    const correct=questions[i].a;
+    const card=document.getElementById('qcard-'+i);
+    const btns=card.querySelectorAll('.opt-btn');
+    revealAnswer(i,answers[i],correct,card,btns);
+    updateDot(i,answers[i]===correct);
+  });
+  const right=Object.entries(answers).filter(([qi,oi])=>oi===questions[qi].a).length;
+  const pct=Math.round((right/questions.length)*100);
+  const sb=document.getElementById('scoreboard');
+  sb.style.display='block';
+  document.getElementById('sbTitle').textContent=pct>=65?'Passed!':'Keep Studying';
+  document.getElementById('sbDetail').textContent=`${right} out of ${questions.length} correct (${pct}%). Pass mark: 65%. ${points} pts · best streak ${maxStreak}.`;
+  const r=70,cx=80,cy=80,circ=2*Math.PI*r,offset=circ-(pct/100)*circ;
+  const col=pct>=65?'var(--correct)':'var(--wrong)';
+  document.getElementById('scoreRing').innerHTML=`<svg viewBox="0 0 160 160"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="10"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="10" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" style="transition:stroke-dashoffset 1s ease"/><text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="36">${pct}%</text></svg>`;
+  sb.scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>completionCelebration(),700);
+}
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.controls .pill').forEach((p,i)=>{
+    p.classList.toggle('active',(m==='practice' && i===0) || (m==='exam' && i===1));
+  });
+  restart();
+}
+
+function shuffleAll(){
+  for(let i=questions.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[questions[i],questions[j]]=[questions[j],questions[i]];}
+  answers={};points=0;streak=0;maxStreak=0;
+  clearStoredState();
+  document.getElementById('scoreboard').style.display='none';
+  render();
+}
+
+function restart(){
+  answers={};points=0;streak=0;maxStreak=0;
+  clearStoredState();
+  document.getElementById('scoreboard').style.display='none';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetAll(){
+  if(!confirm('Reset all answers, points, and streaks? Start completely fresh?')) return;
+  questions=[...DATA]; // restore original order if previously shuffled
+  restart();
+}
+
+/* ─────────  CELEBRATION FX ENGINE  ───────── */
+const canvas=document.getElementById('fxCanvas');
+const ctx=canvas.getContext('2d');
+let particles=[];
+function resizeCanvas(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
+resizeCanvas();
+addEventListener('resize',resizeCanvas);
+
+function drawStar(x,y,r,color){
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const radius=i%2===0?r:r*0.45;
+    const a=(i*Math.PI)/5-Math.PI/2;
+    const px=x+Math.cos(a)*radius;
+    const py=y+Math.sin(a)*radius;
+    if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles=particles.filter(p=>{
+    p.vy+=p.gravity;
+    p.vx*=0.992;
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.life-=1;
+    p.rot=(p.rot||0)+(p.spin||0);
+    if(p.life<=0||p.y>canvas.height+30) return false;
+    ctx.globalAlpha=Math.min(1,p.life/40);
+    if(p.shape==='star'){
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      drawStar(0,0,p.size,p.color);
+      ctx.restore();
+    } else if(p.shape==='square'){
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-p.size,-p.size*0.4,p.size*2,p.size*0.8);
+      ctx.restore();
+    } else {
+      ctx.fillStyle=p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    }
+    return true;
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+const COLORS_GOLD=['#fbbf24','#b8860b','#fde68a','#f59e0b','#ffd700','#fff8dc'];
+const COLORS_PARTY=['#fbbf24','#1b7a3d','#1a3a5c','#b8860b','#fff','#34d399','#f59e0b'];
+
+function fireworks(x,y,count,colors,power){
+  count=count||28;
+  colors=colors||COLORS_PARTY;
+  power=power||1;
+  for(let i=0;i<count;i++){
+    const angle=(Math.PI*2*i)/count+(Math.random()-0.5)*0.4;
+    const speed=(2.5+Math.random()*4)*power;
+    const shapes=['circle','star','star','circle'];
+    particles.push({
+      x,y,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      life:55+Math.random()*35,
+      size:2+Math.random()*3,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      gravity:0.13,
+      shape:shapes[Math.floor(Math.random()*shapes.length)],
+      rot:Math.random()*Math.PI*2,
+      spin:(Math.random()-0.5)*0.2
+    });
+  }
+}
+
+function goldenShower(duration,intensity){
+  duration=duration||1800;
+  intensity=intensity||5;
+  const start=Date.now();
+  const interval=setInterval(()=>{
+    if(Date.now()-start>duration){clearInterval(interval);return;}
+    for(let i=0;i<intensity;i++){
+      const shape=Math.random()>0.5?'star':(Math.random()>0.5?'square':'circle');
+      particles.push({
+        x:Math.random()*canvas.width,
+        y:-15,
+        vx:(Math.random()-0.5)*1.8,
+        vy:1.5+Math.random()*2.5,
+        life:240,
+        size:3+Math.random()*4,
+        color:COLORS_GOLD[Math.floor(Math.random()*COLORS_GOLD.length)],
+        gravity:0.04,
+        shape,
+        rot:Math.random()*Math.PI*2,
+        spin:(Math.random()-0.5)*0.25
+      });
+    }
+  },35);
+}
+
+function floatPoints(x,y,pts,strk){
+  const el=document.createElement('div');
+  el.className='float-pts';
+  let emoji='✨';
+  if(strk>=10) emoji='🌟';
+  else if(strk>=5) emoji='⭐';
+  else if(strk>=3) emoji='🔥';
+  let text=`+${pts} ${emoji}`;
+  if(strk>=2) text+=` ×${strk}`;
+  el.textContent=text;
+  el.style.left=x+'px';
+  el.style.top=(y-20)+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+function happyFace(x,y){
+  const faces=['😊','😄','🎉','🌟','💫','✨'];
+  const el=document.createElement('div');
+  el.className='float-pts';
+  el.style.fontSize='2.2rem';
+  el.textContent=faces[Math.floor(Math.random()*faces.length)];
+  el.style.left=(x+(Math.random()-0.5)*80)+'px';
+  el.style.top=y+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+function pulseStreak(){
+  const stat=document.getElementById('streakStat');
+  if(!stat) return;
+  stat.classList.add('pulse');
+  setTimeout(()=>stat.classList.remove('pulse'),700);
+}
+
+function shakeWrong(optEl){
+  if(!optEl) return;
+  optEl.classList.add('shake');
+  setTimeout(()=>optEl.classList.remove('shake'),500);
+}
+
+function celebrate(optEl,pts,strk){
+  if(!optEl) return;
+  const rect=optEl.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  fireworks(cx,cy,28,COLORS_PARTY,1);
+  floatPoints(cx,rect.top,pts,strk);
+  pulseStreak();
+  if(strk>=3){
+    setTimeout(()=>fireworks(cx,cy,18,COLORS_GOLD,0.8),100);
+    happyFace(cx,rect.top-10);
+  }
+  if(strk>=5){
+    setTimeout(()=>fireworks(80,80,20,COLORS_GOLD,0.9),150);
+    setTimeout(()=>fireworks(canvas.width-80,80,20,COLORS_GOLD,0.9),250);
+  }
+  if([5,10,15,20,25].includes(strk)){
+    showMilestone(strk);
+    goldenShower(2200,7);
+  }
+}
+
+function showMilestone(strk){
+  const banner=document.createElement('div');
+  banner.className='milestone-banner';
+  let title;
+  if(strk>=25) title='👑 LEGENDARY';
+  else if(strk>=20) title='🏆 Unstoppable!';
+  else if(strk>=15) title='💎 Phenomenal!';
+  else if(strk>=10) title='⭐ Brilliant!';
+  else title='🔥 On Fire!';
+  banner.innerHTML=`${title}<span class="small">${strk} correct in a row</span>`;
+  document.body.appendChild(banner);
+  setTimeout(()=>banner.remove(),2400);
+}
+
+function completionCelebration(){
+  const total=questions.length;
+  const correct=Object.entries(answers).filter(([k,v])=>questions[k].a===v).length;
+  const pct=Math.round(correct/total*100);
+  goldenShower(4500,10);
+  setTimeout(()=>fireworks(innerWidth/2,innerHeight/3,60,COLORS_PARTY,1.4),200);
+  setTimeout(()=>fireworks(innerWidth*0.25,innerHeight/2.5,45,COLORS_GOLD,1.2),700);
+  setTimeout(()=>fireworks(innerWidth*0.75,innerHeight/2.5,45,COLORS_GOLD,1.2),1100);
+  setTimeout(()=>fireworks(innerWidth/2,innerHeight/2,70,COLORS_PARTY,1.5),1700);
+  const banner=document.createElement('div');
+  banner.className='milestone-banner';
+  let title;
+  if(pct===100) title='🏆 PERFECT SCORE';
+  else if(pct>=80) title='🌟 Outstanding!';
+  else if(pct>=65) title='✅ You Pass!';
+  else title='💪 Keep Studying!';
+  banner.innerHTML=`${title}<span class="small">${correct} / ${total} · ${points} pts · best streak ${maxStreak}</span>`;
+  banner.style.animationDuration='4.5s';
+  document.body.appendChild(banner);
+  setTimeout(()=>banner.remove(),4500);
+}
+
+render();
+</script>
+</body>
+</html>

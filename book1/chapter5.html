@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Exam — Chapter 5: Consulting, Private Practice &amp; Business</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f0eb;--card:#fff;--border:#d6cfc6;--accent:#1a3a5c;--accent2:#b8860b;
+  --correct:#1b7a3d;--correct-bg:#e8f5ed;--wrong:#b22222;--wrong-bg:#fde8e8;
+  --text:#2c2c2c;--muted:#6b6b6b;--light:#e8e2da;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+.hero{background:var(--accent);color:#fff;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--accent2)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:.4rem;letter-spacing:.3px}
+.hero .sub{opacity:.85;font-size:.95rem;max-width:640px;margin:0 auto;font-weight:300}
+.hero .ch{display:inline-block;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;background:var(--accent2);color:#fff;padding:.3rem .8rem;border-radius:2px;margin-bottom:1rem;font-weight:600}
+
+.score-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;justify-content:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.score-bar .stat{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;font-weight:500}
+.score-bar .stat b{font-size:1.05rem;color:var(--text);font-weight:700}
+.score-bar .stat.c b{color:var(--correct)}
+.score-bar .stat.w b{color:var(--wrong)}
+.progress-wrap{flex-basis:100%;height:5px;background:var(--light);border-radius:3px;overflow:hidden;margin-top:.4rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .4s ease}
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.35rem .9rem;font-family:inherit;font-size:.78rem;cursor:pointer;border-radius:3px;letter-spacing:.5px;transition:all .2s}
+.reset-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.container{max-width:840px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.intro{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--accent2);padding:1.2rem 1.4rem;margin-bottom:2rem;font-size:.92rem;color:var(--muted);border-radius:2px}
+.intro b{color:var(--text)}
+
+.question{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:1.6rem 1.5rem;margin-bottom:1.4rem;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:box-shadow .25s}
+.question:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.q-num{display:flex;align-items:center;gap:.65rem;margin-bottom:.85rem}
+.q-num .badge{background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:2px;letter-spacing:1px}
+.q-num .topic{font-size:.72rem;color:var(--accent2);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.q-text{font-size:1.02rem;line-height:1.55;margin-bottom:1.1rem;color:var(--text);font-weight:500}
+
+.options{display:flex;flex-direction:column;gap:.55rem}
+.option{background:transparent;border:1.5px solid var(--border);padding:.85rem 1rem;text-align:left;font-family:inherit;font-size:.95rem;cursor:pointer;color:var(--text);border-radius:3px;display:flex;align-items:flex-start;gap:.75rem;line-height:1.45;transition:all .15s;width:100%}
+.option:hover:not(:disabled){border-color:var(--accent);background:rgba(26,58,92,.04)}
+.option:disabled{cursor:default}
+.option .letter{font-weight:700;color:var(--accent);min-width:1.4rem;font-family:'DM Serif Display',serif}
+.option.correct{background:var(--correct-bg);border-color:var(--correct);color:var(--correct)}
+.option.correct .letter{color:var(--correct)}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong)}
+.option.wrong .letter{color:var(--wrong)}
+.option.dim{opacity:.55}
+
+.explanation{display:none;margin-top:1.1rem;padding:1rem 1.15rem;background:rgba(26,58,92,.05);border-left:3px solid var(--accent2);border-radius:2px;font-size:.9rem;color:var(--text);line-height:1.6}
+.explanation.show{display:block;animation:fadeIn .35s ease}
+.explanation b{color:var(--accent);font-weight:700;display:block;margin-bottom:.3rem;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border);margin-top:2rem}
+footer .src{font-style:italic;font-family:'DM Serif Display',serif}
+
+/* CELEBRATION FX */
+#fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.float-pts{position:fixed;font-family:'DM Serif Display',serif;font-weight:700;font-size:1.7rem;color:var(--accent2);pointer-events:none;z-index:10000;text-shadow:0 2px 12px rgba(184,134,11,.6),0 0 24px rgba(251,191,36,.4);animation:floatUp 1.5s cubic-bezier(.2,.6,.3,1) forwards;white-space:nowrap}
+@keyframes floatUp{
+  0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+  18%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+  30%{transform:translate(-50%,-22px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-100px) scale(.95)}
+}
+.streak-fire{display:inline-block;animation:flameDance 1.4s ease-in-out infinite}
+@keyframes flameDance{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.12)}}
+.score-bar .stat.pulse b{animation:streakPulse .65s ease}
+@keyframes streakPulse{
+  0%,100%{transform:scale(1);color:var(--text)}
+  40%{transform:scale(1.45);color:var(--accent2);text-shadow:0 0 12px rgba(251,191,36,.6)}
+}
+.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{
+  10%,90%{transform:translateX(-2px)}
+  20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)}
+  40%,60%{transform:translateX(7px)}
+}
+.option.correct{animation:correctGlow 1s ease-out}
+@keyframes correctGlow{
+  0%{box-shadow:0 0 0 0 rgba(27,122,61,.7),0 0 30px 0 rgba(27,122,61,.4)}
+  60%{box-shadow:0 0 0 14px rgba(27,122,61,0),0 0 30px 8px rgba(27,122,61,.2)}
+  100%{box-shadow:0 0 0 0 rgba(27,122,61,0)}
+}
+.milestone-banner{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--accent) 0%,#2a5380 50%,var(--accent2) 100%);color:#fff;padding:1.4rem 2.6rem;border-radius:6px;font-family:'DM Serif Display',serif;font-size:1.7rem;text-align:center;z-index:10001;box-shadow:0 25px 70px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none;animation:bannerPop 2.4s cubic-bezier(.34,1.4,.64,1) forwards;border:1px solid rgba(251,191,36,.4)}
+.milestone-banner .small{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:.5rem;opacity:.9;color:#fde68a}
+@keyframes bannerPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}
+  28%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+  82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(.92) rotate(0)}
+}
+.streak-stat{transition:color .3s,text-shadow .3s}
+.streak-stat.hot b{color:var(--accent2);text-shadow:0 0 8px rgba(251,191,36,.5)}
+
+@media(max-width:600px){
+  .hero{padding:2rem 1rem}
+  .question{padding:1.25rem 1.1rem}
+  .score-bar{gap:.8rem;padding:.75rem 1rem}
+  .score-bar .stat{font-size:.76rem}
+  .score-bar .stat b{font-size:.95rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="ch">Chapter 5 · Practice Exam</span>
+  <h1>Consulting, Private Practice &amp; Business</h1>
+  <p class="sub">50 NPPE-style questions · Canadian Professional Engineering &amp; Geoscience, 6th Ed.</p>
+</div>
+
+<div class="score-bar">
+  <span class="stat">Answered <b id="answered">0</b>/50</span>
+  <span class="stat c">Correct <b id="correct">0</b></span>
+  <span class="stat w">Wrong <b id="wrong">0</b></span>
+  <span class="stat">Score <b id="pct">—</b></span>
+  <span class="stat" id="pointsStat">Points <b id="points">0</b></span>
+  <span class="stat streak-stat" id="streakStat">Streak <span class="streak-fire">🔥</span> <b id="streak">0</b></span>
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+  <div class="progress-wrap"><div class="progress-fill" id="progress"></div></div>
+</div>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="container">
+
+<div class="intro">
+  <b>How to use this exam.</b> Click an answer to lock it in — correct picks turn green and trigger fireworks; wrong picks turn red. Each correct answer earns <b>10 points</b>, plus a <b>streak bonus</b> (+2 per consecutive correct, capped at +20). Hit streaks of 5, 10, or 20 for milestone celebrations. Your progress, points, and streak save automatically in this browser. The NPPE typically requires roughly 65% to pass — aim for 80%+ in practice.
+</div>
+
+<div id="quiz"></div>
+
+</div>
+
+<footer>
+  <p>Source: <span class="src">Canadian Professional Engineering and Geoscience, Sixth Edition</span> — Chapter 5</p>
+  <p style="margin-top:.4rem;opacity:.7">Practice tool · Not affiliated with PEO, APEGA, or Engineers Canada</p>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    topic:"5.1 The Lure of Consulting",
+    q:"In 2016, the Association of Consulting Engineering Companies–Canada (ACEC) estimated that the gross revenues of its member consulting engineering firms exceeded approximately:",
+    options:["$5.4 billion","$11.4 billion","$21.4 billion","$42.4 billion"],
+    correct:2,
+    exp:"ACEC estimated that 2016 gross revenues of its member consulting engineering firms exceeded $21.4 billion — a figure cited in the chapter to illustrate the scale of Canada's consulting engineering industry."
+  },
+  {
+    topic:"5.2 Consulting Activities",
+    q:"Most consulting engineers in Canada work primarily on:",
+    options:["Expert testimony in court proceedings","Design and construction projects","Resource exploration and mining","Patent preparation and prosecution"],
+    correct:1,
+    exp:"The chapter states explicitly that most consulting engineers work on design and construction projects. Tasks may include inspection, testing, quality control, and project management — sometimes alongside the client's in-house staff."
+  },
+  {
+    topic:"5.2 Consulting Activities",
+    q:"When acting as an expert witness before a court, commission, or tribunal, a consultant must:",
+    options:["Advocate strongly for the side paying the testimony","Be impartial and not act as a spokesperson for either side","Refuse to give an opinion to maintain neutrality","Defer all technical questions to legal counsel"],
+    correct:1,
+    exp:"An expert witness provides an independent opinion. The witness must be impartial and must not be a spokesperson for either side, even if only one side is paying for the expert testimony. This is a core ethical requirement."
+  },
+  {
+    topic:"5.2 Consulting Activities",
+    q:"Consulting geoscientists most commonly advise on:",
+    options:["Forensic analysis of failed structures","Resource discovery and development, particularly in petroleum, gas, and mining","Volcanism and seismic monitoring as their primary work","Construction quality control on civil sites"],
+    correct:1,
+    exp:"Many consulting geoscientists advise on resource discovery and development, particularly in petroleum, natural gas, and mining. Specialized services include rock and soil sampling, well logging, slope stability, and groundwater investigations."
+  },
+  {
+    topic:"5.2 Consulting Activities",
+    q:"A feasibility study performed by a consultant is most useful:",
+    options:["After construction is complete, to evaluate performance","During the construction phase, to validate decisions","In the early stages, before deciding whether the project goes ahead","Only when a project has run significantly over budget"],
+    correct:2,
+    exp:"Consultants are vital in the early stages when a client needs to know the feasibility, financial justification, duration, and cost of a project. The consultant helps the client decide whether the project goes ahead at all."
+  },
+  {
+    topic:"5.3 Licensing of Firms",
+    q:"All Canadian provinces and territories EXCEPT one require firms (companies, partnerships, or corporations) offering services to the public to obtain an additional licence. The exception is:",
+    options:["Ontario","Quebec","British Columbia","Alberta"],
+    correct:1,
+    exp:"All provinces and territories except Quebec require firms offering services to the public to have an additional licence. Quebec's regulatory framework treats firms differently."
+  },
+  {
+    topic:"5.3 Licensing of Firms",
+    q:"The additional licence required for firms offering professional services is variously called all of the following EXCEPT:",
+    options:["Certificate of Authorization","Permit to Practise","Certificate of Compliance","Letter of Endorsement"],
+    correct:3,
+    exp:"The licence is called a Certificate of Authorization, a Permit to Practise, or a Certificate of Compliance, depending on the province. \"Letter of Endorsement\" is not a recognized term for this licence."
+  },
+  {
+    topic:"5.3 Licensing of Firms",
+    q:"The primary purpose of requiring firms to hold a Certificate of Authorization or Permit to Practise is to:",
+    options:["Raise revenue for the regulatory association","Identify the licensed individuals personally responsible for the firm's professional work","Restrict the number of consulting firms in a province","Verify that every employee holds a P.Eng. or P.Geo. licence"],
+    correct:1,
+    exp:"The licence protects the public by requiring firms to identify the people responsible. The certificate or permit lists the qualified, full-time licensed employee(s) who supervise and accept personal responsibility for the firm's professional work."
+  },
+  {
+    topic:"5.3 Licensing — Ontario",
+    q:"In Ontario, an individual licensed P.Eng. who wishes to offer professional services directly to the public must:",
+    options:["Begin practice immediately upon receiving the P.Eng. licence","Obtain a Certificate of Authorization from PEO","Form an incorporated company before offering any services","Register only with the federal government"],
+    correct:1,
+    exp:"Ontario (PEO and APGO) and Newfoundland and Labrador (PEGNL) require individuals offering services to the public to hold a Certificate of Authorization, in addition to their personal P.Eng. or P.Geo. licence."
+  },
+  {
+    topic:"5.3 Licensing — Ontario",
+    q:"In Ontario, the Certificate of Authorization for individuals offering professional services to the public requires a minimum of how many years of relevant experience?",
+    options:["2 years","3 years","4 years","5 years"],
+    correct:3,
+    exp:"In Ontario, the Certificate of Authorization requires a minimum of five years of relevant experience. This is in addition to the experience required for the P.Eng. licence itself."
+  },
+  {
+    topic:"5.3 Consulting Engineer Title",
+    q:"To use the title \"Consulting Engineer\" in Ontario, a P.Eng. must satisfy all of the following requirements EXCEPT:",
+    options:["Obtain a Certificate of Authorization from PEO","Hold five years of experience in addition to that required for registration","Hold at least two years of the additional experience in private practice","Hold a master's degree in an engineering discipline"],
+    correct:3,
+    exp:"The Professional Engineers Act (Ontario) requires a Certificate of Authorization, five years of additional experience (with at least two years in private practice), and evidence of liability insurance. A master's degree is NOT a requirement."
+  },
+  {
+    topic:"5.3 Consulting Engineer Title",
+    q:"For the title \"Consulting Engineer\" in Ontario, of the five years of experience required beyond what is needed for registration, how many years must be in private practice?",
+    options:["At least one year","At least two years","At least three years","All five years"],
+    correct:1,
+    exp:"At least two years of the five additional years of experience required to be designated as a Consulting Engineer in Ontario must be in private practice. This ensures direct exposure to consulting work."
+  },
+  {
+    topic:"5.3 Liability Insurance",
+    q:"Professional liability insurance is also commonly known as:",
+    options:["Errors and omissions insurance","Indemnity bond insurance","Surety insurance","Negligence indemnification"],
+    correct:0,
+    exp:"Professional liability insurance is widely called \"errors and omissions\" insurance. It typically includes a duty to defend, meaning the insurer pays the legal bills if the professional is sued — including for frivolous claims."
+  },
+  {
+    topic:"5.3 Liability Insurance",
+    q:"Liability insurance is mandatory for ALL members in which group of provinces?",
+    options:["Ontario, Alberta, and British Columbia","New Brunswick, Newfoundland and Labrador, and Quebec (OIQ and OGQ)","Saskatchewan, Manitoba, and Nova Scotia","Yukon, Nunavut, and Northwest Territories"],
+    correct:1,
+    exp:"Liability insurance is mandatory for all members in New Brunswick, Newfoundland and Labrador, and Quebec (both OIQ and OGQ). Other provinces use notification rules or treat insurance as voluntary."
+  },
+  {
+    topic:"5.3 Liability Insurance",
+    q:"In British Columbia, Manitoba, and Saskatchewan, professional liability insurance is:",
+    options:["Mandatory for every licensed member","Voluntary, with no notification requirement","Not mandatory, but members must notify clients in writing whether insurance covers the services and obtain client acknowledgment before proceeding","Required only for incorporated firms with more than ten employees"],
+    correct:2,
+    exp:"In BC, Manitoba, and Saskatchewan, members, licensees, and certificate holders must notify clients in writing whether professional liability insurance covers the services offered, and must receive the client's acknowledgment before proceeding."
+  },
+  {
+    topic:"5.3 Liability Insurance — Ontario",
+    q:"In Ontario, professional liability insurance is:",
+    options:["Mandatory for every individual P.Eng. holder regardless of practice","Voluntary in all cases","Mandatory for Certificate of Authorization holders unless they notify clients in writing that no insurance covers the services and obtain acknowledgment","Required only for incorporated firms doing public works"],
+    correct:2,
+    exp:"In Ontario (PEO and APGO), liability insurance is mandatory for Certificate of Authorization holders — that is, anyone offering service to the public — unless they notify clients in writing that no professional liability insurance covers the services and receive the client's acknowledgment."
+  },
+  {
+    topic:"5.3 Liability Insurance",
+    q:"In which of the following provinces does the Act NOT mention professional liability insurance, leaving it voluntary?",
+    options:["Ontario","Quebec","Alberta","New Brunswick"],
+    correct:2,
+    exp:"In Alberta, the Northwest Territories, Nova Scotia (APENS and APGNS), Nunavut, Prince Edward Island, and Yukon, the Act does not mention liability insurance and it is therefore voluntary."
+  },
+  {
+    topic:"5.3 Duty to Defend",
+    q:"When a liability insurance policy includes a \"duty to defend,\" this means that:",
+    options:["The insured professional must personally testify in any related lawsuit","The insurer pays the legal bills if the professional is sued","The insurer can compel the professional to settle out of court","The insured must defend their work in writing to the insurer annually"],
+    correct:1,
+    exp:"A duty to defend means the insurer pays the legal bills if the professional is sued. This protection matters even for frivolous claims, because — as the chapter notes — even competent professionals get sued, and defending claims can be enormously expensive."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"The Secondary Professional Liability Insurance program for professional engineers and geoscientists across Canada began in:",
+    options:["March 1985","March 1992","March 2002","March 2010"],
+    correct:2,
+    exp:"The Secondary Professional Liability Insurance program began in March 2002 and now operates in every province and territory."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"The Secondary Professional Liability Insurance plan is administered by Engineers Canada in all provinces and territories EXCEPT:",
+    options:["British Columbia and Alberta","Ontario and Quebec","Manitoba and Saskatchewan","Nova Scotia and New Brunswick"],
+    correct:1,
+    exp:"Engineers Canada administers the plan everywhere except in Ontario and Quebec. In Ontario, the plan is administered by the Ontario Society of Professional Engineers (OSPE). In Quebec, it is administered by the Ordre des ingénieurs du Québec (OIQ)."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"In Quebec, the secondary professional liability insurance plan for engineers is administered by:",
+    options:["Engineers Canada","The Ontario Society of Professional Engineers (OSPE)","The Ordre des ingénieurs du Québec (OIQ)","FIDIC"],
+    correct:2,
+    exp:"In Quebec, the OIQ administers the secondary insurance plan for engineers. In Ontario, OSPE administers the plan. Engineers Canada administers the plan in all other jurisdictions."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"The Engineers Canada secondary insurance plan typically provides members with how much in professional liability coverage?",
+    options:["$50,000","$100,000","$250,000","$500,000"],
+    correct:2,
+    exp:"The Engineers Canada plan typically provides members with $250,000 in professional liability coverage, plus defence costs."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"The Secondary Professional Liability Insurance is called \"secondary\" because:",
+    options:["It only covers second offenses by the same professional","Consultants and similar firms must maintain separate \"primary\" liability insurance for professional activities","It only pays out after another insurer has paid the full claim first","It only covers junior engineers and geoscientists below a certain experience level"],
+    correct:1,
+    exp:"The group policy is called \"secondary\" because it is not the main protection against liability claims. Consulting firms and design/manufacturing firms must maintain separate \"primary\" liability insurance. Secondary insurance typically covers employees, retirees, and small-scale incidental work."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"The secondary insurance plan covers small \"moonlighting\" consulting jobs undertaken outside normal employment, up to a maximum of:",
+    options:["$5,000 in fees per calendar year","$10,000 in fees per calendar year","$15,000 in fees per calendar year","$25,000 in fees per calendar year"],
+    correct:2,
+    exp:"Secondary coverage extends to small consulting jobs of up to $15,000 in fees per calendar year, undertaken outside normal employment. Activities exceeding this fee threshold are not covered by the secondary plan."
+  },
+  {
+    topic:"5.3 Secondary Insurance",
+    q:"Under the Engineers Canada secondary plan, the coverage for legal advice related to a whistle-blower action is up to:",
+    options:["$25,000","$50,000","$75,000","$100,000"],
+    correct:2,
+    exp:"The plan provides up to $75,000 for legal advice to guide a member in any legal action taken against the member as a result of a whistle-blower action, plus another $75,000 for loss of income related to whistle-blowing."
+  },
+  {
+    topic:"5.4 Sole Proprietorship",
+    q:"A key disadvantage of operating as a sole proprietorship is that:",
+    options:["The proprietor must register federally and provincially","The proprietor is personally responsible for all of the business's financial debts and professional problems","Business expenses cannot be deducted from taxable income","The proprietor cannot accept work from corporate clients"],
+    correct:1,
+    exp:"In a sole proprietorship, the proprietor is responsible for all of the business's financial debts and professional problems. Setup is simple — just register the name with the province — but personal exposure is the trade-off."
+  },
+  {
+    topic:"5.4 Sole Proprietorship",
+    q:"If a sole proprietorship incurs large debts, creditors may:",
+    options:["Only seize the business's assets","Sue to seize both the proprietor's business and personal property","Be barred from action under Canadian sole-proprietor law","Wait until the business is voluntarily dissolved before pursuing claims"],
+    correct:1,
+    exp:"If a sole proprietorship should incur large debts, creditors may sue to seize both the proprietor's business and his or her personal property. There is no legal separation between the business and the individual."
+  },
+  {
+    topic:"5.4 General Partnership",
+    q:"In a general partnership, each partner is:",
+    options:["Liable only for their own actions and capital contributions","Shielded from liability for actions taken by the other partners","Liable for the business debts and obligations incurred by all the other partners","Required to carry separate, individual professional insurance unrelated to the firm"],
+    correct:2,
+    exp:"In a general partnership, each partner is liable for the business debts or obligations incurred by all the other partners. Errors, omissions, and even fraudulent acts by one partner create liability for the innocent partners — which is why mutual trust is essential."
+  },
+  {
+    topic:"5.4 General Partnership",
+    q:"If one partner in a general partnership performs unprofessional work, the other partners may:",
+    options:["Always avoid discipline if they were not directly involved","Be subject to discipline if they authorized, permitted, or even acquiesced in the unprofessional work","Be disciplined only if they shared in the profits of that specific job","Face only civil — but never professional — consequences"],
+    correct:1,
+    exp:"All partners who authorized, permitted, or even acquiesced in unprofessional work may be subject to discipline. Mere passive acceptance of a partner's misconduct can trigger disciplinary exposure for the others."
+  },
+  {
+    topic:"5.4 Limited Partnership",
+    q:"The liability of a limited partner in a limited partnership is:",
+    options:["Equal to that of the general partners","Restricted to the value of the assets the limited partner contributed","Restricted to the partner's annual income from the firm","Unlimited unless explicitly waived in writing"],
+    correct:1,
+    exp:"In a limited partnership, the liability of limited partners is restricted to the value of the assets they contributed — but the partnership must be registered provincially to obtain this liability protection."
+  },
+  {
+    topic:"5.4 Limited Partnership",
+    q:"To preserve their limited liability, limited partners must NOT:",
+    options:["Provide any capital to the business","Sign the partnership agreement","Participate in the day-to-day running of the partnership","Hold a professional licence"],
+    correct:2,
+    exp:"Limited partners may not participate in the day-to-day running of the partnership — they cannot intervene in operations. If they do, they risk losing their limited-liability protection."
+  },
+  {
+    topic:"5.4 Corporation",
+    q:"A corporation is best described as:",
+    options:["A partnership of more than ten registered members","A separate legal entity that has many of the rights of a real person","A sole proprietorship that has registered federally","An unincorporated investment association"],
+    correct:1,
+    exp:"A corporation has many of the rights of a real person — it can enter contracts, own property, and conduct business. It is a separate legal entity from its shareholders, which is the basis for its asset-protection benefits."
+  },
+  {
+    topic:"5.4 Corporation",
+    q:"When a professional practice is incorporated, in the event of legal judgments or creditor claims:",
+    options:["Only the personal assets of shareholders are at risk","Both corporate and personal assets are at risk equally","Only the corporation's assets can be seized; personal assets of shareholders are not at risk","Directors must personally guarantee all corporate debts"],
+    correct:2,
+    exp:"When a practice is incorporated, creditors and legal judgments can seize only the corporation's assets; the personal assets of shareholders are not at risk. Forming a corporation is usually an effective way to protect personal assets."
+  },
+  {
+    topic:"5.4 Corporation",
+    q:"A corporation that performs engineering or geoscience services must designate a licensed professional within the corporation who:",
+    options:["Is the highest-paid employee","Has the competence and authority to ensure the corporation's work meets professional standards","Holds the most senior administrative position regardless of technical qualifications","Has the longest tenure with the firm"],
+    correct:1,
+    exp:"The designated professional must have the competence AND the authority to ensure the corporation's technical work meets professional standards — because that person must answer if a charge of professional misconduct is laid against the corporation."
+  },
+  {
+    topic:"5.4 Limits of Insurance/Incorporation",
+    q:"Neither insurance nor incorporation can shield engineers and geoscientists from disciplinary action for:",
+    options:["Properly documented design choices that turn out poorly","Negligence, incompetence, or corruption","Errors caused by employees they did not directly supervise","Honest mistakes in routine calculations"],
+    correct:1,
+    exp:"Insurance and incorporation protect against creditors and civil judgments — but neither shields a professional from disciplinary action for negligence, incompetence, or corruption. These personal failings remain subject to the discipline process."
+  },
+  {
+    topic:"5.5 Qualifications-Based Selection",
+    q:"The defining feature of the Qualifications-Based Selection (QBS) process for hiring consultants is that it:",
+    options:["Selects whichever consultant submits the lowest fixed fee","Separates the evaluation of qualifications from fee negotiation","Is based primarily on geographic proximity to the client","Uses a random draw conducted by the regulator"],
+    correct:1,
+    exp:"QBS separates the evaluation of the consultant's qualifications from the fee negotiation. The client picks the best-qualified consultant first, then negotiates the fee — once both parties have jointly defined the project scope."
+  },
+  {
+    topic:"5.5 QBS",
+    q:"The federal government study that examined methods for selecting consultants on Canadian municipal infrastructure projects was initiated in:",
+    options:["1985","1995","2001","2010"],
+    correct:2,
+    exp:"In 2001, the federal government initiated a study that examined seven common methods for selecting and hiring consultants on municipal infrastructure projects. It concluded that QBS is the best method for most projects, as documented in InfraGuide."
+  },
+  {
+    topic:"5.5 QBS — 7 Steps",
+    q:"In the QBS process, the step that immediately follows the Request for Qualifications is to:",
+    options:["Negotiate the fee agreement","Award the contract","Evaluate and rank consultants and prepare a short list","Sign confidentiality agreements with all interested firms"],
+    correct:2,
+    exp:"After the Request for Qualifications (Step 1), the client evaluates and ranks consultants through interviews, site visits, and references, and prepares a short list (Step 2). Only then does the client issue a Request for Proposals to the short-listed firms."
+  },
+  {
+    topic:"5.5 QBS — 7 Steps",
+    q:"In the QBS process, the short list of best-qualified consultants typically contains how many firms?",
+    options:["Two","Three","Five","Ten"],
+    correct:1,
+    exp:"The client typically prepares a short list of three consultants with the best qualifications. These are the firms invited to submit detailed proposals."
+  },
+  {
+    topic:"5.5 QBS — Scope",
+    q:"In the QBS process, the detailed scope of the project is:",
+    options:["Defined unilaterally by the client before any consultants are contacted","Defined unilaterally by the consultant after winning the contract","Jointly negotiated by the client and the highest-ranked consultant","Determined by an independent third-party reviewer"],
+    correct:2,
+    exp:"In Step 5 of the QBS process, the client and the highest-ranked consultant jointly negotiate the scope in detail — assessing options, life-cycle cost comparisons, and approvals. Joint scope-definition is a core QBS benefit."
+  },
+  {
+    topic:"5.5 QBS — Fee Failure",
+    q:"In the QBS process, if the client and the highest-ranked consultant cannot agree on a fee:",
+    options:["The contract is automatically awarded at the consultant's stated fee","The project is abandoned","The client returns to step 5 and negotiates with the second-ranked consultant","A federal arbitrator is appointed to set the fee"],
+    correct:2,
+    exp:"If the client and the highest-ranked consultant cannot agree on a fee, the client goes back to Step 5 and begins scope and fee negotiations with the second-ranked consultant. The process continues until agreement is reached."
+  },
+  {
+    topic:"5.5 Project Cost Distribution",
+    q:"According to studies cited by the Consulting Engineers of British Columbia (CEBC), engineering typically represents what percentage of a project's total cost?",
+    options:["Approximately 1.5%","Approximately 5%","Approximately 16.5%","Approximately 25%"],
+    correct:0,
+    exp:"CEBC notes that engineering represents only about 1.5% of total project cost, while construction is roughly 16.5% and operations roughly 82%. Despite this small share, design quality drives the rest of the cost picture."
+  },
+  {
+    topic:"5.5 Project Cost Distribution",
+    q:"Of the total cost of a typical project, operations costs represent approximately:",
+    options:["16.5%","35%","65%","82%"],
+    correct:3,
+    exp:"Operations represent about 82% of a project's total cost — by far the largest component. This is why early consulting-engineer involvement, which influences operational efficiency, produces such large life-cycle savings."
+  },
+  {
+    topic:"5.5 Design Savings",
+    q:"According to CEBC, hiring a consulting engineer at the beginning of a project allows good design to cut what percentage of construction costs?",
+    options:["1 to 2%","5 to 8%","10 to 15%","25 to 30%"],
+    correct:2,
+    exp:"Good design — when the consulting engineer is engaged early — can cut 10 to 15% of construction costs, and even more in life-cycle costs. This justifies investing in qualifications-based selection."
+  },
+  {
+    topic:"5.6 ACEC",
+    q:"The Association of Consulting Engineering Companies (ACEC) was founded in:",
+    options:["1898","1925","1955","1980"],
+    correct:1,
+    exp:"ACEC was founded in 1925. It comprises about 12 provincial and territorial member organizations, exchanges professional information, and provides liaison with the federal government."
+  },
+  {
+    topic:"5.6 FIDIC",
+    q:"FIDIC, the International Federation of Consulting Engineers, was founded in:",
+    options:["1913","1925","1948","1965"],
+    correct:0,
+    exp:"FIDIC (Fédération Internationale des Ingénieurs-Conseils) was founded in 1913 and represents consulting engineers in more than 90 countries. Its code addresses professional status, independence, and competence."
+  },
+  {
+    topic:"5.7 Per Diem Compensation",
+    q:"Per diem (daily-rate) compensation is the typical payment method when:",
+    options:["The consultant prefers a guaranteed total fee","The scope of work cannot be accurately determined in advance","Construction costs are well established","The project is funded by a federal grant"],
+    correct:1,
+    exp:"Per diem payments are the usual method when the scope of work cannot be accurately determined — for example, studies, investigations, field services, and report preparation, or short-term overload assistance. Direct out-of-pocket expenses are added on top."
+  },
+  {
+    topic:"5.7 Payroll Multiplier",
+    q:"When consulting fees are calculated using payroll costs times a multiplier, the multiplier is usually in the range of:",
+    options:["1.0 to 1.5","1.5 to 2.0","2.0 to 3.0","4.0 to 5.0"],
+    correct:2,
+    exp:"The multiplier is usually in a range from two to three. The multiplier covers overhead and profit; direct out-of-pocket expenses are reimbursed separately. This method is common for site investigations, preliminary design, and detailed design."
+  },
+  {
+    topic:"5.7 Lump Sum",
+    q:"The principal disadvantage of lump-sum compensation is that:",
+    options:["The client cannot predict the total cost of the work","The consultant may underestimate time or costs and incur a serious loss","Lump-sum fees are prohibited by most provincial Codes of Ethics","Lump-sum agreements automatically void liability insurance"],
+    correct:1,
+    exp:"Clients often prefer lump-sum because it tells them the total cost in advance. The disadvantage falls on the consultant, who may underestimate time or costs and incur a serious loss. The risk transfers from the client to the consultant."
+  },
+  {
+    topic:"5.9 Personal Traits for Consulting",
+    q:"Among the ten characteristics needed for success in private practice, the chapter identifies which trait as the MOST important?",
+    options:["Education and licensing","Network of contacts","Determination","Intelligence"],
+    correct:2,
+    exp:"The chapter states that determination is the most important personal trait you need; consultants and entrepreneurs face many obstacles before they succeed. Education and licensing are listed first as prerequisites, but determination is singled out as the key trait."
+  }
+];
+
+const quiz = document.getElementById('quiz');
+const STORAGE_KEY = 'nppe_ch5_state_v2';
+
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    return {
+      answers: s.answers || {},
+      points: s.points || 0,
+      streak: s.streak || 0,
+      maxStreak: s.maxStreak || 0
+    };
+  }catch(e){ return {answers:{},points:0,streak:0,maxStreak:0}; }
+}
+function saveState(state){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function render(){
+  const state = loadState();
+  quiz.innerHTML = '';
+  QUESTIONS.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question';
+    card.id = 'q' + idx;
+    const userAnswer = state.answers[idx];
+    const answered = userAnswer !== undefined;
+
+    const optsHTML = q.options.map((opt, i) => {
+      let cls = 'option';
+      if (answered) {
+        cls += ' dim';
+        if (i === q.correct) cls = 'option correct';
+        else if (i === userAnswer) cls = 'option wrong';
+      }
+      const letter = String.fromCharCode(65 + i);
+      return `<button class="${cls}" ${answered?'disabled':''} onclick="answer(${idx},${i})">
+        <span class="letter">${letter}.</span><span>${opt}</span>
+      </button>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="q-num">
+        <span class="badge">Q${idx+1}</span>
+        <span class="topic">${q.topic}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optsHTML}</div>
+      <div class="explanation ${answered?'show':''}">
+        <b>Explanation</b>${q.exp}
+      </div>`;
+    quiz.appendChild(card);
+  });
+  updateScore();
+}
+
+function answer(qIdx, optIdx){
+  const state = loadState();
+  if (state.answers[qIdx] !== undefined) return;
+  state.answers[qIdx] = optIdx;
+
+  const isCorrect = QUESTIONS[qIdx].correct === optIdx;
+  let pointsEarned = 0;
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+    const bonus = Math.min((state.streak - 1) * 2, 20);
+    pointsEarned = 10 + bonus;
+    state.points += pointsEarned;
+  } else {
+    state.streak = 0;
+  }
+  saveState(state);
+  render();
+
+  // Trigger FX after DOM updates
+  requestAnimationFrame(() => {
+    const card = document.getElementById('q' + qIdx);
+    if (!card) return;
+    const optEl = card.querySelectorAll('.option')[optIdx];
+    if (isCorrect) celebrate(optEl, pointsEarned, state.streak);
+    else shakeWrong(optEl);
+
+    // Completion check
+    if (Object.keys(state.answers).length === QUESTIONS.length) {
+      setTimeout(() => completionCelebration(state), 900);
+    }
+  });
+}
+
+function updateScore(){
+  const state = loadState();
+  const answered = Object.keys(state.answers).length;
+  let correct = 0;
+  Object.entries(state.answers).forEach(([k, v]) => { if (QUESTIONS[k].correct === v) correct++; });
+  const wrong = answered - correct;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('correct').textContent = correct;
+  document.getElementById('wrong').textContent = wrong;
+  document.getElementById('pct').textContent = answered ? Math.round(correct/answered*100) + '%' : '—';
+  document.getElementById('points').textContent = state.points;
+  document.getElementById('streak').textContent = state.streak;
+  document.getElementById('progress').style.width = (answered/QUESTIONS.length*100) + '%';
+  const streakStat = document.getElementById('streakStat');
+  if (state.streak >= 3) streakStat.classList.add('hot');
+  else streakStat.classList.remove('hot');
+}
+
+function resetAll(){
+  if (!confirm('Reset all answers, points, and streaks? Start completely fresh?')) return;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ─────────  CELEBRATION FX ENGINE  ───────── */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resizeCanvas();
+addEventListener('resize', resizeCanvas);
+
+function drawStar(x, y, r, color){
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const radius = i % 2 === 0 ? r : r * 0.45;
+    const a = (i * Math.PI) / 5 - Math.PI / 2;
+    const px = x + Math.cos(a) * radius;
+    const py = y + Math.sin(a) * radius;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles = particles.filter(p => {
+    p.vy += p.gravity;
+    p.vx *= 0.992;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 1;
+    p.rot = (p.rot || 0) + (p.spin || 0);
+    if (p.life <= 0 || p.y > canvas.height + 30) return false;
+    ctx.globalAlpha = Math.min(1, p.life / 40);
+    if (p.shape === 'star') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      drawStar(0, 0, p.size, p.color);
+      ctx.restore();
+    } else if (p.shape === 'square') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size, -p.size*0.4, p.size*2, p.size*0.8);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+    return true;
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+const COLORS_GOLD = ['#fbbf24','#b8860b','#fde68a','#f59e0b','#ffd700','#fff8dc'];
+const COLORS_PARTY = ['#fbbf24','#1b7a3d','#1a3a5c','#b8860b','#fff','#34d399','#f59e0b'];
+
+function fireworks(x, y, count, colors, power){
+  count = count || 28;
+  colors = colors || COLORS_PARTY;
+  power = power || 1;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+    const speed = (2.5 + Math.random() * 4) * power;
+    const shapes = ['circle','star','star','circle'];
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 55 + Math.random() * 35,
+      size: 2 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      gravity: 0.13,
+      shape: shapes[Math.floor(Math.random() * shapes.length)],
+      rot: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.2
+    });
+  }
+}
+
+function goldenShower(duration, intensity){
+  duration = duration || 1800;
+  intensity = intensity || 5;
+  const start = Date.now();
+  const interval = setInterval(() => {
+    if (Date.now() - start > duration) { clearInterval(interval); return; }
+    for (let i = 0; i < intensity; i++) {
+      const shape = Math.random() > 0.5 ? 'star' : (Math.random() > 0.5 ? 'square' : 'circle');
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: -15,
+        vx: (Math.random() - 0.5) * 1.8,
+        vy: 1.5 + Math.random() * 2.5,
+        life: 240,
+        size: 3 + Math.random() * 4,
+        color: COLORS_GOLD[Math.floor(Math.random() * COLORS_GOLD.length)],
+        gravity: 0.04,
+        shape,
+        rot: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.25
+      });
+    }
+  }, 35);
+}
+
+function floatPoints(x, y, points, streak){
+  const el = document.createElement('div');
+  el.className = 'float-pts';
+  let emoji = '✨';
+  if (streak >= 10) emoji = '🌟';
+  else if (streak >= 5) emoji = '⭐';
+  else if (streak >= 3) emoji = '🔥';
+  let text = `+${points} ${emoji}`;
+  if (streak >= 2) text += ` ×${streak}`;
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = (y - 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function happyFace(x, y){
+  const faces = ['😊','😄','🎉','🌟','💫','✨'];
+  const el = document.createElement('div');
+  el.className = 'float-pts';
+  el.style.fontSize = '2.2rem';
+  el.textContent = faces[Math.floor(Math.random() * faces.length)];
+  el.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function pulseStreak(){
+  const stat = document.getElementById('streakStat');
+  stat.classList.add('pulse');
+  setTimeout(() => stat.classList.remove('pulse'), 700);
+}
+
+function shakeWrong(optEl){
+  optEl.classList.add('shake');
+  setTimeout(() => optEl.classList.remove('shake'), 500);
+}
+
+function celebrate(optEl, points, streak){
+  const rect = optEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // Always: fireworks + floating points + streak pulse
+  fireworks(cx, cy, 28, COLORS_PARTY, 1);
+  floatPoints(cx, rect.top, points, streak);
+  pulseStreak();
+
+  // Streak ≥ 3: extra golden burst + happy face
+  if (streak >= 3) {
+    setTimeout(() => fireworks(cx, cy, 18, COLORS_GOLD, 0.8), 100);
+    happyFace(cx, rect.top - 10);
+  }
+
+  // Streak ≥ 5: stars from the top corners
+  if (streak >= 5) {
+    setTimeout(() => fireworks(80, 80, 20, COLORS_GOLD, 0.9), 150);
+    setTimeout(() => fireworks(canvas.width - 80, 80, 20, COLORS_GOLD, 0.9), 250);
+  }
+
+  // Milestones at 5, 10, 15, 20, 25
+  if ([5, 10, 15, 20, 25].includes(streak)) {
+    showMilestone(streak);
+    goldenShower(2200, 7);
+  }
+}
+
+function showMilestone(streak){
+  const banner = document.createElement('div');
+  banner.className = 'milestone-banner';
+  let title;
+  if (streak >= 25) title = '👑 LEGENDARY';
+  else if (streak >= 20) title = '🏆 Unstoppable!';
+  else if (streak >= 15) title = '💎 Phenomenal!';
+  else if (streak >= 10) title = '⭐ Brilliant!';
+  else title = '🔥 On Fire!';
+  banner.innerHTML = `${title}<span class="small">${streak} correct in a row</span>`;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 2400);
+}
+
+function completionCelebration(state){
+  const total = QUESTIONS.length;
+  const correct = Object.entries(state.answers).filter(([k,v]) => QUESTIONS[k].correct === v).length;
+  const pct = Math.round(correct/total*100);
+
+  // Sustained gold shower
+  goldenShower(4500, 10);
+
+  // Cascading firework finale
+  setTimeout(() => fireworks(innerWidth/2, innerHeight/3, 60, COLORS_PARTY, 1.4), 200);
+  setTimeout(() => fireworks(innerWidth*0.25, innerHeight/2.5, 45, COLORS_GOLD, 1.2), 700);
+  setTimeout(() => fireworks(innerWidth*0.75, innerHeight/2.5, 45, COLORS_GOLD, 1.2), 1100);
+  setTimeout(() => fireworks(innerWidth/2, innerHeight/2, 70, COLORS_PARTY, 1.5), 1700);
+
+  // Final banner
+  const banner = document.createElement('div');
+  banner.className = 'milestone-banner';
+  let title;
+  if (pct === 100) title = '🏆 PERFECT SCORE';
+  else if (pct >= 80) title = '🌟 Outstanding!';
+  else if (pct >= 65) title = '✅ You Pass!';
+  else title = '💪 Keep Studying!';
+  banner.innerHTML = `${title}<span class="small">${correct} / ${total} · ${state.points} pts · best streak ${state.maxStreak}</span>`;
+  banner.style.animationDuration = '4.5s';
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 4500);
+}
+
+render();
+</script>
+
+</body>
+</html>

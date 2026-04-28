@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NPPE Practice — Chapter 10: Ethics & Employment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#070F22;
+    --navy:#0E1E40;
+    --navy-2:#142A55;
+    --navy-3:#1E3A78;
+    --gold:#D4AF37;
+    --gold-bright:#F4D078;
+    --gold-soft:#A88824;
+    --cream:#F5EFE0;
+    --cream-dim:#E2D9C2;
+    --good:#5DD39E;
+    --bad:#E25555;
+    --shadow-1:0 10px 30px rgba(0,0,0,.35);
+    --shadow-2:0 25px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 85% -10%, rgba(212,175,55,.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, rgba(30,58,120,.55), transparent 55%),
+      linear-gradient(180deg, var(--navy-deep) 0%, #050A18 100%);
+    color:var(--cream);
+    font-family:'Lora', Georgia, serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .grain{
+    pointer-events:none;
+    position:fixed; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.93  0 0 0 0 0.85  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:.5; mix-blend-mode:overlay; z-index:1;
+  }
+  .wrap{position:relative; z-index:2; max-width:980px; margin:0 auto; padding:48px 24px 96px;}
+  header.top{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:24px; margin-bottom:36px; flex-wrap:wrap;
+  }
+  .brand{display:flex; gap:18px; align-items:center;}
+  .seal{
+    width:62px; height:62px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, var(--gold-soft) 100%);
+    box-shadow:0 0 0 3px var(--navy-deep), 0 0 0 4px var(--gold-soft), 0 12px 30px rgba(212,175,55,.35);
+    display:grid; place-items:center;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700; font-size:24px; color:var(--navy-deep);
+    letter-spacing:.5px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(28px, 4vw, 42px);
+    letter-spacing:.5px;
+    margin:0;
+    line-height:1.1;
+  }
+  h1 em{
+    font-style:italic; color:var(--gold-bright);
+    font-weight:500;
+  }
+  .sub{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:3px;
+    color:var(--cream-dim); text-transform:uppercase;
+    margin-top:6px; opacity:.85;
+  }
+  .meta{
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+  }
+  .pill{
+    padding:8px 14px; border:1px solid rgba(212,175,55,.35);
+    border-radius:999px; font-size:12.5px;
+    color:var(--cream-dim); background:rgba(20,42,85,.45);
+    backdrop-filter:blur(6px);
+    font-family:'JetBrains Mono', monospace; letter-spacing:1.5px;
+  }
+  .pill b{color:var(--gold-bright); font-weight:500}
+
+  /* Controls bar */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+    background:linear-gradient(180deg, rgba(20,42,85,.7), rgba(14,30,64,.7));
+    border:1px solid rgba(212,175,55,.25);
+    padding:14px 16px;
+    border-radius:14px;
+    margin-bottom:22px;
+    box-shadow:var(--shadow-1);
+  }
+  .seg{
+    display:flex; background:rgba(7,15,34,.6);
+    border:1px solid rgba(212,175,55,.25); border-radius:999px;
+    padding:4px;
+  }
+  .seg button{
+    background:transparent; border:0; color:var(--cream-dim);
+    font-family:'JetBrains Mono', monospace; font-size:11.5px;
+    letter-spacing:2px; text-transform:uppercase;
+    padding:8px 14px; border-radius:999px; cursor:pointer;
+    transition:all .25s;
+  }
+  .seg button.active{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:var(--navy-deep); font-weight:600;
+    box-shadow:0 4px 12px rgba(212,175,55,.4);
+  }
+  .btn{
+    background:transparent; cursor:pointer;
+    color:var(--cream); border:1px solid rgba(212,175,55,.35);
+    padding:9px 16px; border-radius:999px;
+    font-family:'JetBrains Mono', monospace; font-size:11.5px;
+    letter-spacing:2px; text-transform:uppercase;
+    transition:all .2s;
+  }
+  .btn:hover{border-color:var(--gold-bright); color:var(--gold-bright);}
+  .btn.primary{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:var(--navy-deep); font-weight:600; border:0;
+  }
+  .btn.primary:hover{filter:brightness(1.07); color:var(--navy-deep);}
+  .btn.danger{border-color:rgba(226,85,85,.55); color:#FFB1B1;}
+  .btn.danger:hover{background:rgba(226,85,85,.15); color:#fff;}
+  .spacer{flex:1}
+
+  /* Stats strip */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px; margin-bottom:22px;
+  }
+  .stat{
+    background:linear-gradient(180deg, rgba(20,42,85,.55), rgba(14,30,64,.55));
+    border:1px solid rgba(212,175,55,.25);
+    border-radius:12px; padding:14px 14px;
+    position:relative; overflow:hidden;
+  }
+  .stat .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--cream-dim); opacity:.85;
+  }
+  .stat .value{
+    font-family:'Cormorant Garamond', serif;
+    font-size:32px; line-height:1; color:var(--gold-bright);
+    margin-top:6px; font-weight:600;
+  }
+  .stat .value small{
+    font-size:14px; color:var(--cream-dim); margin-left:4px;
+    font-family:'Lora',serif; font-weight:400;
+  }
+  .stat.streak .value{ color:#FFC661; }
+  .progbar{
+    height:6px; border-radius:999px;
+    background:rgba(7,15,34,.6); margin-top:10px; overflow:hidden;
+    border:1px solid rgba(212,175,55,.18);
+  }
+  .progbar > i{
+    display:block; height:100%;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    width:0%; transition:width .5s ease;
+  }
+
+  /* Question card */
+  .card{
+    background:linear-gradient(180deg, rgba(20,42,85,.78), rgba(10,22,52,.85));
+    border:1px solid rgba(212,175,55,.28);
+    border-radius:18px; padding:28px 28px 24px;
+    box-shadow:var(--shadow-2);
+    position:relative;
+  }
+  .qhead{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:16px; margin-bottom:14px;
+  }
+  .qnum{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:3px; color:var(--gold-bright);
+    text-transform:uppercase;
+  }
+  .qtopic{
+    font-family:'Lora', serif; font-style:italic;
+    font-size:13px; color:var(--cream-dim); opacity:.9;
+    text-align:right;
+  }
+  .qtext{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(20px, 2.4vw, 24px);
+    line-height:1.45; color:var(--cream);
+    margin:6px 0 22px;
+  }
+  .opts{display:flex; flex-direction:column; gap:10px;}
+  .opt{
+    display:flex; gap:14px; align-items:flex-start;
+    padding:14px 16px;
+    background:rgba(7,15,34,.55);
+    border:1px solid rgba(212,175,55,.22);
+    border-radius:12px; cursor:pointer;
+    transition:all .2s ease;
+    position:relative; overflow:hidden;
+  }
+  .opt:hover{border-color:var(--gold); transform:translateY(-1px);}
+  .opt .letter{
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    color:var(--gold-bright);
+    display:grid; place-items:center;
+    font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:600;
+  }
+  .opt .text{
+    flex:1; line-height:1.5; color:var(--cream);
+    font-size:15.5px;
+  }
+  .opt.correct{
+    border-color:var(--good);
+    background:linear-gradient(180deg, rgba(93,211,158,.16), rgba(93,211,158,.06));
+  }
+  .opt.correct .letter{
+    border-color:var(--good); color:var(--good); background:rgba(93,211,158,.12);
+  }
+  .opt.wrong{
+    border-color:var(--bad);
+    background:linear-gradient(180deg, rgba(226,85,85,.16), rgba(226,85,85,.06));
+  }
+  .opt.wrong .letter{
+    border-color:var(--bad); color:#FFB1B1; background:rgba(226,85,85,.14);
+  }
+  .opt.locked{cursor:default; transform:none;}
+
+  .explain{
+    margin-top:18px; padding:16px 18px;
+    border-left:3px solid var(--gold);
+    background:rgba(212,175,55,.07);
+    border-radius:0 10px 10px 0;
+    font-size:14.5px; line-height:1.55;
+    color:var(--cream-dim);
+    display:none;
+  }
+  .explain.show{display:block; animation:fadeUp .35s ease both;}
+  .explain b{color:var(--gold-bright); font-weight:600;}
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .qfoot{
+    margin-top:22px; display:flex; justify-content:space-between;
+    align-items:center; gap:12px; flex-wrap:wrap;
+  }
+
+  /* Result screen */
+  .result{
+    text-align:center; padding:32px 16px;
+  }
+  .result .grade{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(72px, 14vw, 132px); line-height:.95;
+    color:var(--gold-bright); font-weight:600;
+    text-shadow:0 8px 28px rgba(212,175,55,.35);
+  }
+  .result .grade.fail{ color:#FFB1B1; text-shadow:0 8px 28px rgba(226,85,85,.3); }
+  .result .verdict{
+    font-family:'JetBrains Mono', monospace; letter-spacing:4px;
+    text-transform:uppercase; font-size:13px;
+    color:var(--cream-dim); margin-top:8px;
+  }
+  .result .summary{
+    margin:22px auto 0; max-width:520px;
+    font-family:'Lora', serif; line-height:1.55; font-size:15px;
+    color:var(--cream-dim);
+  }
+  .result .actions{
+    margin-top:28px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  }
+
+  /* Floating happy face / celebration */
+  #fxLayer{
+    position:fixed; inset:0; pointer-events:none; z-index:50;
+    overflow:hidden;
+  }
+  .floatPoint{
+    position:absolute;
+    font-family:'Cormorant Garamond', serif; font-weight:700;
+    font-size:42px; color:var(--gold-bright);
+    text-shadow:0 4px 20px rgba(212,175,55,.6);
+    animation:floatUp 1.4s ease-out forwards;
+  }
+  @keyframes floatUp{
+    0%{transform:translate(-50%,0) scale(.7); opacity:0;}
+    20%{transform:translate(-50%,-10px) scale(1.1); opacity:1;}
+    100%{transform:translate(-50%,-160px) scale(1); opacity:0;}
+  }
+  .smiley{
+    position:absolute; font-size:80px;
+    animation:smileyPop 1.2s ease-out forwards;
+    filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));
+  }
+  @keyframes smileyPop{
+    0%{transform:translate(-50%,-50%) scale(.2) rotate(-30deg); opacity:0;}
+    35%{transform:translate(-50%,-50%) scale(1.25) rotate(0deg); opacity:1;}
+    70%{transform:translate(-50%,-50%) scale(1) rotate(0deg); opacity:1;}
+    100%{transform:translate(-50%,-50%) scale(1) rotate(20deg); opacity:0;}
+  }
+
+  /* shake on wrong */
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);}
+    60%{transform:translateX(-4px);}
+    80%{transform:translateX(4px);}
+  }
+  .shake{animation:shake .42s;}
+
+  /* star burst on chosen option */
+  .opt .stars{position:absolute; inset:0; pointer-events:none;}
+  .opt .stars i{
+    position:absolute; left:50%; top:50%;
+    width:8px; height:8px;
+    background:var(--gold-bright);
+    clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    opacity:0;
+  }
+  .opt.burst .stars i{ animation:starOut .9s ease-out forwards; }
+  @keyframes starOut{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.3);}
+    25%{opacity:1;}
+    100%{opacity:0; transform:translate(var(--dx), var(--dy)) scale(.4) rotate(180deg);}
+  }
+
+  /* footer note */
+  footer{
+    margin-top:40px; text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px; letter-spacing:2.5px; color:var(--cream-dim); opacity:.6;
+    text-transform:uppercase;
+  }
+
+  /* small screens */
+  @media (max-width:640px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .card{padding:22px 18px 20px;}
+    .qtopic{display:none}
+    .opt .text{font-size:14.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<canvas id="confetti"></canvas>
+<style>#confetti{position:fixed; inset:0; z-index:40; pointer-events:none;}</style>
+<div id="fxLayer"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="seal">P.E.</div>
+      <div>
+        <h1>NPPE Practice — <em>Chapter 10</em></h1>
+        <div class="sub">Ethics &amp; Employment · 50 Questions · Ontario Focus</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pill">SOURCE · <b>Andrews · Shaw · Zhang · McPhee, 6e</b></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="seg" id="modeSeg" title="Switch mode">
+      <button data-mode="practice" class="active">Practice</button>
+      <button data-mode="exam">Exam</button>
+    </div>
+    <button class="btn" id="shuffleBtn" title="Shuffle questions">⇅ Shuffle</button>
+    <div class="spacer"></div>
+    <button class="btn danger" id="resetBtn" title="Reset all progress">↺ Reset</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Question</div>
+      <div class="value" id="sQ">1<small>/ 50</small></div>
+      <div class="progbar"><i id="sQbar"></i></div>
+    </div>
+    <div class="stat">
+      <div class="label">Score</div>
+      <div class="value" id="sScore">0<small>pts</small></div>
+      <div class="progbar"><i id="sScoreBar"></i></div>
+    </div>
+    <div class="stat">
+      <div class="label">Correct</div>
+      <div class="value" id="sCorrect">0<small>/ 0</small></div>
+      <div class="progbar"><i id="sCorrectBar"></i></div>
+    </div>
+    <div class="stat streak">
+      <div class="label">Streak</div>
+      <div class="value" id="sStreak">0<small>🔥</small></div>
+      <div class="progbar"><i id="sStreakBar"></i></div>
+    </div>
+  </div>
+
+  <main id="stage"></main>
+
+  <footer>NPPE-style practice · Not affiliated with PEO or Engineers Canada</footer>
+</div>
+
+<script>
+/* ============================================================
+   QUESTIONS — 50 NPPE-style items grounded in Chapter 10
+   ============================================================ */
+const QUESTIONS = [
+  {
+    topic:"Common ethical issues",
+    q:"Provincial and territorial Codes of Ethics ask professionals to uphold which set of basic values?",
+    opts:[
+      "Profitability, efficiency, innovation and growth",
+      "Competence, ethical conduct, responsibility and accountability for actions, and a commitment to the public interest",
+      "Loyalty to employer, productivity, technical excellence and confidentiality",
+      "Compliance, documentation, certification and continuing education"
+    ],
+    a:1,
+    why:"Chapter 10 is explicit: codes differ slightly but ask all professionals to uphold competence, ethical conduct, responsibility and accountability for actions, and a commitment to the public interest. Failure to maintain these values can lead to disciplinary action."
+  },
+  {
+    topic:"Engineers Canada — duty to report",
+    q:"Engineers Canada lists \"duty to report\" as a common ethical situation. This duty requires professionals to:",
+    opts:[
+      "Report all engineering activities monthly to the Association",
+      "Report unethical and illegal activities",
+      "Report only when their employer instructs them to do so",
+      "Report concerns to colleagues but never to outside parties"
+    ],
+    a:1,
+    why:"Among Engineers Canada's twelve common ethical situations is the duty to report unethical and illegal activities — distinct from routine reporting or whistle-blowing protocols."
+  },
+  {
+    topic:"Overruling technical advice",
+    q:"When an employer or client overrules a professional's technical advice, the textbook's recommended response is to:",
+    opts:[
+      "Comply silently, since the employer has authority over decisions",
+      "Resign in protest from the engagement",
+      "Explain the advice and the consequences of ignoring it in writing, and obtain a written response",
+      "File an immediate complaint with the licensing Association"
+    ],
+    a:2,
+    why:"Two steps: (1) explain your advice and the consequences of ignoring it in writing, and (2) get a response in writing. This shifts full responsibility for the consequences to the decision-maker — provided the decision is not itself illegal or unethical."
+  },
+  {
+    topic:"Authority — management vs technical",
+    q:"In a well-run organization, the textbook describes the proper distribution of authority as:",
+    opts:[
+      "Management has authority over technical matters; professionals execute orders",
+      "Management has authority to direct the company's resources; professionals have technical authority to apply engineering or geoscientific knowledge and skills",
+      "Both authorities reside with senior professionals only",
+      "Authority is shared equally for all decisions"
+    ],
+    a:1,
+    why:"Employer (management) authority directs the company's resources. Professional (technical) authority applies engineering or geoscience knowledge and skills. Mutual respect for the distinction is the marker of a well-run organization."
+  },
+  {
+    topic:"Illegal directives",
+    q:"An employer asks a professional to perform an act clearly contrary to law (criminal, civil, business, or a regulation under an Act). The professional must:",
+    opts:[
+      "Comply because employers can direct employees in the workplace",
+      "Comply only after the employer accepts written responsibility",
+      "Advise the employer the action is illegal and refuse to comply",
+      "Quietly do the work but document objections in a personal file"
+    ],
+    a:2,
+    why:"Employers do not have the authority to direct an employee to break the law. The professional must advise the employer and refuse to comply."
+  },
+  {
+    topic:"Code violation — honesty",
+    q:"A non-technical employer asks a design engineer to \"round off\" a calculated fatigue safety factor of 1.82 to 2.0 to meet a client specification. The engineer should:",
+    opts:[
+      "Round it as instructed — the employer has authority over deliverables",
+      "Round to 1.9 as a reasonable compromise",
+      "Refuse — rounding 1.82 to 2.0 is technically wrong (it rounds to 1.8), violates the Code's competence/integrity requirements, and may be attempted fraud",
+      "Comply but flag the inadequacy in a footnote"
+    ],
+    a:2,
+    why:"Rounding 1.82 to two figures yields 1.8, not 2.0. The fatigue life is inadequate. The Code requires competence and integrity/honesty; the request also resembles fraud, which is illegal."
+  },
+  {
+    topic:"Code violation — secret reviews",
+    q:"A manager privately asks you to review a colleague's work and expense accounts and provide secret comments to justify firing them. Under every Code of Ethics, this:",
+    opts:[
+      "Is acceptable as a confidential management exercise",
+      "Is acceptable provided you only review factual records",
+      "Contravenes the Code — secret reviews of colleagues breach the duty to treat colleagues with courtesy, fairness and good faith, and offend natural justice",
+      "Is acceptable only if HR is informed afterward"
+    ],
+    a:2,
+    why:"Every Code requires courtesy, fairness and good faith toward colleagues; most Codes specifically forbid secret reviews. Secret reviews are contrary to natural justice."
+  },
+  {
+    topic:"Conscience-based objection",
+    q:"Conscientious objection in the engineering and geoscience professions is described as:",
+    opts:[
+      "Common — most provinces have detailed Code provisions for it",
+      "Uncommon — professionals generally avoid working in industries that conflict with their personal ethics",
+      "An automatic legal defence against dismissal",
+      "Grounds for disciplinary action by the Association"
+    ],
+    a:1,
+    why:"Conscientious objection is uncommon in the professions because professionals simply avoid working in industries (e.g. tobacco, gambling, certain armaments) that operate against their personal standards. Codes of Ethics give little explicit guidance."
+  },
+  {
+    topic:"Advocacy bodies — CSPE",
+    q:"The Canadian Society of Professional Engineers (CSPE) was set up to advocate for engineers across Canada in:",
+    opts:["1934", "1973", "1983", "2000"],
+    a:2,
+    why:"CSPE was established in 1983 as a national federation of advocacy groups. As of the 6th edition, Ontario (OSPE) is its only provincial branch."
+  },
+  {
+    topic:"Advocacy bodies — OSPE",
+    q:"The Ontario Society of Professional Engineers (OSPE), established to assist Ontario engineers, was created in:",
+    opts:["1934", "1983", "April 2000", "January 2010"],
+    a:2,
+    why:"OSPE was established in April 2000."
+  },
+  {
+    topic:"Advocacy bodies — NSPE",
+    q:"The American National Society of Professional Engineers (NSPE), whose guidelines for professional employees are useful in Canada, was established in:",
+    opts:["1934", "1973", "1983", "2000"],
+    a:0,
+    why:"NSPE was established in 1934. Its guidelines for professional employees were first published in 1973 and revised (4th ed.) in 2006."
+  },
+  {
+    topic:"NSPE guidelines",
+    q:"The stated purpose of the NSPE guidelines for professional employees is to establish a workplace based on:",
+    opts:[
+      "Maximum profit, efficiency and shareholder value",
+      "Ethical practices, cooperation, mutual respect and fair treatment",
+      "Strict hierarchy, performance metrics and competitive evaluation",
+      "Mandatory unionization and seniority"
+    ],
+    a:1,
+    why:"The NSPE guidelines (60+ clauses across Recruitment, Employment, Professional Development, Termination) aim at a workplace built on \"ethical practices, co-operation, mutual respect, and fair treatment.\""
+  },
+  {
+    topic:"Scope of Association authority",
+    q:"Provincial and territorial Acts give the engineering/geoscience Associations authority over:",
+    opts:[
+      "Salaries, benefits and working hours",
+      "Hiring and firing of professional employees",
+      "Licensing and professional conduct, but not employment matters such as working conditions, pay or hours",
+      "All employment disputes between professionals and employers"
+    ],
+    a:2,
+    why:"The Acts give Associations no authority over employment matters (salaries, benefits, hours, hiring/firing). Associations license and discipline; they do not regulate employment terms."
+  },
+  {
+    topic:"Right to collective action",
+    q:"With respect to professional employees and labour unions, Canadian and U.S. labour law has long held that:",
+    opts:[
+      "Professionals are barred from joining or forming unions",
+      "Professionals have the right to take collective action and may form or join unions, though those who are also company managers cannot",
+      "All professional employees must join a union to bargain collectively",
+      "Only engineers (not geoscientists) may unionize"
+    ],
+    a:1,
+    why:"Professional employees may take collective action and even form/join unions. Professionals who are also company managers cannot — it would be illogical."
+  },
+  {
+    topic:"When to unionize",
+    q:"The textbook positions unionization as:",
+    opts:[
+      "The first step in any employment dispute",
+      "A last resort, after personal or group employment contracts have been attempted",
+      "Best pursued by joining an existing labour union",
+      "A breach of professional ethics"
+    ],
+    a:1,
+    why:"Unionization should be a last resort. Personal or group contracts are simpler, can be just as legally binding with effective negotiation, and avoid bureaucracy."
+  },
+  {
+    topic:"Choosing the union",
+    q:"If professional employees do unionize, the textbook recommends they:",
+    opts:[
+      "Join an existing staff or labour union for greater bargaining power",
+      "Form a collective group composed entirely of professionals, if possible",
+      "Hire a union franchise to act on their behalf",
+      "Operate informally without forming a structured group"
+    ],
+    a:1,
+    why:"Joining an existing union typically makes professionals a minority and risks being obliged to support labour action contrary to their interests. A professionals-only group is preferable."
+  },
+  {
+    topic:"Whistle-blowing — first step",
+    q:"On finding evidence of unsafe practices by an employer, the proper FIRST course of action for the professional employee is to:",
+    opts:[
+      "Immediately notify external regulators",
+      "Resign in protest",
+      "Bring the activities to the immediate attention of the employer or supervisor for action",
+      "File a complaint with the Association"
+    ],
+    a:2,
+    why:"Internal escalation first — communicate the problem clearly and quickly. Delay can be interpreted as condoning the activity."
+  },
+  {
+    topic:"Whistle-blowing — three options",
+    q:"When an employer ignores a hazardous problem, the chapter identifies which three courses of action for the professional?",
+    opts:[
+      "Comply, ignore, or document",
+      "Mediate, arbitrate or litigate",
+      "Correct the problem, blow the whistle, or resign in protest",
+      "Negotiate, escalate or transfer"
+    ],
+    a:2,
+    why:"The three options are: (1) correct the problem internally — usually most effective; (2) blow the whistle to external regulators if internal routes fail; (3) resign in protest, especially where remaining could imply collusion."
+  },
+  {
+    topic:"Whistle-blowing — sequencing",
+    q:"Whistle-blowing to external regulators should be:",
+    opts:[
+      "The first response to any employer misconduct",
+      "Done anonymously through the press whenever possible",
+      "The last option, after all other internal routes have been tried",
+      "Avoided in all circumstances, since dismissal usually follows"
+    ],
+    a:2,
+    why:"Whistle-blowing is unpleasant and unfriendly; companies usually find reasons to dismiss whistle-blowers. It is the last option, reserved for clear and serious public hazards that the employer refuses to correct."
+  },
+  {
+    topic:"Definition of conflict of interest",
+    q:"A conflict of interest occurs when:",
+    opts:[
+      "Two employees disagree about a project's direction",
+      "A professional has a personal interest that could improperly influence their professional judgment",
+      "An employer reassigns a professional's duties",
+      "A professional accepts overtime work"
+    ],
+    a:1,
+    why:"The benefit may be money, gifts (tickets, trips, favours), indirect (helping a friend) or intangible (meeting a celebrity)."
+  },
+  {
+    topic:"Kernaghan & Langford — secret commissions",
+    q:"Accepting a significant gift from someone with whom you have a business relationship is, under Kernaghan and Langford's seven categories:",
+    opts:[
+      "Acceptable provided no benefit is given in return",
+      "Permissible if the gift is below a certain monetary value",
+      "A \"secret commission\" — a conflict of interest exists even if no obvious benefit is given in return",
+      "A \"thank you\" outside the scope of conflicts of interest"
+    ],
+    a:2,
+    why:"The conflict exists by virtue of the relationship — accepting a bribe to ignore shoddy work is the shameful canonical example."
+  },
+  {
+    topic:"Misuse of facilities",
+    q:"Using an employer's computers, telephones, or supplies for private activities is described as:",
+    opts:[
+      "A grey area requiring case-by-case judgment",
+      "Theft — and needs no further explanation",
+      "Acceptable if outside business hours",
+      "Acceptable if the equipment would otherwise be idle"
+    ],
+    a:1,
+    why:"Bluntly stated in the chapter as theft, regardless of \"idle equipment\" rationalizations (see Forte case)."
+  },
+  {
+    topic:"Moonlighting",
+    q:"Why is secret part-time employment (\"moonlighting\") characterized as a conflict of interest?",
+    opts:[
+      "It always reduces the quality of work for the primary employer",
+      "It is illegal in every Canadian province",
+      "An employer pays a professional for knowledge, skill and initiative; secretly diverting these to personal gain is unfair",
+      "It violates federal labour law"
+    ],
+    a:2,
+    why:"Secrecy is the issue. The conflict is severe if the side business competes with the employer or uses the employer's facilities or client list."
+  },
+  {
+    topic:"Self-serving decisions",
+    q:"Using your position to hire relatives or to divert business to a favoured company is:",
+    opts:[
+      "Influence peddling",
+      "A self-serving decision — sometimes called \"self-dealing\" or \"abuse of privilege\"",
+      "A secret commission",
+      "A misuse of facilities"
+    ],
+    a:1,
+    why:"This is the \"self-dealing\" / abuse of privilege category."
+  },
+  {
+    topic:"Influence peddling",
+    q:"Using your professional position to support a particular group, cause or political party is best categorized as:",
+    opts:[
+      "Accepting a secret commission",
+      "Influence peddling",
+      "Misuse of facilities",
+      "Arranging future employment"
+    ],
+    a:1,
+    why:"Influence peddling is itself a self-serving decision, even though the benefit to the professional is less tangible."
+  },
+  {
+    topic:"Confidential information",
+    q:"Acting on an employer's confidential information for personal gain is:",
+    opts:[
+      "An abuse of privilege, a clear conflict of interest, and often illegal",
+      "Acceptable provided you don't use it during working hours",
+      "A grey area — Codes do not address it",
+      "Permitted if the information is also available to competitors"
+    ],
+    a:0,
+    why:"Professionals have a duty to keep employer information confidential. Acting on it for personal gain is abuse of privilege and is often illegal."
+  },
+  {
+    topic:"Future employment",
+    q:"You plan to leave your employer to join a competitor. Under what circumstances may a conflict of interest arise?",
+    opts:[
+      "Never — professionals are free to move",
+      "Only if you take confidential information or trade secrets, or if you have a non-competition clause in your contract",
+      "Always — moving to a competitor is automatically prohibited",
+      "Only if your new salary exceeds your old salary"
+    ],
+    a:1,
+    why:"You may be sued by the former employer if you take trade secrets or confidential information. A non-competition clause may bar the move outright."
+  },
+  {
+    topic:"Three categories of conflict",
+    q:"The three categories of conflict of interest described in the chapter are:",
+    opts:[
+      "Actual, hidden and rumoured",
+      "Clear (actual), potential (latent), and perceived",
+      "Financial, personal and political",
+      "Major, minor and trivial"
+    ],
+    a:1,
+    why:"Clear/actual = currently compromising service; potential/latent = a probable future event would trigger it; perceived = no actual conflict but observers might suspect one."
+  },
+  {
+    topic:"Perceived conflict — example",
+    q:"You ask HR to advertise a job, interview, check references, and hire the best candidate. By coincidence the new hire shares your surname. The conflict is best described as:",
+    opts:[
+      "Actual",
+      "Potential (latent)",
+      "Perceived",
+      "Not a conflict of any kind"
+    ],
+    a:2,
+    why:"There is no actual conflict, but observers might believe one exists. To dispel a perceived conflict, publicly explain that no family relationship exists."
+  },
+  {
+    topic:"Potential conflict — example",
+    q:"A professional standing for mayor accepts a $25,000 anonymous campaign donation from a childhood friend who runs the gravel company that handles the town's winter sand-spreading contract. Until the election:",
+    opts:[
+      "There is no conflict because the donation is anonymous",
+      "There is an actual conflict the moment the donation is accepted",
+      "No conflict exists, but a potential (latent) conflict will arise if the professional is elected and must negotiate the contract",
+      "The conflict is purely perceived"
+    ],
+    a:2,
+    why:"The conflict is potential — election is the triggering event. Secrecy is the real problem; the donor must be made public, and the mayor must declare and step away from negotiations."
+  },
+  {
+    topic:"Avoiding conflicts",
+    q:"When a conflict of interest arises accidentally or unavoidably, the simplest solution is generally:",
+    opts:[
+      "Resign immediately from the position",
+      "Conceal it from the employer to avoid embarrassment",
+      "Full disclosure — usually to a superior — so others can see no favouritism is involved",
+      "Negotiate a private side payment"
+    ],
+    a:2,
+    why:"If everyone knows about it, no benefit or favouritism can hide. Family relationships at work are the standard illustration: disclose to a superior who can verify no favouritism exists."
+  },
+  {
+    topic:"Case 10.1 — Random meeting",
+    q:"At a social gathering, a friend at a rival firm tells you they will receive a recruitment bonus if you are hired and offers to introduce you. Ethically, you may:",
+    opts:[
+      "Not apply — the bonus is a disqualifying conflict",
+      "Apply — the friend's conflict of interest was disclosed to you, so it does not contravene the Code",
+      "Apply only if you also receive a finder's fee",
+      "Apply only after reporting the offer to the Association"
+    ],
+    a:1,
+    why:"It is really a request to apply. The recruitment bonus is a conflict for the friend, but disclosure to you means it does not contravene the Code."
+  },
+  {
+    topic:"Case 10.1 — Targeted contact",
+    q:"While preparing your employer's bid, a friend at a rival firm bidding on the same project offers you a job and bonus if you bring \"a few documents\" — your employer's cost estimates and design details. The offer is:",
+    opts:[
+      "Acceptable, since both companies could benefit from your expertise",
+      "Acceptable if only publicly available documents are taken",
+      "Industrial espionage — clearly unethical under every Code, and possibly illegal",
+      "Acceptable if you have a written employment offer first"
+    ],
+    a:2,
+    why:"Both you and the \"friend\" would breach the Code. Likely illegal. Could result in disciplinary action."
+  },
+  {
+    topic:"Case 10.1 — Downsizing",
+    q:"After your firm loses the bid you worked on, the winning rival offers you a job working on the same project. Ethically, this is:",
+    opts:[
+      "Always unethical because you worked on the losing bid",
+      "Ethically acceptable, unless your contract has a non-competition clause; you should still disclose the offer to your current employer and refuse to share confidential or proprietary information",
+      "Unethical unless your current employer gives written permission",
+      "Acceptable only if you bring your former employer's design with you"
+    ],
+    a:1,
+    why:"Acceptable in principle, but disclose the offer to the current employer and assure them no proprietary information will be shared."
+  },
+  {
+    topic:"Case 10.2 — Senior overrules junior",
+    q:"A senior supervisor (25 years' experience) instructs you, after thorough re-checking, to reduce dam project cost estimates by 15% based on a \"gut feeling\" — to keep the bid attractive — intending to recover funds via overruns and add-ons. The proper response is:",
+    opts:[
+      "Reduce the estimate as instructed; he is your boss",
+      "Submit two reports — one optimistic, one realistic",
+      "Do not change the report; the supervisor may overrule you, but if he does, he must seal and sign the revised report himself",
+      "Resign from the firm to protect your licence"
+    ],
+    a:2,
+    why:"Codes require honesty and good faith. Putting your seal on a report you believe to be incorrect is professional misconduct. Recovering funds via overruns/add-ons is dishonest and an infraction of the Code."
+  },
+  {
+    topic:"The professional seal",
+    q:"Affixing your professional seal to a document is best understood as:",
+    opts:[
+      "A legal formality with no professional meaning",
+      "Required only on government submissions",
+      "A mark of quality assuring the client the report was carefully and competently prepared by, or under, the practitioner",
+      "Optional for senior engineers"
+    ],
+    a:2,
+    why:"The seal is a mark of quality. Ontario explicitly defines signing or sealing a final report not actually prepared or checked by the practitioner as professional misconduct."
+  },
+  {
+    topic:"Case 10.3 — Negligence",
+    q:"Engineer Gamma, overloaded with work, skims a draft report prepared by a technologist, fills in some gaps, and seals it without checking — the report contains errors. Gamma is:",
+    opts:[
+      "Protected because the work was \"under her supervision\"",
+      "Guilty of negligence — a busy schedule is not a defence",
+      "Liable only if the client suffers a loss",
+      "Free of fault because the technologist actually wrote the report"
+    ],
+    a:1,
+    why:"Negligence under every Code. \"Busy schedule\" is not a defence at a disciplinary hearing."
+  },
+  {
+    topic:"Case 10.3 — Employer responsibility",
+    q:"In Case 10.3, what is the employer's role and risk regarding Gamma's apparently excessive workload?",
+    opts:[
+      "None — workload is purely the engineer's responsibility",
+      "The Code addresses workload directly; the employer is automatically liable",
+      "If a client suffers loss from a faulty report, the client typically sues the employer rather than the engineer — so cost-cutting via workload may be a false saving",
+      "Only the technologist could be held liable"
+    ],
+    a:2,
+    why:"The Code does not address workload directly, but workload that defeats competence becomes unprofessional. Clients usually sue employers, so squeezing salaries via overload can backfire financially."
+  },
+  {
+    topic:"Case 10.4 — Forte's moonlighting",
+    q:"Engineer Forte secretly does evening side-work in his employer's offices on his employer's software, arguing the computers \"would otherwise be idle.\" This is:",
+    opts:[
+      "Ethical — no loss is caused to the employer",
+      "A clear conflict of interest contrary to every Code of Ethics — secrecy is the problem",
+      "Ethical because his low salary justifies the practice",
+      "A purely labour-relations matter outside the Code"
+    ],
+    a:1,
+    why:"All employers must be informed when a professional works for more than one. Forte did not inform — secrecy is the violation."
+  },
+  {
+    topic:"Moonlighting — provincial requirements",
+    q:"In some provinces, a professional offering services to the public on a moonlighting basis must:",
+    opts:[
+      "Pay double licensing fees",
+      "Register the moonlighting business, obtain a Certificate of Authorization (\"Permit to Practise\"), and may need liability insurance — failing this is professional misconduct",
+      "Limit the work to weekends only",
+      "Get only verbal employer approval"
+    ],
+    a:1,
+    why:"Failure to register and obtain a Certificate of Authorization, where required, is itself professional misconduct."
+  },
+  {
+    topic:"Case 10.5 — Misleading boat ad",
+    q:"Engineer Adams discovers the company's ad photos show six adults on a boat rated for five. The sales manager dismisses her concern, citing the cost of the ad campaign. Her best next step is:",
+    opts:[
+      "Drop the matter — the sales manager outranks her on marketing",
+      "Confront the sales manager again, more forcefully",
+      "Contact her boss, the engineering manager, immediately and share the photos so the dispute can be settled at the right level (engineering authority overrules misleading ads, with the COO settling any deadlock)",
+      "Resign and report Transport Canada"
+    ],
+    a:2,
+    why:"Public safety is paramount. Engineering must escalate to engineering management — and beyond, if necessary — not re-confront sales. The Transport Canada hull rating is the safety standard advertising must respect."
+  },
+  {
+    topic:"Public safety",
+    q:"Across every provincial Code of Ethics, public safety is:",
+    opts:[
+      "Balanced equally with profitability",
+      "Paramount — most important",
+      "Subordinate to commercial deadlines in marketing matters",
+      "The exclusive responsibility of management, not engineers"
+    ],
+    a:1,
+    why:"Public safety is paramount across every Code."
+  },
+  {
+    topic:"Case 10.6 — Altered structural plans",
+    q:"You discover that a non-engineer crew manager has been deviating from your approved structural drawings on roughly 20 small projects, claiming \"the changes didn't affect strength.\" The professionally correct action is to:",
+    opts:[
+      "Trust the crew manager's experience-based assurance",
+      "Inspect the as-built structures, recalculate strength to determine actual factors of safety, document revised calculations and as-built drawings, and make immediate repairs where needed",
+      "Report only to the Association",
+      "Resign from the project"
+    ],
+    a:1,
+    why:"The crew manager is not qualified to judge strength. The professional must verify, document, and remediate; future supervision must improve."
+  },
+  {
+    topic:"Hyatt Regency walkway collapse (1981)",
+    q:"The Hyatt Regency walkway collapse in Kansas City — the deadliest North American structural failure since the 1907 Quebec Bridge collapse — was caused by:",
+    opts:[
+      "An earthquake during a busy evening",
+      "A minor design change in the walkway support fitting that doubled the load on the supporting fitting (a hazard a free-body diagram would have revealed)",
+      "Substandard concrete in the lobby slab",
+      "A fire that weakened the structural steel"
+    ],
+    a:1,
+    why:"Two 9 m steel rods replaced one 18 m rod for ease of transport, doubling the load on the upper-walkway fitting. About 114 deaths and 200+ injuries. The design engineer's seal was on the revised drawing."
+  },
+  {
+    topic:"LeMessurier and the Citicorp Tower",
+    q:"After the Citicorp Tower in New York was completed, structural engineer William LeMessurier realized that, under certain wind directions, the bolted joints carried much higher loads than originally calculated. His response — which ultimately enhanced his reputation — was to:",
+    opts:[
+      "Conceal the finding to avoid liability",
+      "Inform Citicorp immediately, confirm the issue with wind-tunnel tests, and undertake prompt repairs costing millions of dollars",
+      "Wait until the next routine inspection cycle",
+      "Quietly retrofit the building under a separate contract"
+    ],
+    a:1,
+    why:"LeMessurier faced his error directly, reported promptly, repaired in time to prevent failure, and emerged with an enhanced reputation. (Discussed in detail in Chapter 12.)"
+  },
+  {
+    topic:"Challenger — date",
+    q:"The Challenger space shuttle exploded on:",
+    opts:[
+      "February 1, 2003",
+      "January 28, 1986",
+      "July 4, 1985",
+      "December 12, 1987"
+    ],
+    a:1,
+    why:"Launched 11:38 a.m. on January 28, 1986; exploded 73 seconds into flight at ~14.6 km altitude and Mach 2."
+  },
+  {
+    topic:"Challenger — root cause",
+    q:"The Challenger explosion was traced to:",
+    opts:[
+      "A computer software malfunction",
+      "Failure of a rubber O-ring seal between sections of a rocket booster, allowing hot gas to escape and ultimately rupturing the central hydrogen fuel tank",
+      "Pilot error during ascent",
+      "An external object striking the booster"
+    ],
+    a:1,
+    why:"Cold weather hardened the O-rings; the leak generated lateral thrust, broke a strut, and allowed the booster to swivel into the fuel tank."
+  },
+  {
+    topic:"Challenger — Boisjoly's recommendation",
+    q:"At the evening teleconference before the Challenger launch, Morton-Thiokol's O-ring expert Roger Boisjoly:",
+    opts:[
+      "Recommended proceeding with the launch",
+      "Recommended delaying the launch until the ambient temperature reached at least 53 °F (12 °C), warning that cold could cause O-ring failure",
+      "Was unavailable to attend",
+      "Argued the O-rings were temperature-independent"
+    ],
+    a:1,
+    why:"Boisjoly cited prior booster damage at low temperatures and warned a launch-pad catastrophe was possible — though his data also contained an anomalous failure at 73 °F that NASA's Mulloy seized on."
+  },
+  {
+    topic:"Challenger — Kilminster's intervention",
+    q:"After NASA's Lawrence Mulloy challenged the Morton-Thiokol engineers' recommendation to delay, vice-president Joe Kilminster:",
+    opts:[
+      "Sided firmly with Boisjoly and held to the no-launch recommendation",
+      "Asked NASA for a launch postponement of one week",
+      "Polled four senior engineering managers and asked them to make a \"management decision rather than an engineering decision,\" reversing the previous recommendation and approving the launch",
+      "Cancelled the launch unilaterally"
+    ],
+    a:2,
+    why:"This is the central ethics moment: the framing \"management decision, not engineering decision\" overruled the technical objection. Kilminster's telex to NASA approved the launch."
+  },
+  {
+    topic:"Challenger — philosophy shift",
+    q:"The Challenger commission identified a shift in NASA's launch philosophy from:",
+    opts:[
+      "\"Cost-effectiveness first\" to \"safety first\"",
+      "\"Launch only when engineers can prove it is safe to do so\" to \"launch unless engineers can prove it is unsafe to do so\"",
+      "\"Engineering autonomy\" to \"shared responsibility\"",
+      "\"Contractor-led\" to \"agency-led\""
+    ],
+    a:1,
+    why:"That inverted burden of proof — caused by political and financial schedule pressure — is the textbook's principal ethics lesson from Challenger."
+  }
+];
+
+/* ============================================================
+   STATE & PERSISTENCE
+   ============================================================ */
+const STORAGE_KEY = "nppe_ch10_v1";
+let state = {
+  mode:"practice",          // "practice" | "exam"
+  order: shuffleIndices(QUESTIONS.length, false), // start in given order
+  current: 0,
+  answered: {},             // { qIndex: chosenOpt }
+  scoreCorrect: 0,
+  scoreWrong: 0,
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  finished: false
+};
+function shuffleIndices(n, doShuffle){
+  const a = Array.from({length:n}, (_,i)=>i);
+  if(!doShuffle) return a;
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function save(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const s = JSON.parse(raw);
+      if(s && Array.isArray(s.order) && s.order.length === QUESTIONS.length){
+        state = Object.assign(state, s);
+      }
+    }
+  }catch(e){}
+}
+load();
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const stage = document.getElementById("stage");
+
+function updateStats(){
+  const total = QUESTIONS.length;
+  const idx = Math.min(state.current, total-1) + 1;
+  document.getElementById("sQ").innerHTML = `${idx}<small>/ ${total}</small>`;
+  document.getElementById("sQbar").style.width = ((state.current)/total*100)+"%";
+
+  const maxPts = total * 10 + total * 5; // 10 base + up to 5 streak
+  document.getElementById("sScore").innerHTML = `${state.points}<small>pts</small>`;
+  document.getElementById("sScoreBar").style.width = Math.min(100, (state.points/maxPts*100))+"%";
+
+  const answeredCount = Object.keys(state.answered).length;
+  document.getElementById("sCorrect").innerHTML = `${state.scoreCorrect}<small>/ ${answeredCount}</small>`;
+  document.getElementById("sCorrectBar").style.width = (answeredCount? state.scoreCorrect/answeredCount*100 : 0)+"%";
+
+  document.getElementById("sStreak").innerHTML = `${state.streak}<small>🔥</small>`;
+  document.getElementById("sStreakBar").style.width = Math.min(100, state.streak*10)+"%";
+}
+
+function render(){
+  updateStats();
+  if(state.finished || state.current >= QUESTIONS.length){
+    renderResult();
+    return;
+  }
+  const qIdx = state.order[state.current];
+  const Q = QUESTIONS[qIdx];
+  const chosen = state.answered[qIdx];
+  const isAnswered = chosen !== undefined;
+
+  const optsHtml = Q.opts.map((t,i)=>{
+    let cls = "opt";
+    if(isAnswered){
+      cls += " locked";
+      if(state.mode === "practice"){
+        if(i === Q.a) cls += " correct";
+        else if(i === chosen) cls += " wrong";
+      } else {
+        if(i === chosen) cls += (i === Q.a ? " correct" : " wrong");
+      }
+    }
+    return `
+      <div class="${cls}" data-i="${i}">
+        <div class="letter">${String.fromCharCode(65+i)}</div>
+        <div class="text">${escapeHtml(t)}</div>
+        <div class="stars">${Array.from({length:10}).map(()=>'<i></i>').join('')}</div>
+      </div>`;
+  }).join("");
+
+  const showExplain = state.mode === "practice" && isAnswered;
+  const explainHtml = showExplain
+    ? `<div class="explain show"><b>${chosen===Q.a?"Correct.":"Not quite — answer: "+String.fromCharCode(65+Q.a)+"."}</b> ${escapeHtml(Q.why)}</div>`
+    : `<div class="explain"></div>`;
+
+  const isLast = state.current === QUESTIONS.length - 1;
+  const nextLabel = isLast ? "Finish ▸" : "Next ▸";
+  const canAdvance = state.mode === "exam" ? true : isAnswered;
+
+  stage.innerHTML = `
+    <article class="card">
+      <div class="qhead">
+        <div class="qnum">Q ${state.current+1} / ${QUESTIONS.length}</div>
+        <div class="qtopic">${escapeHtml(Q.topic)}</div>
+      </div>
+      <div class="qtext">${escapeHtml(Q.q)}</div>
+      <div class="opts">${optsHtml}</div>
+      ${explainHtml}
+      <div class="qfoot">
+        <button class="btn" id="prevBtn" ${state.current===0?"disabled style='opacity:.4;cursor:not-allowed'":""}>◂ Prev</button>
+        <button class="btn primary" id="nextBtn" ${canAdvance?"":"disabled style='opacity:.5;cursor:not-allowed'"}>${nextLabel}</button>
+      </div>
+    </article>
+  `;
+
+  // bind
+  stage.querySelectorAll(".opt").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      if(state.answered[qIdx] !== undefined) return; // locked
+      pickAnswer(qIdx, parseInt(el.dataset.i, 10), el);
+    });
+  });
+  document.getElementById("prevBtn").addEventListener("click", ()=>{
+    if(state.current>0){ state.current--; save(); render(); }
+  });
+  document.getElementById("nextBtn").addEventListener("click", ()=>{
+    if(!canAdvance) return;
+    if(isLast){ state.finished = true; save(); render(); fireBigCelebration(); return; }
+    state.current++;
+    save(); render();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+}
+
+function pickAnswer(qIdx, choice, el){
+  const Q = QUESTIONS[qIdx];
+  state.answered[qIdx] = choice;
+  const correct = choice === Q.a;
+  if(correct){
+    state.scoreCorrect++;
+    state.streak++;
+    if(state.streak > state.bestStreak) state.bestStreak = state.streak;
+    const streakBonus = Math.min(5, state.streak); // up to +5
+    const gained = 10 + streakBonus;
+    state.points += gained;
+    save();
+    celebrate(el, gained);
+  } else {
+    state.scoreWrong++;
+    state.streak = 0;
+    save();
+    el.classList.add("shake","wrong");
+    setTimeout(()=>el.classList.remove("shake"), 500);
+  }
+  render();
+}
+
+/* ============================================================
+   RESULT SCREEN
+   ============================================================ */
+function renderResult(){
+  const total = QUESTIONS.length;
+  const correct = state.scoreCorrect;
+  const pct = Math.round((correct/total)*100);
+  const passThreshold = 70;
+  const passed = pct >= passThreshold;
+  const verdict = passed ? "Pass · NPPE Threshold Met" : "Keep Studying · Below 70%";
+  const grade = passed ? "✓" : "↻";
+
+  stage.innerHTML = `
+    <article class="card result">
+      <div class="grade ${passed?"":"fail"}">${grade}</div>
+      <div class="verdict">${verdict}</div>
+      <div class="summary">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:48px; line-height:1; color:var(--gold-bright); margin:18px 0 6px;">${correct} / ${total}</div>
+        <div>${pct}% correct · ${state.points} points · best streak ${state.bestStreak} 🔥</div>
+        <div style="margin-top:14px; font-size:13.5px;">
+          ${passed
+            ? "Strong showing. Re-take with shuffle to keep the recall sharp; the NPPE rewards reasoning under unfamiliar phrasings."
+            : "Review the cases (10.1–10.6, Challenger), the three categories of conflict of interest, and the three whistle-blowing options. Toggle to Practice mode to read explanations as you go."}
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="againBtn">↻ Try Again</button>
+        <button class="btn" id="reviewBtn">Review Answers</button>
+      </div>
+    </article>
+  `;
+  document.getElementById("againBtn").addEventListener("click", ()=>doReset(true));
+  document.getElementById("reviewBtn").addEventListener("click", ()=>{
+    state.finished = false; state.current = 0; save(); render();
+  });
+}
+
+/* ============================================================
+   CELEBRATIONS
+   ============================================================ */
+const fxLayer = document.getElementById("fxLayer");
+const cvs = document.getElementById("confetti");
+const ctx = cvs.getContext("2d");
+function sizeCanvas(){
+  cvs.width = window.innerWidth;
+  cvs.height = window.innerHeight;
+}
+sizeCanvas();
+window.addEventListener("resize", sizeCanvas);
+
+let particles = [];
+function tickParticles(){
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  particles = particles.filter(p=>p.life > 0);
+  particles.forEach(p=>{
+    p.vy += p.g;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life -= 1;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.globalAlpha = Math.max(0, p.life/p.maxLife);
+    ctx.fillStyle = p.color;
+    if(p.shape === "rect"){
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.55);
+    } else if(p.shape === "circle"){
+      ctx.beginPath(); ctx.arc(0,0,p.size/2,0,Math.PI*2); ctx.fill();
+    } else { // star
+      drawStar(ctx, 0, 0, 5, p.size*0.55, p.size*0.25);
+      ctx.fill();
+    }
+    ctx.restore();
+  });
+  if(particles.length) requestAnimationFrame(tickParticles);
+  else ctx.clearRect(0,0,cvs.width,cvs.height);
+}
+function drawStar(ctx, cx, cy, spikes, outerR, innerR){
+  let rot = Math.PI/2*3, x=cx, y=cy;
+  const step = Math.PI/spikes;
+  ctx.beginPath(); ctx.moveTo(cx, cy-outerR);
+  for(let i=0;i<spikes;i++){
+    x = cx + Math.cos(rot)*outerR; y = cy + Math.sin(rot)*outerR;
+    ctx.lineTo(x,y); rot += step;
+    x = cx + Math.cos(rot)*innerR; y = cy + Math.sin(rot)*innerR;
+    ctx.lineTo(x,y); rot += step;
+  }
+  ctx.lineTo(cx, cy-outerR); ctx.closePath();
+}
+
+function spawnConfetti(originX, originY, intensity=1){
+  const COLORS = ["#D4AF37","#F4D078","#FFE9A8","#5DD39E","#F5EFE0","#1E3A78"];
+  const n = Math.floor(60*intensity);
+  for(let i=0;i<n;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = 4 + Math.random()*7;
+    const shapes = ["rect","circle","star","star"];
+    particles.push({
+      x: originX, y: originY,
+      vx: Math.cos(angle)*speed*(0.6+Math.random()*0.8),
+      vy: Math.sin(angle)*speed - 4 - Math.random()*3,
+      g: 0.18 + Math.random()*0.08,
+      rot: Math.random()*Math.PI*2,
+      vr: (Math.random()-0.5)*0.35,
+      size: 6 + Math.random()*10,
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      shape: shapes[Math.floor(Math.random()*shapes.length)],
+      life: 80 + Math.floor(Math.random()*40),
+      maxLife: 120
+    });
+  }
+  // golden shower — vertical streamers from the top
+  for(let i=0;i<Math.floor(40*intensity);i++){
+    particles.push({
+      x: Math.random()*cvs.width,
+      y: -20 - Math.random()*100,
+      vx: (Math.random()-0.5)*1.2,
+      vy: 4 + Math.random()*4,
+      g: 0.05,
+      rot: Math.random()*Math.PI*2,
+      vr: (Math.random()-0.5)*0.2,
+      size: 5 + Math.random()*7,
+      color: Math.random()<0.65 ? "#F4D078" : "#D4AF37",
+      shape: Math.random()<0.5 ? "rect":"star",
+      life: 140 + Math.floor(Math.random()*60),
+      maxLife: 200
+    });
+  }
+  if(particles.length) requestAnimationFrame(tickParticles);
+}
+
+function celebrate(optEl, gained){
+  // 1) star burst inside option
+  optEl.classList.add("burst");
+  optEl.querySelectorAll(".stars i").forEach((s, i)=>{
+    const ang = (i / 10) * Math.PI*2 + Math.random()*0.4;
+    const dist = 60 + Math.random()*60;
+    s.style.setProperty("--dx", `calc(-50% + ${Math.cos(ang)*dist}px)`);
+    s.style.setProperty("--dy", `calc(-50% + ${Math.sin(ang)*dist}px)`);
+  });
+  setTimeout(()=>optEl.classList.remove("burst"), 1000);
+
+  // 2) confetti from option center
+  const r = optEl.getBoundingClientRect();
+  spawnConfetti(r.left + r.width/2, r.top + r.height/2, 1);
+
+  // 3) floating +points
+  const point = document.createElement("div");
+  point.className = "floatPoint";
+  point.textContent = `+${gained}`;
+  point.style.left = (r.left + r.width/2) + "px";
+  point.style.top  = (r.top + 20) + "px";
+  fxLayer.appendChild(point);
+  setTimeout(()=>point.remove(), 1500);
+
+  // 4) happy face on big streaks
+  if(state.streak >= 3){
+    const face = document.createElement("div");
+    face.className = "smiley";
+    face.textContent = state.streak>=8 ? "🤩" : state.streak>=5 ? "😎" : "😄";
+    face.style.left = (r.left + r.width/2) + "px";
+    face.style.top  = (r.top + r.height/2) + "px";
+    fxLayer.appendChild(face);
+    setTimeout(()=>face.remove(), 1300);
+  }
+}
+
+function fireBigCelebration(){
+  const total = QUESTIONS.length;
+  const pct = state.scoreCorrect/total;
+  if(pct < 0.5) return; // gentle for low scores
+  // multi-burst fireworks
+  let bursts = pct >= 0.9 ? 8 : pct >= 0.7 ? 5 : 3;
+  for(let i=0;i<bursts;i++){
+    setTimeout(()=>{
+      const x = cvs.width*(0.15 + Math.random()*0.7);
+      const y = cvs.height*(0.2 + Math.random()*0.4);
+      spawnConfetti(x, y, 1.2);
+    }, i*350);
+  }
+}
+
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+document.getElementById("modeSeg").addEventListener("click", (e)=>{
+  const btn = e.target.closest("button[data-mode]");
+  if(!btn) return;
+  document.querySelectorAll("#modeSeg button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  state.mode = btn.dataset.mode;
+  save(); render();
+});
+document.getElementById("shuffleBtn").addEventListener("click", ()=>{
+  state.order = shuffleIndices(QUESTIONS.length, true);
+  state.current = 0;
+  state.answered = {};
+  state.scoreCorrect = 0; state.scoreWrong = 0;
+  state.points = 0; state.streak = 0;
+  state.finished = false;
+  save(); render();
+});
+document.getElementById("resetBtn").addEventListener("click", ()=>doReset(false));
+
+function doReset(keepShuffle){
+  if(!confirm("Reset all progress and start over?")) return;
+  state = {
+    mode: state.mode,
+    order: keepShuffle ? state.order : shuffleIndices(QUESTIONS.length, false),
+    current: 0,
+    answered: {},
+    scoreCorrect:0, scoreWrong:0,
+    points:0, streak:0, bestStreak:0,
+    finished:false
+  };
+  save(); render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+// init mode segment from state
+document.querySelectorAll("#modeSeg button").forEach(b=>{
+  b.classList.toggle("active", b.dataset.mode === state.mode);
+});
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+  }[m]));
+}
+
+render();
+</script>
+</body>
+</html>

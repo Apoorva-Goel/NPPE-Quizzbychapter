@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Quizzes — Study Hub</title>
+<meta name="description" content="Free, browser-based practice quizzes for the Canadian National Professional Practice Examination (NPPE). Self-paced multiple-choice questions across multiple textbooks.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%238b2232'/%3E%3Ctext x='50' y='68' font-size='62' font-family='Georgia,serif' font-weight='700' fill='%23f5f0e8' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#faf9f6;--text:#1a1a2e;--accent:#8b2232;--accent-light:#f0e0e3;
+    --accent2:#b8860b;--accent2-light:#f7eed4;
+    --card:#fff;--border:#e0ddd6;--muted:#6b6879;--highlight:#f5f0e8;
+    --done:#1a6b3c;--done-bg:#e8f5ee;
+    --shadow-sm:0 1px 2px rgba(26,26,46,.04),0 1px 1px rgba(26,26,46,.03);
+    --shadow-md:0 4px 16px rgba(26,26,46,.06),0 2px 4px rgba(26,26,46,.04);
+    --shadow-lg:0 12px 32px rgba(26,26,46,.08),0 4px 8px rgba(26,26,46,.04);
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --bg:#0f0f14;--text:#e8e6e1;--accent:#d4626f;--accent-light:#2a1a1e;
+      --accent2:#fbbf24;--accent2-light:#2a2210;
+      --card:#1a1a22;--border:#2e2e38;--muted:#9a97a8;--highlight:#1e1e28;
+      --done:#4ade80;--done-bg:#0f2918;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+      --shadow-md:0 4px 16px rgba(0,0,0,.4);
+      --shadow-lg:0 12px 32px rgba(0,0,0,.5);
+    }
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+  /* ============ HEADER ============ */
+  .header{background:var(--accent);color:#fff;padding:40px 24px 56px;position:relative;overflow:hidden}
+  .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#d4a26a,var(--accent2),#d4a26a)}
+  .header::before{content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(ellipse at center,rgba(184,134,11,.15) 0%,transparent 60%);pointer-events:none}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+  .eyebrow{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;opacity:.85;margin-bottom:14px;color:#fde68a}
+  .header h1{font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-.5px;margin-bottom:10px;line-height:1.15}
+  .header h1 em{font-style:italic;color:#fde68a;font-weight:600}
+  .header .tagline{font-family:'DM Sans',sans-serif;font-size:clamp(14px,2vw,16px);opacity:.92;max-width:640px;line-height:1.5}
+
+  /* ============ STATS RIBBON ============ */
+  .stats-ribbon{max-width:1100px;margin:-32px auto 0;padding:0 24px;position:relative;z-index:2}
+  .stats-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:24px;box-shadow:var(--shadow-md)}
+  .stat{display:flex;align-items:baseline;gap:8px;font-family:'DM Sans',sans-serif}
+  .stat-num{font-size:26px;font-weight:700;color:var(--accent);font-family:'Source Serif 4',serif}
+  .stat-label{font-size:13px;color:var(--muted);font-weight:500}
+  .stats-divider{width:1px;height:28px;background:var(--border)}
+
+  /* ============ MAIN ============ */
+  main{max-width:1100px;margin:0 auto;padding:48px 24px 80px}
+
+  /* ============ FILTER BAR ============ */
+  .filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:32px}
+  .search-box{flex:1;min-width:220px;position:relative}
+  .search-box input{width:100%;padding:11px 14px 11px 40px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .15s,box-shadow .15s}
+  .search-box input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+  .search-box svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);width:16px;height:16px}
+  .filter-pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+  .pill:hover{border-color:var(--accent);color:var(--accent)}
+  .pill.active{border-color:var(--accent);background:var(--accent);color:#fff}
+
+  /* ============ BOOK SECTION ============ */
+  .book{margin-bottom:56px;scroll-margin-top:24px}
+  .book-header{margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid var(--border);position:relative}
+  .book-header::after{content:'';position:absolute;bottom:-2px;left:0;width:60px;height:2px;background:var(--accent2)}
+  .book-tag{display:inline-block;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);background:var(--accent2-light);padding:5px 10px;border-radius:5px;margin-bottom:10px}
+  .book-title{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.4px;line-height:1.2;margin-bottom:6px}
+  .book-edition{font-style:italic;color:var(--muted);font-weight:400;font-size:.85em;display:block;margin-top:2px}
+  .book-meta{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:8px}
+  .book-meta span{display:flex;align-items:center;gap:6px}
+  .book-meta .progress-pill{background:var(--highlight);padding:5px 12px;border-radius:20px;font-weight:600;color:var(--text);font-size:12px}
+
+  /* ============ CHAPTER GRID ============ */
+  .chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .chapter-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px;transition:transform .15s,border-color .15s,box-shadow .15s;position:relative;overflow:hidden;cursor:pointer}
+  .chapter-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent);opacity:0;transition:opacity .15s}
+  .chapter-card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:var(--shadow-md)}
+  .chapter-card:hover::before{opacity:1}
+  .chapter-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .chapter-num{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent)}
+  .status-badge{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+  .badge-done{background:var(--done-bg);color:var(--done)}
+  .badge-started{background:var(--accent2-light);color:var(--accent2)}
+  .chapter-title{font-size:16px;font-weight:600;line-height:1.35;letter-spacing:-.2px}
+  .chapter-meta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);padding-top:10px;border-top:1px dashed var(--border)}
+  .arrow{color:var(--accent);font-weight:700;transition:transform .15s}
+  .chapter-card:hover .arrow{transform:translateX(3px)}
+
+  .chapter-card.placeholder{background:transparent;border-style:dashed;cursor:default;opacity:.55}
+  .chapter-card.placeholder:hover{transform:none;box-shadow:none;border-color:var(--border)}
+  .chapter-card.placeholder:hover::before{opacity:0}
+  .chapter-card.placeholder .chapter-num{color:var(--muted)}
+  .chapter-card.placeholder .chapter-title{color:var(--muted);font-style:italic;font-weight:500}
+
+  .empty-state{padding:48px 24px;text-align:center;background:var(--card);border:1.5px dashed var(--border);border-radius:12px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px}
+  .empty-state strong{color:var(--text);font-weight:600}
+
+  /* ============ FOOTER ============ */
+  footer{margin-top:64px;padding:32px 24px;border-top:1px solid var(--border);background:var(--highlight)}
+  .footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  footer a:hover{text-decoration:underline}
+  .footer-tip{padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.5}
+  .footer-tip strong{color:var(--text);font-weight:700}
+
+  /* ============ NO-RESULTS / ERROR ============ */
+  #no-results{display:none;text-align:center;padding:64px 24px;color:var(--muted);font-family:'DM Sans',sans-serif}
+  #no-results.show{display:block}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:600px){
+    .header{padding:32px 20px 48px}
+    main{padding:32px 16px 56px}
+    .stats-card{padding:14px 18px;gap:14px}
+    .stats-divider{display:none}
+    .stat-num{font-size:22px}
+    .chapter-grid{grid-template-columns:1fr}
+    .book{margin-bottom:40px}
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .book{animation:fadeUp .5s ease backwards}
+  .book:nth-child(2){animation-delay:.05s}
+  .book:nth-child(3){animation-delay:.1s}
+  .book:nth-child(4){animation-delay:.15s}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="eyebrow">Free · Open · Browser-based</div>
+    <h1>NPPE Practice Quizzes <em>Study Hub</em></h1>
+    <p class="tagline">Self-paced multiple-choice practice covering the textbooks behind Canada's National Professional Practice Examination. Open any quiz, choose practice or exam mode, and start drilling.</p>
+  </div>
+</header>
+
+<div class="stats-ribbon">
+  <div class="stats-card">
+    <div class="stat">
+      <span class="stat-num" id="stat-quizzes">—</span>
+      <span class="stat-label">quizzes available</span>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="stat">
+      <span class="stat-num" id="stat-questions">—</span>
+      <span class="stat-label">total questions</span>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="stat">
+      <span class="stat-num" id="stat-books">—</span>
+      <span class="stat-label">textbooks covered</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="filter-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="search" id="search" placeholder="Search chapters by title or topic…" autocomplete="off">
+    </div>
+    <div class="filter-pills" id="book-filters">
+      <button class="pill active" data-book="all">All books</button>
+    </div>
+  </div>
+
+  <div id="books-container"></div>
+
+  <div id="no-results">
+    <p>No chapters match your search.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      Built with care for fellow NPPE candidates.
+      <span id="footer-author"></span>
+    </div>
+    <div class="footer-tip">
+      <strong>📚 Tip:</strong> Bookmark this page. Each quiz remembers your progress in your browser.
+    </div>
+  </div>
+</footer>
+
+<script src="quizzes.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const data = window.QUIZZES_DATA;
+  if(!data || !data.books){
+    document.getElementById('books-container').innerHTML =
+      '<div class="empty-state"><strong>Setup needed:</strong> quizzes.js could not be loaded.</div>';
+    return;
+  }
+
+  // ---- Update site title / footer from config
+  if(data.site){
+    if(data.site.title) document.title = data.site.title + ' — Study Hub';
+    if(data.site.author){
+      const a = document.getElementById('footer-author');
+      if(data.site.githubUrl){
+        a.innerHTML = ` · Maintained by <a href="${data.site.githubUrl}" target="_blank" rel="noopener">${data.site.author}</a>`;
+      } else {
+        a.textContent = ` · Maintained by ${data.site.author}`;
+      }
+    }
+  }
+
+  // ---- Build filter pills
+  const filterContainer = document.getElementById('book-filters');
+  data.books.forEach(book => {
+    if(!book.chapters || book.chapters.length === 0) return; // skip empty books in pill bar
+    const btn = document.createElement('button');
+    btn.className = 'pill';
+    btn.dataset.book = book.id;
+    btn.textContent = book.shortLabel || book.title;
+    filterContainer.appendChild(btn);
+  });
+
+  // ---- localStorage progress lookup
+  function getProgress(bookId, chapNum){
+    // Each chapter quiz uses its own localStorage key. We look for any
+    // saved state to indicate "started", and check submission for "completed".
+    // Different chapter files use different storage keys, so we do a broad scan.
+    const prefix = `${bookId}-ch${chapNum}`;
+    for(let i = 0; i < localStorage.length; i++){
+      const key = localStorage.key(i);
+      if(!key) continue;
+      const k = key.toLowerCase();
+      if(k.includes(`chapter${chapNum}`) || k.includes(`ch${chapNum}-`) || k.includes(`ch_${chapNum}`)){
+        try {
+          const v = localStorage.getItem(key);
+          if(v && (v.includes('"submitted":true') || v.includes('submitted'))) return 'completed';
+          if(v) return 'started';
+        } catch(e){}
+      }
+    }
+    return null;
+  }
+
+  // ---- Render books
+  const container = document.getElementById('books-container');
+  let totalQuizzes = 0;
+  let totalQuestions = 0;
+  let booksWithContent = 0;
+
+  data.books.forEach((book, bookIdx) => {
+    const section = document.createElement('section');
+    section.className = 'book';
+    section.dataset.bookId = book.id;
+
+    const chapters = (book.chapters || []).slice().sort((a,b) => a.num - b.num);
+    const total = book.totalChapters || (chapters.length > 0 ? chapters.length : null);
+
+    // Build chapter map for quick lookup of placeholders
+    const chapterMap = new Map();
+    chapters.forEach(c => chapterMap.set(c.num, c));
+
+    // Header
+    const editionLine = book.edition ? ` <span class="book-edition">${book.edition}</span>` : '';
+    let metaParts = [];
+    if(book.authors) metaParts.push(`<span>✍ ${book.authors}</span>`);
+    if(book.year) metaParts.push(`<span>📅 ${book.year}</span>`);
+    if(total){
+      metaParts.push(`<span class="progress-pill">${chapters.length} / ${total} chapters ready</span>`);
+    } else if(chapters.length > 0){
+      metaParts.push(`<span class="progress-pill">${chapters.length} chapter${chapters.length===1?'':'s'} ready</span>`);
+    } else {
+      metaParts.push(`<span class="progress-pill">Coming soon</span>`);
+    }
+
+    section.innerHTML = `
+      <div class="book-header">
+        <div class="book-tag">${book.shortLabel || 'Book ' + (bookIdx+1)}</div>
+        <h2 class="book-title">${book.title}${editionLine}</h2>
+        <div class="book-meta">${metaParts.join('')}</div>
+      </div>
+    `;
+
+    // Chapter grid
+    if(chapters.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.innerHTML = `<strong>Quizzes in progress.</strong><br>Chapter quizzes for this book haven't been added yet — check back soon.`;
+      section.appendChild(empty);
+    } else {
+      booksWithContent++;
+      const grid = document.createElement('div');
+      grid.className = 'chapter-grid';
+
+      // Determine the range of chapter numbers to show
+      const maxNum = total || Math.max(...chapters.map(c => c.num));
+
+      for(let n = 1; n <= maxNum; n++){
+        const ch = chapterMap.get(n);
+        const card = document.createElement('a');
+        if(ch){
+          totalQuizzes++;
+          totalQuestions += (ch.questions || 0);
+          const progress = getProgress(book.id, ch.num);
+          let badge = '';
+          if(progress === 'completed') badge = '<span class="status-badge badge-done">✓ Completed</span>';
+          else if(progress === 'started') badge = '<span class="status-badge badge-started">In progress</span>';
+
+          card.className = 'chapter-card';
+          card.href = ch.file;
+          card.dataset.search = `${ch.num} ${ch.title} ${book.title} ${book.shortLabel||''}`.toLowerCase();
+          card.innerHTML = `
+            <div class="chapter-card-top">
+              <span class="chapter-num">Chapter ${ch.num}</span>
+              ${badge}
+            </div>
+            <h3 class="chapter-title">${ch.title}</h3>
+            <div class="chapter-meta">
+              <span>${ch.questions || '?'} questions</span>
+              <span class="arrow">Open →</span>
+            </div>
+          `;
+        } else {
+          card.className = 'chapter-card placeholder';
+          card.dataset.search = `${n} chapter ${book.title}`.toLowerCase();
+          card.innerHTML = `
+            <div class="chapter-card-top">
+              <span class="chapter-num">Chapter ${n}</span>
+            </div>
+            <h3 class="chapter-title">Coming soon</h3>
+            <div class="chapter-meta">
+              <span>Quiz not yet published</span>
+            </div>
+          `;
+          card.addEventListener('click', e => e.preventDefault());
+        }
+        grid.appendChild(card);
+      }
+      section.appendChild(grid);
+    }
+
+    container.appendChild(section);
+  });
+
+  // ---- Update stats
+  document.getElementById('stat-quizzes').textContent = totalQuizzes;
+  document.getElementById('stat-questions').textContent = totalQuestions.toLocaleString();
+  document.getElementById('stat-books').textContent = booksWithContent;
+
+  // ---- Search functionality
+  const searchInput = document.getElementById('search');
+  const noResults = document.getElementById('no-results');
+
+  function applyFilters(){
+    const q = searchInput.value.trim().toLowerCase();
+    const activePill = document.querySelector('.pill.active');
+    const bookFilter = activePill ? activePill.dataset.book : 'all';
+
+    let visibleCount = 0;
+    document.querySelectorAll('.book').forEach(section => {
+      const matchesBook = bookFilter === 'all' || section.dataset.bookId === bookFilter;
+      let sectionHasVisible = false;
+
+      section.querySelectorAll('.chapter-card').forEach(card => {
+        const matchesSearch = !q || (card.dataset.search && card.dataset.search.includes(q));
+        const visible = matchesBook && matchesSearch;
+        card.style.display = visible ? '' : 'none';
+        if(visible && !card.classList.contains('placeholder')){
+          sectionHasVisible = true;
+          visibleCount++;
+        } else if(visible){
+          sectionHasVisible = true;
+        }
+      });
+
+      section.style.display = (matchesBook && (sectionHasVisible || !q)) ? '' : 'none';
+    });
+
+    noResults.classList.toggle('show', q && visibleCount === 0);
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  document.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      applyFilters();
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>

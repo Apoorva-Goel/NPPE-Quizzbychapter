@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Exam — Chapter 1 (50 Questions)</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#faf9f6;--text:#1a1a2e;--accent:#8b2232;--accent-light:#f0e0e3;
+    --accent2:#b8860b;
+    --card:#fff;--border:#e0ddd6;--correct:#1a6b3c;--correct-bg:#e8f5ee;
+    --correct-border:#a3d9b7;--wrong:#9b2226;--wrong-bg:#fde8e8;
+    --wrong-border:#f0a3a5;--muted:#6b6879;--highlight:#f5f0e8;
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --bg:#0f0f14;--text:#e8e6e1;--accent:#d4626f;--accent-light:#2a1a1e;
+      --accent2:#fbbf24;
+      --card:#1a1a22;--border:#2e2e38;--correct:#4ade80;--correct-bg:#0f2918;
+      --correct-border:#1a5c32;--wrong:#f87171;--wrong-bg:#2a1010;
+      --wrong-border:#7c2222;--muted:#9a97a8;--highlight:#1e1e28;
+    }
+  }
+  body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .header{background:var(--accent);color:#fff;padding:28px 32px 24px;position:relative}
+  .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#d4a26a,var(--accent),#d4a26a)}
+  .header h1{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+  .header p{font-family:'DM Sans',sans-serif;font-size:13px;opacity:.85}
+  .container{max-width:780px;margin:0 auto;padding:0 16px 40px}
+  .score-banner{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:24px 28px;margin:20px 0 12px;display:flex;align-items:center;gap:24px;animation:slideDown .4s ease}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+  .score-circle{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;flex-shrink:0}
+  .score-pass{background:var(--correct-bg);color:var(--correct);border:3px solid var(--correct-border)}
+  .score-fail{background:var(--wrong-bg);color:var(--wrong);border:3px solid var(--wrong-border)}
+  .score-title{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+  .score-detail{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
+  .progress-strip{margin:16px 0 0;padding:14px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
+  .progress-track{flex:1;height:6px;background:var(--highlight);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s ease}
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin:16px 0;padding:24px;transition:border-color .2s}
+  .q-card.card-correct{border-color:var(--correct-border)}
+  .q-card.card-wrong{border-color:var(--wrong-border)}
+  .q-topic{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);margin-bottom:8px}
+  .q-num{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .q-text{font-size:16px;line-height:1.55;font-weight:600;margin-bottom:18px}
+  .option{display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px 16px;margin-bottom:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.45;color:var(--text);transition:all .15s}
+  .option:hover:not(.disabled){border-color:var(--accent);background:var(--accent-light)}
+  .option.selected{border-color:var(--accent);background:var(--accent-light)}
+  .option.disabled{cursor:default}
+  .option.opt-correct{border-color:var(--correct-border);background:var(--correct-bg)}
+  .option.opt-wrong{border-color:var(--wrong-border);background:var(--wrong-bg)}
+  .marker{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px;color:var(--muted);transition:all .15s}
+  .selected .marker{border-color:var(--accent);color:var(--accent);background:#fff}
+  .opt-correct .marker{border-color:var(--correct);color:#fff;background:var(--correct)}
+  .opt-wrong .marker{border-color:var(--wrong);color:#fff;background:var(--wrong)}
+  .expl-toggle{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;padding:8px 0 0;font-weight:600}
+  .expl-box{margin-top:12px;padding:14px 16px;background:var(--highlight);border-radius:8px;font-size:14px;line-height:1.55;color:var(--muted);border-left:3px solid var(--accent);display:none}
+  .expl-box.show{display:block}
+  .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px;gap:12px}
+  .nav-btn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+  .nav-btn:disabled{opacity:.4;cursor:default}
+  .nav-prev{background:var(--highlight);color:var(--text);border:1px solid var(--border)}
+  .nav-prev:hover:not(:disabled){background:var(--border)}
+  .nav-next{background:var(--accent);color:#fff}
+  .nav-next:hover:not(:disabled){opacity:.9}
+  .nav-page{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
+  .submit-section{padding:8px 0 32px;text-align:center}
+  .submit-btn{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;padding:16px 48px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+  .submit-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+  .submit-btn:disabled{opacity:.4;cursor:default}
+  .submit-hint{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);margin-top:8px}
+  .reset-btn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 32px;border-radius:8px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all .15s;margin-top:12px}
+  .reset-btn:hover{background:var(--accent-light)}
+  .mode-bar{display:flex;gap:10px;margin:16px 0 0;flex-wrap:wrap}
+  .mode-btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s}
+  .mode-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .mode-btn.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+
+  /* CELEBRATION FX */
+  #fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+  .progress-strip{flex-direction:column;align-items:stretch}
+  .progress-strip-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;width:100%}
+  .progress-strip .stat{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted)}
+  .progress-strip .stat b{color:var(--text);font-weight:700;font-size:14px}
+  .reset-btn-mini{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all .15s}
+  .reset-btn-mini:hover{background:var(--accent-light)}
+  .float-pts{position:fixed;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.7rem;color:var(--accent2);pointer-events:none;z-index:10000;text-shadow:0 2px 12px rgba(184,134,11,.6),0 0 24px rgba(251,191,36,.4);animation:floatUp 1.5s cubic-bezier(.2,.6,.3,1) forwards;white-space:nowrap}
+  @keyframes floatUp{
+    0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+    18%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+    30%{transform:translate(-50%,-22px) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-100px) scale(.95)}
+  }
+  .streak-fire{display:inline-block;animation:flameDance 1.4s ease-in-out infinite}
+  @keyframes flameDance{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.12)}}
+  .stat.pulse b{animation:streakPulse .65s ease}
+  @keyframes streakPulse{
+    0%,100%{transform:scale(1);color:var(--text)}
+    40%{transform:scale(1.45);color:var(--accent2);text-shadow:0 0 12px rgba(251,191,36,.6)}
+  }
+  .shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)}
+    20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-7px)}
+    40%,60%{transform:translateX(7px)}
+  }
+  .option.opt-correct{animation:correctGlow 1s ease-out}
+  @keyframes correctGlow{
+    0%{box-shadow:0 0 0 0 rgba(26,107,60,.7),0 0 30px 0 rgba(26,107,60,.4)}
+    60%{box-shadow:0 0 0 14px rgba(26,107,60,0),0 0 30px 8px rgba(26,107,60,.2)}
+    100%{box-shadow:0 0 0 0 rgba(26,107,60,0)}
+  }
+  .milestone-banner{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--accent) 0%,#2a5380 50%,var(--accent2) 100%);color:#fff;padding:1.4rem 2.6rem;border-radius:6px;font-family:'DM Serif Display','Source Serif 4',serif;font-size:1.7rem;text-align:center;z-index:10001;box-shadow:0 25px 70px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none;animation:bannerPop 2.4s cubic-bezier(.34,1.4,.64,1) forwards;border:1px solid rgba(251,191,36,.4)}
+  .milestone-banner .small{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:.5rem;opacity:.9;color:#fde68a}
+  @keyframes bannerPop{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+    18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}
+    28%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+    82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(.92) rotate(0)}
+  }
+  .streak-stat{transition:color .3s,text-shadow .3s}
+  .streak-stat.hot b{color:var(--accent2);text-shadow:0 0 8px rgba(251,191,36,.5)}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>NPPE Practice Exam — Chapter 1</h1>
+  <p>Canadian Professional Engineering &amp; Geoscience, 6th Edition &middot; 50 Questions</p>
+</div>
+<div class="container" id="app"></div>
+<canvas id="fxCanvas"></canvas>
+<script>
+const Q=[
+{id:1,t:"Canadian Engineering History",q:"The Rideau Canal, Canada's first megaproject, was built in 1832 to connect which two cities?",o:["Montréal and Toronto","Ottawa and Kingston","Québec City and Montréal","Toronto and Kingston"],c:1,e:"Lieutenant Colonel John By supervised the construction of the Rideau Canal, built in 1832 to connect Ottawa and Kingston. It extends for 202 km and was built by manual labour in only five years."},
+{id:2,t:"Professional Regulation",q:"What event was the primary catalyst for provincial governments to pass laws regulating professional engineering in Canada?",o:["The sinking of the Titanic in 1912","The collapse of the Quebec Bridge in 1907","The construction of the transcontinental railway in 1885","The founding of the Engineering Institute of Canada in 1887"],c:1,e:"The 1907 Quebec Bridge disaster killed approximately 75 workers and remains Canada's most lethal industrial accident. In the decade following, provincial governments passed the first Acts to license professional engineers."},
+{id:3,t:"Professional Licensing",q:"Which province was the first in Canada to regulate geoscience as a profession?",o:["Ontario","British Columbia","Quebec","Alberta"],c:3,e:"In 1955, Alberta was the first province to regulate geoscience (specifically, geology and geophysics)."},
+{id:4,t:"Professional Associations",q:"What is the primary role of the Provincial/Territorial Associations of Professional Engineers and Geoscientists?",o:["To negotiate salaries and benefits for members","To lobby government for increased funding","To set and enforce standards of practice, determine qualifications for admission, and discipline members","To provide insurance and retirement benefits"],c:2,e:"The Associations set qualifications for admission, determine standards of professional practice, discipline members, prevent misuse of titles, and prosecute illegal practice by unqualified individuals."},
+{id:5,t:"Licensing Requirements",q:"What are the typical academic and experience requirements to practise engineering or geoscience in Canada?",o:["A two-year diploma and one year of experience","A four-year university degree and three to four years of acceptable experience","A master's degree and two years of experience","A four-year degree with no experience requirement"],c:1,e:"Applicants typically require both a four-year university degree and an internship—usually three to four years of acceptable experience."},
+{id:6,t:"Quebec Bridge Disaster",q:"What was the primary cause of the 1907 Quebec Bridge collapse, as determined by the Royal Commission?",o:["Sabotage by workers","Faulty materials from the fabricator","Errors in judgment by Cooper and Szlapka, including underestimated design loads","Seismic activity along the St. Lawrence River"],c:2,e:"The Commission assigned most blame to errors in judgment by Cooper and Szlapka. Design loads were underestimated, and when the span was increased from 488 m to 549 m, the dead weight increase was not included in calculations."},
+{id:7,t:"Quebec Bridge Disaster",q:"Theodore Cooper had full technical authority over the Quebec Bridge. Which is TRUE regarding his site involvement?",o:["He visited the site weekly during the final two years","He was unable to visit the site during the final two years due to age and declining health","He relocated to Quebec City to oversee construction","He visited the Phoenix Iron Company shops monthly"],c:1,e:"Cooper never visited the construction site after the supporting piers were built. Due to advancing age and declining health, he was unable to visit during the final two years. He visited the Phoenix Iron Company shops only three times."},
+{id:8,t:"Self-Regulating Professions",q:"Engineering and geoscience in Canada are 'self-regulating' professions. What does this mean?",o:["Engineers and geoscientists set their own work hours","The government delegates responsibility for admission, standards, and discipline to the profession's members","Each individual regulates their own conduct without oversight","Associations negotiate with government on behalf of members"],c:1,e:"Like medicine and law, the government delegates responsibility for admission, standards of practice, and discipline to the members of the profession through their Associations."},
+{id:9,t:"Technical Team",q:"According to the Engineers Canada survey, what percentage of engineers worked on teams?",o:["46 percent","69 percent","79 percent","95 percent"],c:2,e:"A survey showed that 79 percent of engineers worked on teams. Most teams (three out of four) were formed on a project-by-project basis."},
+{id:10,t:"Technical Team Roles",q:"What is the minimum educational requirement to become a certified technologist in Canada?",o:["A bachelor's degree in engineering","A diploma from a technology program at a community college, CEGEP, or CAAT","A master's degree in science","Completion of a skilled trades apprenticeship"],c:1,e:"The basic education needed is a diploma from a technology program at a community college, technical college, CEGEP, or CAAT. Many technologists also have a bachelor's degree."},
+{id:11,t:"Professional Status",q:"The technologist designation in Canada is best described as:",o:["A right to practise — only certified technologists may work in the field","A right to title — certification confers the right to use the title but does not limit unlicensed practice","A licence to sign off on engineering drawings","A mandatory requirement for all technical college graduates"],c:1,e:"The designation is a 'right to title.' It confers the right to use the technologist title but does not limit the right of an unlicensed technologist to practise. Certification is voluntary."},
+{id:12,t:"National Organizations",q:"What is the role of Engineers Canada and Geoscientists Canada?",o:["They directly license engineers and geoscientists across Canada","They set national fee schedules for professional services","They assist the Associations in coordinating licensing policies and procedures across Canada","They provide legal representation to practitioners"],c:2,e:"Engineers Canada and Geoscientists Canada are nonprofit organizations that assist provincial/territorial Associations in coordinating licensing policies and procedures across Canada."},
+{id:13,t:"Canadian Achievements",q:"The CANDU nuclear power system uses natural uranium moderated by which substance?",o:["Light water","Graphite","Heavy water","Liquid sodium"],c:2,e:"CANDU uses natural uranium moderated by heavy water. The uranium does not need enrichment, making the system safer in many respects."},
+{id:14,t:"Canadian Achievements",q:"In 1962, Canada became the third nation to have a satellite in orbit. What was the satellite's name?",o:["Anik A-1","Canadarm","Alouette I","Telesat"],c:2,e:"Alouette I was designed and built in Canada and launched on a U.S. rocket to investigate the ionosphere."},
+{id:15,t:"Geological Survey of Canada",q:"William Logan was appointed the first director of the GSC in what year?",o:["1832","1842","1855","1898"],c:1,e:"In 1842, William Logan was appointed the first director of the Geological Survey of Canada."},
+{id:16,t:"Quebec Bridge Disaster",q:"What caused the SECOND collapse of the Quebec Bridge in 1916?",o:["The same design errors as the 1907 collapse","A material failure in one of the four bearing castings","Excessive wind loads during lifting","Sabotage by protesting workers"],c:1,e:"A material failure in one of the four bearing castings that supported the central span caused the 1916 collapse. It was unrelated to the design. Thirteen men were killed."},
+{id:17,t:"Professional Regulation",q:"In Quebec, the professional engineering and geoscience associations are known as:",o:["The Quebec Association of Professional Engineers and Geoscientists","The Ordre des ingénieurs du Québec and the Ordre des géologues du Québec","Engineers Quebec and Geoscientists Quebec","The Quebec College of Engineers and Geoscientists"],c:1,e:"In Quebec, the Associations are called the Ordre des ingénieurs du Québec and the Ordre des géologues du Québec."},
+{id:18,t:"Engineering vs. Geoscience",q:"Which best distinguishes geoscience from engineering?",o:["Geoscience designs man-made solutions; engineering studies natural systems","Geoscience uses the scientific method to investigate Earth's natural systems; engineering designs man-made solutions using scientific principles","Geoscience requires a doctorate; engineering requires a bachelor's degree","Geoscience is only practised in Alberta"],c:1,e:"Geoscience investigates, maps, models, and predicts Earth's natural systems (which cannot be controlled). Engineering designs man-made solutions using scientific principles (over which the engineer has almost complete control)."},
+{id:19,t:"Quebec Bridge Lessons",q:"Which is NOT a lesson learned from the Quebec Bridge disasters?",o:["Provide adequate funding for projects","Hire capable and competent professionals","Minimize the number of support staff to reduce costs","Ensure that communication is rapid and accurate"],c:2,e:"The actual lesson is the opposite: 'Provide adequate support staff and remuneration for professional people.' Cooper was criticized for accepting inadequate salary and having no support staff."},
+{id:20,t:"Professional Membership",q:"In 2015, approximately how many licensed professional engineers were in Canada?",o:["100,000","150,000","206,000","287,000"],c:2,e:"About 287,000 were on membership lists, but only about 206,000 were licensed professionals. Lists also include EITs and retired engineers."},
+{id:21,t:"Canadian Achievements",q:"Which achievement was recognized on the 1971 Canadian $10 bill?",o:["The Rideau Canal","The Polymer synthetic rubber plant in Sarnia","The CANDU nuclear reactor","The Canadian Pacific Railway"],c:1,e:"The Polymer synthetic rubber factory in Sarnia helped win WWII. Its war contribution was recognized on the 1971 Canadian $10 bill."},
+{id:22,t:"Case History Analysis",q:"The Royal Commission found that Edward Hoare, chief engineer of the Quebec Bridge Company:",o:["Was fully competent but overwhelmed","Had a reputation for integrity but was not technically competent to control the work","Was primarily responsible for the design errors","Had failed to secure adequate funding"],c:1,e:"The Commission said Hoare had a 'reputation for integrity, good judgement and devotion to duty' but was not technically competent to control the work."},
+{id:23,t:"Professional Regulation",q:"Which two jurisdictions do NOT yet regulate geoscience?",o:["Saskatchewan and Manitoba","Yukon and Prince Edward Island","New Brunswick and Nova Scotia","Northwest Territories and Nunavut"],c:1,e:"Yukon and Prince Edward Island do not yet regulate geoscience."},
+{id:24,t:"Canadian Achievements",q:"The Confederation Bridge is notable because it is:",o:["The world's longest suspension bridge","The world's longest saltwater bridge subject to ice hazards","The first bridge using CANDU-generated electricity","The longest freshwater bridge in Canada"],c:1,e:"At 12.9 km, it is the world's longest saltwater bridge subject to ice hazards. It opened in May 1997."},
+{id:25,t:"Technical Team Roles",q:"A professional engineer's stamp on plans and specifications primarily serves to:",o:["Indicate the plans have been reviewed by the Association","Identify unambiguously who is responsible for the accuracy of the documents and computations","Certify government approval of the project","Confirm the project meets international standards"],c:1,e:"The stamp identifies unambiguously who is responsible for the accuracy of the documents and the computations on which they are based."},
+{id:26,t:"Ethics and Case Study",q:"Regarding failure in engineering projects, which statement is most accurate?",o:["Failure is always proof of unethical practice","Failure itself is not proof of unethical or incompetent practice; new projects always involve risk","Failure always results in a Royal Commission","Ethical professionals can guarantee success every time"],c:1,e:"Failure itself is not proof of unethical or incompetent practice. Many projects push the limits of knowledge, and even determined, ethical professionals cannot guarantee success."},
+{id:27,t:"Canadian Achievements",q:"Canada became the first country to use satellites for domestic communications with the launch of:",o:["Alouette I in 1962","Anik A-1 in 1972","Canadarm in 1981","Telesat in 1969"],c:1,e:"Anik A-1 was launched in 1972, followed by Anik A-2 in 1973, making Canada the first country to use satellites for domestic communications."},
+{id:28,t:"Quebec Bridge Design",q:"When Cooper increased the Quebec Bridge span from 488 m to 549 m, what critical error occurred?",o:["The bridge type was changed without analysis","The increased dead weight was not included in stress recalculations","The supporting piers were not redesigned","The steel grade was downgraded to reduce costs"],c:1,e:"The dead weight increased significantly with the longer span, yet this increase was not included in the stress calculations."},
+{id:29,t:"Professional Definition",q:"According to the dictionary definition cited in the text, which is an essential characteristic of a profession?",o:["Members must work as self-employed consultants","Members must earn above-average income","Members commit to continued study and to work with public service as its prime purpose","Members must hold a graduate degree"],c:2,e:"A profession requires 'committing its members to continued study and to a kind of work which has for its prime purpose the rendering of a public service.'"},
+{id:30,t:"Geoscience Achievements",q:"The Sudbury Basin in Ontario was created by:",o:["Volcanic activity 500 million years ago","A comet impact approximately 1.85 billion years ago","Glacial erosion during the last Ice Age","Tectonic plate movement along a fault line"],c:1,e:"The Sudbury Basin is the world's second-largest impact crater, created by a comet 1.85 billion years ago. It is Canada's most productive mining site."},
+{id:31,t:"Canadian Engineering History",q:"What is the significance of the Rideau Canal receiving UNESCO World Heritage Site designation in 2007?",o:["It was the first Canadian structure on the list","It is the only North American canal system of its era still in use with almost all original structures intact","It was the longest canal in the world at the time","It was the first engineering project to receive the designation"],c:1,e:"The Rideau Canal is the only North American canal system of its era that remains in use today. Almost all of its original structures are intact."},
+{id:32,t:"Geoscience Achievements",q:"The Athabasca oil sands in Alberta have the third largest oil reserves in the world, after which two countries?",o:["Russia and the United States","Saudi Arabia and Iran","Venezuela and Saudi Arabia","Iraq and Kuwait"],c:2,e:"Alberta's oil sands have the third largest oil reserves in the world, after Venezuela and Saudi Arabia."},
+{id:33,t:"Canadian Achievements",q:"The Hydro-Québec Manicouagan transmission line, electrified in 1965, was the first to transmit electricity at voltages over:",o:["200 kV (AC)","350 kV (AC)","500 kV (AC)","1,000 kV (AC)"],c:2,e:"When the 735 kV Manicouagan line was electrified in 1965, Hydro-Québec became the first producer to transmit electricity at voltages over 500 kV (AC)."},
+{id:34,t:"Canadian Achievements",q:"The De Havilland Beaver DHC-2, which first flew in 1947, was crucial for developing northern Canada primarily because:",o:["It could carry over 50 passengers","It could take off and land in very short distances, including on floats or skis","It was the world's fastest propeller aircraft","It could fly non-stop across the Atlantic"],c:1,e:"The Beaver carries six passengers plus cargo, can take off and land in very short distances, and when equipped with floats or skis can fly into remote locations."},
+{id:35,t:"Quebec Bridge Disaster",q:"Who was the design engineer of the Phoenix Bridge Company, responsible for generating the design details of the Quebec Bridge?",o:["Theodore Cooper","Edward Hoare","P.L. Szlapka","Norman McLure"],c:2,e:"P.L. Szlapka was the design engineer of the Phoenix Bridge Company, a German-educated engineer with 27 years of experience. He had Cooper's full confidence."},
+{id:36,t:"Quebec Bridge Disaster",q:"Norman McLure's role in the Quebec Bridge project was:",o:["Chief engineer of the Quebec Bridge Company","Design engineer for the Phoenix Bridge Company","The Quebec Bridge Company's inspector of erection","Consulting engineer from New York"],c:2,e:"Norman McLure was the Quebec Bridge Company's inspector of erection. He was appointed by Cooper and reported to both Hoare and Cooper."},
+{id:37,t:"Technical Team Roles",q:"Which of the following designations can a certified technologist use?",o:["P.Eng., P.Geo., or P.L.Eng.","C.E.T., A.Sc.T., R.E.T., or T.P.","C.Tech. only","M.Eng. or M.Sc."],c:1,e:"Certified technologists can use C.E.T. (Certified Engineering Technologist), A.Sc.T. (Applied Science Technologist), R.E.T. (Registered Engineering Technologist), or T.P. (Technologue Professionnel), depending on the province."},
+{id:38,t:"Technical Team Roles",q:"The main role of a research scientist, compared to an engineer, is to:",o:["Apply existing knowledge to practical problems","Generate new knowledge that may not have practical applications for many years","Supervise large construction projects","Design commercial products for market"],c:1,e:"The task of the research scientist is to generate new knowledge, whereas the task of the engineer is to apply that knowledge. A doctorate is typically required for a research scientist."},
+{id:39,t:"Canadian Achievements",q:"The Canadian Pacific Railway transcontinental line was completed in what year?",o:["1867","1880","1885","1900"],c:2,e:"The federal government signed a contract with CPR in 1880, and by 1885 the 'last spike' had been hammered in. The first train from Montréal arrived in Port Moody, BC, in July 1886."},
+{id:40,t:"Canadian Achievements",q:"Dr. John A. Hopps developed the first heart pacemaker in 1950 while working at:",o:["The University of Toronto","The Banting and Best Institute","The National Research Council","McGill University"],c:2,e:"Hopps discovered the principle at the Banting and Best Institute in 1949, and in 1950 developed the first heart pacemaker at the National Research Council."},
+{id:41,t:"Geoscience Achievements",q:"Canada's Cigar Lake uranium deposit is located in which province?",o:["Alberta","Ontario","British Columbia","Saskatchewan"],c:3,e:"The Cigar Lake deposit is in the Athabasca Basin in northern Saskatchewan. It is believed to be the richest uranium deposit in the world, with an average ore grade of 18 percent."},
+{id:42,t:"Geoscience Achievements",q:"Charles Fipke and Dr. Stuart Blusson are credited with discovering:",o:["Oil at Leduc, Alberta","Nickel at the Sudbury Basin","Diamonds near Lac de Gras in the Northwest Territories","Uranium at Cigar Lake, Saskatchewan"],c:2,e:"The pair searched for Kimberlite pipes of volcanic rock and discovered diamonds near Lac de Gras, north of Yellowknife."},
+{id:43,t:"Canadian Achievements",q:"The Mount Macdonald Tunnel under Rogers Pass is significant because it is:",o:["The world's longest railway tunnel","North America's longest railway tunnel","The first tunnel through the Rocky Mountains","Canada's first vehicular tunnel"],c:1,e:"At 14.7 km (9 miles), the Mount Macdonald Tunnel is North America's longest railway tunnel. The Rogers Pass project was completed in 1989."},
+{id:44,t:"Canadian Achievements",q:"Joseph-Armand Bombardier invented the endless-track snowmobile in what year?",o:["1922","1937","1947","1955"],c:1,e:"Bombardier began experimenting with snow machines in 1922 and invented the endless-track snowmobile in 1937."},
+{id:45,t:"Geoscience Achievements",q:"Airborne Electromagnetic (AEM) surveying led directly to the discovery of the Kidd Mine near Timmins, Ontario, by which geoscientist?",o:["William Logan","Charles Fipke","Walter Holyk","Stuart Blusson"],c:2,e:"Walter Holyk applied AEM anomalies in the Canadian Shield and discovered a massive 100 million ton sulphide deposit near Timmins, now the Kidd Mine—one of the world's greatest zinc-copper-lead-silver mines."},
+{id:46,t:"Professional Regulation",q:"Provincial governments first began regulating engineering as a profession in the:",o:["1890s","1900s","1920s","1950s"],c:2,e:"Provincial governments did not regulate engineering as a profession until the 1920s, in the decade following the Quebec Bridge disasters."},
+{id:47,t:"Quebec Bridge Disaster",q:"The Royal Commission criticized Cooper for accepting 'an inadequate salary' for his services. What was the consequence of this?",o:["He was distracted by other paying projects","He had no time to investigate the soundness of the data and theories, allowing fundamental errors to go unchallenged","He cut corners on material specifications","He hired unqualified assistants to save money"],c:1,e:"No provision was made for support staff, and Cooper had no time to investigate the soundness of data and theories, consequently allowing fundamental errors to pass unchallenged."},
+{id:48,t:"Employment Prospects",q:"According to the Randstad report prepared for Engineers Canada in 2013, what was predicted regarding engineering employment?",o:["A surplus of engineers would develop by 2020","An estimated 95,000 professional engineers would retire by 2020, creating a skills shortage","Engineering employment would remain stable with no significant changes","Foreign-trained engineers would fill all vacancies"],c:1,e:"The report estimated 95,000 professional engineers would retire by 2020 and they could not be replaced fast enough, leading to a skills shortage."},
+{id:49,t:"Canadian Achievements",q:"William Shaw's contribution to the IMAX system was the development of:",o:["A new type of film stock","The 'rolling loop' film transport mechanism in the projector","3D glasses technology","Digital projection systems"],c:1,e:"Canadian mechanical engineer William Shaw perfected the 'rolling loop' film transport mechanism, which projects images 10 times the size of conventional ones without vibration or streaking."},
+{id:50,t:"Technical Team Roles",q:"Which of the following best describes the role of an architect in relation to engineers and geoscientists?",o:["Architects supervise all engineering and geoscience work on building projects","Architects are concerned with planning, aesthetic design, and construction management of buildings, often working alongside engineers and geoscientists who handle structural, mechanical, and foundation aspects","Architects have no interaction with engineers or geoscientists","Architects are not licensed professionals"],c:1,e:"Architects handle planning, aesthetic design, and construction management of buildings. They often engage geoscientists for foundation and seismic assessment and engineers for structural, HVAC, and other systems. Architects are licensed under provincial Architects Acts."},
+{id:51,t:"Geoscience Achievements",q:"Hibernia, Canada's largest offshore oil field, is located off the coast of which province?",o:["Nova Scotia","British Columbia","Newfoundland and Labrador","New Brunswick"],c:2,e:"Hibernia is located off Newfoundland and Labrador and has been producing oil since 1997. It produced its one billionth barrel in December 2016."},
+{id:52,t:"Canadian Engineering History",q:"What was Ottawa called before being renamed in 1855, in honour of the builder of the Rideau Canal?",o:["Kingsford","Canalta","Bytown","Loganton"],c:2,e:"Ottawa was called Bytown for almost three decades in Colonel By's honour before being renamed in 1855."},
+{id:53,t:"Geoscience Achievements",q:"Ocean Networks Canada (ONC), established in 2007, is based at which university?",o:["University of British Columbia","McGill University","University of Victoria","Dalhousie University"],c:2,e:"ONC was established at the University of Victoria in 2007 and operates the VENUS and NEPTUNE undersea research facilities."},
+{id:54,t:"Canadian Achievements",q:"The St. Lawrence Seaway permits ocean-going ships to travel approximately how far inland?",o:["800 km (500 miles)","1,600 km (1,000 miles)","3,800 km (2,400 miles)","6,000 km (3,700 miles)"],c:2,e:"The Seaway permits ships to travel up the St. Lawrence River and through the Great Lakes, almost 3,800 km (2,400 miles)."},
+{id:55,t:"Quebec Bridge Disaster",q:"The Quebec Bridge's cantilever design was influenced by the success of which earlier bridge?",o:["The Brooklyn Bridge in New York","The Forth Bridge in Scotland","The Tower Bridge in London","The Golden Gate Bridge in San Francisco"],c:1,e:"The success of the cantilevered Forth Bridge, built in 1890 in Scotland with two spans of 521 m each, influenced the choice of a cantilever design for the Quebec Bridge."},
+{id:56,t:"Professional Regulation",q:"How many professional geoscientists held licences in Canada in 2015?",o:["About 5,000","About 10,500","About 50,000","About 100,000"],c:1,e:"About 10,500 professional geoscientists held licences in 2015, according to Geoscientists Canada."},
+{id:57,t:"Technical Team",q:"According to the Engineers Canada survey, what proportion of engineering teams included a technician or technologist?",o:["About one quarter (25%)","Almost half (46%)","About two thirds (69%)","Almost all (90%)"],c:1,e:"Almost half of the teams (46 percent) included a technician or technologist, and a quarter included a non-engineering technical person."},
+{id:58,t:"Quebec Bridge Disaster",q:"On what date did the first Quebec Bridge collapse occur?",o:["August 29, 1907","September 11, 1916","August 22, 1919","January 1, 1908"],c:0,e:"The south cantilever span collapsed on August 29, 1907, killing approximately 75 workers."},
+{id:59,t:"Canadian Achievements",q:"Chris Hadfield installed the Canadarm2 on the International Space Station in:",o:["1981","1997","April 2001","2003"],c:2,e:"Canadian Space Agency astronaut Chris Hadfield installed the Canadarm2 in April 2001."},
+{id:60,t:"Professional Regulation",q:"Most engineers in Canada practise in which three provinces?",o:["British Columbia, Alberta, and Saskatchewan","Ontario, Alberta, and Quebec","Manitoba, Ontario, and Nova Scotia","Quebec, New Brunswick, and Newfoundland"],c:1,e:"Most engineers practise in Ontario, Alberta, and Quebec, whereas most geoscientists practise in Alberta, Ontario, or British Columbia."}
+];
+
+const PER=10;
+const STORAGE_KEY='nppe_ch1_state_v2';
+let pg=0,filter='all';
+
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem(STORAGE_KEY))||{};
+    return {answers:s.answers||{},points:s.points||0,streak:s.streak||0,maxStreak:s.maxStreak||0};
+  }catch(e){return {answers:{},points:0,streak:0,maxStreak:0};}
+}
+function saveState(state){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+}
+function fqs(){
+  if(filter==='all')return Q;
+  return Q.filter(q=>q.t===filter);
+}
+function topics(){let s=new Set();Q.forEach(q=>s.add(q.t));return [...s]}
+function tp(){return Math.max(1,Math.ceil(fqs().length/PER))}
+
+function render(){
+  const state=loadState();
+  const app=document.getElementById('app');
+  let h='';
+  let qs=fqs();
+  let total=qs.length;
+
+  // Clamp pagination after filter change
+  let totalPages=tp();
+  if(pg>=totalPages)pg=totalPages-1;
+  if(pg<0)pg=0;
+
+  // Topic filter bar
+  h+=`<div class="mode-bar">
+    <button class="mode-btn ${filter==='all'?'active':''}" onclick="setFilter('all')">All (${Q.length})</button>`;
+  topics().forEach(t=>{
+    let n=Q.filter(q=>q.t===t).length;
+    h+=`<button class="mode-btn ${filter===t?'active':''}" onclick="setFilter('${t.replace(/'/g,"\\'")}')">${t} (${n})</button>`;
+  });
+  h+=`</div>`;
+
+  // Stats / progress strip — chapter-wide totals (always visible)
+  let totalAnswered=Object.keys(state.answers).length;
+  let totalCorrect=Q.reduce((a,q)=>a+(state.answers[q.id]===q.c?1:0),0);
+  let totalWrong=totalAnswered-totalCorrect;
+  let pctText=totalAnswered?Math.round(totalCorrect/totalAnswered*100)+'%':'—';
+  let progPct=(totalAnswered/Q.length)*100;
+  let hotCls=state.streak>=3?'hot':'';
+  h+=`<div class="progress-strip">
+    <div class="progress-strip-row">
+      <span class="stat"><b id="answered">${totalAnswered}</b>/${Q.length} answered</span>
+      <span class="stat">Correct <b id="correct">${totalCorrect}</b></span>
+      <span class="stat">Wrong <b id="wrong">${totalWrong}</b></span>
+      <span class="stat">Score <b id="pct">${pctText}</b></span>
+      <span class="stat" id="pointsStat">Points <b id="points">${state.points}</b></span>
+      <span class="stat streak-stat ${hotCls}" id="streakStat">Streak <span class="streak-fire">🔥</span> <b id="streak">${state.streak}</b></span>
+      <button class="reset-btn-mini" onclick="resetAll()">Reset</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress" style="width:${progPct}%"></div></div>
+  </div>`;
+
+  // Question cards (instant-grading model)
+  let start=pg*PER;
+  let pqs=qs.slice(start,start+PER);
+  let letters=['A','B','C','D'];
+
+  pqs.forEach((q,i)=>{
+    let idx=start+i+1;
+    let ua=state.answers[q.id];
+    let answered=ua!==undefined;
+    let ic=answered&&ua===q.c;
+    let iw=answered&&ua!==q.c;
+    h+=`<div class="q-card ${ic?'card-correct':''} ${iw?'card-wrong':''}" id="q${q.id}">
+      <div class="q-topic">${q.t}</div>
+      <div class="q-num">Question ${idx} of ${total}${filter==='all'?'':' (filtered)'}</div>
+      <div class="q-text">${q.q}</div>`;
+    q.o.forEach((opt,oi)=>{
+      let cls='option';
+      if(answered){
+        cls+=' disabled';
+        if(oi===q.c)cls+=' opt-correct';
+        else if(oi===ua)cls+=' opt-wrong';
+      }
+      let onClickAttr=answered?'':`onclick="answer(${q.id},${oi})"`;
+      h+=`<button class="${cls}" ${onClickAttr}><div class="marker">${letters[oi]}</div><div>${opt}</div></button>`;
+    });
+    if(answered){
+      h+=`<div class="expl-box show"><b>Explanation.</b> ${q.e}</div>`;
+    }
+    h+=`</div>`;
+  });
+
+  // Pagination
+  h+=`<div class="nav-bar">
+    <button class="nav-btn nav-prev" onclick="goP(${pg-1})" ${pg===0?'disabled':''}>&larr; Previous</button>
+    <span class="nav-page">Page ${pg+1} of ${totalPages}</span>
+    <button class="nav-btn nav-next" onclick="goP(${pg+1})" ${pg>=totalPages-1?'disabled':''}>Next &rarr;</button>
+  </div>`;
+
+  app.innerHTML=h;
+  updateScore();
+}
+
+function answer(qId,optIdx){
+  const state=loadState();
+  if(state.answers[qId]!==undefined)return;
+  const q=Q.find(qq=>qq.id===qId);
+  if(!q)return;
+  state.answers[qId]=optIdx;
+  const isCorrect=q.c===optIdx;
+  let pointsEarned=0;
+  if(isCorrect){
+    state.streak+=1;
+    if(state.streak>state.maxStreak)state.maxStreak=state.streak;
+    const bonus=Math.min((state.streak-1)*2,20);
+    pointsEarned=10+bonus;
+    state.points+=pointsEarned;
+  }else{
+    state.streak=0;
+  }
+  saveState(state);
+  render();
+  requestAnimationFrame(()=>{
+    const card=document.getElementById('q'+qId);
+    if(!card)return;
+    const optEl=card.querySelectorAll('.option')[optIdx];
+    if(!optEl)return;
+    if(isCorrect)celebrate(optEl,pointsEarned,state.streak);
+    else shakeWrong(optEl);
+    if(Object.keys(state.answers).length===Q.length){
+      setTimeout(()=>completionCelebration(state),900);
+    }
+  });
+}
+
+function updateScore(){
+  const state=loadState();
+  const answered=Object.keys(state.answers).length;
+  let correct=0;
+  Q.forEach(q=>{if(state.answers[q.id]===q.c)correct++;});
+  const wrong=answered-correct;
+  const els={
+    answered:document.getElementById('answered'),
+    correct:document.getElementById('correct'),
+    wrong:document.getElementById('wrong'),
+    pct:document.getElementById('pct'),
+    points:document.getElementById('points'),
+    streak:document.getElementById('streak'),
+    progress:document.getElementById('progress'),
+    streakStat:document.getElementById('streakStat')
+  };
+  if(els.answered)els.answered.textContent=answered;
+  if(els.correct)els.correct.textContent=correct;
+  if(els.wrong)els.wrong.textContent=wrong;
+  if(els.pct)els.pct.textContent=answered?Math.round(correct/answered*100)+'%':'—';
+  if(els.points)els.points.textContent=state.points;
+  if(els.streak)els.streak.textContent=state.streak;
+  if(els.progress)els.progress.style.width=(answered/Q.length*100)+'%';
+  if(els.streakStat){
+    if(state.streak>=3)els.streakStat.classList.add('hot');
+    else els.streakStat.classList.remove('hot');
+  }
+}
+
+function resetAll(){
+  if(!confirm('Reset all answers, points, and streaks? Start completely fresh?'))return;
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+  pg=0;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goP(p){pg=p;window.scrollTo({top:0,behavior:'smooth'});render()}
+function setFilter(f){filter=f;pg=0;window.scrollTo({top:0,behavior:'smooth'});render()}
+
+/* ─────────  CELEBRATION FX ENGINE  ───────── */
+const canvas=document.getElementById('fxCanvas');
+const ctx=canvas.getContext('2d');
+let particles=[];
+function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resizeCanvas();
+addEventListener('resize',resizeCanvas);
+
+function drawStar(x,y,r,color){
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const radius=i%2===0?r:r*0.45;
+    const a=(i*Math.PI)/5-Math.PI/2;
+    const px=x+Math.cos(a)*radius;
+    const py=y+Math.sin(a)*radius;
+    if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles=particles.filter(p=>{
+    p.vy+=p.gravity;
+    p.vx*=0.992;
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.life-=1;
+    p.rot=(p.rot||0)+(p.spin||0);
+    if(p.life<=0||p.y>canvas.height+30)return false;
+    ctx.globalAlpha=Math.min(1,p.life/40);
+    if(p.shape==='star'){
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      drawStar(0,0,p.size,p.color);
+      ctx.restore();
+    }else if(p.shape==='square'){
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-p.size,-p.size*0.4,p.size*2,p.size*0.8);
+      ctx.restore();
+    }else{
+      ctx.fillStyle=p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    }
+    return true;
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+const COLORS_GOLD=['#fbbf24','#b8860b','#fde68a','#f59e0b','#ffd700','#fff8dc'];
+const COLORS_PARTY=['#fbbf24','#1b7a3d','#1a3a5c','#b8860b','#fff','#34d399','#f59e0b'];
+
+function fireworks(x,y,count,colors,power){
+  count=count||28;
+  colors=colors||COLORS_PARTY;
+  power=power||1;
+  for(let i=0;i<count;i++){
+    const angle=(Math.PI*2*i)/count+(Math.random()-0.5)*0.4;
+    const speed=(2.5+Math.random()*4)*power;
+    const shapes=['circle','star','star','circle'];
+    particles.push({
+      x,y,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      life:55+Math.random()*35,
+      size:2+Math.random()*3,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      gravity:0.13,
+      shape:shapes[Math.floor(Math.random()*shapes.length)],
+      rot:Math.random()*Math.PI*2,
+      spin:(Math.random()-0.5)*0.2
+    });
+  }
+}
+
+function goldenShower(duration,intensity){
+  duration=duration||1800;
+  intensity=intensity||5;
+  const start=Date.now();
+  const interval=setInterval(()=>{
+    if(Date.now()-start>duration){clearInterval(interval);return;}
+    for(let i=0;i<intensity;i++){
+      const shape=Math.random()>0.5?'star':(Math.random()>0.5?'square':'circle');
+      particles.push({
+        x:Math.random()*canvas.width,
+        y:-15,
+        vx:(Math.random()-0.5)*1.8,
+        vy:1.5+Math.random()*2.5,
+        life:240,
+        size:3+Math.random()*4,
+        color:COLORS_GOLD[Math.floor(Math.random()*COLORS_GOLD.length)],
+        gravity:0.04,
+        shape,
+        rot:Math.random()*Math.PI*2,
+        spin:(Math.random()-0.5)*0.25
+      });
+    }
+  },35);
+}
+
+function floatPoints(x,y,points,streak){
+  const el=document.createElement('div');
+  el.className='float-pts';
+  let emoji='✨';
+  if(streak>=10)emoji='🌟';
+  else if(streak>=5)emoji='⭐';
+  else if(streak>=3)emoji='🔥';
+  let text=`+${points} ${emoji}`;
+  if(streak>=2)text+=` ×${streak}`;
+  el.textContent=text;
+  el.style.left=x+'px';
+  el.style.top=(y-20)+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+function happyFace(x,y){
+  const faces=['😊','😄','🎉','🌟','💫','✨'];
+  const el=document.createElement('div');
+  el.className='float-pts';
+  el.style.fontSize='2.2rem';
+  el.textContent=faces[Math.floor(Math.random()*faces.length)];
+  el.style.left=(x+(Math.random()-0.5)*80)+'px';
+  el.style.top=y+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+function pulseStreak(){
+  const stat=document.getElementById('streakStat');
+  if(!stat)return;
+  stat.classList.add('pulse');
+  setTimeout(()=>stat.classList.remove('pulse'),700);
+}
+
+function shakeWrong(optEl){
+  optEl.classList.add('shake');
+  setTimeout(()=>optEl.classList.remove('shake'),500);
+}
+
+function celebrate(optEl,points,streak){
+  const rect=optEl.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  fireworks(cx,cy,28,COLORS_PARTY,1);
+  floatPoints(cx,rect.top,points,streak);
+  pulseStreak();
+  if(streak>=3){
+    setTimeout(()=>fireworks(cx,cy,18,COLORS_GOLD,0.8),100);
+    happyFace(cx,rect.top-10);
+  }
+  if(streak>=5){
+    setTimeout(()=>fireworks(80,80,20,COLORS_GOLD,0.9),150);
+    setTimeout(()=>fireworks(canvas.width-80,80,20,COLORS_GOLD,0.9),250);
+  }
+  if([5,10,15,20,25].includes(streak)){
+    showMilestone(streak);
+    goldenShower(2200,7);
+  }
+}
+
+function showMilestone(streak){
+  const banner=document.createElement('div');
+  banner.className='milestone-banner';
+  let title;
+  if(streak>=25)title='👑 LEGENDARY';
+  else if(streak>=20)title='🏆 Unstoppable!';
+  else if(streak>=15)title='💎 Phenomenal!';
+  else if(streak>=10)title='⭐ Brilliant!';
+  else title='🔥 On Fire!';
+  banner.innerHTML=`${title}<span class="small">${streak} correct in a row</span>`;
+  document.body.appendChild(banner);
+  setTimeout(()=>banner.remove(),2400);
+}
+
+function completionCelebration(state){
+  const total=Q.length;
+  const correct=Q.reduce((a,q)=>a+(state.answers[q.id]===q.c?1:0),0);
+  const pct=Math.round(correct/total*100);
+  goldenShower(4500,10);
+  setTimeout(()=>fireworks(innerWidth/2,innerHeight/3,60,COLORS_PARTY,1.4),200);
+  setTimeout(()=>fireworks(innerWidth*0.25,innerHeight/2.5,45,COLORS_GOLD,1.2),700);
+  setTimeout(()=>fireworks(innerWidth*0.75,innerHeight/2.5,45,COLORS_GOLD,1.2),1100);
+  setTimeout(()=>fireworks(innerWidth/2,innerHeight/2,70,COLORS_PARTY,1.5),1700);
+  const banner=document.createElement('div');
+  banner.className='milestone-banner';
+  let title;
+  if(pct===100)title='🏆 PERFECT SCORE';
+  else if(pct>=80)title='🌟 Outstanding!';
+  else if(pct>=65)title='✅ You Pass!';
+  else title='💪 Keep Studying!';
+  banner.innerHTML=`${title}<span class="small">${correct} / ${total} · ${state.points} pts · best streak ${state.maxStreak}</span>`;
+  banner.style.animationDuration='4.5s';
+  document.body.appendChild(banner);
+  setTimeout(()=>banner.remove(),4500);
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Ch. 7 — Computers, Software & Intellectual Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1d;
+    --ink-2: #232328;
+    --ink-3: #2c2c33;
+    --paper: #f5f0e6;
+    --paper-soft: #ebe4d4;
+    --paper-dim: #b8aea0;
+    --gold: #d4a544;
+    --gold-bright: #f4cb6a;
+    --gold-deep: #a87d2c;
+    --rust: #c54a3b;
+    --rust-deep: #8a3128;
+    --moss: #6a8f5e;
+    --plum: #6b4a6e;
+    --shadow: rgba(0,0,0,0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(212,165,68,0.08), transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(107,74,110,0.10), transparent 50%),
+      var(--ink);
+    position: relative;
+  }
+
+  /* Subtle grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' /></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    z-index: 1;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(245,240,230,0.08);
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    flex: 1 1 320px;
+  }
+
+  .eyebrow {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    font-weight: 400;
+    font-size: clamp(28px, 4.2vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold-bright);
+  }
+
+  .subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--paper-dim);
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  /* SCOREBOARD */
+  .scoreboard {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .score-card {
+    background: linear-gradient(180deg, var(--ink-2), var(--ink-3));
+    border: 1px solid rgba(245,240,230,0.08);
+    padding: 12px 16px 10px;
+    border-radius: 4px;
+    min-width: 84px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.3s;
+  }
+  .score-card.pulse {
+    animation: pulseScale 0.6s cubic-bezier(.34,1.56,.64,1);
+    border-color: var(--gold);
+  }
+  @keyframes pulseScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .score-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    margin-bottom: 4px;
+  }
+
+  .score-value {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--gold-bright);
+    line-height: 1;
+  }
+  .score-value .small { font-size: 13px; color: var(--paper-dim); }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 36px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    margin-bottom: 8px;
+  }
+  .progress-meta span:last-child { color: var(--gold); }
+  .progress-bar {
+    height: 3px;
+    background: rgba(245,240,230,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));
+    width: 0%;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 0 16px rgba(244,203,106,0.4);
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: linear-gradient(180deg, var(--ink-2), var(--ink));
+    border: 1px solid rgba(245,240,230,0.08);
+    border-radius: 6px;
+    padding: 36px;
+    position: relative;
+    box-shadow: 0 24px 60px -20px var(--shadow);
+    animation: cardIn 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .q-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  .q-text {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 60;
+    font-weight: 400;
+    font-size: clamp(19px, 2.4vw, 23px);
+    line-height: 1.4;
+    color: var(--paper);
+    margin-bottom: 28px;
+    letter-spacing: -0.005em;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--ink-3);
+    border: 1px solid rgba(245,240,230,0.06);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    color: var(--paper);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+  }
+  .option:hover:not(:disabled) {
+    background: #34343c;
+    border-color: rgba(212,165,68,0.4);
+    transform: translateX(2px);
+  }
+  .option:disabled { cursor: default; }
+
+  .option-letter {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--gold);
+    min-width: 22px;
+    flex-shrink: 0;
+    line-height: 1.5;
+  }
+
+  .option.correct {
+    background: linear-gradient(135deg, rgba(106,143,94,0.25), rgba(106,143,94,0.12));
+    border-color: var(--moss);
+    color: var(--paper);
+    animation: correctGlow 0.6s ease;
+  }
+  .option.correct .option-letter { color: var(--moss); }
+  @keyframes correctGlow {
+    0%, 100% { box-shadow: 0 0 0 rgba(106,143,94,0); }
+    50% { box-shadow: 0 0 24px rgba(106,143,94,0.5); }
+  }
+
+  .option.incorrect {
+    background: linear-gradient(135deg, rgba(197,74,59,0.18), rgba(197,74,59,0.08));
+    border-color: var(--rust);
+    animation: shake 0.5s;
+  }
+  .option.incorrect .option-letter { color: var(--rust); }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  .option.dimmed {
+    opacity: 0.4;
+  }
+
+  .option .check-icon {
+    margin-left: auto;
+    font-size: 18px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .option.correct .check-icon,
+  .option.incorrect .check-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 24px;
+    padding: 16px 20px;
+    border-radius: 4px;
+    display: none;
+    animation: feedIn 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .feedback.show { display: block; }
+  @keyframes feedIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.correct {
+    background: rgba(106,143,94,0.12);
+    border-left: 3px solid var(--moss);
+  }
+  .feedback.incorrect {
+    background: rgba(197,74,59,0.10);
+    border-left: 3px solid var(--rust);
+  }
+  .feedback-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .feedback.correct .feedback-title { color: var(--moss); }
+  .feedback.incorrect .feedback-title { color: var(--rust); }
+  .feedback-detail {
+    font-size: 14px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+  }
+  .feedback-detail strong { color: var(--paper); font-weight: 600; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover { background: var(--gold); color: var(--ink); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .btn:disabled:hover { background: transparent; color: var(--gold); }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .btn-primary:hover {
+    background: var(--gold-bright);
+    box-shadow: 0 4px 20px rgba(244,203,106,0.3);
+  }
+
+  .btn-ghost {
+    border-color: rgba(245,240,230,0.2);
+    color: var(--paper-dim);
+  }
+  .btn-ghost:hover { background: rgba(245,240,230,0.06); color: var(--paper); border-color: var(--paper-dim); }
+
+  /* RESULTS */
+  .results {
+    display: none;
+    text-align: center;
+    padding: 50px 30px;
+    background: linear-gradient(180deg, var(--ink-2), var(--ink));
+    border: 1px solid rgba(212,165,68,0.2);
+    border-radius: 6px;
+    box-shadow: 0 24px 80px -20px var(--shadow);
+    animation: cardIn 0.6s cubic-bezier(.4,0,.2,1);
+  }
+  .results.show { display: block; }
+
+  .results-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .results-grade {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-weight: 400;
+    font-size: clamp(72px, 14vw, 130px);
+    line-height: 1;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    letter-spacing: -0.04em;
+  }
+  .results-score {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 8px;
+  }
+  .results-percent {
+    font-size: 14px;
+    color: var(--paper-dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 36px;
+  }
+
+  .results-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+    padding: 24px;
+    background: rgba(245,240,230,0.03);
+    border-radius: 4px;
+    border: 1px solid rgba(245,240,230,0.06);
+  }
+  .stat-item .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .stat-item .stat-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--gold-bright);
+  }
+
+  .results-message {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--paper-dim);
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.5;
+  }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 14px;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform, opacity;
+  }
+
+  .firework-particle {
+    position: fixed;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform, opacity;
+  }
+
+  /* FLOATING REWARD POPUP */
+  .reward-popup {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 28px;
+    color: var(--gold-bright);
+    text-shadow: 0 2px 24px rgba(244,203,106,0.6);
+    will-change: transform, opacity;
+  }
+
+  /* STREAK FIRE */
+  .streak-fire {
+    display: inline-block;
+    margin-right: 4px;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .score-card.fire-active .streak-fire {
+    animation: flicker 1.5s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.15) rotate(-3deg); }
+  }
+
+  /* RESET MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--ink-2);
+    border: 1px solid rgba(212,165,68,0.3);
+    border-radius: 6px;
+    padding: 36px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 30px 80px var(--shadow);
+  }
+  .modal h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 26px;
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+  }
+  .modal p {
+    color: var(--paper-dim);
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  .modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  /* HEADER FLOURISH */
+  .ornament {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--gold);
+    opacity: 0.6;
+    margin: 0 8px;
+  }
+
+  @media (max-width: 600px) {
+    .question-card { padding: 24px 20px; }
+    .controls { flex-direction: column; gap: 12px; }
+    .controls .btn { width: 100%; }
+    header { align-items: flex-start; }
+  }
+
+  /* Hide initially */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="eyebrow">NPPE Practice · Ontario</div>
+      <h1>Computers, Software<br>&amp; <em>Intellectual Property</em></h1>
+      <div class="subtitle">Chapter 7 · Canadian Professional Engineering &amp; Geoscience, 6<sup>th</sup> ed.</div>
+    </div>
+    <div class="scoreboard">
+      <div class="score-card" id="scoreCard">
+        <div class="score-label">Score</div>
+        <div class="score-value" id="scoreValue">0</div>
+      </div>
+      <div class="score-card" id="streakCard">
+        <div class="score-label">Streak</div>
+        <div class="score-value"><span class="streak-fire">🔥</span><span id="streakValue">0</span></div>
+      </div>
+      <div class="score-card" id="starsCard">
+        <div class="score-label">Stars</div>
+        <div class="score-value">⭐ <span id="starsValue">0</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span>Question <span id="qCurrent">1</span> of <span id="qTotal">50</span></span>
+      <span id="accuracyMeter">— %</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- QUESTION VIEW -->
+  <div id="quizView">
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">Question I</div>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback">
+        <div class="feedback-title" id="feedbackTitle"></div>
+        <div class="feedback-detail" id="feedbackDetail"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-ghost" id="resetBtn">↺ Reset Quiz</button>
+      <button class="btn btn-primary" id="nextBtn" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS VIEW -->
+  <div id="resultsView" class="results">
+    <div class="results-eyebrow">Examination Complete</div>
+    <div class="results-grade" id="finalGrade">A</div>
+    <div class="results-score"><span id="finalCorrect">0</span> of <span id="finalTotal">50</span> correct</div>
+    <div class="results-percent" id="finalPercent">0%</div>
+    <div class="results-stats">
+      <div class="stat-item">
+        <div class="stat-label">Final Score</div>
+        <div class="stat-num" id="finalScore">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Best Streak</div>
+        <div class="stat-num" id="finalStreak">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Stars Earned</div>
+        <div class="stat-num" id="finalStars">0</div>
+      </div>
+    </div>
+    <div class="results-message" id="finalMessage">Well done.</div>
+    <button class="btn btn-primary" id="restartBtn">Take Another Run</button>
+  </div>
+
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h2>Reset progress?</h2>
+    <p>You'll lose your current score, streak, and stars. The quiz will start over from question one.</p>
+    <div class="modal-buttons">
+      <button class="btn btn-ghost" id="cancelReset">Cancel</button>
+      <button class="btn btn-primary" id="confirmReset">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTIONS — 50 NPPE-style items based on Chapter 7
+   ============================================================ */
+const QUESTIONS = [
+  {
+    q: "The Hartford Arena collapse of 1978 is widely regarded as the first large-scale 'computer-aided' structural failure. According to the chapter, what was the basic cause of the collapse?",
+    options: [
+      "Snow loading that exceeded the rated design capacity of the roof",
+      "An oversimplified computer analysis that did not consider buckling as a failure mode",
+      "Defective structural steel supplied by the manufacturer",
+      "Improper assembly of the truss during construction"
+    ],
+    answer: 1,
+    rationale: "Henry Petroski described it as an 'oversimplified computer analysis.' The software treated tension and compression equivalently and ignored Euler buckling — a mode of failure not considered in the analysis."
+  },
+  {
+    q: "How many columns supported the roof of the Hartford Arena?",
+    options: ["Two", "Four", "Eight", "Twelve"],
+    answer: 1,
+    rationale: "The space-frame roof was supported by only four columns, one near each corner of the building, to minimize obstructions to the view of the basketball court."
+  },
+  {
+    q: "The chapter states that any engineer could easily have detected the design flaw in the Hartford Arena, in a matter of minutes, by comparing the computer output against which simple analytical relationship?",
+    options: [
+      "Mohr's circle for plane stress",
+      "The Euler buckling equation",
+      "Castigliano's second theorem",
+      "Bernoulli's equation for flow"
+    ],
+    answer: 1,
+    rationale: "A simple Euler buckling check would have shown that compression members buckle at far lower stresses than the steel's yield strength — the failure mode the software ignored."
+  },
+  {
+    q: "While the Hartford Arena truss was being assembled on the ground and hoisted into place, what warning sign did the design engineers ignore?",
+    options: [
+      "Audible cracking from welded joints during lifting",
+      "A failed independent load test by an outside inspector",
+      "Deflections that contractors described as unreasonably large",
+      "Abnormal readings from strain gauges installed on diagonal members"
+    ],
+    answer: 2,
+    rationale: "Kaminetzky reports that the deflections were so much larger than expected that contractors commented they were unreasonably large. The engineers did not double-check their work."
+  },
+  {
+    q: "How was the legal dispute over the Hartford Arena collapse ultimately resolved?",
+    options: [
+      "By a Supreme Court decision finding the engineers personally negligent",
+      "By an out-of-court settlement after roughly six years of legal preparation",
+      "By a criminal conviction of the lead structural engineer",
+      "By dismissal on the grounds that the snow load exceeded design specifications"
+    ],
+    answer: 1,
+    rationale: "After six years of legal preparation, an out-of-court settlement was reached, which avoided any probing public discussion of the causes of the collapse."
+  },
+  {
+    q: "The Therac-25 was:",
+    options: [
+      "A nuclear reactor control system",
+      "A radiation therapy machine",
+      "An aircraft autopilot system",
+      "A surgical robotic arm"
+    ],
+    answer: 1,
+    rationale: "The Therac-25 was a radiation therapy machine manufactured by AECL. Software defects led to several patient overdoses between 1985 and 1987."
+  },
+  {
+    q: "The chapter identifies the primary cause of the Therac-25 software accidents as:",
+    options: [
+      "Cosmic radiation corrupting the controller's memory",
+      "A 'race condition' produced when operators entered commands in rapid succession",
+      "A mechanical failure in the electron-beam targeting motor",
+      "Unfiltered electrical surges from the hospital's power supply"
+    ],
+    answer: 1,
+    rationale: "Expert operators familiar with the command sequences typed quickly, which created a race condition the safety testing — done with slow, careful entry — never reproduced."
+  },
+  {
+    q: "Which cryptic error message did the Therac-25 display for both underdose and overdose conditions, contributing to operator desensitization?",
+    options: ["Code Red 17", "Malfunction 54", "Critical 99", "System Halt 7"],
+    answer: 1,
+    rationale: "'Malfunction 54' was the same message for both conditions and appeared so often that operators learned to dismiss it with a single keystroke."
+  },
+  {
+    q: "Who first replicated and identified the Therac-25 software error?",
+    options: [
+      "Investigators from the U.S. Food and Drug Administration",
+      "AECL's own engineering team",
+      "The hospital physicist Fritz Hager and a technician at the East Coast Cancer Center",
+      "An independent law firm representing the victims"
+    ],
+    answer: 2,
+    rationale: "After two overdoses in less than a month, hospital physicist Fritz Hager and the technician spent several days reproducing the error — proof that AECL had been unable to find on its own."
+  },
+  {
+    q: "In January 1986, Yakima Valley Memorial Hospital wrote to AECL reporting a possible Therac-25 overdose. According to the chapter, AECL responded by:",
+    options: [
+      "Recalling all Therac-25 units immediately",
+      "Stating that an overdose was not possible and that it was unaware of any other incidents",
+      "Notifying Health Canada and issuing a public advisory",
+      "Offering full refunds to all affected institutions"
+    ],
+    answer: 1,
+    rationale: "AECL replied that an overdose was not possible and that it was not aware of any other incidents — even though, by that time, two other incidents had already been reported and investigated by AECL itself."
+  },
+  {
+    q: "According to PEO's guideline on computer software, who is ultimately responsible for verifying that results obtained from a software tool are accurate and acceptable?",
+    options: [
+      "The vendor or developer of the software",
+      "The professional engineer who uses the software",
+      "The IT department of the engineer's employer",
+      "The professional regulator (PEO) which approves the software"
+    ],
+    answer: 1,
+    rationale: "PEO's guideline places the responsibility squarely on the engineer to verify that software output is reliable, accurate, and applied correctly."
+  },
+  {
+    q: "Most commercial software disclaimers limit the manufacturer's total liability to:",
+    options: [
+      "The full replacement cost of any damaged property",
+      "Indirect business losses only",
+      "The price the user paid for the program",
+      "The greater of actual damages or one million dollars"
+    ],
+    answer: 2,
+    rationale: "Commercial software disclaimers typically deny liability for direct or indirect damages, in effect limiting the manufacturer's exposure to the price of the program."
+  },
+  {
+    q: "According to PEO's guideline, a contract for the development of engineering software for a client should address all of the following EXCEPT:",
+    options: [
+      "Deliverables and scope of use of deliverables",
+      "Limitation of liability",
+      "Maintenance and escrow",
+      "The personal references of the developer"
+    ],
+    answer: 3,
+    rationale: "PEO recommends provisions for what is to be developed, deliverables, scope of use, representations and warranties, ownership, limitation of liability, contract price, and maintenance/escrow — not personal references."
+  },
+  {
+    q: "Software validation through 'dummy runs' involves:",
+    options: [
+      "Running the program with deliberately corrupt data to verify how it crashes",
+      "Using nominal inputs (such as zeros or ones) to verify that the program produces a known answer",
+      "Allowing untrained operators to test usability",
+      "Executing the program in a sandboxed virtual machine"
+    ],
+    answer: 1,
+    rationale: "Dummy runs use nominal inputs that produce a known result (e.g. averaging identical numbers should yield that number with zero standard deviation). They are necessary but not sufficient for validation."
+  },
+  {
+    q: "An 'approximate analytical check,' as a software validation method, involves:",
+    options: [
+      "Comparing the computer output against analytical calculations performed on a simplified configuration of the model",
+      "Asking another engineer to review the source code line by line",
+      "Submitting the software to CIPO for certification",
+      "Running Monte-Carlo simulations to bound the answer"
+    ],
+    answer: 0,
+    rationale: "An approximate analytical check imagines a simpler version of the model that can be solved by hand, then verifies the computer output falls within reasonable bounds of that simpler answer."
+  },
+  {
+    q: "'Complete duplication' as a validation technique means:",
+    options: [
+      "Running the same software twice on the same machine to confirm repeatability",
+      "A full-scale duplication of the computation using different software, hardware, and input files",
+      "Comparing two separate runs of the same program with the same inputs",
+      "Backing up the source code on two independent drives"
+    ],
+    answer: 1,
+    rationale: "Complete duplication uses different software, hardware, and (ideally) different staff to re-perform the calculation — expensive, but it validates input data, theory, and computation."
+  },
+  {
+    q: "According to Engineers Canada, an activity falls under the exclusive scope of software engineering when it:",
+    options: [
+      "Is sold commercially in any form",
+      "Concerns the public interest and requires the application of engineering principles",
+      "Is performed by someone who holds an engineering degree",
+      "Is used in a federally regulated industry"
+    ],
+    answer: 1,
+    rationale: "Engineers Canada's test is twofold: the activity must concern the public interest (life, health, property, the environment, etc.) AND require engineering principles."
+  },
+  {
+    q: "For a small professional practice, the chapter identifies the first line of protection against a complete computer disaster as:",
+    options: [
+      "Real-time replication to a secondary off-site data centre",
+      "Duplication of critical data and programs on backup disks stored in a safe, secure location",
+      "An uninterruptible power supply with battery backup",
+      "Annual insurance audits of computer assets"
+    ],
+    answer: 1,
+    rationale: "The simplest first line of defence is keeping critical data and programs duplicated on backups stored in a safe, secure location, with a recovery plan to lease or buy alternative hardware."
+  },
+  {
+    q: "In a professional office's computer system, the primary purpose of a firewall is to:",
+    options: [
+      "Encrypt all outgoing email automatically",
+      "Guard the computer's connections to the Internet and block unauthorized access",
+      "Provide physical fire suppression for server rooms",
+      "Filter spam from the inbox"
+    ],
+    answer: 1,
+    rationale: "A firewall guards Internet connections and blocks unauthorized access. Combined with antivirus software, it protects against a range of email and web-based threats."
+  },
+  {
+    q: "Under the Canadian Copyright Act, the purchase of a computer program ordinarily includes which of the following rights?",
+    options: [
+      "The right to make multiple copies for use within the same office",
+      "The right to reverse-engineer the program for commercial purposes",
+      "The right to make a backup copy of the program",
+      "The right to distribute the program to professional colleagues"
+    ],
+    answer: 2,
+    rationale: "The Copyright Act allows copying only for backup purposes. It does not authorize multiple-machine copies, distribution, or commercial reverse engineering."
+  },
+  {
+    q: "Under Alberta APEGA's guidelines, the use of pirated software by a member is treated as:",
+    options: [
+      "Permissible if used for personal, non-commercial purposes only",
+      "Acceptable when the software is no longer commercially available",
+      "Unprofessional conduct that may result in disciplinary action",
+      "Tolerable if the value of the software is below a defined threshold"
+    ],
+    answer: 2,
+    rationale: "APEGA explicitly states that using copies of software obtained in violation of copyright is unprofessional conduct, exposing the member to discipline by APEGA in addition to legal liability."
+  },
+  {
+    q: "Canadian copyright law protects:",
+    options: [
+      "Only registered written works that have been formally published",
+      "Original written, artistic, dramatic, and musical works, including computer programs",
+      "Only works deposited with the Canadian Intellectual Property Office",
+      "Inventions, machines, and processes"
+    ],
+    answer: 1,
+    rationale: "Copyright protects original literary, artistic, dramatic, and musical works — including computer programs. Inventions and processes fall under patent law."
+  },
+  {
+    q: "Copyright protection in Canada is obtained:",
+    options: [
+      "Only after registration with CIPO",
+      "Automatically, the moment the work is created",
+      "Only after the work has been published",
+      "Upon payment of an annual maintenance fee"
+    ],
+    answer: 1,
+    rationale: "Copyright exists immediately upon creation. Registration with CIPO is optional but improves the certainty of enforcement."
+  },
+  {
+    q: "The standard duration of copyright protection in Canada for a work by a single human author is:",
+    options: [
+      "20 years from the date of creation",
+      "50 years from first publication",
+      "The life of the author plus 50 years",
+      "The life of the author plus 70 years"
+    ],
+    answer: 2,
+    rationale: "The chapter specifies the life of the author plus 50 years — measured to the end of the calendar year of death."
+  },
+  {
+    q: "Mechanically or electronically reproduced works such as films, photographs, and recordings are typically protected by Canadian copyright for:",
+    options: [
+      "The life of the producer plus 50 years",
+      "A maximum of 50 years from the date of creation",
+      "100 years from the date of publication",
+      "25 years, renewable for further terms"
+    ],
+    answer: 1,
+    rationale: "Films, photos, recordings, and similar mechanically reproduced works are limited to a maximum of 50 years from the date of creation."
+  },
+  {
+    q: "To qualify for a Canadian patent, an invention must be:",
+    options: [
+      "Original and visually distinctive",
+      "New, useful, and innovative (or 'ingenious')",
+      "Mechanical and capable of being mass produced",
+      "Profitable and commercially viable"
+    ],
+    answer: 1,
+    rationale: "The three statutory requirements are novelty, utility, and inventive ingenuity. Most Canadian patent applications today are for improvements to existing patents."
+  },
+  {
+    q: "The duration of protection granted by a Canadian patent is:",
+    options: [
+      "10 years, renewable indefinitely",
+      "15 years, renewable for additional 15-year terms",
+      "20 years from the date of the patent application, non-renewable",
+      "The life of the inventor plus 50 years"
+    ],
+    answer: 2,
+    rationale: "A Canadian patent gives 20 years of protection from the application date, and is not renewable."
+  },
+  {
+    q: "After the petition (cover letter), the four parts that make up a Canadian patent are:",
+    options: [
+      "Cover letter, drawings, claims, and references",
+      "Abstract, specification, claims, and drawings (where appropriate)",
+      "Disclosure, summary, prior art, and inventor's biography",
+      "Claims, abstract, prior art search, and patent fees"
+    ],
+    answer: 1,
+    rationale: "The four substantive parts are the abstract, the specification (disclosure), the claims, and drawings where appropriate."
+  },
+  {
+    q: "In a Canadian patent application, the function of the 'claims' is to:",
+    options: [
+      "Describe how the invention solves a particular problem",
+      "Define the features of the invention that the inventor seeks to protect as property",
+      "List all prior art and previous related inventions",
+      "Identify the materials and tools required to manufacture the invention"
+    ],
+    answer: 1,
+    rationale: "The claims build a 'fence of words' around the invention — they are the enforceable clauses that define what is protected."
+  },
+  {
+    q: "A registered industrial design protects:",
+    options: [
+      "The way a device operates or how it is made",
+      "The shape, configuration, pattern, or ornamentation applied to a finished article",
+      "A logo or symbol used to identify a company in the marketplace",
+      "A new chemical composition of matter"
+    ],
+    answer: 1,
+    rationale: "An industrial design protects only the aesthetic appearance — shape, pattern, ornamentation — of a finished article. The function is protected (if at all) by patent law."
+  },
+  {
+    q: "To obtain protection for an industrial design in Canada, the design must be:",
+    options: [
+      "Sold commercially before any application is filed",
+      "Registered with CIPO",
+      "Marked with a special copyright symbol",
+      "Patented under the Patent Act"
+    ],
+    answer: 1,
+    rationale: "Unlike copyright, industrial design protection is not automatic — registration with CIPO is required, and unregistered designs have no legal protection against imitation."
+  },
+  {
+    q: "Integrated circuit topographies are protected in Canada for:",
+    options: [
+      "5 years, renewable",
+      "10 years from the date of the application",
+      "20 years, non-renewable",
+      "The life of the designer plus 50 years"
+    ],
+    answer: 1,
+    rationale: "Under the Integrated Circuit Topography Act, registration provides 10 years of protection from the application date."
+  },
+  {
+    q: "Trademarks differ from other forms of intellectual property in that they:",
+    options: [
+      "Cannot be registered with CIPO",
+      "Are protected only for the life of the company that owns them",
+      "May be renewed indefinitely as long as they continue to identify the company's goods or services",
+      "Provide protection only within a single province"
+    ],
+    answer: 2,
+    rationale: "Trademarks are the only form of IP that can be renewed indefinitely, provided they continue to serve as a market identifier."
+  },
+  {
+    q: "The initial duration of trademark registration in Canada, as described in the chapter, is:",
+    options: ["5 years", "10 years", "15 years", "20 years"],
+    answer: 2,
+    rationale: "The chapter states that trademark registration grants the right to use the trademark for 15 years, renewable indefinitely."
+  },
+  {
+    q: "The mark 'MC' beside a Canadian trademark indicates:",
+    options: [
+      "'Marque de commerce' (the French equivalent of 'trademark')",
+      "'Manufactured commercially'",
+      "'Marketed in Canada'",
+      "'Multimedia copyright'"
+    ],
+    answer: 0,
+    rationale: "MC stands for 'marque de commerce' — the French equivalent of the English 'TM.' MD ('marque déposée') corresponds to the registered ® mark."
+  },
+  {
+    q: "Trade secrets, unlike patents, are protected primarily by:",
+    options: [
+      "Formal registration with CIPO",
+      "The provisions of the Patent Act",
+      "Confidentiality and employment contracts that the employer must enforce in court",
+      "An automatic legal status equivalent to that of a patent"
+    ],
+    answer: 2,
+    rationale: "Trade secrets have no formal patent-law status. The owner must rely on contractual confidentiality with employees and others who have access to the secret."
+  },
+  {
+    q: "The 2012 amendments to the Canadian Copyright Act (Bill C-11) are commonly known as:",
+    options: [
+      "The Digital Privacy Act",
+      "The Copyright Modernization Act",
+      "The Internet Fair Use Act",
+      "The Intellectual Property Reform Act"
+    ],
+    answer: 1,
+    rationale: "Bill C-11, the Copyright Modernization Act, came into force in November 2012."
+  },
+  {
+    q: "Under the post-2012 'fair dealing' provisions, permissible uses of copyright material include all of the following EXCEPT:",
+    options: [
+      "Research, private study, news reporting, criticism, and review",
+      "Satire, parody, and education",
+      "Commercial reproduction for resale",
+      "Backup copies of legally acquired works"
+    ],
+    answer: 2,
+    rationale: "Fair dealing was expanded in 2012 to include satire, parody, and education, in addition to the original five purposes. Commercial reproduction for resale is not fair dealing."
+  },
+  {
+    q: "Under Canada's 'notice-and-notice' system for online copyright infringement:",
+    options: [
+      "ISPs must remove allegedly infringing content within 24 hours",
+      "ISPs must forward infringement notices to the subscriber but are not required to disclose the subscriber's identity",
+      "ISPs must terminate accounts of repeat alleged infringers",
+      "Copyright holders may directly access subscriber records held by the ISP"
+    ],
+    answer: 1,
+    rationale: "Under notice-and-notice, the ISP forwards the rights holder's notice to the subscriber but is not required to disclose the subscriber's identity or take further action."
+  },
+  {
+    q: "Under the 2012 Copyright Act, a 'digital lock' (technological protection measure, TPM):",
+    options: [
+      "May not be circumvented by the user, even to make a backup copy",
+      "May be freely disabled for personal, non-commercial use",
+      "Is illegal to apply to consumer products",
+      "Has no legal status in Canada"
+    ],
+    answer: 0,
+    rationale: "The 2012 Act prohibits disabling a TPM, helping others to do so, or making/importing/selling devices designed to do so — even where the underlying use would otherwise be lawful."
+  },
+  {
+    q: "To make a legal backup copy of a work under the 2012 Copyright Act, all of the following are required EXCEPT:",
+    options: [
+      "The source copy must be legally acquired",
+      "Any technological lock on the work must not be circumvented",
+      "The backup must be destroyed if the person ceases to own the original",
+      "The backup must be registered with CIPO"
+    ],
+    answer: 3,
+    rationale: "There is no registration requirement for a backup. The other three conditions are all required by the Act."
+  },
+  {
+    q: "Moral rights under Canadian copyright law:",
+    options: [
+      "Are automatically transferred with the copyright when the work is sold",
+      "Remain with the original creator and cannot be assigned to others",
+      "Apply only to works of religious or political content",
+      "Last for 25 years and then expire"
+    ],
+    answer: 1,
+    rationale: "Moral rights — for example, the right to be identified as the author — stay with the original creator and cannot be assigned, although they may need to be enforced through legal action."
+  },
+  {
+    q: "The chapter defines plagiarism as:",
+    options: [
+      "Quoting a source without paying a royalty",
+      "Claiming credit for work that is not your own",
+      "Distributing copies of a work without the owner's permission",
+      "Using public-domain material in a commercial publication"
+    ],
+    answer: 1,
+    rationale: "Plagiarism is claiming credit for work that is not your own. It is usually both a copyright infringement and a serious academic offence."
+  },
+  {
+    q: "A 'patent troll' or Non-Practising Entity (NPE) is best described as:",
+    options: [
+      "An inventor who refuses to license his or her own patents",
+      "A firm that derives income primarily from licensing and litigation rather than from making products",
+      "An international body that polices patent fraud",
+      "A government office responsible for revoking invalid patents"
+    ],
+    answer: 1,
+    rationale: "The GAO study calls them 'patent monetization entities' — their primary focus is revenue from licensing and litigation, not the manufacture of products."
+  },
+  {
+    q: "When Nortel Networks went bankrupt in 2011, a consortium that included Microsoft and Apple ultimately bid for its patent portfolio. The chapter cites the bid amount as approximately:",
+    options: [
+      "$1 billion U.S.",
+      "$2.5 billion U.S.",
+      "$4.5 billion U.S.",
+      "$10 billion U.S."
+    ],
+    answer: 2,
+    rationale: "Nortel was valued at about $1 billion, but the consortium paid roughly $4.5 billion for the patents alone — partly to keep them out of the hands of trolls."
+  },
+  {
+    q: "In the 2006 BlackBerry / Research in Motion patent-troll case described in the chapter, RIM ultimately settled with the NPE for:",
+    options: [
+      "$50 million U.S.",
+      "$612.5 million U.S.",
+      "$1.05 billion U.S.",
+      "$4.5 billion U.S."
+    ],
+    answer: 1,
+    rationale: "RIM settled for $612.5 million U.S., fearing an injunction that could shut down the entire BlackBerry business — and not long after the settlement, the Patent Office ruled many of the disputed patents were invalid."
+  },
+  {
+    q: "In the 'Winch-Atomic' / 'Liftodrome' case history, the court ultimately ruled that inverting the mechanism:",
+    options: [
+      "Constituted a sufficiently new invention to escape infringement",
+      "Did not change the kinematic classification of the mechanism, and so infringed the original patent",
+      "Was a patentable improvement over the original device",
+      "Was outside the scope of Canadian patent law because the change was purely geometric"
+    ],
+    answer: 1,
+    rationale: "Mechanisms are classified by their topology — number and types of members and joints. Inverting the device did not change its kinematic classification, so the components were performing the same functions and the patent was infringed."
+  },
+  {
+    q: "According to the chapter, the basic reasons for regulating intellectual property are to:",
+    options: [
+      "Maximize federal tax revenue from licensed inventions",
+      "Encourage creativity and provide an orderly way to exchange and improve creative ideas",
+      "Restrict foreign competition in Canadian markets",
+      "Permit inventors to retain permanent control over the use of their work"
+    ],
+    answer: 1,
+    rationale: "IP laws aim to encourage creativity by protecting creators' rights for a limited period — in exchange for eventual disclosure to the public."
+  },
+  {
+    q: "When an employee creates intellectual property in the course of their employment, ownership in Canada is normally:",
+    options: [
+      "Retained by the employee, who may license it back to the employer",
+      "Assigned to the employer at registration, with the employee named as the creator",
+      "Held jointly by the employer and the employee",
+      "Transferred to CIPO until the employee leaves the company"
+    ],
+    answer: 1,
+    rationale: "When an employer hires an employee to create IP, the employee is named as creator but ownership is assigned to the employer. Employment contracts should make this explicit."
+  },
+  {
+    q: "Before adopting a new trademark, the chapter recommends that the first step be to:",
+    options: [
+      "File a provisional trademark application with CIPO",
+      "Search the CIPO database to verify that no similar trademark already exists",
+      "Publish the proposed trademark in a national newspaper",
+      "Conduct a public-opinion survey on the proposed mark"
+    ],
+    answer: 1,
+    rationale: "A preliminary CIPO search may save time and effort by revealing whether a similar mark — or a 'prohibited mark' — already exists."
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_ch7_quiz_state_v1';
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIII','XXIV','XXV','XXVI','XXVII','XXVIII','XXIX','XXX','XXXI','XXXII','XXXIII','XXXIV','XXXV','XXXVI','XXXVII','XXXVIII','XXXIX','XL','XLI','XLII','XLIII','XLIV','XLV','XLVI','XLVII','XLVIII','XLIX','L'];
+
+let state = freshState();
+
+function freshState(){
+  return {
+    index: 0,
+    correct: 0,
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    stars: 0,
+    answered: false,
+    chosen: null,
+    finished: false,
+    order: shuffleOrder()
+  };
+}
+
+function shuffleOrder(){
+  const arr = QUESTIONS.map((_,i)=>i);
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function saveState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function loadState(){
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if(!s) return null;
+    const obj = JSON.parse(s);
+    if(!obj || !Array.isArray(obj.order)) return null;
+    return obj;
+  } catch(e){ return null; }
+}
+
+/* ============================================================
+   DOM REFS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const qNumber = $('qNumber');
+const qText = $('qText');
+const optionsBox = $('options');
+const feedback = $('feedback');
+const feedbackTitle = $('feedbackTitle');
+const feedbackDetail = $('feedbackDetail');
+const nextBtn = $('nextBtn');
+const resetBtn = $('resetBtn');
+const restartBtn = $('restartBtn');
+const progressFill = $('progressFill');
+const qCurrent = $('qCurrent');
+const qTotal = $('qTotal');
+const accuracyMeter = $('accuracyMeter');
+const scoreValueEl = $('scoreValue');
+const streakValueEl = $('streakValue');
+const starsValueEl = $('starsValue');
+const scoreCard = $('scoreCard');
+const streakCard = $('streakCard');
+const starsCard = $('starsCard');
+const quizView = $('quizView');
+const resultsView = $('resultsView');
+const resetModal = $('resetModal');
+const cancelReset = $('cancelReset');
+const confirmReset = $('confirmReset');
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+qTotal.textContent = QUESTIONS.length;
+
+function renderQuestion(){
+  const realIdx = state.order[state.index];
+  const q = QUESTIONS[realIdx];
+
+  qNumber.textContent = `Question ${ROMAN[state.index]}`;
+  qText.textContent = q.q;
+
+  optionsBox.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.dataset.idx = i;
+    btn.innerHTML = `
+      <span class="option-letter">${String.fromCharCode(65+i)}.</span>
+      <span class="option-text">${escapeHtml(opt)}</span>
+      <span class="check-icon"></span>
+    `;
+    btn.addEventListener('click', () => handleAnswer(i, btn));
+    optionsBox.appendChild(btn);
+  });
+
+  feedback.className = 'feedback';
+  feedback.classList.remove('show','correct','incorrect');
+  nextBtn.disabled = true;
+  nextBtn.textContent = (state.index === QUESTIONS.length - 1) ? 'See Results →' : 'Next →';
+
+  state.answered = false;
+  state.chosen = null;
+
+  updateProgress();
+  saveState();
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function updateProgress(){
+  const done = state.index;
+  const pct = (done / QUESTIONS.length) * 100;
+  progressFill.style.width = pct + '%';
+  qCurrent.textContent = state.index + 1;
+
+  if (done === 0) {
+    accuracyMeter.textContent = '— %';
+  } else {
+    const acc = Math.round((state.correct / done) * 100);
+    accuracyMeter.textContent = `${acc}% accuracy`;
+  }
+
+  scoreValueEl.textContent = state.score;
+  streakValueEl.textContent = state.streak;
+  starsValueEl.textContent = state.stars;
+
+  streakCard.classList.toggle('fire-active', state.streak >= 3);
+}
+
+/* ============================================================
+   ANSWER HANDLING
+   ============================================================ */
+function handleAnswer(chosenIdx, btn){
+  if (state.answered) return;
+  state.answered = true;
+  state.chosen = chosenIdx;
+
+  const realIdx = state.order[state.index];
+  const q = QUESTIONS[realIdx];
+  const correct = chosenIdx === q.answer;
+
+  // Mark options
+  const allOpts = optionsBox.querySelectorAll('.option');
+  allOpts.forEach((o, i) => {
+    o.disabled = true;
+    if (i === q.answer) {
+      o.classList.add('correct');
+      o.querySelector('.check-icon').textContent = '✓';
+    }
+    if (i === chosenIdx && !correct) {
+      o.classList.add('incorrect');
+      o.querySelector('.check-icon').textContent = '✕';
+    }
+    if (i !== q.answer && i !== chosenIdx) {
+      o.classList.add('dimmed');
+    }
+  });
+
+  if (correct) {
+    state.correct += 1;
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+
+    // Score: base 100 + streak bonus
+    const streakBonus = Math.min(state.streak - 1, 9) * 25; // capped
+    const gained = 100 + streakBonus;
+    state.score += gained;
+
+    // Star awarded for streaks of 3, 5, 10, 15, 20...
+    let starsAwarded = 0;
+    if (state.streak === 3 || state.streak === 5 || state.streak === 10 ||
+        (state.streak > 10 && state.streak % 5 === 0)) {
+      starsAwarded = 1;
+      state.stars += 1;
+    }
+
+    showCorrectFeedback(q.rationale, gained, streakBonus, starsAwarded);
+    pulse(scoreCard);
+    pulse(streakCard);
+    if (starsAwarded) pulse(starsCard);
+
+    // Particle rewards
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    if (state.streak >= 5) {
+      // Big celebration — fireworks + confetti
+      fireworks(cx, cy);
+      confettiBurst();
+      floatingPopup(cx, cy, getStreakMessage(state.streak));
+    } else if (state.streak >= 3) {
+      fireworks(cx, cy);
+      floatingPopup(cx, cy, `+${gained}`);
+    } else {
+      sparkBurst(cx, cy);
+      floatingPopup(cx, cy, `+${gained}`);
+    }
+  } else {
+    state.streak = 0;
+    showIncorrectFeedback(q, chosenIdx);
+  }
+
+  nextBtn.disabled = false;
+  updateProgress();
+  saveState();
+}
+
+function getStreakMessage(streak){
+  if (streak >= 20) return '✨ Legendary! ✨';
+  if (streak >= 15) return '⚡ Unstoppable!';
+  if (streak >= 10) return '🔥 On Fire!';
+  if (streak >= 7) return '🌟 Brilliant!';
+  if (streak >= 5) return '🎉 Streak!';
+  return '+1';
+}
+
+function showCorrectFeedback(rationale, gained, streakBonus, stars){
+  feedback.className = 'feedback correct show';
+  let title = 'Correct.';
+  if (state.streak >= 3) title = `Correct — ${state.streak}-question streak!`;
+  feedbackTitle.textContent = title;
+  let bonus = '';
+  if (streakBonus > 0) bonus = ` <strong>+${streakBonus} streak bonus.</strong>`;
+  if (stars > 0) bonus += ` <strong>★ +1 star.</strong>`;
+  feedbackDetail.innerHTML = `${escapeHtml(rationale)}${bonus}`;
+}
+
+function showIncorrectFeedback(q, chosenIdx){
+  feedback.className = 'feedback incorrect show';
+  feedbackTitle.textContent = 'Not quite.';
+  const correctText = q.options[q.answer];
+  feedbackDetail.innerHTML =
+    `<strong>The correct answer is ${String.fromCharCode(65 + q.answer)}.</strong> ${escapeHtml(correctText)}<br><br>` +
+    escapeHtml(q.rationale);
+}
+
+function pulse(el){
+  el.classList.remove('pulse');
+  void el.offsetWidth;
+  el.classList.add('pulse');
+}
+
+/* ============================================================
+   PARTICLE EFFECTS
+   ============================================================ */
+const PALETTE = ['#d4a544','#f4cb6a','#a87d2c','#c54a3b','#6a8f5e','#6b4a6e','#f5f0e6'];
+
+function sparkBurst(x, y){
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'firework-particle';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    p.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    document.body.appendChild(p);
+
+    const angle = (Math.PI * 2 * i) / 18 + Math.random() * 0.4;
+    const dist = 60 + Math.random() * 70;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+
+    p.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1 },
+      { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+    ], { duration: 700 + Math.random() * 200, easing: 'cubic-bezier(.2,.6,.4,1)' });
+
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+function fireworks(x, y){
+  // Two layered bursts: large + small
+  for (let layer = 0; layer < 2; layer++) {
+    setTimeout(() => {
+      const count = layer === 0 ? 36 : 24;
+      const baseSize = layer === 0 ? 8 : 5;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.width = baseSize + 'px';
+        p.style.height = baseSize + 'px';
+        p.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+        p.style.boxShadow = `0 0 ${baseSize * 1.5}px currentColor`;
+        document.body.appendChild(p);
+
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+        const dist = (layer === 0 ? 140 : 90) + Math.random() * 60;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist;
+
+        p.animate([
+          { transform: 'translate(0,0) scale(1)', opacity: 1 },
+          { transform: `translate(${dx*0.6}px, ${dy*0.6 - 20}px) scale(1)`, opacity: 1, offset: 0.4 },
+          { transform: `translate(${dx}px, ${dy + 80}px) scale(0)`, opacity: 0 }
+        ], { duration: 1100 + Math.random() * 300, easing: 'cubic-bezier(.2,.6,.4,1)' });
+
+        setTimeout(() => p.remove(), 1500);
+      }
+    }, layer * 180);
+  }
+}
+
+function confettiBurst(){
+  const count = 60;
+  for (let i = 0; i < count; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = (Math.random() * 100) + 'vw';
+    c.style.top = '-20px';
+    c.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    c.style.transform = `rotate(${Math.random() * 360}deg)`;
+    if (Math.random() > 0.6) {
+      c.style.borderRadius = '50%';
+      c.style.width = '8px';
+      c.style.height = '8px';
+    } else if (Math.random() > 0.5) {
+      c.style.width = '6px';
+      c.style.height = '16px';
+    }
+    document.body.appendChild(c);
+
+    const dx = (Math.random() - 0.5) * 300;
+    const dy = window.innerHeight + 60;
+    const rot = (Math.random() - 0.5) * 1080;
+    const dur = 2200 + Math.random() * 1400;
+
+    c.animate([
+      { transform: `translate(0, 0) rotate(${Math.random()*360}deg)`, opacity: 1 },
+      { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)`, opacity: 0.4 }
+    ], { duration: dur, easing: 'cubic-bezier(.2,.6,.4,1)' });
+
+    setTimeout(() => c.remove(), dur + 100);
+  }
+}
+
+function floatingPopup(x, y, text){
+  const p = document.createElement('div');
+  p.className = 'reward-popup';
+  p.textContent = text;
+  p.style.left = (x - 40) + 'px';
+  p.style.top = (y - 30) + 'px';
+  document.body.appendChild(p);
+
+  p.animate([
+    { transform: 'translateY(0) scale(0.6)', opacity: 0 },
+    { transform: 'translateY(-20px) scale(1.2)', opacity: 1, offset: 0.2 },
+    { transform: 'translateY(-90px) scale(1)', opacity: 0 }
+  ], { duration: 1500, easing: 'cubic-bezier(.2,.6,.4,1)' });
+
+  setTimeout(() => p.remove(), 1600);
+}
+
+/* ============================================================
+   FLOW
+   ============================================================ */
+nextBtn.addEventListener('click', () => {
+  if (!state.answered) return;
+  state.index += 1;
+  if (state.index >= QUESTIONS.length) {
+    finish();
+  } else {
+    renderQuestion();
+  }
+});
+
+function finish(){
+  state.finished = true;
+  saveState();
+
+  quizView.classList.add('hidden');
+  resultsView.classList.add('show');
+
+  const total = QUESTIONS.length;
+  const pct = Math.round((state.correct / total) * 100);
+
+  $('finalCorrect').textContent = state.correct;
+  $('finalTotal').textContent = total;
+  $('finalPercent').textContent = pct + '%';
+  $('finalScore').textContent = state.score;
+  $('finalStreak').textContent = state.bestStreak;
+  $('finalStars').textContent = state.stars;
+  $('finalGrade').textContent = letterGrade(pct);
+  $('finalMessage').textContent = gradeMessage(pct);
+
+  progressFill.style.width = '100%';
+  qCurrent.textContent = total;
+
+  // Final celebration if they did well
+  if (pct >= 80) {
+    setTimeout(confettiBurst, 200);
+    setTimeout(confettiBurst, 600);
+    setTimeout(() => fireworks(window.innerWidth/2, window.innerHeight/3), 400);
+    setTimeout(() => fireworks(window.innerWidth/2 - 200, window.innerHeight/2), 900);
+    setTimeout(() => fireworks(window.innerWidth/2 + 200, window.innerHeight/2), 1100);
+  } else if (pct >= 60) {
+    setTimeout(confettiBurst, 200);
+    setTimeout(() => fireworks(window.innerWidth/2, window.innerHeight/3), 400);
+  }
+}
+
+function letterGrade(pct){
+  if (pct >= 90) return 'A';
+  if (pct >= 80) return 'B';
+  if (pct >= 70) return 'C';
+  if (pct >= 60) return 'D';
+  return 'F';
+}
+
+function gradeMessage(pct){
+  if (pct >= 90) return "Exceptional command of the chapter. You're well prepared for these topics on the NPPE.";
+  if (pct >= 80) return "Strong showing. Review the few you missed and you'll be in great shape.";
+  if (pct >= 70) return "Solid foundation, with room to sharpen the details. Worth a second pass through the chapter.";
+  if (pct >= 60) return "You're building a working knowledge — revisit the case histories and the IP-duration table, then run it again.";
+  return "Don't be discouraged — this is the time to learn. Re-read the chapter, paying attention to durations, validation tests, and the case histories, then return for another attempt.";
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function openResetModal(){ resetModal.classList.add('show'); }
+function closeResetModal(){ resetModal.classList.remove('show'); }
+
+resetBtn.addEventListener('click', openResetModal);
+cancelReset.addEventListener('click', closeResetModal);
+confirmReset.addEventListener('click', () => {
+  closeResetModal();
+  doReset();
+});
+restartBtn.addEventListener('click', doReset);
+
+resetModal.addEventListener('click', e => {
+  if (e.target === resetModal) closeResetModal();
+});
+
+function doReset(){
+  state = freshState();
+  saveState();
+  resultsView.classList.remove('show');
+  quizView.classList.remove('hidden');
+  renderQuestion();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+(function init(){
+  const saved = loadState();
+  if (saved && !saved.finished && Number.isInteger(saved.index) && saved.index < QUESTIONS.length) {
+    state = saved;
+  }
+  renderQuestion();
+})();
+</script>
+</body>
+</html>

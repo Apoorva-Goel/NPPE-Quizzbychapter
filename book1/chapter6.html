@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Exam — Chapter 6: Hazards, Liability, Standards, and Safety</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:        #0a0e1f;
+    --bg-mid:         #0f1530;
+    --bg-card:        #161e3f;
+    --bg-card-2:      #1d264c;
+    --line:           #2a3566;
+    --line-soft:      rgba(212, 175, 55, 0.12);
+    --gold:           #d4af37;
+    --gold-bright:    #f4cf5a;
+    --gold-soft:      rgba(212, 175, 55, 0.15);
+    --crimson:        #dc2e3a;
+    --crimson-soft:   rgba(220, 46, 58, 0.12);
+    --emerald:        #10b981;
+    --emerald-soft:   rgba(16, 185, 129, 0.14);
+    --ink:            #f5efe2;
+    --ink-soft:       #c5c0b3;
+    --ink-dim:        #8a8676;
+    --serif:          'Fraunces', 'Times New Roman', serif;
+    --sans:           'Manrope', system-ui, sans-serif;
+    --mono:           'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg-deep);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(212, 175, 55, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(70, 110, 180, 0.10), transparent 50%),
+      linear-gradient(rgba(212, 175, 55, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 175, 55, 0.025) 1px, transparent 1px);
+    background-size: auto, auto, 60px 60px, 60px 60px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+
+  /* Canvas for fireworks/confetti — covers viewport, ignores pointer events */
+  #fxCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Floating emoji layer */
+  #emojiLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    overflow: hidden;
+  }
+
+  .float-emoji {
+    position: absolute;
+    font-size: 2.5rem;
+    will-change: transform, opacity;
+    animation: floatUp 1.8s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+    user-select: none;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(0.4) rotate(0deg);     opacity: 0; }
+    20%  { transform: translateY(-30px) scale(1.2) rotate(15deg); opacity: 1; }
+    80%  { transform: translateY(-180px) scale(1) rotate(-10deg); opacity: 1; }
+    100% { transform: translateY(-260px) scale(0.6) rotate(20deg); opacity: 0; }
+  }
+
+  /* Score popup */
+  .score-pop {
+    position: fixed;
+    font-family: var(--serif);
+    font-weight: 900;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px rgba(244, 207, 90, 0.8), 0 4px 14px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    z-index: 10000;
+    animation: scorePop 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+    white-space: nowrap;
+  }
+
+  @keyframes scorePop {
+    0%   { transform: translate(-50%, -50%) scale(0.5);   opacity: 0; }
+    25%  { transform: translate(-50%, -110%) scale(1.4);  opacity: 1; }
+    100% { transform: translate(-50%, -240%) scale(1);    opacity: 0; }
+  }
+
+  /* HEADER */
+  .top-strip {
+    background: linear-gradient(90deg, transparent, var(--gold-soft) 20%, var(--gold-soft) 80%, transparent);
+    padding: 0.4rem 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .header {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 1rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .header .label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .header h1 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(180deg, #faf3df 0%, #d4af37 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .header .sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* HUD — score, streak, progress */
+  .hud {
+    max-width: 1100px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+  }
+
+  .hud-tile {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hud-tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+  }
+
+  .hud-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 0.25rem;
+  }
+
+  .hud-value {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .hud-value .accent { color: var(--gold-bright); }
+  .hud-value .small { font-size: 0.95rem; color: var(--ink-soft); font-weight: 400; }
+
+  .streak-flame {
+    display: inline-block;
+    margin-right: 0.25rem;
+    transition: transform 0.3s, filter 0.3s;
+  }
+
+  .streak-flame.hot {
+    animation: flameWobble 0.6s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(244, 116, 50, 0.8));
+  }
+
+  @keyframes flameWobble {
+    from { transform: scale(1) rotate(-5deg); }
+    to   { transform: scale(1.15) rotate(5deg); }
+  }
+
+  /* Progress bar */
+  .progress-track {
+    max-width: 1100px;
+    margin: 1.25rem auto 0;
+    padding: 0 1.5rem;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--bg-card);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    transition: width 0.4s cubic-bezier(0.2, 0.7, 0.3, 1);
+    box-shadow: 0 0 12px rgba(244, 207, 90, 0.5);
+    width: 0%;
+  }
+
+  /* Question navigator dots */
+  .nav-dots {
+    max-width: 1100px;
+    margin: 1rem auto 0;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .nav-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .nav-dot:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .nav-dot.current { border-color: var(--gold-bright); background: var(--gold-soft); color: var(--gold-bright); box-shadow: 0 0 10px rgba(244, 207, 90, 0.4); }
+  .nav-dot.correct { background: var(--emerald-soft); border-color: var(--emerald); color: var(--emerald); }
+  .nav-dot.incorrect { background: var(--crimson-soft); border-color: var(--crimson); color: var(--crimson); }
+
+  /* MAIN CARD */
+  main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .card {
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 2.25rem 2.25rem 2rem;
+    position: relative;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(212, 175, 55, 0.05);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 2rem; right: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 2px;
+  }
+
+  .q-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .q-number {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .q-topic {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    text-align: right;
+  }
+
+  .q-text {
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.45;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.95rem;
+    padding: 1rem 1.15rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0.7, 0.3, 1);
+    text-align: left;
+    font-family: var(--sans);
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.5;
+    position: relative;
+    width: 100%;
+  }
+
+  .opt:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+    transform: translateX(4px);
+  }
+
+  .opt:disabled { cursor: default; }
+
+  .opt-letter {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: var(--bg-deep);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--gold);
+    transition: all 0.2s;
+  }
+
+  .opt:hover:not(:disabled) .opt-letter { background: var(--gold); color: var(--bg-deep); border-color: var(--gold); }
+
+  .opt-text { flex: 1; padding-top: 0.15rem; }
+
+  .opt.correct {
+    border-color: var(--emerald);
+    background: var(--emerald-soft);
+    animation: correctPulse 0.6s ease-out;
+  }
+  .opt.correct .opt-letter {
+    background: var(--emerald);
+    color: var(--bg-deep);
+    border-color: var(--emerald);
+  }
+
+  .opt.incorrect {
+    border-color: var(--crimson);
+    background: var(--crimson-soft);
+    animation: shake 0.5s ease-in-out;
+  }
+  .opt.incorrect .opt-letter {
+    background: var(--crimson);
+    color: var(--ink);
+    border-color: var(--crimson);
+  }
+
+  .opt.reveal {
+    border-color: var(--emerald);
+    background: var(--emerald-soft);
+  }
+  .opt.reveal .opt-letter {
+    background: var(--emerald);
+    color: var(--bg-deep);
+    border-color: var(--emerald);
+  }
+
+  @keyframes correctPulse {
+    0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+    50%  { transform: scale(1.02); box-shadow: 0 0 0 16px rgba(16, 185, 129, 0); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-8px); }
+    40%      { transform: translateX(8px); }
+    60%      { transform: translateX(-5px); }
+    80%      { transform: translateX(5px); }
+  }
+
+  /* Explanation */
+  .explanation {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.4rem;
+    background: rgba(212, 175, 55, 0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    display: none;
+    animation: slideIn 0.4s ease-out;
+  }
+  .explanation.show { display: block; }
+  .explanation .label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-style: normal;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Controls */
+  .controls {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+    transform: translateY(-1px);
+  }
+
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary {
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color: var(--bg-deep);
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #fada6e, var(--gold-bright));
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* RESULTS SCREEN */
+  .results-card {
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .results-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--gold-soft), transparent 60%);
+    pointer-events: none;
+  }
+
+  .results-card .label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .results-card h2 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .grade-display {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(5rem, 14vw, 9rem);
+    line-height: 1;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 1rem 0;
+    letter-spacing: -0.04em;
+  }
+
+  .verdict {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .stat {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  .stat .stat-num {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: var(--gold-bright);
+    letter-spacing: -0.02em;
+  }
+
+  .stat .stat-lbl {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-top: 0.25rem;
+  }
+
+  .results-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  /* REVIEW LIST */
+  .review-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .review-item {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+  }
+
+  .review-item.wrong { border-left-color: var(--crimson); }
+
+  .review-item .ri-q {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .review-item .ri-meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .review-item .ri-ans {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    margin: 0.4rem 0;
+  }
+
+  .review-item .ri-ans .you { color: var(--crimson); }
+  .review-item .ri-ans .right { color: var(--emerald); }
+  .review-item .ri-explain {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-soft);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--line);
+    font-size: 0.95rem;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  footer span { color: var(--gold); }
+
+  /* COMBO BANNER */
+  .combo-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-family: var(--serif);
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--gold-bright);
+    text-shadow:
+      0 0 40px rgba(244, 207, 90, 0.9),
+      0 0 80px rgba(244, 207, 90, 0.5),
+      0 6px 20px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    z-index: 10001;
+    letter-spacing: -0.02em;
+    transition: opacity 0.4s;
+    white-space: nowrap;
+  }
+
+  .combo-banner.show {
+    animation: comboBurst 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  }
+
+  @keyframes comboBurst {
+    0%   { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    25%  { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 1; }
+    40%  { transform: translate(-50%, -50%) scale(1) rotate(-2deg); opacity: 1; }
+    80%  { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8) rotate(0deg); opacity: 0; }
+  }
+
+  /* Hide elements based on screen mode */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Scroll-snap-friendly anchor for question */
+  #questionAnchor { scroll-margin-top: 1rem; }
+
+  /* RESPONSIVE */
+  @media (max-width: 720px) {
+    .hud { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 1.5rem 1.25rem; }
+    .results-card { padding: 2rem 1.25rem; }
+    .header { padding: 1.5rem 1rem 0.5rem; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .btn { width: 100%; }
+    .nav-dot { width: 18px; height: 18px; font-size: 0.55rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+<div id="emojiLayer"></div>
+<div class="combo-banner" id="comboBanner"></div>
+
+<div class="top-strip">National Professional Practice Examination · Practice Set</div>
+
+<header class="header">
+  <div class="label">Book 2 · Sixth Edition · Chapter 6</div>
+  <h1>Hazards, Liability,<br><em>Standards &amp; Safety</em></h1>
+  <p class="sub">A 50-question practice exam covering tort law, products liability, design codes, ISO standards, occupational health &amp; safety, and the Westray legacy.</p>
+</header>
+
+<div class="hud" id="hud">
+  <div class="hud-tile">
+    <div class="hud-label">Score</div>
+    <div class="hud-value"><span class="accent" id="scoreVal">0</span> <span class="small">pts</span></div>
+  </div>
+  <div class="hud-tile">
+    <div class="hud-label">Streak</div>
+    <div class="hud-value"><span class="streak-flame" id="streakFlame">🔥</span><span id="streakVal">0</span></div>
+  </div>
+  <div class="hud-tile">
+    <div class="hud-label">Correct</div>
+    <div class="hud-value"><span id="correctVal">0</span><span class="small"> / <span id="answeredVal">0</span></span></div>
+  </div>
+  <div class="hud-tile">
+    <div class="hud-label">Question</div>
+    <div class="hud-value"><span id="qNumVal">1</span><span class="small"> / 50</span></div>
+  </div>
+</div>
+
+<div class="progress-track">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="nav-dots" id="navDots"></div>
+
+<main>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen active" id="quizScreen">
+    <div id="questionAnchor"></div>
+    <div class="card">
+      <div class="q-meta">
+        <div class="q-number" id="qLabel">Question 01 of 50</div>
+        <div class="q-topic" id="qTopic">Topic</div>
+      </div>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="options" id="optionsList"></div>
+      <div class="explanation" id="explanation">
+        <span class="label">Reference</span>
+        <span id="explainText"></span>
+      </div>
+      <div class="controls">
+        <button class="btn" id="prevBtn">← Previous</button>
+        <button class="btn btn-primary" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="label">Exam Complete</div>
+      <h2 id="resultTitle">Practice Exam Results</h2>
+      <div class="grade-display" id="gradeDisplay">—</div>
+      <p class="verdict" id="resultVerdict"></p>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num" id="finalCorrect">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-num" id="finalIncorrect">0</div><div class="stat-lbl">Incorrect</div></div>
+        <div class="stat"><div class="stat-num" id="finalScore">0</div><div class="stat-lbl">Total Points</div></div>
+        <div class="stat"><div class="stat-num" id="finalStreak">0</div><div class="stat-lbl">Best Streak</div></div>
+      </div>
+      <div class="results-actions">
+        <button class="btn" id="reviewBtn">Review Answers</button>
+        <button class="btn btn-primary" id="restartBtn">Restart Exam</button>
+      </div>
+    </div>
+    <div class="review-list" id="reviewList" style="display:none;"></div>
+  </div>
+
+</main>
+
+<footer>
+  © Practice tool · Sourced from <span>Canadian Professional Engineering &amp; Geoscience, 6th Ed., Ch. 6</span>
+</footer>
+
+<script>
+/* =========================================================================
+   QUESTION BANK — 50 NPPE-style questions for Chapter 6
+   Each question: { topic, q, options[4], correct (index), explain }
+   ========================================================================= */
+const QUESTIONS = [
+  { topic: "Tort Law",
+    q: "To succeed in a tort action, the plaintiff must prove all of the following EXCEPT:",
+    options: [
+      "The defendant owed the plaintiff a duty of care",
+      "The defendant breached that duty",
+      "The plaintiff suffered loss or damage",
+      "The defendant signed a written contract with the plaintiff"
+    ],
+    correct: 3,
+    explain: "Tort law operates independently of contract law and criminal law. A contract is not a required element of a tort claim — the plaintiff must prove duty, breach, damage, and causation."
+  },
+  { topic: "Duty of Care",
+    q: "A duty of care exists between two parties when which conditions are satisfied?",
+    options: [
+      "A written contract has been signed by both parties",
+      "A reasonably foreseeable risk of injury exists, and someone is close enough to be affected",
+      "Both parties are licensed professionals",
+      "The parties have met in person at least once"
+    ],
+    correct: 1,
+    explain: "A duty of care arises when (1) a reasonably foreseeable risk of injury or damage exists from the action, and (2) someone is close enough to be affected — even in the absence of a contract."
+  },
+  { topic: "Tort Law",
+    q: "The Latin phrase \"res ipsa loquitur\" means:",
+    options: [
+      "Buyer beware",
+      "Let the seller beware",
+      "The thing speaks for itself",
+      "By the act itself"
+    ],
+    correct: 2,
+    explain: "Res ipsa loquitur is circumstantial evidence of negligence: when the defendant had sole control and the harm would not normally occur without negligence, the act itself is treated as evidence of negligence (e.g., a surgical sponge left in a patient)."
+  },
+  { topic: "Products Liability",
+    q: "The \"strict liability\" concept in products liability cases applies primarily in:",
+    options: [
+      "Canada",
+      "The United States",
+      "The United Kingdom",
+      "Quebec only"
+    ],
+    correct: 1,
+    explain: "Under U.S. strict liability, the manufacturer is presumed at fault; the defendant must prove the product's safety. Canadian law generally requires the plaintiff to prove negligence."
+  },
+  { topic: "Products Liability",
+    q: "Canadian product liability law more commonly applies which test to evaluate design defects?",
+    options: [
+      "Reasonable expectations of the consumer",
+      "Risk-utility analysis",
+      "Strict liability without fault",
+      "Caveat emptor"
+    ],
+    correct: 1,
+    explain: "Canadian courts favour a risk/utility analysis (illustrated in Rentway v. Laidlaw) that weighs the design's utility against foreseeable risks and the availability of safer alternatives."
+  },
+  { topic: "Consumer Law",
+    q: "The Sale of Goods Act typically requires that products:",
+    options: [
+      "Carry a written warranty for at least one year",
+      "Be sold only by licensed retailers",
+      "Be of merchantable quality and usable as intended",
+      "Be manufactured in Canada"
+    ],
+    correct: 2,
+    explain: "Provincial Sale of Goods Acts imply that products must not be defective and must be usable for their intended purpose — a lawn mower must cut grass, a refrigerator must keep food cold."
+  },
+  { topic: "Professional Insurance",
+    q: "\"Errors and omissions\" insurance protects engineers against:",
+    options: [
+      "Workplace injuries",
+      "Costs arising from negligent professional conduct",
+      "Lost wages during illness",
+      "Equipment damage at construction sites"
+    ],
+    correct: 1,
+    explain: "E&O insurance covers professional liability arising from negligence in advice or design. It is a wise investment for engineers in private practice and is compulsory in some provinces."
+  },
+  { topic: "Liability Sources",
+    q: "Liability laws in Quebec differ from the rest of Canada because they are based on:",
+    options: [
+      "The Sale of Goods Act",
+      "The Civil Code of Quebec",
+      "U.S. legal precedents",
+      "European Union directives"
+    ],
+    correct: 1,
+    explain: "Quebec's law of liability is set out in the Civil Code of Quebec, while the rest of Canada follows the common-law tradition based on judicial precedent."
+  },
+  { topic: "Tort Law",
+    q: "In tort law, the word \"tort\" means:",
+    options: [
+      "Contract",
+      "Crime",
+      "Injury or damage",
+      "Negligence"
+    ],
+    correct: 2,
+    explain: "\"Tort\" literally means injury or damage. The plaintiff (injured party) sues the defendant for harm caused by wrongful behaviour or defective merchandise."
+  },
+  { topic: "Standard of Care",
+    q: "To determine the standard of care owed in a tort case, courts apply:",
+    options: [
+      "A professional perfection test",
+      "A reasonable person test",
+      "A strict liability test",
+      "A contractual terms test"
+    ],
+    correct: 1,
+    explain: "Courts ask, \"What would a reasonable and prudent practitioner do under the circumstances?\" Perfection is not required, but reasonable care, established practices, and well-tested principles are expected."
+  },
+  { topic: "Tort Law",
+    q: "Under Canadian tort law, truly random or accidental events:",
+    options: [
+      "Always result in tort liability",
+      "Cannot be the basis for a tort lawsuit",
+      "Are governed only by the Sale of Goods Act",
+      "Result in automatic strict liability"
+    ],
+    correct: 1,
+    explain: "The principle is \"no liability without fault.\" The defendant's conduct must be intentional or negligent to ground a tort claim — bad luck or pure accident does not."
+  },
+  { topic: "Case Law",
+    q: "The Rivtow Marine case (Supreme Court of Canada) is significant in tort law because it established that:",
+    options: [
+      "Negligence requires a written contract",
+      "Strict liability applies to all manufacturers",
+      "Pure economic loss may be recovered for negligent failure to warn",
+      "Engineers are immune from products liability"
+    ],
+    correct: 2,
+    explain: "Before Rivtow, economic loss without personal injury was generally considered too remote. Rivtow established that economic loss can be recovered when a manufacturer or dealer negligently fails to warn of a known hazard."
+  },
+  { topic: "Tort Law",
+    q: "A negligent act, by itself, in the absence of any damage:",
+    options: [
+      "Is sufficient grounds for a successful tort lawsuit",
+      "Is not a basis for a claim under tort law",
+      "Always leads to disciplinary action by the licensing Association",
+      "Constitutes strict liability"
+    ],
+    correct: 1,
+    explain: "All four elements — duty, breach, damage, and proximate cause — must be present. Negligence alone, without any actual loss to the plaintiff, will not support a tort claim."
+  },
+  { topic: "Products Liability",
+    q: "Which of the following is NOT one of the typical reasons for a product damages claim?",
+    options: [
+      "Defective manufacturing",
+      "Negligence in design",
+      "Failure to warn of dangers associated with the product",
+      "Failure to advertise the product widely"
+    ],
+    correct: 3,
+    explain: "Products-liability claims are typically based on defective manufacturing, design negligence, or failure to warn. Advertising scope is not a basis for liability."
+  },
+  { topic: "Contract Law",
+    q: "Contract clauses are typically divided into conditions and warranties. Which statement is correct?",
+    options: [
+      "Conditions are minor clauses; warranties are key clauses",
+      "Conditions are key clauses that may terminate the contract if breached; warranties permit claims for repairs/damages but not termination",
+      "Conditions and warranties are identical",
+      "Warranties are key clauses that, if breached, automatically terminate the contract"
+    ],
+    correct: 1,
+    explain: "Conditions are essential terms — breach can end the contract. Warranties are subsidiary promises — breach permits a claim for repair, replacement, or damages, but not termination."
+  },
+  { topic: "Government Regulation",
+    q: "The federal Hazardous Products Act sets safety standards across Canada for:",
+    options: [
+      "Industrial chemicals only",
+      "A wide variety of consumer products, from hockey helmets to kettles",
+      "Pharmaceuticals only",
+      "Motor vehicles only"
+    ],
+    correct: 1,
+    explain: "The Hazardous Products Act covers a broad range of consumer products. The Motor Vehicle Safety Act covers automobiles separately."
+  },
+  { topic: "Risk Reduction",
+    q: "When implementing risk reduction in a design, what is the most preferred (first) method?",
+    options: [
+      "Personal protective equipment",
+      "Administrative controls",
+      "Eliminate the hazard or substitute it with a safer alternative",
+      "Engineering controls (guards, interlocks)"
+    ],
+    correct: 2,
+    explain: "The hierarchy of controls puts elimination/substitution first, followed by engineering controls, administrative controls, and finally PPE — the last line of defence."
+  },
+  { topic: "Risk Reduction",
+    q: "Which sequence shows the risk reduction hierarchy from MOST to LEAST preferred?",
+    options: [
+      "PPE → Administrative controls → Engineering controls → Elimination",
+      "Elimination → Engineering controls → Administrative controls → PPE",
+      "Engineering controls → Elimination → PPE → Administrative controls",
+      "Administrative controls → PPE → Elimination → Engineering controls"
+    ],
+    correct: 1,
+    explain: "Always try to eliminate or substitute the hazard first. If not possible, apply engineering controls (guards/interlocks), then administrative controls (rules, procedures, signs), and only then rely on PPE."
+  },
+  { topic: "Risk Assessment",
+    q: "According to the risk matrix in Figure 6.1, a hazard with \"Likely\" likelihood and \"Major\" severity falls into what risk level?",
+    options: [
+      "Low",
+      "Medium",
+      "High",
+      "None"
+    ],
+    correct: 2,
+    explain: "Likely × Major produces a High risk in the matrix — generally unacceptable and requiring further mitigation."
+  },
+  { topic: "Codes & Standards",
+    q: "What is the difference between a code and a standard?",
+    options: [
+      "Codes apply to materials; standards apply to construction",
+      "Codes describe how something is constructed; standards typically apply to the materials themselves",
+      "They are identical and interchangeable terms",
+      "Codes are always voluntary; standards are always mandatory"
+    ],
+    correct: 1,
+    explain: "Codes describe construction (how to build); standards describe the properties of materials. Codes often reference standards, and both aim to improve quality, safety, and reliability."
+  },
+  { topic: "Codes & Standards",
+    q: "When a designer deviates from accepted design codes, the deviation must be:",
+    options: [
+      "Approved by the local municipality",
+      "Explained by written analysis or convincing design calculations",
+      "Permitted only if the client agrees in writing",
+      "Avoided in all circumstances"
+    ],
+    correct: 1,
+    explain: "Codes are treated by courts as a \"minimum mandatory standard.\" Any deviation must be justified by rational analysis or calculations demonstrating that the design conforms to accepted engineering practice."
+  },
+  { topic: "Standards Bodies",
+    q: "The Standards Council of Canada (SCC) is best described as:",
+    options: [
+      "A private engineering firm",
+      "A federal Crown corporation",
+      "A provincial regulatory body",
+      "A division of the National Research Council"
+    ],
+    correct: 1,
+    explain: "SCC is a federal Crown corporation reporting to Parliament through the Minister of Industry, with a mandate to promote efficient and effective standardization in Canada."
+  },
+  { topic: "Standards Bodies",
+    q: "SCC represents Canada at which two key international standardization organizations?",
+    options: [
+      "WTO and WIPO",
+      "OECD and UN",
+      "ISO and IEC",
+      "IEEE and ASTM"
+    ],
+    correct: 2,
+    explain: "SCC is Canada's member body at both the International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC)."
+  },
+  { topic: "ISO Standards",
+    q: "The ISO 9000 family of standards primarily addresses:",
+    options: [
+      "Environmental management",
+      "Quality management",
+      "Social responsibility",
+      "Occupational health and safety"
+    ],
+    correct: 1,
+    explain: "ISO 9000 is the world's dominant quality management standard, requiring organizations to document quality policies, assurance procedures, processes, and proof."
+  },
+  { topic: "ISO Standards",
+    q: "The ISO 14000 series provides a framework for:",
+    options: [
+      "Quality management systems",
+      "Environmental management systems",
+      "Information security systems",
+      "Risk assessment systems"
+    ],
+    correct: 1,
+    explain: "ISO 14000 helps organizations measure, manage, and reduce environmental impacts. Note that ISO 14000 does not set acceptable environmental levels — those remain with regulatory agencies."
+  },
+  { topic: "ISO Standards",
+    q: "ISO 26000 is unique among well-known ISO standards in that it:",
+    options: [
+      "Sets mandatory requirements for quality management",
+      "Is the certification standard for environmental compliance",
+      "Provides guidance on social responsibility and is NOT certifiable",
+      "Specifies risk matrix templates"
+    ],
+    correct: 2,
+    explain: "ISO 26000 (released in 2010) provides guidelines, not requirements, on socially responsible operation. Unlike ISO 9001 or ISO 14001, organizations cannot be \"certified\" to ISO 26000."
+  },
+  { topic: "ISO Process",
+    q: "A draft ISO standard becomes an international standard when:",
+    options: [
+      "The Central Secretariat in Geneva approves it unilaterally",
+      "It receives a two-thirds positive vote from member countries",
+      "Canada ratifies it",
+      "ISO management adopts it unanimously"
+    ],
+    correct: 1,
+    explain: "After three drafts and member-country negotiation, the final draft must receive a two-thirds positive vote to become an ISO standard, which is then translated into the official languages."
+  },
+  { topic: "Government Codes",
+    q: "The National Building Code of Canada is best described as:",
+    options: [
+      "A mandatory federal law applicable across all provinces",
+      "A model code that provinces have adopted, sometimes with modifications",
+      "A voluntary international standard published by ISO",
+      "A document issued by the Standards Council of Canada"
+    ],
+    correct: 1,
+    explain: "Building construction is under provincial jurisdiction. The NBCC, published by the National Research Council's Institute for Research in Construction, serves as a model that provinces have adopted (sometimes with local amendments)."
+  },
+  { topic: "Design for Safety",
+    q: "According to good design practice, the first step in any design project should typically be to:",
+    options: [
+      "Brainstorm creative solutions",
+      "Search the Internet for relevant codes, standards, and safety regulations",
+      "Draft a contract with the client",
+      "Select suppliers and quote pricing"
+    ],
+    correct: 1,
+    explain: "Codes, standards, and safety regulations should be obtained at the outset of any project. Designers should rely on dependable sources (technical societies, standards organizations) rather than only on company standards or textbooks."
+  },
+  { topic: "Design for Safety",
+    q: "When a hazard cannot be eliminated by design, the designer's obligation is to:",
+    options: [
+      "Eliminate only the obvious hazards and ignore concealed ones",
+      "Shield the user from the hazard if possible, and clearly warn the user",
+      "Disclose the hazard only after a complaint is received",
+      "Pass the responsibility to the manufacturer"
+    ],
+    correct: 1,
+    explain: "If a hazard cannot be removed (e.g., a lawn mower's rotating blade is required to cut grass), the designer must shield the user where possible and provide clear warnings of the danger."
+  },
+  { topic: "OHS",
+    q: "Which of the following is NOT one of the three basic rights typically given to employees under OHS laws?",
+    options: [
+      "The right to know about hazards in the workplace",
+      "The right to refuse dangerous work",
+      "The right to participate in making the workplace safe",
+      "The right to negotiate wages"
+    ],
+    correct: 3,
+    explain: "OHS legislation establishes three core rights: the right to know, the right to refuse dangerous work, and the right to participate. Wage negotiation falls under labour and employment law, not OHS."
+  },
+  { topic: "OHS",
+    q: "Under occupational health and safety laws, primary responsibility for workplace safety rests with:",
+    options: [
+      "The employee",
+      "The employer",
+      "The provincial government",
+      "The licensing Association"
+    ],
+    correct: 1,
+    explain: "OHS laws place the responsibility for workplace safety firmly on the employer, who must ensure that workplaces, equipment, and procedures comply with the regulations."
+  },
+  { topic: "OHS Jurisdiction",
+    q: "Approximately what percentage of the Canadian workforce falls under federal OHS jurisdiction?",
+    options: [
+      "1%",
+      "10%",
+      "50%",
+      "90%"
+    ],
+    correct: 1,
+    explain: "About 10% of Canadian workers fall under federal jurisdiction (federal employees, federal corporations, and certain industries like inter-provincial transportation, shipping, telephone systems). The remaining 90% are governed by provincial or territorial law."
+  },
+  { topic: "Prime Contractor",
+    q: "If a contract for a worksite does NOT designate a prime contractor (or designates more than one), responsibility for occupational health and safety:",
+    options: [
+      "Defaults to the employees collectively",
+      "Falls back on the owner",
+      "Is assigned by the labour ministry",
+      "Is shared equally among all contractors"
+    ],
+    correct: 1,
+    explain: "Designating a single prime contractor (or \"constructor\") in writing is critical. Otherwise, OHS responsibility for the entire worksite reverts to the owner."
+  },
+  { topic: "OHS Resources",
+    q: "The Canadian Centre for Occupational Health and Safety (CCOHS) primarily provides:",
+    options: [
+      "Direct workplace inspections and enforcement",
+      "Internet links to provincial, territorial, and federal health and safety legislation, plus safety information and training",
+      "Mandatory OHS certification for employers",
+      "Workers' compensation payments to injured workers"
+    ],
+    correct: 1,
+    explain: "CCOHS is a federal agency that aggregates legislation, training, publications, and hazard databases. CanOSH (an auxiliary site) organizes laws by region. Enforcement and compensation are handled by other bodies."
+  },
+  { topic: "Workers' Compensation",
+    q: "Workers' compensation in Canada is best described as:",
+    options: [
+      "Mandatory employee health insurance paid for by the worker",
+      "A form of \"no-fault\" workers' insurance funded by employer assessments based on payroll",
+      "A government welfare program available to all citizens",
+      "Voluntary insurance offered only to high-risk workers"
+    ],
+    correct: 1,
+    explain: "Each employer is assessed (taxed) as a proportion of payroll. The Accident Fund pays wage, medical, and disability benefits to injured workers without requiring them to sue."
+  },
+  { topic: "Workers' Compensation",
+    q: "In return for financing the Workers' Compensation Board, employers are:",
+    options: [
+      "Required to attend annual safety training",
+      "Shielded from employee lawsuits for workplace injuries",
+      "Given direct tax credits by the federal government",
+      "Exempted from OHS regulations"
+    ],
+    correct: 1,
+    explain: "The trade-off underlying workers' compensation is that employers fund the system and, in return, are protected from being sued by employees for workplace injuries."
+  },
+  { topic: "WHMIS",
+    q: "WHMIS is the system that:",
+    options: [
+      "Regulates the import of automobiles into Canada",
+      "Provides workers with information about hazardous materials in the workplace",
+      "Sets accident compensation rates for injured workers",
+      "Certifies engineering designs for federal projects"
+    ],
+    correct: 1,
+    explain: "The Workplace Hazardous Materials Information System (WHMIS) ensures workers know what hazardous substances they handle and that they are properly protected, through coordinated federal/provincial laws."
+  },
+  { topic: "WHMIS",
+    q: "Suppliers selling or importing a hazardous product for workplace use must provide:",
+    options: [
+      "An environmental impact statement",
+      "A safety data sheet (SDS)",
+      "An ISO 9000 certificate",
+      "A workers' compensation registration form"
+    ],
+    correct: 1,
+    explain: "The supplier must provide a safety data sheet (formerly called a Material Safety Data Sheet) and ensure the product or container is labelled with required information and hazard symbols."
+  },
+  { topic: "WHMIS 2015",
+    q: "WHMIS 2015 reflects Canada's alignment with:",
+    options: [
+      "The European REACH regulations",
+      "The Globally Harmonized System of Classification and Labelling of Chemicals (GHS)",
+      "U.S. OSHA's Hazard Communication Standard",
+      "The ISO 14000 environmental management series"
+    ],
+    correct: 1,
+    explain: "WHMIS 2015 incorporates GHS elements — standardized classification criteria, label requirements, and SDS requirements — without replacing the existing WHMIS framework."
+  },
+  { topic: "Westray",
+    q: "According to the Westray Inquiry, the most crucial aspect of mine safety in an underground coal mine — and the one that was grossly inadequate at Westray — was:",
+    options: [
+      "Worker training in first aid",
+      "The ventilation system",
+      "The mine entrance design",
+      "Workers' compensation insurance"
+    ],
+    correct: 1,
+    explain: "Justice Richard's report stated ventilation is the most crucial aspect of underground coal-mine safety. At Westray, the system failed to clear methane to non-explosive concentrations, and the conditions were ripe for a coal-dust explosion."
+  },
+  { topic: "Criminal Code",
+    q: "Section 217.1 of the Criminal Code of Canada — added in response to the Westray disaster — provides that:",
+    options: [
+      "Underground coal mining is banned in Canada",
+      "Anyone who undertakes or has authority to direct work has a legal duty to take reasonable steps to prevent bodily harm",
+      "Provincial OHS laws are replaced by a federal regime",
+      "A new federal mining regulator is created"
+    ],
+    correct: 1,
+    explain: "Section 217.1 imposes a criminal-law duty on those who direct work, holding corporations and individuals criminally responsible for failing to provide a safe work environment."
+  },
+  { topic: "Westray",
+    q: "How many miners died in the Westray mine explosion of May 9, 1992?",
+    options: [
+      "12",
+      "26",
+      "42",
+      "189"
+    ],
+    correct: 1,
+    explain: "Twenty-six miners were killed — one of the worst industrial tragedies in Canadian history. Justice Richard described Westray as \"an accident waiting to happen.\""
+  },
+  { topic: "Products Liability",
+    q: "The KEY difference between Canadian and American products-liability law is that under American strict liability:",
+    options: [
+      "The plaintiff must prove negligence",
+      "The rule applies even when the seller has exercised all possible care",
+      "Only the manufacturer (not the seller) can be sued",
+      "Damages are capped by federal statute"
+    ],
+    correct: 1,
+    explain: "U.S. strict liability applies to anyone in the design-manufacture-sales chain even if all possible care was taken — the defendant must prove product safety. Canadian law generally requires the plaintiff to prove negligence."
+  },
+  { topic: "Failure Analysis",
+    q: "FMEA stands for:",
+    options: [
+      "Federal Manufacturing Engineering Authority",
+      "Failure Modes and Effects Analysis",
+      "Final Mechanical Evaluation Assessment",
+      "Functional Materials Engineering Audit"
+    ],
+    correct: 1,
+    explain: "FMEA (Failure Modes and Effects Analysis) and FTA (Fault Tree Analysis) are systematic techniques to identify which component failures are most critical in large systems."
+  },
+  { topic: "HAZOP",
+    q: "HAZOP (Hazard and Operability) studies are typically applied in which industries?",
+    options: [
+      "Software development and IT",
+      "Banking and finance",
+      "Chemical, process, and oil and gas",
+      "Retail and consumer goods"
+    ],
+    correct: 2,
+    explain: "HAZOP studies were developed for and are widely used in chemical, process, and oil-and-gas industries. They consider hazards, human error, and equipment failures during the design stage."
+  },
+  { topic: "Manufacturer Duties",
+    q: "Which of the following is NOT typically listed as a manufacturer's responsibility for product safety?",
+    options: [
+      "Establish safety as a company policy",
+      "Conduct quality assurance and testing during manufacturing",
+      "Act promptly on consumer complaints",
+      "Indemnify all retailers from any product liability"
+    ],
+    correct: 3,
+    explain: "Manufacturers are expected to set safety policy, ensure designer competence, conduct safety reviews, perform QA, review warranties, act on complaints, inform designers of failures, and warn owners of hazards. Indemnifying retailers is not part of the standard checklist."
+  },
+  { topic: "Accident Response",
+    q: "Where a workplace accident causes death or critical injury, the employer must:",
+    options: [
+      "Resume operations immediately to minimize losses",
+      "Preserve the scene and notify the labour ministry and the workplace health and safety committee",
+      "Pay compensation directly to the family before reporting the incident",
+      "Wait for police to arrive before contacting any government agency"
+    ],
+    correct: 1,
+    explain: "OHS law requires preservation of the accident scene and prompt notification of both the labour ministry and the joint health and safety committee. Engineers often participate as subject matter experts in subsequent investigations."
+  },
+  { topic: "OHS Enforcement",
+    q: "Government OHS inspectors typically have authority to:",
+    options: [
+      "Lay criminal charges directly",
+      "Enter and inspect workplaces, examine documents, and test equipment",
+      "Suspend professional engineering licences",
+      "Award workers' compensation benefits"
+    ],
+    correct: 1,
+    explain: "OHS inspectors can enter workplaces, inspect documents and equipment, and order compliance. Failure to comply may lead to prosecution, fines, or imprisonment — but criminal charges are pursued through the courts, and licensing discipline is handled by the engineering Association."
+  },
+  { topic: "Products Liability",
+    q: "Outside of the res ipsa loquitur doctrine, Canadian product-liability law generally requires:",
+    options: [
+      "The manufacturer to prove the product was not defective",
+      "The injured party to prove negligence in the design or manufacture of the product",
+      "Automatic damages upon any injury caused by a product",
+      "That only the retailer can be sued"
+    ],
+    correct: 1,
+    explain: "In Canada, the manufacturer is not at fault unless the injured party proves negligence. This contrasts with U.S. strict liability, where fault is presumed unless disproven."
+  }
+];
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+const STATE_KEY = 'nppe_ch6_state_v1';
+
+let state = {
+  currentIndex: 0,
+  answers: {},      // { qIndex: optionIndex }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  startedAt: null
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      state = { ...state, ...saved };
+    }
+  } catch (e) { /* ignore */ }
+  if (!state.startedAt) state.startedAt = Date.now();
+}
+
+function saveState() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function resetState() {
+  state = { currentIndex: 0, answers: {}, score: 0, streak: 0, bestStreak: 0, startedAt: Date.now() };
+  saveState();
+}
+
+/* =========================================================================
+   FIREWORKS / CONFETTI / PARTICLES (canvas)
+   ========================================================================= */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+
+const GOLDS = ['#f4cf5a', '#d4af37', '#fde68a', '#fbbf24', '#facc15', '#fff8dc', '#ffd700'];
+
+function fireworkBurst(x, y, count = 60, baseSpeed = 6, palette = GOLDS) {
+  for (let i = 0; i < count; i++) {
+    const angle = rand(0, Math.PI * 2);
+    const speed = rand(baseSpeed * 0.4, baseSpeed * 1.2);
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: rand(0.012, 0.025),
+      size: rand(2, 4.5),
+      color: palette[Math.floor(Math.random() * palette.length)],
+      gravity: 0.08,
+      shape: 'circle',
+      sparkle: Math.random() < 0.3
+    });
+  }
+}
+
+function confettiShower(count = 90) {
+  const palette = ['#f4cf5a', '#d4af37', '#fde68a', '#fbbf24', '#fff8dc', '#facc15', '#ffd700', '#fff'];
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: rand(0, window.innerWidth),
+      y: rand(-200, -20),
+      vx: rand(-1.5, 1.5),
+      vy: rand(2, 5),
+      life: 1,
+      decay: 0.005,
+      size: rand(4, 8),
+      color: palette[Math.floor(Math.random() * palette.length)],
+      gravity: 0.05,
+      rot: rand(0, Math.PI * 2),
+      vrot: rand(-0.2, 0.2),
+      shape: 'rect',
+      sparkle: false
+    });
+  }
+}
+
+function starBurst(x, y, count = 12) {
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + rand(-0.1, 0.1);
+    const speed = rand(3, 7);
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: 0.018,
+      size: rand(8, 14),
+      color: '#f4cf5a',
+      gravity: 0.04,
+      shape: 'star',
+      rot: rand(0, Math.PI * 2),
+      vrot: rand(-0.15, 0.15),
+      sparkle: true
+    });
+  }
+}
+
+function drawStar(ctx, x, y, r, rot) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const outer = i * Math.PI * 2 / 5 - Math.PI / 2;
+    const inner = outer + Math.PI / 5;
+    if (i === 0) ctx.moveTo(Math.cos(outer) * r, Math.sin(outer) * r);
+    else ctx.lineTo(Math.cos(outer) * r, Math.sin(outer) * r);
+    ctx.lineTo(Math.cos(inner) * r * 0.45, Math.sin(inner) * r * 0.45);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  particles = particles.filter(p => p.life > 0);
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= 0.99;
+    p.life -= p.decay;
+    if (p.vrot) p.rot += p.vrot;
+
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.color;
+
+    if (p.sparkle) {
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = p.color;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+
+    if (p.shape === 'rect') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot || 0);
+      ctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+      ctx.restore();
+    } else if (p.shape === 'star') {
+      drawStar(ctx, p.x, p.y, p.size, p.rot || 0);
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* =========================================================================
+   FLOATING EMOJIS & SCORE POPUPS
+   ========================================================================= */
+function spawnEmoji(emoji, x, y) {
+  const layer = document.getElementById('emojiLayer');
+  const el = document.createElement('div');
+  el.className = 'float-emoji';
+  el.textContent = emoji;
+  el.style.left = (x + rand(-30, 30)) + 'px';
+  el.style.top = y + 'px';
+  layer.appendChild(el);
+  setTimeout(() => el.remove(), 1900);
+}
+
+function scorePopup(text, x, y) {
+  const el = document.createElement('div');
+  el.className = 'score-pop';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.fontSize = 'clamp(1.5rem, 3vw, 2.4rem)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function showCombo(text) {
+  const banner = document.getElementById('comboBanner');
+  banner.textContent = text;
+  banner.classList.remove('show');
+  void banner.offsetWidth; // restart animation
+  banner.classList.add('show');
+}
+
+/* =========================================================================
+   CELEBRATION DISPATCH
+   ========================================================================= */
+const COMBO_MESSAGES = [
+  null,           // streak 1 — nothing extra
+  null,           // streak 2
+  "Nice!",        // streak 3
+  "Great!",       // streak 4
+  "Excellent!",   // streak 5
+  "Brilliant!",   // streak 6
+  "Unstoppable!", // streak 7
+  "Phenomenal!",  // streak 8
+  "Legendary!",   // streak 9+
+];
+
+function celebrate(streak, opt) {
+  const rect = opt.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // Always: small star burst + happy emoji + score popup
+  starBurst(cx, cy, 10);
+  const emojis = ['⭐', '🌟', '✨', '😊', '🎉', '👏', '💫'];
+  spawnEmoji(emojis[Math.floor(Math.random() * emojis.length)], cx, cy);
+  spawnEmoji(emojis[Math.floor(Math.random() * emojis.length)], cx + rand(-50, 50), cy + rand(-20, 20));
+
+  // Score gained
+  const basePoints = 10;
+  const multiplier = Math.min(streak, 5);
+  const gained = basePoints * multiplier;
+  state.score += gained;
+  scorePopup(`+${gained}${multiplier > 1 ? ' ×' + multiplier : ''}`, cx, cy);
+
+  // Streak >= 3 — fireworks
+  if (streak >= 3) {
+    fireworkBurst(cx, cy - 20, 50, 6);
+    setTimeout(() => fireworkBurst(rand(window.innerWidth*0.2, window.innerWidth*0.8), rand(window.innerHeight*0.15, window.innerHeight*0.5), 40, 5), 200);
+  }
+
+  // Streak >= 5 — confetti shower + bigger fireworks + combo banner
+  if (streak >= 5) {
+    confettiShower(60);
+    setTimeout(() => fireworkBurst(rand(100, window.innerWidth - 100), rand(100, 300), 60, 7), 350);
+  }
+
+  if (streak >= 3) {
+    const idx = Math.min(streak, COMBO_MESSAGES.length - 1);
+    if (COMBO_MESSAGES[idx]) showCombo(COMBO_MESSAGES[idx]);
+  }
+
+  return gained;
+}
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+const elQText = document.getElementById('qText');
+const elQLabel = document.getElementById('qLabel');
+const elQTopic = document.getElementById('qTopic');
+const elOptions = document.getElementById('optionsList');
+const elExplain = document.getElementById('explanation');
+const elExplainText = document.getElementById('explainText');
+const elPrev = document.getElementById('prevBtn');
+const elNext = document.getElementById('nextBtn');
+const elScore = document.getElementById('scoreVal');
+const elStreak = document.getElementById('streakVal');
+const elFlame = document.getElementById('streakFlame');
+const elCorrect = document.getElementById('correctVal');
+const elAnswered = document.getElementById('answeredVal');
+const elQNum = document.getElementById('qNumVal');
+const elProgress = document.getElementById('progressFill');
+const elNavDots = document.getElementById('navDots');
+
+function renderHud() {
+  const correct = Object.entries(state.answers).filter(([i, a]) => a === QUESTIONS[+i].correct).length;
+  const answered = Object.keys(state.answers).length;
+  elScore.textContent = state.score;
+  elStreak.textContent = state.streak;
+  elCorrect.textContent = correct;
+  elAnswered.textContent = answered;
+  elQNum.textContent = state.currentIndex + 1;
+  elProgress.style.width = ((answered / QUESTIONS.length) * 100) + '%';
+  elFlame.classList.toggle('hot', state.streak >= 3);
+}
+
+function renderNavDots() {
+  elNavDots.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'nav-dot';
+    d.textContent = i + 1;
+    if (i === state.currentIndex) d.classList.add('current');
+    if (state.answers[i] !== undefined) {
+      if (state.answers[i] === QUESTIONS[i].correct) d.classList.add('correct');
+      else d.classList.add('incorrect');
+    }
+    d.addEventListener('click', () => goTo(i));
+    elNavDots.appendChild(d);
+  });
+}
+
+function renderQuestion() {
+  const i = state.currentIndex;
+  const q = QUESTIONS[i];
+  elQLabel.textContent = `Question ${String(i + 1).padStart(2, '0')} of ${QUESTIONS.length}`;
+  elQTopic.textContent = q.topic;
+  elQText.textContent = q.q;
+  elOptions.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  const userAnswer = state.answers[i];
+  const answered = userAnswer !== undefined;
+
+  q.options.forEach((opt, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.disabled = answered;
+    btn.innerHTML = `
+      <span class="opt-letter">${letters[optIdx]}</span>
+      <span class="opt-text"></span>
+    `;
+    btn.querySelector('.opt-text').textContent = opt;
+
+    if (answered) {
+      if (optIdx === q.correct) btn.classList.add(userAnswer === q.correct ? 'correct' : 'reveal');
+      else if (optIdx === userAnswer) btn.classList.add('incorrect');
+    }
+
+    btn.addEventListener('click', () => handleAnswer(optIdx, btn));
+    elOptions.appendChild(btn);
+  });
+
+  if (answered) {
+    elExplain.classList.add('show');
+    elExplainText.textContent = q.explain;
+  } else {
+    elExplain.classList.remove('show');
+    elExplainText.textContent = '';
+  }
+
+  elPrev.disabled = i === 0;
+  elNext.textContent = i === QUESTIONS.length - 1 ? 'Finish Exam ✓' : 'Next →';
+
+  renderHud();
+  renderNavDots();
+}
+
+function handleAnswer(optIdx, btn) {
+  const i = state.currentIndex;
+  if (state.answers[i] !== undefined) return;
+  const q = QUESTIONS[i];
+  state.answers[i] = optIdx;
+
+  const isCorrect = optIdx === q.correct;
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    celebrate(state.streak, btn);
+  } else {
+    state.streak = 0;
+  }
+  saveState();
+  renderQuestion();
+}
+
+function goTo(i) {
+  if (i < 0 || i >= QUESTIONS.length) return;
+  state.currentIndex = i;
+  saveState();
+  renderQuestion();
+  document.getElementById('questionAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+elPrev.addEventListener('click', () => goTo(state.currentIndex - 1));
+elNext.addEventListener('click', () => {
+  if (state.currentIndex === QUESTIONS.length - 1) {
+    showResults();
+  } else {
+    goTo(state.currentIndex + 1);
+  }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (document.getElementById('quizScreen').classList.contains('active')) {
+    if (e.key === 'ArrowRight') elNext.click();
+    if (e.key === 'ArrowLeft' && !elPrev.disabled) elPrev.click();
+    if (['1','2','3','4','a','b','c','d','A','B','C','D'].includes(e.key)) {
+      const map = {'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3,'A':0,'B':1,'C':2,'D':3};
+      const idx = map[e.key];
+      const buttons = elOptions.querySelectorAll('.opt');
+      if (buttons[idx] && !buttons[idx].disabled) buttons[idx].click();
+    }
+  }
+});
+
+/* =========================================================================
+   RESULTS
+   ========================================================================= */
+function showResults() {
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const correctCount = Object.entries(state.answers).filter(([i, a]) => a === QUESTIONS[+i].correct).length;
+  const total = QUESTIONS.length;
+  const incorrect = Object.keys(state.answers).length - correctCount;
+  const pct = Math.round((correctCount / total) * 100);
+
+  let grade, verdict;
+  if (pct >= 90)      { grade = 'A+'; verdict = 'Outstanding — you have an exceptional grasp of Chapter 6.'; }
+  else if (pct >= 85) { grade = 'A';  verdict = 'Excellent work. You are well prepared on this material.'; }
+  else if (pct >= 80) { grade = 'A−'; verdict = 'Strong performance. Review the missed items and you are exam-ready.'; }
+  else if (pct >= 75) { grade = 'B+'; verdict = 'Solid pass — a focused review of weaker topics will sharpen this further.'; }
+  else if (pct >= 70) { grade = 'B';  verdict = 'A passing performance. Revisit the explanations and re-attempt.'; }
+  else if (pct >= 65) { grade = 'B−'; verdict = 'Borderline. A second pass through the chapter is recommended.'; }
+  else if (pct >= 60) { grade = 'C';  verdict = 'You have the foundation; deepen your review of liability and OHS sections.'; }
+  else if (pct >= 50) { grade = 'D';  verdict = 'Re-read the chapter carefully and try again.'; }
+  else                { grade = 'F';  verdict = 'Time to dig back into the chapter — you can do this.'; }
+
+  document.getElementById('gradeDisplay').textContent = grade;
+  document.getElementById('resultVerdict').textContent = verdict;
+  document.getElementById('finalCorrect').textContent = correctCount;
+  document.getElementById('finalIncorrect').textContent = incorrect;
+  document.getElementById('finalScore').textContent = state.score;
+  document.getElementById('finalStreak').textContent = state.bestStreak;
+  document.getElementById('resultTitle').textContent = `${correctCount} of ${total} Correct`;
+
+  // Big finale celebration if score is high
+  if (pct >= 80) {
+    setTimeout(() => {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          fireworkBurst(rand(window.innerWidth*0.2, window.innerWidth*0.8), rand(120, 360), 70, 7);
+        }, i * 250);
+      }
+      confettiShower(150);
+    }, 400);
+  } else if (pct >= 60) {
+    setTimeout(() => {
+      fireworkBurst(window.innerWidth/2, 200, 50, 6);
+      confettiShower(80);
+    }, 400);
+  }
+}
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  if (confirm('Restart the exam? Your current results will be cleared.')) {
+    resetState();
+    document.getElementById('resultsScreen').classList.remove('active');
+    document.getElementById('quizScreen').classList.add('active');
+    document.getElementById('reviewList').style.display = 'none';
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+document.getElementById('reviewBtn').addEventListener('click', () => {
+  const list = document.getElementById('reviewList');
+  if (list.style.display === 'none' || !list.style.display) {
+    renderReview();
+    list.style.display = 'flex';
+    document.getElementById('reviewBtn').textContent = 'Hide Review';
+    list.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    list.style.display = 'none';
+    document.getElementById('reviewBtn').textContent = 'Review Answers';
+  }
+});
+
+function renderReview() {
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  QUESTIONS.forEach((q, i) => {
+    const ua = state.answers[i];
+    const isCorrect = ua === q.correct;
+    const item = document.createElement('div');
+    item.className = 'review-item' + (isCorrect ? '' : ' wrong');
+    item.innerHTML = `
+      <div class="ri-meta">Q${i+1} · ${q.topic} · ${isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
+      <div class="ri-q"></div>
+      <div class="ri-ans"><strong>Your answer:</strong> <span class="${isCorrect ? 'right' : 'you'}">${ua !== undefined ? letters[ua] + ') ' + q.options[ua] : '(unanswered)'}</span></div>
+      ${!isCorrect ? `<div class="ri-ans"><strong>Correct answer:</strong> <span class="right">${letters[q.correct]}) ${q.options[q.correct]}</span></div>` : ''}
+      <div class="ri-explain"></div>
+    `;
+    item.querySelector('.ri-q').textContent = q.q;
+    item.querySelector('.ri-explain').textContent = q.explain;
+    list.appendChild(item);
+  });
+}
+
+/* =========================================================================
+   INIT
+   ========================================================================= */
+loadState();
+renderQuestion();
+
+// Welcome confetti on first launch (when no answers exist)
+if (Object.keys(state.answers).length === 0) {
+  setTimeout(() => confettiShower(40), 500);
+}
+</script>
+</body>
+</html>

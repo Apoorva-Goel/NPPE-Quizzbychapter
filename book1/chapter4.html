@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Exam — Chapter 4: Basic Concepts of Professional Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f0eb;--card:#fff;--border:#d6cfc6;--accent:#1a3a5c;--accent2:#b8860b;
+  --correct:#1b7a3d;--correct-bg:#e8f5ed;--wrong:#b22222;--wrong-bg:#fde8e8;
+  --text:#2c2c2c;--muted:#6b6b6b;--light:#e8e2da;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+/* HEADER */
+.hero{background:var(--accent);color:#fff;padding:2.5rem 1.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--accent2)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:.4rem;letter-spacing:.3px}
+.hero p{opacity:.8;font-size:.95rem;max-width:640px;margin:0 auto}
+
+/* SCORE BAR */
+.score-bar{background:var(--card);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.score-bar .stat{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.score-bar .stat b{font-size:1.1rem;color:var(--text)}
+.score-bar .stat.correct b{color:var(--correct)}
+.score-bar .stat.wrong b{color:var(--wrong)}
+.progress-track{flex:1 1 200px;max-width:360px;height:8px;background:var(--light);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent2);border-radius:99px;transition:width .4s ease}
+.btn-reset{background:var(--accent);color:#fff;border:none;padding:.45rem 1.1rem;border-radius:6px;font-size:.82rem;cursor:pointer;font-family:inherit;font-weight:600;transition:background .2s}
+.btn-reset:hover{background:#244d73}
+
+/* CONTAINER */
+.container{max-width:820px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* QUESTION CARD */
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.8rem 1.6rem;margin-bottom:1.25rem;transition:box-shadow .25s}
+.q-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.q-num{font-family:'DM Serif Display',serif;font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent2);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.q-num .badge{font-size:.65rem;padding:.15rem .5rem;border-radius:99px;background:var(--light);color:var(--muted);letter-spacing:.5px;font-family:'DM Sans',sans-serif}
+.q-text{font-size:1.02rem;font-weight:500;margin-bottom:1.1rem;line-height:1.65}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.55rem}
+.opt{display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.93rem;line-height:1.5}
+.opt:hover{border-color:var(--accent);background:#f0f4f8}
+.opt.selected{border-color:var(--accent);background:#e4ecf4;font-weight:500}
+.opt.correct-answer{border-color:var(--correct);background:var(--correct-bg)}
+.opt.wrong-answer{border-color:var(--wrong);background:var(--wrong-bg)}
+.opt.disabled{pointer-events:none;opacity:.85}
+.opt .letter{min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--light);font-weight:700;font-size:.78rem;color:var(--accent);flex-shrink:0;margin-top:1px}
+.opt.correct-answer .letter{background:var(--correct);color:#fff}
+.opt.wrong-answer .letter{background:var(--wrong);color:#fff}
+
+/* EXPLANATION */
+.explanation{margin-top:1rem;padding:1rem 1.1rem;border-radius:8px;font-size:.88rem;line-height:1.6;display:none}
+.explanation.show{display:block}
+.explanation.right{background:var(--correct-bg);border-left:3px solid var(--correct)}
+.explanation.wrong{background:var(--wrong-bg);border-left:3px solid var(--wrong)}
+.explanation strong{display:block;margin-bottom:.25rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.8px}
+
+/* BOTTOM BAR */
+.bottom-bar{text-align:center;padding:2rem 1rem}
+.btn-top{background:var(--accent2);color:#fff;border:none;padding:.6rem 1.8rem;border-radius:8px;font-size:.9rem;cursor:pointer;font-family:inherit;font-weight:600;transition:background .2s}
+.btn-top:hover{background:#9a7209}
+
+/* CELEBRATION FX */
+#fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.float-pts{position:fixed;font-family:'DM Serif Display',serif;font-weight:700;font-size:1.7rem;color:var(--accent2);pointer-events:none;z-index:10000;text-shadow:0 2px 12px rgba(184,134,11,.6),0 0 24px rgba(251,191,36,.4);animation:floatUp 1.5s cubic-bezier(.2,.6,.3,1) forwards;white-space:nowrap}
+@keyframes floatUp{
+  0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+  18%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+  30%{transform:translate(-50%,-22px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-100px) scale(.95)}
+}
+.streak-fire{display:inline-block;animation:flameDance 1.4s ease-in-out infinite}
+@keyframes flameDance{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.12)}}
+.score-bar .stat.pulse b{animation:streakPulse .65s ease}
+@keyframes streakPulse{
+  0%,100%{transform:scale(1);color:var(--text)}
+  40%{transform:scale(1.45);color:var(--accent2);text-shadow:0 0 12px rgba(251,191,36,.6)}
+}
+.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{
+  10%,90%{transform:translateX(-2px)}
+  20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)}
+  40%,60%{transform:translateX(7px)}
+}
+.opt.correct-answer{animation:correctGlow 1s ease-out}
+@keyframes correctGlow{
+  0%{box-shadow:0 0 0 0 rgba(27,122,61,.7),0 0 30px 0 rgba(27,122,61,.4)}
+  60%{box-shadow:0 0 0 14px rgba(27,122,61,0),0 0 30px 8px rgba(27,122,61,.2)}
+  100%{box-shadow:0 0 0 0 rgba(27,122,61,0)}
+}
+.milestone-banner{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--accent) 0%,#2a5380 50%,var(--accent2) 100%);color:#fff;padding:1.4rem 2.6rem;border-radius:6px;font-family:'DM Serif Display',serif;font-size:1.7rem;text-align:center;z-index:10001;box-shadow:0 25px 70px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none;animation:bannerPop 2.4s cubic-bezier(.34,1.4,.64,1) forwards;border:1px solid rgba(251,191,36,.4)}
+.milestone-banner .small{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:.5rem;opacity:.9;color:#fde68a}
+@keyframes bannerPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}
+  28%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+  82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(.92) rotate(0)}
+}
+.streak-stat{transition:color .3s,text-shadow .3s}
+.streak-stat.hot b{color:var(--accent2);text-shadow:0 0 8px rgba(251,191,36,.5)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .q-card{padding:1.2rem 1rem}
+  .hero{padding:1.8rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>NPPE Practice Exam — Chapter 4</h1>
+  <p>Basic Concepts of Professional Practice &middot; 50 Questions</p>
+</div>
+
+<div class="score-bar" id="scoreBar">
+  <div class="stat">Answered: <b id="answered">0</b>/50</div>
+  <div class="stat correct">Correct: <b id="correctCount">0</b></div>
+  <div class="stat wrong">Wrong: <b id="wrongCount">0</b></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <span class="stat" id="pointsStat">Points <b id="points">0</b></span>
+  <span class="stat streak-stat" id="streakStat">Streak <span class="streak-fire">🔥</span> <b id="streak">0</b></span>
+  <button class="btn-reset" onclick="resetAll()">Reset</button>
+</div>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="container" id="quizContainer"></div>
+
+<div class="bottom-bar"><button class="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to Top</button></div>
+
+<script>
+const QUESTIONS=[
+{q:"What is the MOST basic professional duty of a licensed engineer or geoscientist?",opts:["Maximize profits for the employer","Protect the public","Follow the instructions of the client","Advance the profession"],ans:1,expl:"Every licensing Act defines the duty to protect the public, and it is the first clause in every Code of Ethics. The professional must put public safety, health, and welfare ahead of any personal gain."},
+{q:"How many years of documented professional experience are typically required to satisfy licensing requirements in most Canadian provinces?",opts:["Two years","Three years","Four years","Five years"],ans:2,expl:"Four years of documented professional experience are required in most provinces. Quebec is the exception, requiring three years."},
+{q:"Which of the following is NOT an acceptable title for an engineering intern registered with a provincial Association?",opts:["Engineering Intern (EIT)","Member-in-Training (MIT)","Assistant Engineer","Ingénieur junior (ing. jr.)"],ans:2,expl:"Graduates must not use titles that imply they are licensed. Internal company titles such as Assistant Engineer, Assistant Geologist, Plant Engineer, or Sales Engineer should be avoided."},
+{q:"What is the maximum credit for pre-graduate experience that may reduce the required years of experience for licensing?",opts:["Six months","One year","Two years","Three years"],ans:1,expl:"Each Association allows credit for up to one year of pre-graduate experience, and most grant up to 12 months' credit for a relevant postgraduate degree."},
+{q:"Under the competency-based evaluation system, applicants must demonstrate competencies by explaining what they did in a situation and also:",opts:["Who supervised them","How and why they did it","What tools they used exclusively","How much it cost"],ans:1,expl:"Applicants must write about situations showing what they did, how they did it, and why they did it. This detail is essential for assessment of engineering work experience."},
+{q:"Which of the following is NOT one of the seven competency areas published by Engineers Canada?",opts:["Apply engineering knowledge, methods and techniques","Manage engineering activities","Maximize corporate revenue","Protect the public interest"],ans:2,expl:"The seven competencies include applying knowledge, using tools, protecting the public, managing activities, communicating, collaborating, and maintaining skills. Maximizing corporate revenue is not listed."},
+{q:"Under the five quality criteria for documenting experience, which category is considered the 'best' experience?",opts:["Practical experience","Application of theory","Communication skills","Management of engineering"],ans:1,expl:"Application of theory is described as the best experience. It includes analysis, design and synthesis, testing methods, and project implementation."},
+{q:"Approximately what percentage of an applicant's experience should involve 'meaningful participation' in the application of theory?",opts:["10 percent","20 percent","30 percent","50 percent"],ans:1,expl:"Most Associations expect meaningful participation of about 20 percent of experience in the application of theory category."},
+{q:"At which responsibility level does an engineer or geoscientist typically begin to make independent analyses and interpret results without supervision?",opts:["Level A — Entry Level","Level B — Internship","Level C — Qualified Professional","Level D — First Supervisory"],ans:2,expl:"Level C professionals make independent analyses and interpret results without supervision. They must be licensed and typically have five to six years of experience."},
+{q:"Which responsibility level is described as the first level involving direct and sustained supervision of other professionals?",opts:["Level B","Level C","Level D","Level E"],ans:2,expl:"Level D is the first level that involves direct and sustained supervision of other professionals or the first level of full specialization, typically requiring seven to eight years of experience."},
+{q:"At Level E (Middle Management), how many years of experience are normally required?",opts:["5 to 6 years","7 to 8 years","10 to 12 years","15 to 20 years"],ans:2,expl:"Level E normally requires at least 10 to 12 years of engineering, geoscience, and/or administrative experience."},
+{q:"What does 'due diligence' literally mean in a professional context?",opts:["Maximum effort","Reasonable care","Absolute perfection","Legal compliance"],ans:1,expl:"Due diligence literally means 'reasonable care.' It is a strategy for guaranteeing success by considering every possible mode of failure and ensuring a contingency plan is in place."},
+{q:"Why is due diligence considered an important legal defence?",opts:["It eliminates all risk","It proves compliance with every regulation","A defendant who took reasonable precautions will not be found guilty","It automatically qualifies as insurance"],ans:2,expl:"If a defendant can show that reasonable precautions were taken to protect health and safety, then the defendant will not be found guilty under occupational health and safety laws."},
+{q:"What does the professional seal (stamp) on a document signify?",opts:["The document is perfect and error-free","A licensed professional prepared and approves the document","The document has been reviewed by the Association","The document is a draft for internal use"],ans:1,expl:"The seal identifies the author and means the author approves the document, is confident it is accurate, and assumes professional responsibility and accountability."},
+{q:"Which of the following documents should be sealed by a professional engineer?",opts:["A business memo with no technical content","A preliminary draft specification","A final engineering report issued to the public","A legal contract"],ans:2,expl:"The Act requires all final drawings, specifications, plans, reports, maps, and similar documents involving professional practice and issued to the public to be signed, sealed, and dated."},
+{q:"What should be done with preliminary or draft documents to distinguish them from final sealed documents?",opts:["Seal them with a different colour ink","Mark them clearly as Preliminary, Draft, or Not for Construction","File them with the Association","Destroy them immediately after the final version is complete"],ans:1,expl:"Preliminary documents must be clearly marked 'Preliminary,' 'Not for Construction,' 'Draft,' 'For Discussion Only,' or something similar so they are not confused with final documents."},
+{q:"When a colleague asks you to 'check' a document, what must you do first?",opts:["Immediately sign and seal it","Clarify whether you are scanning for errors or assuming responsibility","Refer it to your employer","Decline to review it under any circumstances"],ans:1,expl:"The term 'checking' is ambiguous. You must clarify whether you are merely scanning for errors or accepting legal responsibility for the document."},
+{q:"If an unlicensed colleague asks you to 'check, sign, and seal' a drawing as a favour, what is the professional response?",opts:["Sign it since the colleague assures you it is correct","Refuse unless you have supervised or thoroughly reviewed the work","Seal it but add a disclaimer","Ask the colleague to pay a review fee"],ans:1,expl:"You must not seal a document unless you have supervised or thoroughly reviewed the work. Yielding to pressure is unprofessional and can lead to discipline proceedings."},
+{q:"When two professionals collaborate on a document, what is the general rule regarding seals?",opts:["Only the senior professional seals it","Only the project leader seals it","Both the preparing and approving professionals should affix their seals","Neither needs to seal it if it is internal"],ans:2,expl:"If one professional prepares a document and another approves it, both seals should be affixed. If not possible, only the approving professional should seal it."},
+{q:"What happens if a professional fails to seal a document that should have been sealed?",opts:["Nothing, as sealing is optional","It is a violation of the Act","Liability is eliminated","The Association will seal it on the professional's behalf"],ans:1,expl:"Omitting the seal is a violation of the Act. While it may not increase liability per se, discipline cases often include this charge as it may corroborate a pattern of negligence."},
+{q:"Does applying a seal to a document increase the author's legal liability?",opts:["Yes, it significantly increases liability","No, applying a seal does not increase legal liability","Only if the document contains errors","Only for consulting engineers"],ans:1,expl:"Applying a seal does not increase the author's legal or professional liability, and omitting the seal does not relieve the author of liability. Courts assign liability based on facts."},
+{q:"What is the key difference between a digital signature and a digitized signature?",opts:["A digitized signature is more secure","A digital signature has cryptographic protection; a digitized signature is merely an image","They are identical in function","A digitized signature requires Association approval"],ans:1,expl:"A digital signature has cryptographic protection, while a digitized signature is merely an image of a handwritten signature, which is risky and unprofessional to use on documents."},
+{q:"What must an electronic seal or digital signature be capable of to meet security requirements?",opts:["Being easily copied by colleagues","Electronic verification and detecting data alteration","Being shared across the organization","Operating without any subscription fees"],ans:1,expl:"Electronic seals and digital signatures must be unique to the person, under their sole control, capable of electronic verification, and attached so that any data alteration is immediately recognizable."},
+{q:"Under the experience documentation requirements, which of the following qualifies as 'practical experience'?",opts:["Only laboratory research","Knowing manufacturing equipment, operating procedures, and safety codes","Only attending conferences","Only classroom instruction"],ans:1,expl:"Practical experience helps appreciate the limits of theory and includes knowing manufacturing equipment, operating procedures, maintenance schedules, computer software, safety codes, and design standards."},
+{q:"Which of the following is an example of the 'social implications' category in experience documentation?",opts:["Writing a technical report","Creating a project budget","Reporting dangerous conditions to protect life, health, or the environment","Learning new software"],ans:2,expl:"The social implications category typically includes experience involving responsibility to protect life, health, property, or the environment, especially reporting dangerous conditions."},
+{q:"How does the 'duty to inform' obligation affect a professional engineer?",opts:["The professional must communicate truthfully except where confidentiality is legally required","The professional may withhold any information they choose","The professional must share all information publicly","The duty only applies to government-employed engineers"],ans:0,expl:"The professional must communicate truthfully and openly with clients, employers, regulatory agencies, and the public, except where patent, legal, or personnel matters require confidentiality."},
+{q:"What is sustainable development in the context of professional practice?",opts:["Maximizing current resource extraction","Using natural resources sensibly to avoid degrading quality of life for future generations","Developing only renewable energy projects","Ensuring all projects are profitable"],ans:1,expl:"Sustainable development means using natural resources sensibly so they are not dissipated through negligence and the quality of life for future generations is not degraded."},
+{q:"What do ISO 9000 standards certify?",opts:["The quality of individual products","The organization's systems and processes","Individual employee competence","Product safety ratings"],ans:1,expl:"ISO 9000 standards do not certify the quality of a product or service; they certify the organization's systems and processes for quality management."},
+{q:"According to the chapter, 'errors and omissions' insurance is:",opts:["Optional for all professionals","Compulsory for engineering and geoscience firms","Only required for sole proprietors","Only required in Ontario"],ans:1,expl:"Errors and omissions insurance is compulsory for engineering and geoscience firms and for sole proprietors in some provinces, to protect against costs of negligent conduct."},
+{q:"What is the Canadian Society of Professional Engineers (CSPE)?",opts:["A union for professional engineers","An advocacy group for professional engineers","A licensing body","A branch of Engineers Canada"],ans:1,expl:"CSPE is an advocacy group for professional engineers. It is not a union and was modelled after medical associations and bar associations."},
+{q:"In Quebec, how many years of documented experience are required for licensing?",opts:["Two years","Three years","Four years","Five years"],ans:1,expl:"Quebec requires three years of documented professional experience, compared to four years in all other provinces and territories."},
+{q:"Which of the following is NOT listed as one of the five quality criteria for documenting experience?",opts:["Application of theory","Communication skills","Financial management","Management of engineering and geoscience"],ans:2,expl:"The five quality criteria are: application of theory, practical experience, management of engineering and geoscience, communication skills, and social implications. Financial management is not one of them."},
+{q:"At Level A (Entry Level), employees typically work under what kind of supervision?",opts:["No supervision","Close supervision","Minimal supervision","Remote supervision"],ans:1,expl:"Level A employees work under close supervision, preparing simple plans, designs, calculations, costs, and bills of material in accordance with established codes, standards, or specifications."},
+{q:"What does 'whistle-blowing' refer to in the context of professional duties?",opts:["Reporting minor workplace inconveniences","Taking exceptional action to protect life, health, or property when dangerous or illicit situations arise","Filing for a patent","Informing the media about corporate strategy"],ans:1,expl:"In extreme cases, the professional may need to take exceptional action to protect life, health, or property by disclosing dangerous or illicit situations, known as whistle-blowing."},
+{q:"When should a new graduate apply to their provincial Association for licensing?",opts:["After gaining four years of experience","After their first promotion","As soon as possible after graduation","After passing the NPPE"],ans:2,expl:"The chapter states that applicants should apply as soon as possible after graduating. You do not need to satisfy the experience requirement first before applying."},
+{q:"Theory X management style assumes that:",opts:["Work is naturally enjoyable for most people","Employees are self-motivated and creative","Work is basically distasteful and employees must be closely monitored and controlled","Managers should act as colleagues"],ans:2,expl:"Theory X states that work is basically distasteful to most people, that they will avoid it whenever possible, and that employees must be closely monitored, controlled, and motivated through threats or rewards."},
+{q:"Theory Y management style assumes that:",opts:["Employees need strict penalties to be productive","People are naturally inclined to work and need favourable conditions to be productive","Workers cannot be trusted with responsibility","Only financial incentives motivate employees"],ans:1,expl:"Theory Y states that people are naturally inclined to work and merely need favourable working conditions. Psychological factors like perceived control and creative opportunities are important motivators."},
+{q:"According to Table 4.3, which management style treats employees as colleagues and permits them to function independently?",opts:["Autocratic","Paternal","Collegial","Responsive"],ans:2,expl:"The collegial style treats employees as colleagues and permits them to function independently, within agreed terms of reference. It is based on Theory Y."},
+{q:"Which management style has the manager instructing employees with no discussion?",opts:["Team-Oriented","Authoritarian","Collegial","Autocratic"],ans:3,expl:"The autocratic style is at the extreme end of Theory X, where the manager simply instructs employees with no discussion or input invited."},
+{q:"How long does Level A (Entry Level) typically last?",opts:["Six months","One or two years","Three to four years","Five years"],ans:1,expl:"Level A (Entry Level) typically lasts one or two years, during which recent graduates receive on-the-job training and work under close supervision."},
+{q:"At Level C (Qualified Professional), what is typically the minimum experience required?",opts:["Two to three years","Three to four years","Five to six years","Eight to ten years"],ans:2,expl:"Level C typically requires a minimum of five to six years of related work experience after graduation."},
+{q:"Which of the following best describes the purpose of the professional seal?",opts:["It is an archaic tradition with no legal meaning","It is a 'mark of reliance' indicating professional standards","It guarantees the document is perfect","It replaces the need for insurance"],ans:1,expl:"The seal is described as a 'mark of reliance' that indicates opinions, judgments, or designs were provided by a professional held to high standards of knowledge, skill, and ethical conduct."},
+{q:"What should a professional do if asked to seal a document outside their field of expertise?",opts:["Seal it anyway, as sealing is a formality","Consult a colleague experienced in the relevant field","Add a disclaimer and seal it","Seal it but note it is outside their expertise"],ans:1,expl:"If a document is outside your field of expertise, you should not seal it. A colleague experienced in the relevant discipline must be consulted."},
+{q:"When professionals collaborate on a multi-discipline project, how should seals be applied?",opts:["Only the project leader seals all documents","Each discipline's design professional and the project leader should seal, with explanatory notes","Only one seal per document is permitted","Seals are not required for multi-discipline projects"],ans:1,expl:"Documents should be sealed by the approving professional (typically the project leader) and by the design professional for each discipline. Seals should be qualified with explanatory notes indicating each person's area of responsibility."},
+{q:"What is the professional's obligation when a client ignores or overrules a technical recommendation?",opts:["Accept the client's decision without comment","Clearly explain what harm may occur if the recommendation is ignored","Resign immediately","Report the client to the Association"],ans:1,expl:"Professionals must explain clearly what harm may occur if the client or employer ignores or overrules a technical recommendation. This is part of the duty to inform."},
+{q:"A professional's duty regarding codes and standards is best described as:",opts:["Following recognized codes and standards to improve safety and prevent harm","Creating their own standards when existing ones are inconvenient","Codes are guidelines only and may be ignored","Standards only apply to government projects"],ans:0,expl:"Professionals must follow recognized codes and standards. Doing so is a simple way to improve safety and prevent harm."},
+{q:"Under 'adequate supervision,' a supervising professional must ensure all of the following EXCEPT:",opts:["Active involvement in the project","Supervision of field reviews","Guaranteed error-free results","Appropriate supervision given experience levels"],ans:2,expl:"The supervising professional must demonstrate active involvement, supervise field reviews, be responsible for engineering decisions, and provide appropriate supervision. Perfection is not required."},
+{q:"If a professional must approve work not prepared under their direct supervision, what is required?",opts:["A simple signature is sufficient","A thorough review of the document before applying the seal","Only a verbal assurance from the original author","Approval from the Association"],ans:1,expl:"Before applying a seal, the approving professional must take responsibility for the document by thoroughly reviewing it. This may require duplicating some or all of the work."},
+{q:"What did the Supreme Court of Canada rule regarding the professional seal and liability?",opts:["The seal is an absolute guarantee of accuracy","The seal attests that a qualified professional prepared the drawing but is not a guarantee of accuracy","The seal has no legal significance","Liability only applies if the seal is missing"],ans:1,expl:"The Supreme Court of Canada ruled that the seal attests that a qualified professional prepared the drawing but it is not a guarantee of accuracy. The affixation of the seal alone is insufficient to establish liability."},
+{q:"According to the chapter, what happens to the professional seal when a professional retires or resigns?",opts:["They keep it as a memento","It must be returned to the Association","It is automatically cancelled electronically","They may pass it to a colleague"],ans:1,expl:"The seal remains the property of the Association and must be returned if the professional retires or resigns, or if the Association asks for it."}
+];
+
+const container=document.getElementById('quizContainer');
+const STORAGE_KEY = 'nppe_ch4_state_v2';
+
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    return {
+      answers: s.answers || {},
+      points: s.points || 0,
+      streak: s.streak || 0,
+      maxStreak: s.maxStreak || 0
+    };
+  }catch(e){ return {answers:{},points:0,streak:0,maxStreak:0}; }
+}
+
+function saveState(state){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function render(){
+  const state = loadState();
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  QUESTIONS.forEach((q,i)=>{
+    const idx=i;
+    const userAns=state.answers[idx];
+    const answered=userAns!==undefined;
+    const isCorrect=answered && userAns===q.ans;
+
+    let html=`<div class="q-card" id="q${idx}">
+      <div class="q-num">Question ${i+1} <span class="badge">${answered?(isCorrect?'✓ Correct':'✗ Incorrect'):'Unanswered'}</span></div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">`;
+    q.opts.forEach((o,j)=>{
+      let cls='opt';
+      if(answered){
+        cls+=' disabled';
+        if(j===q.ans) cls+=' correct-answer';
+        if(j===userAns && !isCorrect) cls+=' wrong-answer';
+      }
+      html+=`<div class="${cls}" data-q="${idx}" data-o="${j}" onclick="selectOpt(${idx},${j})">
+        <span class="letter">${letters[j]}</span><span>${o}</span></div>`;
+    });
+    html+=`</div>`;
+    if(answered){
+      const etype=isCorrect?'right':'wrong';
+      html+=`<div class="explanation show ${etype}"><strong>${isCorrect?'✓ Correct':'✗ Incorrect — Correct Answer: '+letters[q.ans]}</strong>${q.expl}</div>`;
+    }
+    html+=`</div>`;
+    container.innerHTML+=html;
+  });
+  updateScore();
+}
+
+function selectOpt(qIdx, optIdx){
+  const state = loadState();
+  if (state.answers[qIdx] !== undefined) return;
+  state.answers[qIdx] = optIdx;
+  const isCorrect = QUESTIONS[qIdx].ans === optIdx;
+  let pointsEarned = 0;
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+    const bonus = Math.min((state.streak - 1) * 2, 20);
+    pointsEarned = 10 + bonus;
+    state.points += pointsEarned;
+  } else {
+    state.streak = 0;
+  }
+  saveState(state);
+  render();
+  requestAnimationFrame(() => {
+    const card = document.getElementById('q' + qIdx);
+    if (!card) return;
+    const optEl = card.querySelectorAll('.opt')[optIdx];
+    if (isCorrect) celebrate(optEl, pointsEarned, state.streak);
+    else shakeWrong(optEl);
+    setTimeout(()=>{
+      const c = document.getElementById('q'+qIdx);
+      if (c) c.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 50);
+    if (Object.keys(state.answers).length === QUESTIONS.length) {
+      setTimeout(() => completionCelebration(state), 900);
+    }
+  });
+}
+
+function updateScore(){
+  const state = loadState();
+  const answered = Object.keys(state.answers).length;
+  let correct = 0;
+  Object.entries(state.answers).forEach(([k, v]) => { if (QUESTIONS[k].ans === v) correct++; });
+  const wrong = answered - correct;
+
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setText('answered', answered);
+  setText('correctCount', correct);
+  setText('wrongCount', wrong);
+  setText('points', state.points);
+  setText('streak', state.streak);
+
+  const fill = document.getElementById('progressFill');
+  if (fill) fill.style.width = (answered/QUESTIONS.length*100) + '%';
+
+  const streakStat = document.getElementById('streakStat');
+  if (streakStat) {
+    if (state.streak >= 3) streakStat.classList.add('hot');
+    else streakStat.classList.remove('hot');
+  }
+}
+
+function resetAll(){
+  if (!confirm('Reset all answers, points, and streaks? Start completely fresh?')) return;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ─────────  CELEBRATION FX ENGINE  ───────── */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resizeCanvas();
+addEventListener('resize', resizeCanvas);
+
+function drawStar(x, y, r, color){
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const radius = i % 2 === 0 ? r : r * 0.45;
+    const a = (i * Math.PI) / 5 - Math.PI / 2;
+    const px = x + Math.cos(a) * radius;
+    const py = y + Math.sin(a) * radius;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles = particles.filter(p => {
+    p.vy += p.gravity;
+    p.vx *= 0.992;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 1;
+    p.rot = (p.rot || 0) + (p.spin || 0);
+    if (p.life <= 0 || p.y > canvas.height + 30) return false;
+    ctx.globalAlpha = Math.min(1, p.life / 40);
+    if (p.shape === 'star') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      drawStar(0, 0, p.size, p.color);
+      ctx.restore();
+    } else if (p.shape === 'square') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size, -p.size*0.4, p.size*2, p.size*0.8);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+    return true;
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+const COLORS_GOLD = ['#fbbf24','#b8860b','#fde68a','#f59e0b','#ffd700','#fff8dc'];
+const COLORS_PARTY = ['#fbbf24','#1b7a3d','#1a3a5c','#b8860b','#fff','#34d399','#f59e0b'];
+
+function fireworks(x, y, count, colors, power){
+  count = count || 28;
+  colors = colors || COLORS_PARTY;
+  power = power || 1;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+    const speed = (2.5 + Math.random() * 4) * power;
+    const shapes = ['circle','star','star','circle'];
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 55 + Math.random() * 35,
+      size: 2 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      gravity: 0.13,
+      shape: shapes[Math.floor(Math.random() * shapes.length)],
+      rot: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.2
+    });
+  }
+}
+
+function goldenShower(duration, intensity){
+  duration = duration || 1800;
+  intensity = intensity || 5;
+  const start = Date.now();
+  const interval = setInterval(() => {
+    if (Date.now() - start > duration) { clearInterval(interval); return; }
+    for (let i = 0; i < intensity; i++) {
+      const shape = Math.random() > 0.5 ? 'star' : (Math.random() > 0.5 ? 'square' : 'circle');
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: -15,
+        vx: (Math.random() - 0.5) * 1.8,
+        vy: 1.5 + Math.random() * 2.5,
+        life: 240,
+        size: 3 + Math.random() * 4,
+        color: COLORS_GOLD[Math.floor(Math.random() * COLORS_GOLD.length)],
+        gravity: 0.04,
+        shape,
+        rot: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.25
+      });
+    }
+  }, 35);
+}
+
+function floatPoints(x, y, points, streak){
+  const el = document.createElement('div');
+  el.className = 'float-pts';
+  let emoji = '✨';
+  if (streak >= 10) emoji = '🌟';
+  else if (streak >= 5) emoji = '⭐';
+  else if (streak >= 3) emoji = '🔥';
+  let text = `+${points} ${emoji}`;
+  if (streak >= 2) text += ` ×${streak}`;
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = (y - 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function happyFace(x, y){
+  const faces = ['😊','😄','🎉','🌟','💫','✨'];
+  const el = document.createElement('div');
+  el.className = 'float-pts';
+  el.style.fontSize = '2.2rem';
+  el.textContent = faces[Math.floor(Math.random() * faces.length)];
+  el.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function pulseStreak(){
+  const stat = document.getElementById('streakStat');
+  if (!stat) return;
+  stat.classList.add('pulse');
+  setTimeout(() => stat.classList.remove('pulse'), 700);
+}
+
+function shakeWrong(optEl){
+  if (!optEl) return;
+  optEl.classList.add('shake');
+  setTimeout(() => optEl.classList.remove('shake'), 500);
+}
+
+function celebrate(optEl, points, streak){
+  if (!optEl) return;
+  const rect = optEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  fireworks(cx, cy, 28, COLORS_PARTY, 1);
+  floatPoints(cx, rect.top, points, streak);
+  pulseStreak();
+  if (streak >= 3) {
+    setTimeout(() => fireworks(cx, cy, 18, COLORS_GOLD, 0.8), 100);
+    happyFace(cx, rect.top - 10);
+  }
+  if (streak >= 5) {
+    setTimeout(() => fireworks(80, 80, 20, COLORS_GOLD, 0.9), 150);
+    setTimeout(() => fireworks(canvas.width - 80, 80, 20, COLORS_GOLD, 0.9), 250);
+  }
+  if ([5, 10, 15, 20, 25].includes(streak)) {
+    showMilestone(streak);
+    goldenShower(2200, 7);
+  }
+}
+
+function showMilestone(streak){
+  const banner = document.createElement('div');
+  banner.className = 'milestone-banner';
+  let title;
+  if (streak >= 25) title = '👑 LEGENDARY';
+  else if (streak >= 20) title = '🏆 Unstoppable!';
+  else if (streak >= 15) title = '💎 Phenomenal!';
+  else if (streak >= 10) title = '⭐ Brilliant!';
+  else title = '🔥 On Fire!';
+  banner.innerHTML = `${title}<span class="small">${streak} correct in a row</span>`;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 2400);
+}
+
+function completionCelebration(state){
+  const total = QUESTIONS.length;
+  const correct = Object.entries(state.answers).filter(([k,v]) => QUESTIONS[k].ans === v).length;
+  const pct = Math.round(correct/total*100);
+  goldenShower(4500, 10);
+  setTimeout(() => fireworks(innerWidth/2, innerHeight/3, 60, COLORS_PARTY, 1.4), 200);
+  setTimeout(() => fireworks(innerWidth*0.25, innerHeight/2.5, 45, COLORS_GOLD, 1.2), 700);
+  setTimeout(() => fireworks(innerWidth*0.75, innerHeight/2.5, 45, COLORS_GOLD, 1.2), 1100);
+  setTimeout(() => fireworks(innerWidth/2, innerHeight/2, 70, COLORS_PARTY, 1.5), 1700);
+  const banner = document.createElement('div');
+  banner.className = 'milestone-banner';
+  let title;
+  if (pct === 100) title = '🏆 PERFECT SCORE';
+  else if (pct >= 80) title = '🌟 Outstanding!';
+  else if (pct >= 65) title = '✅ You Pass!';
+  else title = '💪 Keep Studying!';
+  banner.innerHTML = `${title}<span class="small">${correct} / ${total} · ${state.points} pts · best streak ${state.maxStreak}</span>`;
+  banner.style.animationDuration = '4.5s';
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 4500);
+}
+
+render();
+</script>
+</body>
+</html>

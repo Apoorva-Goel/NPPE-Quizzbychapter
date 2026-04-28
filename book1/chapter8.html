@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice Exam — Chapter 8: Diversity in the Professional Workplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1419;
+    --bg-soft: #161c24;
+    --card: #1c2330;
+    --card-hover: #232b3a;
+    --border: #2a3343;
+    --text: #e8eef5;
+    --text-dim: #9aa7ba;
+    --text-faint: #6b7689;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(99, 102, 241, 0.25);
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.3);
+    --error: #ef4444;
+    --error-glow: rgba(239, 68, 68, 0.25);
+    --gold: #fbbf24;
+    --gold-light: #fcd34d;
+    --gold-glow: rgba(251, 191, 36, 0.4);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.4);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.08), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(251, 191, 36, 0.05), transparent 45%);
+    color: var(--text);
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    padding: 24px 16px 80px;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 28px;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .header h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 1.85rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    margin-top: 4px;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .stat-pill.score { color: var(--gold); }
+  .stat-pill.streak { color: #f97316; }
+  .stat-pill .label { color: var(--text-faint); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-pill.flash {
+    transform: scale(1.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 24px var(--gold-glow);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+
+  /* QUESTION CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-top: 24px;
+    box-shadow: var(--shadow-lg);
+    animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-num {
+    font-size: 0.78rem;
+    color: var(--accent-light);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 22px;
+    color: var(--text);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    background: var(--bg-soft);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    text-align: left;
+    font-family: inherit;
+    font-size: 0.96rem;
+    color: var(--text);
+    width: 100%;
+    line-height: 1.5;
+  }
+  .option:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--card-hover);
+    transform: translateX(2px);
+  }
+  .option:disabled { cursor: not-allowed; }
+  .option-letter {
+    background: var(--card-hover);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option:hover:not(:disabled) .option-letter {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .option.correct {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: var(--success);
+    box-shadow: 0 0 0 1px var(--success), 0 8px 24px var(--success-glow);
+  }
+  .option.correct .option-letter {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+  .option.incorrect {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--error);
+  }
+  .option.incorrect .option-letter {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    display: none;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+  }
+  .feedback.incorrect {
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #fca5a5;
+  }
+  .feedback strong { color: white; }
+  .feedback-label {
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* BUTTONS */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 22px;
+    gap: 12px;
+  }
+  .btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+  .btn:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    box-shadow: none;
+  }
+  .btn.ghost:hover { background: var(--card-hover); color: var(--text); border-color: var(--text-faint); }
+  .btn.gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #f59e0b 100%);
+    box-shadow: 0 4px 14px var(--gold-glow);
+    color: #1a1a1a;
+  }
+  .btn.gold:hover { box-shadow: 0 8px 24px var(--gold-glow); }
+
+  /* RESULTS SCREEN */
+  .results {
+    text-align: center;
+    padding: 40px 28px;
+  }
+  .results-emoji {
+    font-size: 5rem;
+    margin-bottom: 12px;
+    animation: bounce 1s ease;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .results h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .results-subtitle { color: var(--text-dim); margin-bottom: 32px; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .result-stat {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 12px;
+  }
+  .result-stat .num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+  .result-stat .num.success { color: var(--success); }
+  .result-stat .num.error { color: var(--error); }
+  .result-stat .num.gold { color: var(--gold); }
+  .result-stat .lbl {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .results-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* CELEBRATIONS — fixed overlays */
+  #celebration-canvas,
+  #fireworks-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .floating-emoji {
+    position: fixed;
+    font-size: 3rem;
+    pointer-events: none;
+    z-index: 10000;
+    animation: floatUp 1.4s ease-out forwards;
+    user-select: none;
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+    25% { opacity: 1; transform: translate(-50%, -40px) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -180px) scale(0.9); }
+  }
+
+  .points-burst {
+    position: fixed;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold-glow), 0 4px 12px rgba(0,0,0,0.6);
+    pointer-events: none;
+    z-index: 10000;
+    animation: pointsBurst 1.3s ease-out forwards;
+    user-select: none;
+  }
+  @keyframes pointsBurst {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -10px) scale(1.3); }
+    100% { opacity: 0; transform: translate(-50%, -120px) scale(1); }
+  }
+
+  .streak-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: white;
+    padding: 18px 36px;
+    border-radius: 999px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    box-shadow: 0 10px 40px rgba(245, 158, 11, 0.5);
+    z-index: 10001;
+    pointer-events: none;
+    animation: streakPop 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    white-space: nowrap;
+  }
+  @keyframes streakPop {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.15) rotate(3deg); opacity: 1; }
+    35% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.85) rotate(0); opacity: 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    body { padding: 16px 12px 60px; }
+    .card { padding: 22px 18px; }
+    .q-text { font-size: 1.05rem; }
+    .results-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .stat-pill { padding: 6px 11px; font-size: 0.78rem; }
+    .actions { flex-direction: column-reverse; }
+    .actions .btn { width: 100%; }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    color: var(--text-faint);
+    font-size: 0.78rem;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="celebration-canvas"></canvas>
+<canvas id="fireworks-canvas"></canvas>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <h1>NPPE Practice Exam — Chapter 8</h1>
+        <div class="subtitle">Diversity in the Professional Workplace · 50 questions</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-pill score" id="scorePill">
+          <span class="label">Score</span>
+          <span id="scoreVal">0</span>
+        </div>
+        <div class="stat-pill streak" id="streakPill" style="display:none">
+          🔥 <span id="streakVal">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-meta">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="accuracyText">0% accuracy</span>
+    </div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="footer">
+    Based on <em>Canadian Professional Engineering and Geoscience, Sixth Edition</em>, Chapter 8 by Dr. Monique Frize
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTION BANK — 50 NPPE-style questions for Chapter 8
+   ============================================================ */
+const QUESTIONS = [
+  {
+    q: "According to the Canadian Charter of Rights and Freedoms, Section 7, everyone has the right to:",
+    options: [
+      "Equal pay for equal work in all sectors",
+      "Life, liberty and security of the person",
+      "Freedom from religious persecution only",
+      "Mandated affirmative action programs"
+    ],
+    answer: 1,
+    explanation: "Section 7 of the Charter states: 'Everyone has the right to life, liberty and security of the person and the right not to be deprived thereof except in accordance with the principles of fundamental justice.'"
+  },
+  {
+    q: "Section 15(1) of the Charter prohibits discrimination based on all of the following EXCEPT:",
+    options: [
+      "Race, national or ethnic origin",
+      "Religion, sex, age",
+      "Mental or physical disability",
+      "Political affiliation"
+    ],
+    answer: 3,
+    explanation: "Section 15(1) explicitly lists race, national or ethnic origin, colour, religion, sex, age, and mental or physical disability — but does not include political affiliation."
+  },
+  {
+    q: "The Canadian Charter of Rights and Freedoms protects:",
+    options: [
+      "Only Canadian citizens",
+      "Only permanent residents",
+      "Everyone in Canada, both citizens and non-citizens",
+      "Only those employed in regulated professions"
+    ],
+    answer: 2,
+    explanation: "The Charter protects everyone in Canada — citizens and non-citizens alike — making it a foundational human rights instrument with broad coverage."
+  },
+  {
+    q: "What is the main difference between the Canadian Charter of Rights and Freedoms and provincial human rights legislation?",
+    options: [
+      "The Charter applies to all levels of government, while provincial legislation applies to organizations under provincial jurisdiction",
+      "The Charter is voluntary while provincial legislation is mandatory",
+      "The Charter only applies to federally regulated professions",
+      "Provincial legislation supersedes the Charter in all cases"
+    ],
+    answer: 0,
+    explanation: "The Charter applies to all levels of government and government-controlled agencies. Provincial human rights legislation applies to organizations under provincial jurisdiction."
+  },
+  {
+    q: "Both the Charter and provincial human rights Acts are best described as:",
+    options: [
+      "Voluntary guidelines",
+      "Primacy legislation",
+      "Subordinate legislation",
+      "International treaties"
+    ],
+    answer: 1,
+    explanation: "Both are primacy legislation, meaning they supersede all other laws of that jurisdiction unless expressly declared otherwise by an Act of legislature or Parliament."
+  },
+  {
+    q: "Which statement is true about contracts and human rights legislation?",
+    options: [
+      "Contracts always override human rights legislation",
+      "Collective agreements are exempt from human rights laws",
+      "Contracts can be rescinded and statutes nullified if found to be discriminatory",
+      "Only government contracts must comply with human rights legislation"
+    ],
+    answer: 2,
+    explanation: "Contracts, including collective agreements, can be rescinded, and statutes and regulations can be nullified if found to be discriminatory."
+  },
+  {
+    q: "According to the PEO Guideline on Human Rights in Professional Practice, discrimination and harassment are:",
+    options: [
+      "Acceptable in private practice settings",
+      "Professional misconduct subject to discipline",
+      "Only addressed by federal law",
+      "Solely the responsibility of the employer"
+    ],
+    answer: 1,
+    explanation: "The PEO Guideline specifically states that discrimination and harassment constitute professional misconduct and are subject to discipline."
+  },
+  {
+    q: "Who was the first female engineering graduate from the University of Toronto in 1912?",
+    options: [
+      "Elsie MacGill",
+      "Julie Payette",
+      "Hildegard Scott",
+      "Ann van Beers"
+    ],
+    answer: 2,
+    explanation: "Hildegard Scott graduated from the Faculty of Applied Science and Engineering at the University of Toronto in 1912 in analytical and applied chemistry."
+  },
+  {
+    q: "Elizabeth (Elsie) MacGill is notable for:",
+    options: [
+      "Being the first Canadian astronaut",
+      "Directing the production of the Hawker Hurricane fighter aircraft in Canada",
+      "Founding APEGA",
+      "Drafting the Canadian Charter of Rights"
+    ],
+    answer: 1,
+    explanation: "Elsie MacGill became chief aeronautical engineer for Canadian Car and Foundry in 1938 and directed Hawker Hurricane production, contributing significantly to the Allied war effort."
+  },
+  {
+    q: "In what year did NSERC create regional Chairs for Women in Science and Engineering?",
+    options: [
+      "1985",
+      "1991",
+      "1997",
+      "2003"
+    ],
+    answer: 2,
+    explanation: "In 1997, NSERC created five regional Chairs for women in science and engineering with the mandate to develop strategies to increase female participation."
+  },
+  {
+    q: "How many regional NSERC Chairs for Women in Science and Engineering were created?",
+    options: [
+      "Three",
+      "Four",
+      "Five",
+      "Ten"
+    ],
+    answer: 2,
+    explanation: "NSERC created five regional Chairs for women in science and engineering in 1997."
+  },
+  {
+    q: "The proportion of women in undergraduate engineering programs in Canada in 1991 was approximately:",
+    options: [
+      "5 percent",
+      "15 percent",
+      "25 percent",
+      "35 percent"
+    ],
+    answer: 1,
+    explanation: "In 1991, women comprised about 15 percent of undergraduate engineering enrolment, rising to 19 percent by 1995 and peaking at 21 percent in 2001."
+  },
+  {
+    q: "According to enrolment data, which engineering field has the highest proportion of women?",
+    options: [
+      "Electrical engineering",
+      "Mechanical engineering",
+      "Biosystems engineering",
+      "Software engineering"
+    ],
+    answer: 2,
+    explanation: "Biosystems engineering had the highest enrolment of women at approximately 45 percent, followed by environmental (41%), geological (37%), and chemical engineering (36%)."
+  },
+  {
+    q: "Which of the following engineering disciplines typically has the LOWEST enrolment of women?",
+    options: [
+      "Chemical engineering",
+      "Environmental engineering",
+      "Geological engineering",
+      "Software engineering"
+    ],
+    answer: 3,
+    explanation: "The lowest female enrolment is found in electrical, mechanical, computer, and software engineering."
+  },
+  {
+    q: "By 2015, the proportion of women on engineering faculty had grown to approximately:",
+    options: [
+      "2.2 percent",
+      "7.6 percent",
+      "14.6 percent",
+      "25 percent"
+    ],
+    answer: 2,
+    explanation: "Female faculty representation grew from 2.2% in 1991 to 7.6% in 2001 to 14.6% in 2015 — though women remain underrepresented at senior ranks (only 10% at the Professor level)."
+  },
+  {
+    q: "According to the United Nations definition, sexual harassment occurs when ALL of the following are true EXCEPT:",
+    options: [
+      "The behaviour is unwanted or unwelcome",
+      "The behaviour is of a sexual or gender-related nature",
+      "The behaviour occurs in a relationship with a power imbalance",
+      "The behaviour occurs only between male and female colleagues"
+    ],
+    answer: 3,
+    explanation: "Sexual harassment can occur between persons of any gender — men to women, women to men, and between persons of the same sex."
+  },
+  {
+    q: "Which of the following is an example of a FORMAL power relationship in the context of sexual harassment?",
+    options: [
+      "Two equally ranked colleagues",
+      "Friends from different departments",
+      "A faculty member and a student",
+      "Two clients of the same company"
+    ],
+    answer: 2,
+    explanation: "Examples of formal power relationships include work supervisor and employee, faculty member and student, and physician and patient."
+  },
+  {
+    q: "Sexual harassment in the engineering workplace, according to the studies cited:",
+    options: [
+      "Is exclusively a problem for women",
+      "Affects men and women equally",
+      "Is overwhelmingly experienced by women, though not exclusive to them",
+      "Only occurs in junior positions"
+    ],
+    answer: 2,
+    explanation: "Although sexual harassment is not exclusively a problem for women, women are overwhelmingly the victims, and isolation in male-dominated environments can compound the issue."
+  },
+  {
+    q: "According to the chapter, the heart of the solution to harassment in the workplace is:",
+    options: [
+      "Immediate termination of the accused",
+      "Education",
+      "Mandatory hiring quotas",
+      "Increased workplace surveillance"
+    ],
+    answer: 1,
+    explanation: "Education is at the heart of the solution. Companies need fair investigation procedures that verify accusations without victimizing the complainant."
+  },
+  {
+    q: "In some harassment situations, informal investigations may be preferred because:",
+    options: [
+      "They are cheaper to conduct",
+      "Formal investigations can be confrontational",
+      "They produce better legal documentation",
+      "They are mandated by provincial law"
+    ],
+    answer: 1,
+    explanation: "Informal investigations may accomplish more than formal ones, which can be confrontational. Organizations should provide flexibility in their policies."
+  },
+  {
+    q: "According to van Beers' 1996 Canadian study, women engineers, when well established in their careers:",
+    options: [
+      "Adopted the same approach as their male colleagues",
+      "Were less effective communicators",
+      "Developed their own style with a more contextual approach to problem solving",
+      "Generally avoided design work"
+    ],
+    answer: 2,
+    explanation: "Van Beers found that established women engineers used a more contextual problem-solving approach, had strong communication and people skills, and enjoyed the writing aspects of the work."
+  },
+  {
+    q: "Vickers and colleagues found that, compared to male students, female science and engineering students more often cited which factor as important when choosing a career?",
+    options: [
+      "High starting salary",
+      "Job security",
+      "Contributing to society",
+      "International travel opportunities"
+    ],
+    answer: 2,
+    explanation: "A substantially larger proportion of female students cited contributing to society as an important career criterion compared to male students."
+  },
+  {
+    q: "According to the chapter, designs developed by homogeneous groups can be:",
+    options: [
+      "More efficient",
+      "One-dimensional",
+      "More cost-effective",
+      "More technically rigorous"
+    ],
+    answer: 1,
+    explanation: "Homogeneous groups tend to produce one-dimensional designs. Diverse perspectives and worldviews enrich the design process."
+  },
+  {
+    q: "Direct discrimination is:",
+    options: [
+      "Always unintentional",
+      "Usually obvious",
+      "Subtle and very hard to identify",
+      "Legal in some Canadian provinces"
+    ],
+    answer: 1,
+    explanation: "Direct discrimination is usually obvious. In contrast, indirect discrimination is subtler and may not be recognized even by those engaged in it."
+  },
+  {
+    q: "Indirect discrimination occurs when:",
+    options: [
+      "An employer specifically targets one identifiable group",
+      "An employer enforces rules that have a greater effect on one group than another, for no good reason",
+      "Discrimination is publicly stated in hiring materials",
+      "An employee files a complaint about working conditions"
+    ],
+    answer: 1,
+    explanation: "Indirect discrimination occurs when rules or practices have a disproportionate effect on one group with no legitimate justification."
+  },
+  {
+    q: "Which of the following is an example of indirect discrimination?",
+    options: [
+      "Requiring all applicants to pass a job-related skills test",
+      "Requiring 10 years of Canadian experience when not essential to the role",
+      "Requiring a university degree for engineering positions",
+      "Requiring professional registration for engineering work"
+    ],
+    answer: 1,
+    explanation: "Requiring 10 years of Canadian experience may discriminate against recent immigrants if such experience is not essential. Similar issues arise with unjustified driver's licence, height, weight, or strength requirements."
+  },
+  {
+    q: "The Wennerås and Wold study in Sweden of postdoctoral awards demonstrated that:",
+    options: [
+      "Women received more postdoctoral fellowships than men",
+      "Men's performance was overestimated while women's was underestimated",
+      "Gender had no impact on award decisions",
+      "Women had to publish far less than men to receive equivalent awards"
+    ],
+    answer: 1,
+    explanation: "The Wennerås and Wold study showed men's performance was overestimated and women's underestimated — women needed far more publications than men to obtain the same fellowship."
+  },
+  {
+    q: "In the cited study where male and female applicants had equal qualifications for 20 summer engineering jobs, male selectors chose:",
+    options: [
+      "10 men and 10 women",
+      "16 men and 4 women",
+      "4 men and 16 women",
+      "20 men only"
+    ],
+    answer: 1,
+    explanation: "Male selectors chose 16 men and 4 women, while female selectors chose 11 women and 9 men — illustrating selector bias even with identical qualifications."
+  },
+  {
+    q: "Employment equity is best defined as:",
+    options: [
+      "A quota system requiring specific hiring numbers",
+      "A comprehensive proactive strategy to ensure fair and equal access to employment opportunities",
+      "Mandatory affirmative action with strict targets",
+      "Reverse discrimination against majority groups"
+    ],
+    answer: 1,
+    explanation: "Employment equity is a proactive strategy to remove barriers and ensure fair and equal access to employment opportunities — it is not a quota system."
+  },
+  {
+    q: "The key difference between employment equity and a quota system is:",
+    options: [
+      "Employment equity removes barriers, while quotas hire from one group until a number is reached regardless of qualifications",
+      "Quotas are more legally defensible than employment equity",
+      "Employment equity requires hiring a specific number of candidates",
+      "There is no meaningful difference between the two approaches"
+    ],
+    answer: 0,
+    explanation: "Employment equity removes barriers to opportunity, while quotas focus on filling positions from a target group regardless of qualifications — which can lead to frustration."
+  },
+  {
+    q: "The DiTomaso and Farris study of American scientists and engineers in high-tech companies found:",
+    options: [
+      "No measurable differences in performance ratings",
+      "Significant differences in how managers rated the performance of men and women",
+      "Women consistently received higher ratings than men",
+      "Performance ratings were uniformly objective"
+    ],
+    answer: 1,
+    explanation: "Their study found significant differences in how managers rated men and women, and differences in expectations between men and women toward their managers."
+  },
+  {
+    q: "According to DiTomaso and Farris, women in their study tended to:",
+    options: [
+      "Rate themselves higher than their managers did",
+      "Rate themselves the same as their managers",
+      "Rate themselves lower than their managers did",
+      "Refuse to participate in self-rating exercises"
+    ],
+    answer: 2,
+    explanation: "Women tended to rate themselves lower than their managers did — a pattern with implications for compensation, promotion, and self-advocacy."
+  },
+  {
+    q: "To avoid unfairness in employee performance assessments, managers should:",
+    options: [
+      "Rely primarily on intuition and gut feel",
+      "Develop objective and measurable assessment criteria",
+      "Rate all employees identically to avoid bias claims",
+      "Avoid documenting written feedback"
+    ],
+    answer: 1,
+    explanation: "Managers should develop objective and measurable criteria, focus on the type of feedback they provide, communicate the rules clearly, and verify that the rules are understood."
+  },
+  {
+    q: "The Engineers Canada national project initiated in 2003 to address obstacles for internationally educated graduates was called:",
+    options: [
+      "Roadmap to Canada",
+      "From Consideration to Integration (FC2I)",
+      "Engineers Without Borders",
+      "Newcomers in Engineering"
+    ],
+    answer: 1,
+    explanation: "The 'From Consideration to Integration' (FC2I) project, launched in 2003, was a three-phase national initiative to remove barriers for IEGs."
+  },
+  {
+    q: "According to the chapter, the most serious obstacles for internationally educated graduates (IEGs) entering the Canadian engineering workforce are:",
+    options: [
+      "Language barriers only",
+      "Cultural adaptation challenges only",
+      "Procedures for validating foreign credentials and obtaining a first Canadian job",
+      "Difficulty adjusting to the climate"
+    ],
+    answer: 2,
+    explanation: "While language and culture matter, the most serious obstacles are credential validation and getting a first Canadian job — that first job is critical because it generates recognized Canadian experience."
+  },
+  {
+    q: "The 'Provisional Membership' status approved by APEGBC in 2003 recognizes IEGs who:",
+    options: [
+      "Have only secondary school education",
+      "Have completed academic, professional, and character requirements but lack one year of Canadian experience under direct supervision",
+      "Are still in the process of immigrating",
+      "Hold only a foreign engineering licence"
+    ],
+    answer: 1,
+    explanation: "Provisional Membership recognizes IEGs missing only the required one year of supervised Canadian experience — bridging them into full registration."
+  },
+  {
+    q: "In 2016, Engineers Canada submitted a report to the Government of Canada containing how many recommendations?",
+    options: [
+      "5 recommendations",
+      "11 recommendations",
+      "20 recommendations",
+      "No specific recommendations"
+    ],
+    answer: 1,
+    explanation: "Engineers Canada's 2016 submission contained 11 recommendations and described the 'Roadmap to Engineering in Canada.'"
+  },
+  {
+    q: "The 'Roadmap to Engineering in Canada' is best described as:",
+    options: [
+      "A physical map of accredited engineering schools",
+      "An online tool to assist newcomers in immigration decisions and the transition to Canada",
+      "A national licensing examination",
+      "A printed textbook for new immigrants"
+    ],
+    answer: 1,
+    explanation: "The Roadmap is an online tool that helps prospective newcomers make immigration decisions and supports their transition into the Canadian engineering profession."
+  },
+  {
+    q: "According to the chapter, the book that gives advice for human resources managers on cross-cultural training is:",
+    options: [
+      "Women in Engineering: More Than Just Numbers",
+      "The Bold and the Brave",
+      "Managing Cultural Diversity in Technical Professions by Lionel Laroche",
+      "Ethics for Bioengineers"
+    ],
+    answer: 2,
+    explanation: "Lionel Laroche's Managing Cultural Diversity in Technical Professions provides advice for HR managers and illustrates how minor cultural differences can create serious misunderstandings."
+  },
+  {
+    q: "The retirement of the baby boomer generation (born after WWII):",
+    options: [
+      "Has no significant impact on the engineering workforce",
+      "Creates vacancies and opportunities for promotion",
+      "Will eliminate the need for new engineers",
+      "Affects only the public sector"
+    ],
+    answer: 1,
+    explanation: "The peak of baby boomer retirements creates vacancies and promotion opportunities, increasing the need for trained engineers — including IEGs — to maintain Canadian productivity."
+  },
+  {
+    q: "Fair hiring practices recommended in the chapter include:",
+    options: [
+      "Restricting advertising to internal posting only",
+      "Having a single senior supervisor make all hiring decisions",
+      "Advertising widely and externally as well as internally, and obtaining input from a diverse group of supervisors and employees",
+      "Hiring only candidates referred by current employees"
+    ],
+    answer: 2,
+    explanation: "Fair hiring includes advertising widely (externally and internally) and obtaining input from a diverse group of supervisors and employees in the decision."
+  },
+  {
+    q: "If an engineer experiences or witnesses direct or indirect discrimination, they should:",
+    options: [
+      "Ignore the incident to avoid workplace conflict",
+      "Confront the person privately first without involving anyone",
+      "Report the incident, following the company's internal policy",
+      "Resign from the position immediately"
+    ],
+    answer: 2,
+    explanation: "The chapter is clear: report the incident, following the company's internal policy. Other channels include the provincial Human Rights Commission and the regulatory Association."
+  },
+  {
+    q: "If a company has no internal policy for human rights complaints, an engineer can report discrimination to:",
+    options: [
+      "The federal Department of Justice exclusively",
+      "The provincial Human Rights Commission and the provincial regulatory Association",
+      "The local police service",
+      "The Supreme Court of Canada directly"
+    ],
+    answer: 1,
+    explanation: "In most provinces, both the provincial Human Rights Commission and the provincial regulatory Association can receive a discrimination complaint involving a professional engineer or geoscientist."
+  },
+  {
+    q: "Which Canadian astronaut and engineer, mentioned in the chapter, served as Canada's Governor General?",
+    options: [
+      "Roberta Bondar",
+      "Chris Hadfield",
+      "Julie Payette",
+      "Marc Garneau"
+    ],
+    answer: 2,
+    explanation: "Julie Payette completed two missions to the International Space Station, served as Chief Astronaut for the CSA, was Capsule Communicator at NASA, and later served as Canada's Governor General."
+  },
+  {
+    q: "The Women in Engineering Advisory Committee (WEAC/PEO) survey found that:",
+    options: [
+      "Workplace barriers for women have been completely eliminated",
+      "Workplace challenges continue to exist for female engineers, including some attitudinal barriers",
+      "Female engineers are paid more than their male counterparts",
+      "Networking opportunities are fully equal for both genders"
+    ],
+    answer: 1,
+    explanation: "WEAC/PEO concluded that workplace challenges remain — particularly attitudinal barriers from superiors and limited access to networking and executive-level opportunities."
+  },
+  {
+    q: "According to the chapter, women may bring which of the following to engineering teams?",
+    options: [
+      "Less technical preparation than male peers",
+      "A consultative working style aligned with modern management philosophy",
+      "Reluctance to participate in design discussions",
+      "Resistance to teamwork"
+    ],
+    answer: 1,
+    explanation: "Women often offer a consultative working style aligned with modern management philosophy, with verbal and interpersonal skills that complement strong technical training."
+  },
+  {
+    q: "The proportion of women enrolled in engineering master's programs in 2015 was approximately:",
+    options: [
+      "12 percent",
+      "24 percent",
+      "35 percent",
+      "50 percent"
+    ],
+    answer: 1,
+    explanation: "Female enrolment in engineering master's programs returned to about 24 percent in 2015 — the same level reached in 2001."
+  },
+  {
+    q: "Which professions, according to the chapter, have surpassed the 50 percent mark for female enrolment?",
+    options: [
+      "Engineering and geoscience",
+      "Medicine, dentistry, veterinary medicine, and law",
+      "Architecture and construction",
+      "Mining and petroleum"
+    ],
+    answer: 1,
+    explanation: "Medicine, dentistry, veterinary medicine, and law have all reached female enrolments above 50 percent — a benchmark engineering has not yet achieved."
+  },
+  {
+    q: "Realistic objectives for hiring people from underrepresented groups should be based on:",
+    options: [
+      "Random selection among all applicants",
+      "Achieving better than, or at least the level of, the availability of each underrepresented group in the candidate pool",
+      "Hiring exclusively from one designated group",
+      "Government-mandated rigid quotas"
+    ],
+    answer: 1,
+    explanation: "Realistic targets should match — or exceed — the availability of each underrepresented group in the candidate pool. This is distinct from quotas and avoids both under- and over-correction."
+  },
+  {
+    q: "The Charter and provincial human rights Acts are described as primacy legislation, which means:",
+    options: [
+      "They are the oldest pieces of law in Canada",
+      "They supersede all other laws of that jurisdiction unless expressly declared otherwise by an Act of legislature or Parliament",
+      "They apply only to senior government officials",
+      "They can be overridden by ordinary company policy"
+    ],
+    answer: 1,
+    explanation: "Primacy legislation supersedes all other laws of that jurisdiction unless an Act of legislature or Parliament expressly declares otherwise — placing human rights protections at the top of the legal hierarchy."
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_ch8_exam_v1';
+let state = loadState();
+
+function freshState() {
+  return {
+    current: 0,
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    correctCount: 0,
+    answered: [],          // {idx, chosen, correct} per answered question
+    finished: false
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && Array.isArray(parsed.answered)) return parsed;
+    }
+  } catch (e) {}
+  return freshState();
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function resetAll() {
+  state = freshState();
+  saveState();
+  render();
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const quizArea = document.getElementById('quizArea');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const accuracyText = document.getElementById('accuracyText');
+const scoreVal = document.getElementById('scoreVal');
+const scorePill = document.getElementById('scorePill');
+const streakPill = document.getElementById('streakPill');
+const streakVal = document.getElementById('streakVal');
+
+function updateHud() {
+  scoreVal.textContent = state.score;
+  if (state.streak >= 2) {
+    streakPill.style.display = 'flex';
+    streakVal.textContent = state.streak;
+  } else {
+    streakPill.style.display = 'none';
+  }
+
+  const total = QUESTIONS.length;
+  const done = state.finished ? total : state.current;
+  const pct = (done / total) * 100;
+  progressBar.style.width = pct + '%';
+  progressText.textContent = state.finished
+    ? `Completed all ${total} questions`
+    : `Question ${state.current + 1} of ${total}`;
+
+  const answeredCount = state.answered.length;
+  const acc = answeredCount === 0 ? 0 : Math.round((state.correctCount / answeredCount) * 100);
+  accuracyText.textContent = answeredCount === 0 ? '—' : `${acc}% accuracy`;
+}
+
+function render() {
+  updateHud();
+  if (state.finished) return renderResults();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const idx = state.current;
+  const q = QUESTIONS[idx];
+  const letters = ['A', 'B', 'C', 'D'];
+
+  quizArea.innerHTML = `
+    <div class="card" id="qCard">
+      <div class="q-num">Question ${idx + 1} · of ${QUESTIONS.length}</div>
+      <div class="q-text">${escapeHtml(q.q)}</div>
+      <div class="options" id="optList">
+        ${q.options.map((opt, i) => `
+          <button class="option" data-i="${i}">
+            <span class="option-letter">${letters[i]}</span>
+            <span>${escapeHtml(opt)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="btn ghost" id="resetBtn">↺ Reset Quiz</button>
+        <button class="btn" id="nextBtn" disabled>Next →</button>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => handleAnswer(parseInt(btn.dataset.i, 10)));
+  });
+  document.getElementById('nextBtn').addEventListener('click', goNext);
+  document.getElementById('resetBtn').addEventListener('click', confirmReset);
+}
+
+function handleAnswer(chosen) {
+  const idx = state.current;
+  const q = QUESTIONS[idx];
+  const isCorrect = chosen === q.answer;
+  const buttons = document.querySelectorAll('.option');
+
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('incorrect');
+  });
+
+  // Score logic
+  if (isCorrect) {
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    state.correctCount++;
+    let pts = 10;
+    if (state.streak >= 5) pts = 25;
+    else if (state.streak >= 3) pts = 15;
+    state.score += pts;
+    showFeedback(true, q.explanation);
+    celebrate(pts, state.streak);
+  } else {
+    state.streak = 0;
+    showFeedback(false, q.explanation, q.options[q.answer], ['A','B','C','D'][q.answer]);
+  }
+
+  state.answered.push({ idx, chosen, correct: isCorrect });
+  document.getElementById('nextBtn').disabled = false;
+  if (idx === QUESTIONS.length - 1) {
+    document.getElementById('nextBtn').textContent = 'See Results →';
+  }
+  updateHud();
+  saveState();
+}
+
+function showFeedback(correct, explanation, correctText, correctLetter) {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+  if (correct) {
+    fb.innerHTML = `
+      <div class="feedback-label">✓ Correct</div>
+      <div>${escapeHtml(explanation)}</div>
+    `;
+  } else {
+    fb.innerHTML = `
+      <div class="feedback-label">✗ Not quite</div>
+      <div><strong>Correct answer: ${correctLetter}.</strong> ${escapeHtml(correctText)}</div>
+      <div style="margin-top:8px">${escapeHtml(explanation)}</div>
+    `;
+  }
+}
+
+function goNext() {
+  if (state.current >= QUESTIONS.length - 1) {
+    state.finished = true;
+  } else {
+    state.current++;
+  }
+  saveState();
+  render();
+}
+
+function renderResults() {
+  const total = QUESTIONS.length;
+  const correct = state.correctCount;
+  const incorrect = total - correct;
+  const pct = Math.round((correct / total) * 100);
+
+  let emoji = '🎯', title = 'Quiz Complete', sub = 'Review the explanations and try again to improve.';
+  if (pct === 100) { emoji = '🏆'; title = 'Perfect Score!'; sub = 'Outstanding mastery of Chapter 8. You\'re ready for this section of the NPPE.'; }
+  else if (pct >= 90) { emoji = '🌟'; title = 'Exceptional!'; sub = 'You have a strong grasp of the chapter material.'; }
+  else if (pct >= 80) { emoji = '🎉'; title = 'Great Work!'; sub = 'Solid performance — review the few you missed and you\'ll be set.'; }
+  else if (pct >= 70) { emoji = '👍'; title = 'Good Effort'; sub = 'Above passing — but a focused review will lift you further.'; }
+  else if (pct >= 60) { emoji = '📚'; title = 'Keep Studying'; sub = 'You have the foundations — re-read the chapter sections you missed.'; }
+  else { emoji = '💪'; title = 'Time for a Re-Read'; sub = 'Don\'t be discouraged. Revisit the chapter and try again.'; }
+
+  quizArea.innerHTML = `
+    <div class="card results">
+      <div class="results-emoji">${emoji}</div>
+      <h2>${title}</h2>
+      <div class="results-subtitle">${sub}</div>
+      <div class="results-grid">
+        <div class="result-stat">
+          <div class="num gold">${state.score}</div>
+          <div class="lbl">Total Points</div>
+        </div>
+        <div class="result-stat">
+          <div class="num success">${correct}/${total}</div>
+          <div class="lbl">Correct (${pct}%)</div>
+        </div>
+        <div class="result-stat">
+          <div class="num">${state.bestStreak}🔥</div>
+          <div class="lbl">Best Streak</div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn gold" id="resetFinal">↺ Reset & Try Again</button>
+        <button class="btn ghost" id="reviewBtn">Review Answers</button>
+      </div>
+      <div id="reviewArea" style="margin-top:24px;text-align:left;display:none"></div>
+    </div>
+  `;
+
+  document.getElementById('resetFinal').addEventListener('click', resetAll);
+  document.getElementById('reviewBtn').addEventListener('click', toggleReview);
+
+  // Big celebration if good score
+  if (pct === 100) finalFireworks(8);
+  else if (pct >= 80) finalFireworks(4);
+  else if (pct >= 60) finalFireworks(2);
+}
+
+function toggleReview() {
+  const area = document.getElementById('reviewArea');
+  const btn = document.getElementById('reviewBtn');
+  if (area.style.display === 'none') {
+    area.style.display = 'block';
+    btn.textContent = 'Hide Review';
+    area.innerHTML = state.answered.map((a, n) => {
+      const q = QUESTIONS[a.idx];
+      const letters = ['A', 'B', 'C', 'D'];
+      return `
+        <div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px">
+          <div style="font-size:0.78rem;color:var(--text-faint);font-weight:600;letter-spacing:0.05em;text-transform:uppercase">
+            Q${n + 1} ${a.correct ? '· <span style="color:var(--success)">✓ Correct</span>' : '· <span style="color:var(--error)">✗ Incorrect</span>'}
+          </div>
+          <div style="font-weight:600;margin:6px 0 10px;font-family:'Plus Jakarta Sans',sans-serif">${escapeHtml(q.q)}</div>
+          <div style="font-size:0.9rem;color:var(--text-dim)">
+            <div>Your answer: <strong style="color:${a.correct ? 'var(--success)' : 'var(--error)'}">${letters[a.chosen]}. ${escapeHtml(q.options[a.chosen])}</strong></div>
+            ${a.correct ? '' : `<div style="margin-top:4px">Correct answer: <strong style="color:var(--success)">${letters[q.answer]}. ${escapeHtml(q.options[q.answer])}</strong></div>`}
+            <div style="margin-top:8px;color:var(--text-dim);font-style:italic">${escapeHtml(q.explanation)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    area.style.display = 'none';
+    btn.textContent = 'Review Answers';
+  }
+}
+
+function confirmReset() {
+  if (confirm('Reset the quiz and clear your progress?')) resetAll();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================================================
+   CELEBRATIONS — confetti, fireworks, stars, emoji, points, streak
+   ============================================================ */
+const celebCanvas = document.getElementById('celebration-canvas');
+const celebCtx = celebCanvas.getContext('2d');
+const fwCanvas = document.getElementById('fireworks-canvas');
+const fwCtx = fwCanvas.getContext('2d');
+
+function sizeCanvases() {
+  [celebCanvas, fwCanvas].forEach(c => {
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  });
+}
+window.addEventListener('resize', sizeCanvases);
+sizeCanvases();
+
+let particles = [];
+let fireworks = [];
+
+function celebrate(points, streak) {
+  // Flash score pill
+  scorePill.classList.add('flash');
+  setTimeout(() => scorePill.classList.remove('flash'), 600);
+
+  // +points burst near score pill
+  const pillRect = scorePill.getBoundingClientRect();
+  spawnPointsBurst(pillRect.left + pillRect.width / 2, pillRect.top + pillRect.height + 4, '+' + points);
+
+  // Pick celebration based on streak
+  const r = Math.random();
+  if (streak >= 5) {
+    // Maximum: golden shower + fireworks + streak banner + emoji
+    spawnGoldenShower(80);
+    spawnFireworks(3);
+    spawnStreakBanner(streak);
+    spawnFloatingEmoji('🔥');
+  } else if (streak >= 3) {
+    // Big: confetti + stars + emoji
+    spawnConfetti(60);
+    spawnStars(15);
+    if (streak === 3) spawnStreakBanner(streak);
+    spawnFloatingEmoji(['⭐', '✨', '🌟'][Math.floor(Math.random() * 3)]);
+  } else {
+    // Standard: confetti or stars + happy face
+    if (r < 0.5) spawnConfetti(40);
+    else spawnStars(12);
+    spawnFloatingEmoji(['😊', '🎉', '👏', '✨'][Math.floor(Math.random() * 4)]);
+  }
+}
+
+function finalFireworks(count) {
+  let n = 0;
+  const interval = setInterval(() => {
+    spawnFireworks(1);
+    n++;
+    if (n >= count) clearInterval(interval);
+  }, 600);
+  if (count >= 6) {
+    setTimeout(() => spawnGoldenShower(120), 300);
+  }
+}
+
+/* ----- Confetti ----- */
+function spawnConfetti(n) {
+  const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+  for (let i = 0; i < n; i++) {
+    particles.push({
+      type: 'confetti',
+      x: window.innerWidth * (0.3 + Math.random() * 0.4),
+      y: -20,
+      vx: (Math.random() - 0.5) * 8,
+      vy: Math.random() * 3 + 2,
+      gravity: 0.18,
+      size: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.25,
+      life: 1
+    });
+  }
+  if (!animating) animate();
+}
+
+/* ----- Golden Shower (gold particles raining) ----- */
+function spawnGoldenShower(n) {
+  const golds = ['#fbbf24', '#fcd34d', '#f59e0b', '#fde68a', '#facc15'];
+  for (let i = 0; i < n; i++) {
+    particles.push({
+      type: 'gold',
+      x: Math.random() * window.innerWidth,
+      y: -30 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 2,
+      vy: Math.random() * 4 + 3,
+      gravity: 0.12,
+      size: Math.random() * 6 + 4,
+      color: golds[Math.floor(Math.random() * golds.length)],
+      glow: true,
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.3,
+      life: 1
+    });
+  }
+  if (!animating) animate();
+}
+
+/* ----- Stars ----- */
+function spawnStars(n) {
+  for (let i = 0; i < n; i++) {
+    particles.push({
+      type: 'star',
+      x: window.innerWidth * (0.2 + Math.random() * 0.6),
+      y: window.innerHeight * (0.3 + Math.random() * 0.4),
+      vx: (Math.random() - 0.5) * 6,
+      vy: -Math.random() * 4 - 2,
+      gravity: 0.15,
+      size: Math.random() * 14 + 10,
+      color: ['#fbbf24', '#fcd34d', '#fde68a', '#fff'][Math.floor(Math.random() * 4)],
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.4,
+      life: 1
+    });
+  }
+  if (!animating) animate();
+}
+
+let animating = false;
+function animate() {
+  animating = true;
+  celebCtx.clearRect(0, 0, celebCanvas.width, celebCanvas.height);
+
+  particles = particles.filter(p => {
+    p.vy += p.gravity;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vrot;
+
+    // fade if past bottom
+    if (p.y > window.innerHeight + 50) p.life -= 0.1;
+    if (p.life <= 0) return false;
+
+    celebCtx.save();
+    celebCtx.translate(p.x, p.y);
+    celebCtx.rotate(p.rot);
+    celebCtx.globalAlpha = Math.max(0, Math.min(1, p.life));
+
+    if (p.glow) {
+      celebCtx.shadowColor = p.color;
+      celebCtx.shadowBlur = 14;
+    }
+
+    celebCtx.fillStyle = p.color;
+
+    if (p.type === 'star') {
+      drawStar(celebCtx, 0, 0, 5, p.size, p.size / 2);
+    } else if (p.type === 'gold') {
+      celebCtx.beginPath();
+      celebCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+      celebCtx.fill();
+    } else {
+      // confetti rectangle
+      celebCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    }
+    celebCtx.restore();
+
+    return true;
+  });
+
+  if (particles.length > 0 || fireworks.length > 0) {
+    requestAnimationFrame(animate);
+  } else {
+    animating = false;
+    celebCtx.clearRect(0, 0, celebCanvas.width, celebCanvas.height);
+  }
+}
+
+function drawStar(ctx, cx, cy, spikes, outer, inner) {
+  let rot = Math.PI / 2 * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outer);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outer;
+    y = cy + Math.sin(rot) * outer;
+    ctx.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * inner;
+    y = cy + Math.sin(rot) * inner;
+    ctx.lineTo(x, y);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outer);
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* ----- Fireworks ----- */
+function spawnFireworks(count) {
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      launchFirework();
+    }, i * 250);
+  }
+  if (!fwAnimating) fwAnimate();
+}
+
+function launchFirework() {
+  const x = window.innerWidth * (0.15 + Math.random() * 0.7);
+  const y = window.innerHeight * (0.2 + Math.random() * 0.3);
+  const colors = ['#fbbf24', '#ef4444', '#10b981', '#6366f1', '#ec4899', '#06b6d4', '#f59e0b'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  const count = 50 + Math.floor(Math.random() * 30);
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+    const speed = Math.random() * 5 + 3;
+    fireworks.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color,
+      life: 1,
+      decay: Math.random() * 0.015 + 0.012,
+      size: Math.random() * 2 + 1.5
+    });
+  }
+}
+
+let fwAnimating = false;
+function fwAnimate() {
+  fwAnimating = true;
+  // Trail effect
+  fwCtx.fillStyle = 'rgba(15, 20, 25, 0.18)';
+  fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+
+  fireworks = fireworks.filter(p => {
+    p.vx *= 0.985;
+    p.vy *= 0.985;
+    p.vy += 0.06;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= p.decay;
+    if (p.life <= 0) return false;
+
+    fwCtx.save();
+    fwCtx.globalAlpha = p.life;
+    fwCtx.fillStyle = p.color;
+    fwCtx.shadowColor = p.color;
+    fwCtx.shadowBlur = 12;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    fwCtx.fill();
+    fwCtx.restore();
+
+    return true;
+  });
+
+  if (fireworks.length > 0) {
+    requestAnimationFrame(fwAnimate);
+  } else {
+    fwAnimating = false;
+    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  }
+}
+
+/* ----- Floating emoji ----- */
+function spawnFloatingEmoji(emoji) {
+  const card = document.getElementById('qCard');
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  const el = document.createElement('div');
+  el.className = 'floating-emoji';
+  el.textContent = emoji;
+  el.style.left = (rect.left + rect.width / 2) + 'px';
+  el.style.top = (rect.top + rect.height / 2) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+/* ----- Points burst ----- */
+function spawnPointsBurst(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'points-burst';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+/* ----- Streak banner ----- */
+function spawnStreakBanner(streak) {
+  const messages = {
+    3: '🔥 3 in a row!',
+    4: '🔥 4 in a row!',
+    5: '🔥🔥 5-streak — On fire!',
+    6: '🔥🔥 6-streak!',
+    7: '🔥🔥🔥 7-streak — Unstoppable!',
+    8: '🔥🔥🔥 8-streak!',
+    9: '🔥🔥🔥 9-streak!',
+    10: '🔥🔥🔥 10-streak — LEGENDARY!'
+  };
+  const msg = messages[streak] || `🔥🔥🔥 ${streak}-streak — INCREDIBLE!`;
+  const el = document.createElement('div');
+  el.className = 'streak-banner';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1700);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
+</script>
+</body>
+</html>

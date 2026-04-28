@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice — Chapter 11: Ethics Concepts and Cases: Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #0a1628;
+    --navy-800: #0f1f3a;
+    --navy-700: #15294d;
+    --navy-600: #1d3461;
+    --navy-500: #2a4373;
+    --gold-500: #d4a946;
+    --gold-400: #e6c068;
+    --gold-300: #f0d488;
+    --gold-200: #f7e3a8;
+    --cream: #f5efe0;
+    --green: #5cb87a;
+    --red: #d96666;
+    --shadow-deep: 0 20px 60px rgba(0,0,0,0.4);
+    --shadow-mid: 0 8px 24px rgba(0,0,0,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(212,169,70,0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 80% 100%, rgba(212,169,70,0.06) 0%, transparent 50%),
+      linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 100%);
+    color: var(--cream);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Decorative background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(212,169,70,0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 32px 24px;
+    border-top: 1px solid rgba(212,169,70,0.3);
+    border-bottom: 1px solid rgba(212,169,70,0.3);
+    position: relative;
+  }
+
+  header::before, header::after {
+    content: '◆';
+    position: absolute;
+    color: var(--gold-500);
+    font-size: 12px;
+    top: -7px;
+    background: var(--navy-900);
+    padding: 0 8px;
+  }
+  header::before { left: 50%; transform: translateX(-50%); }
+  header::after { left: 50%; transform: translateX(-50%); top: auto; bottom: -7px; }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  h1 .accent { color: var(--gold-400); font-style: italic; }
+
+  .subtitle {
+    font-size: 14px;
+    color: rgba(245,239,224,0.7);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat {
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
+    border: 1px solid rgba(212,169,70,0.2);
+    border-radius: 8px;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .stat:hover { transform: translateY(-2px); border-color: rgba(212,169,70,0.5); }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+
+  .stat-value.bump { animation: pulse 0.5s ease; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); color: var(--gold-300); }
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+    justify-content: center;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid rgba(212,169,70,0.4);
+    color: var(--cream);
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover {
+    border-color: var(--gold-400);
+    color: var(--gold-300);
+    transform: translateY(-1px);
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+    color: var(--navy-900);
+    border-color: var(--gold-500);
+    font-weight: 600;
+  }
+  .btn.primary:hover {
+    background: linear-gradient(135deg, var(--gold-400), var(--gold-300));
+    color: var(--navy-900);
+  }
+
+  .btn.danger { border-color: rgba(217,102,102,0.4); }
+  .btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--navy-700);
+    border: 1px solid rgba(212,169,70,0.3);
+    border-radius: 4px;
+    padding: 3px;
+  }
+  .mode-toggle button {
+    background: transparent;
+    border: none;
+    color: rgba(245,239,224,0.6);
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  .mode-toggle button.active {
+    background: var(--gold-500);
+    color: var(--navy-900);
+    font-weight: 600;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 24px;
+  }
+  .progress-track {
+    height: 4px;
+    background: rgba(212,169,70,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-500), var(--gold-300));
+    width: 0%;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 12px rgba(212,169,70,0.5);
+  }
+  .progress-meta {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.5);
+  }
+
+  /* Question card */
+  .card {
+    background: linear-gradient(180deg, var(--navy-700), var(--navy-800));
+    border: 1px solid rgba(212,169,70,0.2);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: var(--shadow-mid);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-500), transparent);
+  }
+
+  .q-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold-400);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+
+  .options { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .option {
+    background: rgba(10,22,40,0.5);
+    border: 1px solid rgba(212,169,70,0.15);
+    border-radius: 6px;
+    padding: 14px 16px 14px 50px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    color: rgba(245,239,224,0.9);
+  }
+
+  .option:hover:not(.locked) {
+    border-color: rgba(212,169,70,0.5);
+    background: rgba(15,31,58,0.8);
+    transform: translateX(2px);
+  }
+
+  .option .letter {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(212,169,70,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--gold-400);
+    transition: all 0.2s ease;
+  }
+
+  .option.selected { border-color: var(--gold-400); background: rgba(212,169,70,0.08); }
+  .option.selected .letter { background: var(--gold-500); color: var(--navy-900); border-color: var(--gold-500); }
+
+  .option.correct {
+    border-color: var(--green);
+    background: rgba(92,184,122,0.12);
+    animation: correctPulse 0.6s ease;
+  }
+  .option.correct .letter { background: var(--green); color: var(--navy-900); border-color: var(--green); }
+
+  .option.wrong {
+    border-color: var(--red);
+    background: rgba(217,102,102,0.1);
+    animation: shake 0.4s ease;
+  }
+  .option.wrong .letter { background: var(--red); color: white; border-color: var(--red); }
+
+  .option.locked { cursor: default; pointer-events: none; }
+
+  @keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(92,184,122,0.4); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Explanation */
+  .explanation {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: rgba(10,22,40,0.6);
+    border-left: 3px solid var(--gold-500);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(245,239,224,0.85);
+    display: none;
+  }
+  .explanation.show { display: block; animation: fadeIn 0.4s ease; }
+  .explanation strong {
+    display: block;
+    color: var(--gold-400);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Nav buttons under card */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  /* Streak indicator */
+  .streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--gold-300);
+    margin-left: 6px;
+  }
+  .streak.fire { color: #ff8c42; }
+
+  /* Results screen */
+  .results {
+    text-align: center;
+    padding: 40px 24px;
+  }
+  .results h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    color: var(--gold-400);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .score-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 96px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1;
+    margin: 24px 0;
+  }
+  .score-display .pct { color: var(--gold-400); }
+  .verdict {
+    font-size: 16px;
+    margin-bottom: 24px;
+    color: rgba(245,239,224,0.9);
+  }
+  .verdict.pass { color: var(--green); }
+  .verdict.fail { color: var(--red); }
+
+  .breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .breakdown .stat-value { font-size: 32px; }
+
+  /* Toast for achievements */
+  .toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+    color: var(--navy-900);
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-deep);
+    transform: translateX(120%);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast.show { transform: translateX(0); }
+  .toast .badge-icon { font-size: 22px; }
+
+  /* Happy face popup */
+  .happy-face {
+    position: fixed;
+    font-size: 80px;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0;
+    transform: scale(0);
+  }
+  .happy-face.pop { animation: happyPop 1.2s ease forwards; }
+  @keyframes happyPop {
+    0% { opacity: 0; transform: scale(0) rotate(-180deg); }
+    30% { opacity: 1; transform: scale(1.3) rotate(0deg); }
+    60% { opacity: 1; transform: scale(1) rotate(15deg); }
+    100% { opacity: 0; transform: scale(1.5) translateY(-100px) rotate(-20deg); }
+  }
+
+  /* Canvas for fireworks/golden shower */
+  #fxCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 998;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 0 0;
+    margin-top: 48px;
+    border-top: 1px solid rgba(212,169,70,0.15);
+    color: rgba(245,239,224,0.4);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 20px 16px 60px; }
+    header { padding: 24px 16px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .breakdown { grid-template-columns: 1fr; }
+    .card { padding: 22px 18px; }
+    .q-text { font-size: 18px; }
+    .option { font-size: 13px; padding: 12px 12px 12px 44px; }
+    .option .letter { left: 12px; width: 22px; height: 22px; }
+    .controls { flex-direction: column; }
+    .controls > * { width: 100%; }
+    .mode-toggle { justify-content: center; }
+    .score-display { font-size: 64px; }
+    .nav-buttons { flex-direction: column; }
+    .nav-buttons .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">NPPE Practice · Ontario · Canadian Professional Engineering &amp; Geoscience, 6e</div>
+    <h1>Chapter Eleven<br><span class="accent">Ethics, Cases &amp; Management</span></h1>
+    <p class="subtitle">Fifty exam-style questions on hiring, dismissal, conflict of interest, work review, the Vancouver Second Narrows Bridge, and the chapter's six case studies.</p>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-label">Question</div>
+      <div class="stat-value" id="qIndex">0<span style="opacity:0.4">/50</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Score</div>
+      <div class="stat-value" id="scoreVal">0<span style="opacity:0.4">/0</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Points</div>
+      <div class="stat-value" id="pointsVal">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value" id="streakVal">0<span class="streak" id="streakIcon"></span></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="mode-toggle" role="tablist">
+      <button id="modePractice" class="active" type="button">Practice</button>
+      <button id="modeExam" type="button">Exam</button>
+    </div>
+    <button class="btn" id="btnShuffle" type="button">Shuffle</button>
+    <button class="btn danger" id="btnReset" type="button">Reset</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-meta">
+      <span id="progressLeft">Practice mode · instant feedback</span>
+      <span id="progressRight">Pass threshold: 65%</span>
+    </div>
+  </div>
+
+  <!-- Quiz / Results area -->
+  <div id="quizArea"></div>
+
+  <footer>Self-contained · No setup · Saves progress locally</footer>
+</div>
+
+<script>
+/* =======================================================
+   QUESTIONS — Chapter 11
+   Each: { q, options: [a,b,c,d], correct: index, exp }
+   ======================================================= */
+const QUESTIONS = [
+  {
+    q: "How does Canadian law differ from U.S. law regarding the use of professional engineering or geoscience titles?",
+    options: [
+      "Canadian law allows unlicensed individuals to use professional titles in private companies, while U.S. law forbids it.",
+      "Canadian law is stricter: an unlicensed person cannot use a professional title, whereas U.S. law generally permits unlicensed persons to use one.",
+      "Both jurisdictions require licensure to use professional titles in any setting.",
+      "U.S. law restricts titles only in federal projects, while Canadian law restricts them only provincially."
+    ],
+    correct: 1,
+    exp: "Canadian law restricts not only the practice of engineering/geoscience but also the use of professional titles to licensed persons. The U.S. is stricter on practice than on titles."
+  },
+  {
+    q: "A manager discovers an employee is using the internal job title \"Project Engineer\" but is not licensed. What is the manager's appropriate course of action?",
+    options: [
+      "Terminate the employee immediately for misrepresentation.",
+      "Allow the title to remain because it is for internal use only.",
+      "Tactfully insist on changing the title to one that is accurate.",
+      "Report the employee directly to the regulator with no internal action."
+    ],
+    correct: 2,
+    exp: "An unlicensed person cannot use a title implying professional status. Reassigning a job title is usually simple; the manager must insist tactfully on accuracy."
+  },
+  {
+    q: "What does the chapter identify as the BEST method for employing professional engineers?",
+    options: [
+      "Verbal agreements between manager and employee.",
+      "Standard collective agreements only.",
+      "Probationary periods without further documentation.",
+      "Clear-cut written employment contracts specifying duties, duration, remuneration, and similar terms."
+    ],
+    correct: 3,
+    exp: "Clear written contracts setting out duties, term, remuneration, and (sometimes) just-cause definitions and severance are the preferred mechanism."
+  },
+  {
+    q: "In a large company where individual contracts are impractical, what should management establish for professional employees?",
+    options: [
+      "Verbal understandings only.",
+      "Published employment policies, referenced in each professional's letter of appointment.",
+      "A union agreement, regardless of employee preference.",
+      "A simple probation regime with no policy framework."
+    ],
+    correct: 1,
+    exp: "Where individual contracts are impractical, fair and published employment policies (referenced in the letter of appointment) are the appropriate substitute."
+  },
+  {
+    q: "Which of the following is NOT included in the chapter's list of grounds for terminating an employee without notice or severance?",
+    options: [
+      "Theft, fraud, or dishonesty.",
+      "Habitual neglect of duty.",
+      "General management dissatisfaction with overall performance.",
+      "Wilful disobedience to a lawful and reasonable order of a superior in a matter of substance."
+    ],
+    correct: 2,
+    exp: "The list cites SERIOUS incompetence — not mere management dissatisfaction. Generic dissatisfaction with performance is not, by itself, just cause."
+  },
+  {
+    q: "Under what conditions does the chapter say drug or alcohol abuse may justify termination?",
+    options: [
+      "Whenever a manager personally disapproves of substance use.",
+      "If a single incident of intoxication is observed at work.",
+      "When co-workers complain, regardless of performance.",
+      "When inadequate performance has continued over an extended period AND the employee fails to accept the company's rehabilitation efforts."
+    ],
+    correct: 3,
+    exp: "Both conditions must apply: extended inadequate performance attributable to abuse, and refusal of rehabilitation."
+  },
+  {
+    q: "Howard Levitt identifies six situations that may amount to wrongful (constructive) dismissal even though the employee was not formally fired. Which is one of them?",
+    options: [
+      "Voluntary resignation following a promotion.",
+      "Termination accompanied by proper notice and severance.",
+      "A unilateral demotion or downward change in reporting function imposed by the employer.",
+      "Dismissal for documented theft."
+    ],
+    correct: 2,
+    exp: "Levitt's six include forced resignation, demotion, downward change in reporting, unilateral change in responsibilities, forced transfer, and serious employer misconduct."
+  },
+  {
+    q: "How are important calculations routinely treated in the structural, aerospace, and nuclear industries?",
+    options: [
+      "They are submitted only after construction begins.",
+      "They are reviewed only by external regulators.",
+      "They are checked secretly to avoid bias.",
+      "They are routinely double-checked, with the original engineer informed in advance and shown the results."
+    ],
+    correct: 3,
+    exp: "Routine double-checking is standard. The original engineer is always informed first and given the chance to clarify."
+  },
+  {
+    q: "What does the Code of Ethics typically prohibit a manager from asking another professional to do regarding a colleague's work?",
+    options: [
+      "Audit financial accounts.",
+      "Lead a project the colleague is on.",
+      "Train new staff in the colleague's specialty.",
+      "Conduct a SECRET review of the colleague's professional work."
+    ],
+    correct: 3,
+    exp: "Secret reviews are likened to a trial in absentia and can damage a professional reputation built over years."
+  },
+  {
+    q: "Which scenario is the established EXCEPTION to the rule against one professional reviewing another's work without notice?",
+    options: [
+      "Where the reviewer holds a higher class of licence.",
+      "Where the original professional has resigned and a successor must take over the work.",
+      "Where a client requests the review informally.",
+      "Where the work is already published."
+    ],
+    correct: 1,
+    exp: "Continuity reviews following resignation are an obvious and accepted exception."
+  },
+  {
+    q: "What does the duty to maintain competence under licensing Acts require of professionals AND managers?",
+    options: [
+      "Only newly licensed professionals must update their skills.",
+      "Continuing education is optional in all provinces.",
+      "Managers alone are responsible for ensuring competence.",
+      "Professionals must continually upgrade their skills, and managers should support and encourage that effort."
+    ],
+    correct: 3,
+    exp: "Maintaining competence is a shared duty: the professional shows initiative, and the manager supports the upgrade — a win-win."
+  },
+  {
+    q: "Why is incompetence treated as significant under provincial licensing Acts?",
+    options: [
+      "It triggers an automatic salary review.",
+      "It is grounds for charging higher fees.",
+      "It is unrelated to licensure.",
+      "It is cited as a basis for removing a professional licence."
+    ],
+    correct: 3,
+    exp: "Every licensing Act lists incompetence as a basis for licence removal."
+  },
+  {
+    q: "Which gift policy is described as the simplest and most easily applied?",
+    options: [
+      "Permitting gifts only from competitors.",
+      "A complete prohibition on accepting any gifts or benefits from clients, suppliers, or colleagues.",
+      "Allowing gifts up to a subjective dollar limit such as fifty dollars.",
+      "Permitting gifts that are kept private from the employer."
+    ],
+    correct: 1,
+    exp: "A blanket no-gifts policy is unambiguous; dollar limits are subjective and may be hard to verify."
+  },
+  {
+    q: "How does the chapter characterize a failure to disclose a serious conflict of interest?",
+    options: [
+      "Acceptable if no money changes hands.",
+      "An issue that concerns only senior managers.",
+      "A purely civil matter with no professional consequence.",
+      "Unprofessional conduct under every Code of Ethics."
+    ],
+    correct: 3,
+    exp: "Codes of Ethics universally treat non-disclosure of a serious conflict as unprofessional conduct."
+  },
+  {
+    q: "Under the Canadian Charter of Rights and Freedoms, hiring decisions for professional positions must be based on:",
+    options: [
+      "Seniority within the firm.",
+      "Personal connections.",
+      "Geographic origin of the candidate.",
+      "Merit."
+    ],
+    correct: 3,
+    exp: "Hiring on merit, promotion on performance, and dismissal for just cause (or per contract) are the chapter's anti-discrimination principles."
+  },
+  {
+    q: "Which group is identified as a slight majority in the general population yet a clear minority within engineering and geoscience?",
+    options: [
+      "Aboriginal peoples.",
+      "Women.",
+      "Persons with disabilities.",
+      "Recent immigrants."
+    ],
+    correct: 1,
+    exp: "Women are roughly half the population but remain underrepresented in engineering and geoscience."
+  },
+  {
+    q: "(Case 11.1) In Canada, the geographic validity of a professional engineering or geoscience licence is best described as:",
+    options: [
+      "Valid nationally on first issue.",
+      "Valid worldwide upon registration.",
+      "Valid only in the province of issue, but a routine application normally yields a licence in the new jurisdiction.",
+      "Valid in any province with similar economic conditions."
+    ],
+    correct: 2,
+    exp: "Licences are provincially issued. Reciprocal applications are routine but required when relocating."
+  },
+  {
+    q: "(Case 11.1) A manager who allows an unlicensed employee to practise while using \"P.Geo.\" on cards and signage is:",
+    options: [
+      "Acting acceptably so long as the use is internal.",
+      "Acting in compliance during a transition period.",
+      "Allowed to do so if the client raises no objection.",
+      "Committing an infraction of the Act and breaching the Code of Ethics by assisting illegal practice."
+    ],
+    correct: 3,
+    exp: "The Act forbids unlicensed title use; permitting it is assisting illegal practice — a Code of Ethics breach for the manager."
+  },
+  {
+    q: "(Case 11.1) Xavier holds a licence in another province but, six months into the role, has still not applied in the province where he now works. This is best described as:",
+    options: [
+      "A minor administrative oversight.",
+      "Acceptable under reciprocity rules.",
+      "The Association's responsibility, not the employer's.",
+      "Negligence rising to serious misconduct, providing just cause for dismissal."
+    ],
+    correct: 3,
+    exp: "Six months without applying is more than oversight — the authors classify it as serious misconduct and just cause."
+  },
+  {
+    q: "(Case 11.2) A standards-committee member's company would clearly profit from a proposed change to the standard. The proper action is to:",
+    options: [
+      "Quietly support the change.",
+      "Disclose the conflict and refrain from voting; participation in discussion may still be acceptable.",
+      "Vote anonymously to avoid any appearance of interest.",
+      "Resign from the committee immediately."
+    ],
+    correct: 1,
+    exp: "Disclosure is mandatory; participation in the formal vote on the conflicted item is not appropriate."
+  },
+  {
+    q: "(Case 11.2) The principal function of an industry standards committee is to serve:",
+    options: [
+      "The chair's organization.",
+      "The financial interests of its members.",
+      "The trade-secret protection of major players.",
+      "The public welfare."
+    ],
+    correct: 3,
+    exp: "Standards committees exist for the public good; that priority is what makes disclosure essential."
+  },
+  {
+    q: "(Case 11.3) Acme's review of Delta's gearbox drawings, where Delta is the engineer of record, is best characterized as:",
+    options: [
+      "An unethical secret review of a colleague's work.",
+      "A justified design review aimed at protecting the public, even though some elements lie outside Acme's contract.",
+      "Forbidden unless the client requests it.",
+      "Permitted only after the work is complete."
+    ],
+    correct: 1,
+    exp: "Reviewing a design that affects public safety is appropriate and not a secret review under the Code."
+  },
+  {
+    q: "(Case 11.3) Delta's chief engineer rudely tells Acme to \"get on with the job\" despite valid safety concerns. Acme's best next step is to:",
+    options: [
+      "Comply, since the client has design authority.",
+      "Anonymously alert the press.",
+      "Document concerns in writing to Delta, escalate internally, and consider declining (breaching) the contract; consult the Association for confidential advice if needed.",
+      "Begin construction with unilateral modifications without telling Delta."
+    ],
+    correct: 2,
+    exp: "Written documentation, escalation, and a willingness to walk away — together with a confidential call to the Association — are the correct combination."
+  },
+  {
+    q: "(Case 11.3) The Ford Pinto and DC-10 cargo-door cases collectively illustrate that:",
+    options: [
+      "Whistle-blowing is rarely effective.",
+      "Concealing dangerous design faults can lead to fatal tragedy, and engineers have a duty to challenge unsafe authority.",
+      "Management decisions must always override engineering judgment.",
+      "Internal memos by themselves discharge an engineer's duty to act."
+    ],
+    correct: 1,
+    exp: "Both cases show that silence on known hazards costs lives — and that escalation, not just memo-writing, may be required."
+  },
+  {
+    q: "(Case 11.4) In a Canadian corporation, who has authority for day-to-day operations and public statements?",
+    options: [
+      "Major creditors.",
+      "Shareholders directly.",
+      "The provincial securities regulator.",
+      "The officers (CEO, president, treasurer) appointed by the board of directors."
+    ],
+    correct: 3,
+    exp: "Shareholders elect directors; directors appoint officers, who run the company day-to-day. Most boards authorize only the CEO to issue public statements."
+  },
+  {
+    q: "(Case 11.4) Public mineral disclosures in Canada must comply with guidelines issued by:",
+    options: [
+      "The Toronto Stock Exchange exclusively.",
+      "The Canadian Securities Administrators (CSA).",
+      "The provincial Minister of Mines.",
+      "The federal Department of Natural Resources only."
+    ],
+    correct: 1,
+    exp: "The CSA's NI 43-101 framework — referenced as the CSA guidelines — governs mineral disclosure in Canada."
+  },
+  {
+    q: "(Case 11.4) The strengthened CSA mineral-disclosure framework was developed largely in response to:",
+    options: [
+      "The Westray mine disaster.",
+      "The Bre-X mining fraud.",
+      "The Quebec Bridge collapse.",
+      "The Lac-Megantic derailment."
+    ],
+    correct: 1,
+    exp: "Bre-X — discussed in Chapter 2 — drove the post-fraud overhaul of mineral disclosure rules."
+  },
+  {
+    q: "(Case 11.4) A \"qualified person\" under CSA mineral-disclosure rules is responsible for:",
+    options: [
+      "Maximizing the company's share price.",
+      "Filing with foreign regulators only.",
+      "Permanent confidentiality of all geological data.",
+      "Ensuring that technical reports are accurate, complete, and follow the CSA-prescribed format."
+    ],
+    correct: 3,
+    exp: "Qualified-person sign-off is the technical-authority backbone of the CSA disclosure regime."
+  },
+  {
+    q: "(Case 11.4) Where the CEO directs a geoscientist to delay release of preliminary unfavourable assays, the proper allocation of authority is:",
+    options: [
+      "The CEO holds both technical and management authority.",
+      "Management authority lies with the CEO over WHEN to release; technical authority for accuracy and CSA-compliant format remains with the geoscientist.",
+      "The CEO has no role in disclosure decisions.",
+      "The geoscientist must release all preliminary data to shareholders immediately."
+    ],
+    correct: 1,
+    exp: "Timing of release is a management call; the technical content is the qualified person's responsibility."
+  },
+  {
+    q: "(Case 11.5) Edward Eager's plausible exposure for tolerating a dishonest plant culture is best described as:",
+    options: [
+      "Possible employer discipline (e.g., demotion or dismissal for habitual neglect of duty) AND possible Association reprimand for negligence.",
+      "Only criminal liability.",
+      "None, since he did not personally participate in the theft.",
+      "Solely civil liability to shareholders."
+    ],
+    correct: 0,
+    exp: "Eager faces both employment consequences and a possible professional reprimand — both flow from his failure to act."
+  },
+  {
+    q: "(Case 11.5) What is Cam Complacent's responsibility in the Eager scenario?",
+    options: [
+      "None, because he is retired.",
+      "Sole responsibility, with Eager blameless.",
+      "He cannot be addressed in any forum at this stage.",
+      "Partial responsibility for tolerating the dishonest environment under his watch."
+    ],
+    correct: 3,
+    exp: "Complacent's permissive management contributed materially to the situation, though Eager will bear most of the consequences."
+  },
+  {
+    q: "(Case 11.6) Submitting a former student's work report as one's own is:",
+    options: [
+      "Acceptable when a supervisor approves it.",
+      "Acceptable in co-op terms specifically.",
+      "Plagiarism — a breach of the Code of Ethics and academic integrity, regardless of who suggests it.",
+      "Permitted with footnote attribution."
+    ],
+    correct: 2,
+    exp: "Plagiarism is condemned by every Code of Ethics. Supervisor approval does not legitimize it."
+  },
+  {
+    q: "(Case 11.6) The boss who suggests Oliver plagiarize:",
+    options: [
+      "Bears no responsibility, since he is not the student.",
+      "May face Association discipline; the employer may be informed; and the company's co-op privileges may be revoked.",
+      "Is protected by client confidentiality.",
+      "Is exempt because of his seniority."
+    ],
+    correct: 1,
+    exp: "The boss has breached the Code of Ethics; downstream consequences can flow to him, his employer, and future hiring rights."
+  },
+  {
+    q: "(Case 11.6) The proper way to use Internet content in a report without plagiarizing is to:",
+    options: [
+      "Paraphrase without citation.",
+      "Use only short passages without crediting the source.",
+      "Convert the text into images to obscure its origin.",
+      "Cite the complete source — including the URL and the date accessed."
+    ],
+    correct: 3,
+    exp: "All borrowed material — text, photos, drawings, figures — must be cited. Internet sources require URL and date."
+  },
+  {
+    q: "What was the immediate cause of the Vancouver Second Narrows Bridge collapse on June 17, 1958?",
+    options: [
+      "An earthquake.",
+      "Sabotage.",
+      "A driver error involving the diesel locomotive.",
+      "Failure of a temporary support beneath span 5 due to numerical errors in the grillage design."
+    ],
+    correct: 3,
+    exp: "Two arithmetic errors by the assistant field engineer in the grillage calculations went unchecked and triggered the collapse."
+  },
+  {
+    q: "Which three basic oversights did the royal commission attribute to Dominion Bridge?",
+    options: [
+      "Concrete-mix errors, late delivery, and labour disputes.",
+      "Failing to design the temporary support properly, failing to submit calculations to the engineer of record as required by contract, and inadequate checking of an inexperienced engineer's work.",
+      "Use of imperial instead of metric units, miscommunication with the contractor, and weather-related delays.",
+      "Inadequate insurance, faulty steel supply, and missing permits."
+    ],
+    correct: 1,
+    exp: "Those three were the commission's specific findings against Dominion Bridge."
+  },
+  {
+    q: "What was the failure mode in the temporary tower's grillage at the Second Narrows Bridge?",
+    options: [
+      "Shear failure of bolts.",
+      "Concrete crushing.",
+      "Lateral buckling of I-beams whose webs were too thin for the load.",
+      "Corrosion fatigue."
+    ],
+    correct: 2,
+    exp: "Wreckage analysis confirmed lateral web buckling of the grillage I-beams."
+  },
+  {
+    q: "What recurring engineering lesson did the Second Narrows Bridge tragedy reinforce?",
+    options: [
+      "Cantilever bridges are inherently unsafe.",
+      "Junior engineers should never be assigned design tasks.",
+      "Permanent structures alone require careful analysis.",
+      "Temporary supports and scaffolds must be analyzed as carefully as the permanent structure."
+    ],
+    correct: 3,
+    exp: "Engineers historically under-analyze temporary works. Second Narrows is a stark reminder that they deserve the same rigour."
+  },
+  {
+    q: "How did the 1988 Save-on-Foods supermarket roof collapse echo Second Narrows?",
+    options: [
+      "It demonstrated that the problems were unique to bridges.",
+      "It involved similar basic load-calculation errors causing lateral buckling, and it prompted changes to British Columbia's structural-engineering licensing procedures.",
+      "It showed that building codes had become too strict.",
+      "It demonstrated that structural engineering had become irrelevant."
+    ],
+    correct: 1,
+    exp: "Three decades later, the same family of error reappeared — leading to BC licensing reforms for structural engineers."
+  },
+  {
+    q: "(Discussion 1) Older colleagues urge a project manager to reduce her cost estimates so the project will not be cancelled. The chapter's framing identifies this as:",
+    options: [
+      "Reasonable optimism.",
+      "Lying — a breach of professional integrity that also exposes the manager's reputation if costs later overrun.",
+      "A sound management compromise.",
+      "Required practice in competitive bidding."
+    ],
+    correct: 1,
+    exp: "Knowingly understating estimates is dishonest; it also creates personal reputational risk if the budget is later breached."
+  },
+  {
+    q: "(Discussion 2) A long-time, unlicensed employee uses the title \"Associate Geoscientist\" on his door and business cards. The manager should:",
+    options: [
+      "Accept it because of the employee's experience.",
+      "Treat it as a regulator-only matter.",
+      "Recognize it as a likely contravention of the provincial geoscience Act and act to correct the title.",
+      "Allow it if previously approved by another manager."
+    ],
+    correct: 2,
+    exp: "Title regulations apply regardless of seniority or experience; the manager must correct the title."
+  },
+  {
+    q: "(Discussion 3) Three competing dredging companies coordinate high bids so that one company is assured of a particular federal contract. This arrangement is best described as:",
+    options: [
+      "A strategic alliance.",
+      "Bid rigging — illegal and unethical collusion.",
+      "Cooperative bidding (\"coopetition\").",
+      "Acceptable industry practice."
+    ],
+    correct: 1,
+    exp: "Coordinating bids to predetermine a winner is bid rigging — a Competition Act offence and an ethics breach. A licensed professional faces additional disciplinary exposure."
+  },
+  {
+    q: "A manager who fails to verify that a new hire actually holds a current professional licence has:",
+    options: [
+      "No exposure to liability.",
+      "Personal and corporate exposure, because firms offering professional services have a duty to verify that licences are current.",
+      "Exposure only if the employee misrepresented themselves criminally.",
+      "Liability limited to the salary paid."
+    ],
+    correct: 1,
+    exp: "Verification is part of due diligence. Failing it does not insulate either the manager or the firm from liability."
+  },
+  {
+    q: "Annual performance reviews of professional employees are properly characterized by:",
+    options: [
+      "Being conducted secretly to avoid bias.",
+      "Being conducted only by external auditors.",
+      "Being annual, discussed with the employee, and including the employee's right to challenge or explain unsatisfactory assessments.",
+      "Replacement by industry salary surveys."
+    ],
+    correct: 2,
+    exp: "Annual, transparent reviews with a right to respond are standard. Additional reviews may follow if performance is unsatisfactory."
+  },
+  {
+    q: "When a professional's calculations are reviewed for accuracy, that professional should be:",
+    options: [
+      "Excluded from the review process to avoid bias.",
+      "Replaced before the review begins.",
+      "Notified only if errors are found.",
+      "Informed in advance, given an opportunity to clarify, and shown the results."
+    ],
+    correct: 3,
+    exp: "Routine review is collaborative, not adversarial: notice, opportunity to explain, and disclosure of the outcome are basics."
+  },
+  {
+    q: "On a standards committee, why is disclosure of a conflict — followed by abstention from voting — required by the Code of Ethics?",
+    options: [
+      "It is an optional courtesy of professional life.",
+      "It places the welfare of society above narrow personal interest, which the Code requires.",
+      "It is an overly cautious legalism without ethical foundation.",
+      "It is a regulator's discretionary rule rather than a Code requirement."
+    ],
+    correct: 1,
+    exp: "Public welfare above personal gain is a Code-level obligation, not mere etiquette."
+  },
+  {
+    q: "A manager who tolerates \"horseplay,\" lax time-keeping, racial and sexual harassment, and inventory shortfalls — rationalizing these as morale and productivity boosters — is:",
+    options: [
+      "Exercising sound managerial judgment.",
+      "Demonstrating cultural sensitivity.",
+      "Failing the duty to act with personal honour and to expose unethical conduct, exposing themselves to discipline.",
+      "Acting consistently with the Code of Ethics."
+    ],
+    correct: 2,
+    exp: "Codes require professionals to expose unprofessional or unethical conduct before the proper tribunals — silence here is itself a breach."
+  },
+  {
+    q: "Continuing professional development for licensed engineers and geoscientists in Canada is generally:",
+    options: [
+      "Optional in all jurisdictions.",
+      "The exclusive responsibility of the regulator.",
+      "Discouraged by employers because of cost.",
+      "A duty under licensing Acts to maintain competence, which managers should support."
+    ],
+    correct: 3,
+    exp: "Maintaining competence is a statutory professional duty (covered also in Chapter 17), and managers are expected to facilitate it."
+  },
+  {
+    q: "Why does the chapter strictly prohibit one professional from secretly reviewing another's work?",
+    options: [
+      "To protect billing arrangements.",
+      "To protect the reviewed person's professional reputation and to ensure natural justice — no \"trial in absentia.\"",
+      "To protect intellectual property.",
+      "To reduce administrative costs."
+    ],
+    correct: 1,
+    exp: "Reputation is a professional's most valuable asset; secret reviews can damage it without the professional ever having a chance to respond."
+  },
+  {
+    q: "When a client refuses to investigate a credible safety concern that the subcontractor has raised in writing, the BEST course of action is to:",
+    options: [
+      "Proceed with construction as instructed by the client.",
+      "Ignore the issue, since it lies outside the subcontract.",
+      "Publish the dispute publicly via the press or social media.",
+      "Consult senior management and legal counsel; consider declining (breaching) the contract; and seek confidential advice from the provincial Association."
+    ],
+    correct: 3,
+    exp: "Internal escalation, legal review, willingness to walk away, and a confidential call to the Association are the chapter's recommended pathway."
+  }
+];
+
+/* =======================================================
+   STATE & STORAGE
+   ======================================================= */
+const STORAGE_KEY = 'nppe_ch11_quiz_v1';
+
+const defaultState = () => ({
+  mode: 'practice',
+  order: shuffleArray([...Array(QUESTIONS.length).keys()]),
+  current: 0,
+  answers: {},      // qIndex -> selected option index
+  correct: 0,
+  wrong: 0,
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  achievements: [],
+  finished: false
+});
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    // Sanity check
+    if (!Array.isArray(parsed.order) || parsed.order.length !== QUESTIONS.length) {
+      return defaultState();
+    }
+    return Object.assign(defaultState(), parsed);
+  } catch (e) {
+    return defaultState();
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* private mode — silently ignore */ }
+}
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* =======================================================
+   RENDER
+   ======================================================= */
+const $ = id => document.getElementById(id);
+const quizArea = $('quizArea');
+
+function updateStats() {
+  const total = QUESTIONS.length;
+  const answered = Object.keys(state.answers).length;
+  $('qIndex').innerHTML = `${Math.min(state.current + 1, total)}<span style="opacity:0.4">/${total}</span>`;
+  $('scoreVal').innerHTML = `${state.correct}<span style="opacity:0.4">/${answered}</span>`;
+  $('pointsVal').textContent = state.points;
+  $('streakVal').innerHTML = `${state.streak}<span class="streak${state.streak >= 5 ? ' fire' : ''}" id="streakIcon">${streakEmoji(state.streak)}</span>`;
+  $('progressFill').style.width = `${(answered / total) * 100}%`;
+
+  $('progressLeft').textContent = state.mode === 'practice'
+    ? 'Practice mode · instant feedback'
+    : 'Exam mode · feedback at the end';
+  $('progressRight').textContent = state.mode === 'practice'
+    ? `Best streak: ${state.bestStreak}`
+    : 'Pass threshold: 65%';
+}
+
+function streakEmoji(s) {
+  if (s >= 10) return '🔥🔥';
+  if (s >= 5) return '🔥';
+  if (s >= 3) return '✨';
+  return '';
+}
+
+function renderQuestion() {
+  if (state.finished) { renderResults(); return; }
+
+  const qIdx = state.order[state.current];
+  const q = QUESTIONS[qIdx];
+  const selected = state.answers[qIdx];
+  const isAnswered = selected !== undefined;
+  const showFeedback = isAnswered && state.mode === 'practice';
+
+  let html = `
+    <div class="card">
+      <div class="q-number">Question ${state.current + 1} of ${QUESTIONS.length}</div>
+      <div class="q-text">${escapeHtml(q.q)}</div>
+      <ul class="options">
+  `;
+  q.options.forEach((opt, i) => {
+    const letter = String.fromCharCode(65 + i);
+    let cls = 'option';
+    if (isAnswered) {
+      cls += ' locked';
+      if (showFeedback) {
+        if (i === q.correct) cls += ' correct';
+        else if (i === selected) cls += ' wrong';
+      } else if (i === selected) {
+        cls += ' selected';
+      }
+    }
+    html += `
+      <li class="${cls}" data-idx="${i}">
+        <span class="letter">${letter}</span>${escapeHtml(opt)}
+      </li>
+    `;
+  });
+  html += `</ul>`;
+
+  if (showFeedback) {
+    const correctMark = selected === q.correct ? '✓ Correct' : '✗ Not quite';
+    html += `
+      <div class="explanation show">
+        <strong>${correctMark} — Why</strong>
+        ${escapeHtml(q.exp)}
+      </div>
+    `;
+  }
+
+  html += `
+      <div class="nav-buttons">
+        <button class="btn" id="btnPrev" type="button" ${state.current === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>← Previous</button>
+        <button class="btn primary" id="btnNext" type="button">
+          ${state.current === QUESTIONS.length - 1 ? (state.mode === 'exam' ? 'Submit Exam' : 'See Results') : 'Next →'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  quizArea.innerHTML = html;
+  attachOptionListeners();
+  attachNavListeners();
+  updateStats();
+}
+
+function attachOptionListeners() {
+  document.querySelectorAll('.option').forEach(el => {
+    el.addEventListener('click', () => {
+      if (el.classList.contains('locked')) return;
+      const i = parseInt(el.dataset.idx, 10);
+      handleAnswer(i);
+    });
+  });
+}
+
+function attachNavListeners() {
+  const prev = $('btnPrev');
+  const next = $('btnNext');
+  if (prev) prev.addEventListener('click', () => {
+    if (state.current > 0) { state.current--; saveState(); renderQuestion(); }
+  });
+  if (next) next.addEventListener('click', () => {
+    if (state.current < QUESTIONS.length - 1) {
+      state.current++;
+      saveState();
+      renderQuestion();
+    } else {
+      state.finished = true;
+      saveState();
+      renderResults();
+    }
+  });
+}
+
+function handleAnswer(optIdx) {
+  const qIdx = state.order[state.current];
+  if (state.answers[qIdx] !== undefined) return;
+  const q = QUESTIONS[qIdx];
+  state.answers[qIdx] = optIdx;
+
+  const correct = optIdx === q.correct;
+
+  if (correct) {
+    state.correct++;
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    // Points: base 100 + streak bonus
+    const streakBonus = Math.min(state.streak * 10, 100);
+    const earned = 100 + streakBonus;
+    state.points += earned;
+  } else {
+    state.wrong++;
+    state.streak = 0;
+  }
+
+  saveState();
+  renderQuestion();
+
+  // Celebrations only in practice mode (visible feedback)
+  if (state.mode === 'practice' && correct) {
+    triggerCelebration(state.streak);
+  }
+  // In exam mode, no immediate visual reaction
+  if (state.mode === 'practice') {
+    bumpStat($('pointsVal'));
+    if (correct) bumpStat($('streakVal'));
+  }
+
+  checkAchievements(correct);
+}
+
+function bumpStat(el) {
+  if (!el) return;
+  el.classList.remove('bump');
+  void el.offsetWidth; // reflow
+  el.classList.add('bump');
+}
+
+/* =======================================================
+   RESULTS SCREEN
+   ======================================================= */
+function renderResults() {
+  const total = QUESTIONS.length;
+  const answered = Object.keys(state.answers).length;
+  const correct = state.correct;
+  const pct = answered > 0 ? Math.round((correct / total) * 100) : 0;
+  const passed = pct >= 65;
+
+  let verdict = '';
+  if (state.mode === 'exam') {
+    verdict = passed
+      ? `<div class="verdict pass">PASS — at or above the 65% threshold</div>`
+      : `<div class="verdict fail">Below the 65% pass threshold — review and try again</div>`;
+  } else {
+    if (pct >= 90) verdict = `<div class="verdict pass">Distinction — outstanding command of Chapter 11</div>`;
+    else if (pct >= 75) verdict = `<div class="verdict pass">Strong — solid grasp of the material</div>`;
+    else if (pct >= 65) verdict = `<div class="verdict">On track — review the wrong ones</div>`;
+    else verdict = `<div class="verdict fail">Needs more review — focus on the misses below</div>`;
+  }
+
+  let html = `
+    <div class="card results">
+      <h2>Results</h2>
+      ${verdict}
+      <div class="score-display">${pct}<span class="pct">%</span></div>
+      <div class="breakdown">
+        <div class="stat">
+          <div class="stat-label">Correct</div>
+          <div class="stat-value" style="color:var(--green)">${correct}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Wrong</div>
+          <div class="stat-value" style="color:var(--red)">${state.wrong}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Points</div>
+          <div class="stat-value" style="color:var(--gold-400)">${state.points}</div>
+        </div>
+      </div>
+      <div style="margin: 24px 0; font-size: 13px; color: rgba(245,239,224,0.7)">
+        Best streak: <strong style="color:var(--gold-300)">${state.bestStreak}</strong>
+        ${state.achievements.length > 0 ? ` · Achievements unlocked: <strong style="color:var(--gold-300)">${state.achievements.length}</strong>` : ''}
+      </div>
+      <div class="nav-buttons" style="justify-content: center; flex-wrap: wrap;">
+        <button class="btn" id="btnReview" type="button">Review answers</button>
+        <button class="btn primary" id="btnRestart" type="button">Restart Quiz</button>
+      </div>
+    </div>
+  `;
+
+  // Misses listing
+  const misses = [];
+  state.order.forEach(idx => {
+    const sel = state.answers[idx];
+    if (sel !== undefined && sel !== QUESTIONS[idx].correct) {
+      misses.push({ idx, sel });
+    }
+  });
+
+  if (misses.length > 0) {
+    html += `<div class="card"><div class="q-number">Review — Questions you missed (${misses.length})</div>`;
+    misses.forEach((m, i) => {
+      const q = QUESTIONS[m.idx];
+      html += `
+        <div style="padding: 16px 0; border-top: 1px solid rgba(212,169,70,0.15); ${i===0?'border-top:none':''}">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:17px; line-height:1.4; margin-bottom:10px; color:var(--cream)">${escapeHtml(q.q)}</div>
+          <div style="font-size:13px; color: var(--red); margin-bottom: 4px"><strong>Your answer:</strong> ${escapeHtml(q.options[m.sel])}</div>
+          <div style="font-size:13px; color: var(--green); margin-bottom: 8px"><strong>Correct answer:</strong> ${escapeHtml(q.options[q.correct])}</div>
+          <div style="font-size:13px; color: rgba(245,239,224,0.75); font-style: italic; padding-left: 12px; border-left: 2px solid var(--gold-500)">${escapeHtml(q.exp)}</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  } else if (answered === total) {
+    html += `<div class="card" style="text-align:center; padding: 28px"><div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; color: var(--gold-400)">Perfect run. No misses to review.</div></div>`;
+  }
+
+  quizArea.innerHTML = html;
+
+  $('btnRestart').addEventListener('click', resetQuiz);
+  if ($('btnReview')) {
+    $('btnReview').addEventListener('click', () => {
+      // Jump back into quiz at first miss (or first question)
+      state.finished = false;
+      state.current = misses.length > 0 ? state.order.indexOf(misses[0].idx) : 0;
+      saveState();
+      renderQuestion();
+    });
+  }
+
+  // Big celebration if perfect or pass
+  if (state.mode === 'exam' && passed) {
+    setTimeout(() => triggerBigCelebration(), 200);
+  } else if (pct === 100) {
+    setTimeout(() => triggerBigCelebration(), 200);
+  }
+
+  updateStats();
+}
+
+/* =======================================================
+   ACHIEVEMENTS
+   ======================================================= */
+const ACHIEVEMENTS = [
+  { id: 'first',    label: 'First Blood',         icon: '🎯', test: () => state.correct === 1 },
+  { id: 'fiver',    label: 'High Five',           icon: '✋', test: () => state.correct === 5 },
+  { id: 'ten',      label: 'Tenacious',           icon: '🏅', test: () => state.correct === 10 },
+  { id: 'twentyfive', label: 'Halfway Hero',     icon: '⚡', test: () => state.correct === 25 },
+  { id: 'forty',    label: 'Almost There',        icon: '🚀', test: () => state.correct === 40 },
+  { id: 'streak3',  label: '3 in a Row',          icon: '✨', test: () => state.streak === 3 },
+  { id: 'streak5',  label: 'On Fire (5 streak)',  icon: '🔥', test: () => state.streak === 5 },
+  { id: 'streak10', label: 'Inferno (10 streak)', icon: '🔥🔥', test: () => state.streak === 10 },
+  { id: 'streak20', label: 'Untouchable (20)',    icon: '👑', test: () => state.streak === 20 },
+  { id: 'perfect',  label: 'PERFECT SCORE',       icon: '💎', test: () => state.correct === QUESTIONS.length }
+];
+
+function checkAchievements(wasCorrect) {
+  ACHIEVEMENTS.forEach(a => {
+    if (state.achievements.includes(a.id)) return;
+    if (a.test()) {
+      state.achievements.push(a.id);
+      saveState();
+      showToast(a.icon, a.label);
+    }
+  });
+}
+
+function showToast(icon, text) {
+  const container = $('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span class="badge-icon">${icon}</span><span>${text}</span>`;
+  container.appendChild(t);
+  // Slide in
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 600);
+  }, 3000);
+}
+
+/* =======================================================
+   CELEBRATION FX — fireworks, golden coin shower, sparkles, happy face
+   ======================================================= */
+const canvas = $('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function triggerCelebration(streak) {
+  // Tier reaction by streak
+  if (streak >= 10) {
+    fireworksBurst(canvas.width * 0.5, canvas.height * 0.4, 60);
+    fireworksBurst(canvas.width * 0.25, canvas.height * 0.5, 40);
+    fireworksBurst(canvas.width * 0.75, canvas.height * 0.5, 40);
+    goldenShower(80);
+    showHappyFace('🤩');
+  } else if (streak >= 5) {
+    fireworksBurst(canvas.width * 0.5, canvas.height * 0.4, 50);
+    goldenShower(50);
+    showHappyFace('😄');
+  } else if (streak >= 3) {
+    fireworksBurst(canvas.width * 0.5, canvas.height * 0.45, 35);
+    sparkleBurst(window.innerWidth * 0.5, window.innerHeight * 0.5, 20);
+    showHappyFace('😊');
+  } else {
+    sparkleBurst(window.innerWidth * 0.5, window.innerHeight * 0.5, 24);
+    showHappyFace('🙂');
+  }
+  startAnimating();
+}
+
+function triggerBigCelebration() {
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      fireworksBurst(
+        Math.random() * canvas.width,
+        Math.random() * canvas.height * 0.6,
+        50 + Math.random() * 30
+      );
+    }, i * 250);
+  }
+  goldenShower(150);
+  showHappyFace('🎉');
+  startAnimating();
+}
+
+function fireworksBurst(x, y, count) {
+  const palettes = [
+    ['#d4a946', '#f0d488', '#f7e3a8', '#ffe9b3'],   // gold
+    ['#ff6b6b', '#ffa56b', '#ffd56b'],               // sunset
+    ['#5cb87a', '#a8e6c1', '#d4a946'],               // mint+gold
+    ['#6ec5ff', '#a3d8ff', '#f0d488']                // ice+gold
+  ];
+  const colors = palettes[Math.floor(Math.random() * palettes.length)];
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+    const speed = 3 + Math.random() * 5;
+    particles.push({
+      type: 'firework',
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: 0.012 + Math.random() * 0.012,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: 2 + Math.random() * 2
+    });
+  }
+}
+
+function goldenShower(count) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      type: 'coin',
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 2,
+      vy: 2 + Math.random() * 4,
+      life: 1,
+      decay: 0.005,
+      rotation: Math.random() * Math.PI * 2,
+      vRot: (Math.random() - 0.5) * 0.2,
+      size: 6 + Math.random() * 8,
+      color: ['#d4a946','#f0d488','#f7e3a8','#e6c068'][Math.floor(Math.random()*4)],
+      shape: Math.random() < 0.5 ? 'star' : 'coin'
+    });
+  }
+}
+
+function sparkleBurst(x, y, count) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1 + Math.random() * 4;
+    particles.push({
+      type: 'sparkle',
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 1,
+      life: 1,
+      decay: 0.02 + Math.random() * 0.02,
+      color: ['#f0d488','#f7e3a8','#fff'][Math.floor(Math.random()*3)],
+      size: 3 + Math.random() * 3
+    });
+  }
+}
+
+let animating = false;
+function startAnimating() {
+  if (animating) return;
+  animating = true;
+  requestAnimationFrame(animate);
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles = particles.filter(p => p.life > 0 && p.y < canvas.height + 40);
+
+  particles.forEach(p => {
+    if (p.type === 'firework') {
+      p.vy += 0.08; // gravity
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+      // Trail
+      ctx.globalAlpha = Math.max(0, p.life * 0.4);
+      ctx.beginPath();
+      ctx.arc(p.x - p.vx, p.y - p.vy, p.size * p.life * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.type === 'coin') {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.vRot;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = p.color;
+      if (p.shape === 'star') {
+        drawStar(ctx, 0, 0, 5, p.size, p.size / 2);
+      } else {
+        // Coin (tilted ellipse for depth feel)
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * (0.5 + Math.abs(Math.cos(p.rotation)) * 0.5), 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Highlight
+        ctx.fillStyle = '#fff5d6';
+        ctx.globalAlpha = 0.3;
+        ctx.beginPath();
+        ctx.ellipse(-p.size * 0.3, -p.size * 0.3, p.size * 0.3, p.size * 0.15, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    } else if (p.type === 'sparkle') {
+      p.vy += 0.05;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color;
+      drawStar(ctx, p.x, p.y, 4, p.size, p.size / 2);
+    }
+  });
+
+  ctx.globalAlpha = 1;
+
+  if (particles.length > 0) {
+    requestAnimationFrame(animate);
+  } else {
+    animating = false;
+  }
+}
+
+function drawStar(ctx, cx, cy, spikes, outerR, innerR) {
+  let rot = (Math.PI / 2) * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outerR);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outerR;
+    y = cy + Math.sin(rot) * outerR;
+    ctx.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * innerR;
+    y = cy + Math.sin(rot) * innerR;
+    ctx.lineTo(x, y);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outerR);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function showHappyFace(emoji) {
+  const face = document.createElement('div');
+  face.className = 'happy-face';
+  face.textContent = emoji;
+  face.style.left = (window.innerWidth / 2 - 40) + 'px';
+  face.style.top = (window.innerHeight / 2 - 80) + 'px';
+  document.body.appendChild(face);
+  requestAnimationFrame(() => face.classList.add('pop'));
+  setTimeout(() => face.remove(), 1300);
+}
+
+/* =======================================================
+   CONTROLS
+   ======================================================= */
+$('modePractice').addEventListener('click', () => setMode('practice'));
+$('modeExam').addEventListener('click', () => setMode('exam'));
+$('btnShuffle').addEventListener('click', () => {
+  if (confirm('Shuffle the questions and clear answers? Your points and streak will reset.')) {
+    state.order = shuffleArray([...Array(QUESTIONS.length).keys()]);
+    state.current = 0;
+    state.answers = {};
+    state.correct = 0;
+    state.wrong = 0;
+    state.points = 0;
+    state.streak = 0;
+    state.finished = false;
+    saveState();
+    renderQuestion();
+  }
+});
+$('btnReset').addEventListener('click', resetQuiz);
+
+function setMode(m) {
+  if (state.mode === m) return;
+  if (Object.keys(state.answers).length > 0) {
+    if (!confirm(`Switch to ${m === 'exam' ? 'Exam' : 'Practice'} mode? This will clear your current answers.`)) return;
+  }
+  state.mode = m;
+  state.current = 0;
+  state.answers = {};
+  state.correct = 0;
+  state.wrong = 0;
+  state.points = 0;
+  state.streak = 0;
+  state.finished = false;
+  $('modePractice').classList.toggle('active', m === 'practice');
+  $('modeExam').classList.toggle('active', m === 'exam');
+  saveState();
+  renderQuestion();
+}
+
+function resetQuiz() {
+  if (!confirm('Reset the entire quiz? All progress, points, streaks, and achievements will be cleared.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = defaultState();
+  $('modePractice').classList.add('active');
+  $('modeExam').classList.remove('active');
+  saveState();
+  renderQuestion();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* =======================================================
+   INIT
+   ======================================================= */
+$('modePractice').classList.toggle('active', state.mode === 'practice');
+$('modeExam').classList.toggle('active', state.mode === 'exam');
+renderQuestion();
+</script>
+</body>
+</html>

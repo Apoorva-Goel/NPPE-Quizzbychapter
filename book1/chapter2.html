@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Exam — Chapter 2: Regulation of Engineering & Geoscience</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #1a2d42;
+    --navy-light: #243447;
+    --gold: #c9a84c;
+    --gold-light: #e2c97e;
+    --gold-pale: #f5ecd0;
+    --cream: #faf7f2;
+    --text: #1c1c1c;
+    --text-muted: #5a6475;
+    --correct: #1e7a4a;
+    --correct-bg: #edf7f1;
+    --wrong: #9b2335;
+    --wrong-bg: #fdf0f2;
+    --border: #d8cdb8;
+    --shadow: 0 4px 24px rgba(13,27,42,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    background: var(--navy);
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 39px,
+      rgba(201,168,76,0.07) 39px, rgba(201,168,76,0.07) 40px
+    ),
+    repeating-linear-gradient(
+      90deg, transparent, transparent 39px,
+      rgba(201,168,76,0.07) 39px, rgba(201,168,76,0.07) 40px
+    );
+    padding: 48px 32px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% -10%, rgba(201,168,76,0.15), transparent);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 42px);
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--gold-light); }
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  /* ── SCORE BAR ── */
+  .scorebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .stat-divider { width: 1px; height: 48px; background: rgba(255,255,255,0.12); }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    max-width: 860px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+  }
+  .progress-track {
+    height: 4px;
+    background: rgba(201,168,76,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-heading {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-left: 3px solid var(--gold);
+    padding-left: 10px;
+    margin: 48px 0 24px;
+  }
+  .section-heading:first-child { margin-top: 0; }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 28px 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .q-card.answered-correct { border-left: 4px solid var(--correct); }
+  .q-card.answered-wrong   { border-left: 4px solid var(--wrong); }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .q-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .option:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: var(--gold-pale);
+  }
+  .option .opt-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    min-width: 18px;
+    margin-top: 2px;
+  }
+  .option:disabled { cursor: default; }
+
+  .option.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+  }
+  .option.correct .opt-letter { color: var(--correct); }
+
+  .option.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+  }
+  .option.wrong .opt-letter { color: var(--wrong); }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: #f7f5f0;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #3a3530;
+  }
+  .explanation.visible { display: block; animation: fadeIn 0.25s ease; }
+  .explanation strong { color: var(--navy); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+  /* ── RESULT TAG ── */
+  .result-tag {
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 22px;
+    right: 24px;
+  }
+  .result-tag.show { display: inline-block; }
+  .result-tag.correct { background: var(--correct-bg); color: var(--correct); }
+  .result-tag.wrong   { background: var(--wrong-bg); color: var(--wrong); }
+
+  /* ── FINAL RESULTS ── */
+  #results-panel {
+    display: none;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 6px;
+    padding: 40px 32px;
+    text-align: center;
+    margin-top: 40px;
+    animation: fadeIn 0.4s ease;
+  }
+  #results-panel h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+  #results-panel p { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 28px; }
+  .grade-circle {
+    width: 120px;
+    height: 120px;
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .grade-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .grade-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .grade-msg {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+  .btn-reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-reset:hover { background: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .q-card { opacity: 0; transform: translateY(16px); }
+  .q-card.in-view { opacity: 1; transform: none; transition: opacity 0.35s ease, transform 0.35s ease; }
+
+  /* CELEBRATION FX */
+  #fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
+
+  .float-pts{position:fixed;font-family:'Playfair Display',serif;font-weight:700;font-size:1.7rem;color:var(--gold-light);pointer-events:none;z-index:10000;text-shadow:0 2px 12px rgba(184,134,11,.6),0 0 24px rgba(251,191,36,.4);animation:floatUp 1.5s cubic-bezier(.2,.6,.3,1) forwards;white-space:nowrap}
+  @keyframes floatUp{
+    0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+    18%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+    30%{transform:translate(-50%,-22px) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-100px) scale(.95)}
+  }
+
+  .streak-fire{display:inline-block;animation:flameDance 1.4s ease-in-out infinite}
+  @keyframes flameDance{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.12)}}
+
+  .scorebar .stat.pulse .stat-val{animation:streakPulse .65s ease}
+  @keyframes streakPulse{
+    0%,100%{transform:scale(1);color:var(--gold-light)}
+    40%{transform:scale(1.45);color:#fbbf24;text-shadow:0 0 12px rgba(251,191,36,.6)}
+  }
+
+  .shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)}
+    20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-7px)}
+    40%,60%{transform:translateX(7px)}
+  }
+
+  .option.fresh-correct{animation:correctGlow 1s ease-out}
+  @keyframes correctGlow{
+    0%{box-shadow:0 0 0 0 rgba(30,122,74,.7),0 0 30px 0 rgba(30,122,74,.4)}
+    60%{box-shadow:0 0 0 14px rgba(30,122,74,0),0 0 30px 8px rgba(30,122,74,.2)}
+    100%{box-shadow:0 0 0 0 rgba(30,122,74,0)}
+  }
+
+  .milestone-banner{position:fixed;top:50%;left:50%;background:linear-gradient(135deg,var(--navy) 0%,#2a5380 50%,var(--gold-light) 100%);color:#fff;padding:1.4rem 2.6rem;border-radius:6px;font-family:'Playfair Display',serif;font-size:1.7rem;text-align:center;z-index:10001;box-shadow:0 25px 70px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none;animation:bannerPop 2.4s cubic-bezier(.34,1.4,.64,1) forwards;border:1px solid rgba(251,191,36,.4)}
+  .milestone-banner .small{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:.5rem;opacity:.9;color:#fde68a}
+  @keyframes bannerPop{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+    18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}
+    28%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+    82%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(.92) rotate(0)}
+  }
+
+  .streak-stat{transition:color .3s,text-shadow .3s}
+  .streak-stat.hot .stat-val{color:#fbbf24;text-shadow:0 0 8px rgba(251,191,36,.5)}
+
+  @media (max-width: 600px) {
+    .hero { padding: 36px 20px 32px; }
+    main { padding: 28px 16px 60px; }
+    .q-card { padding: 20px 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">NPPE Practice · Ontario Edition</div>
+  <h1>Chapter 2: <span>Regulation of Engineering &amp; Geoscience</span></h1>
+  <p>Canadian Professional Engineering and Geoscience, 6th Edition — 50 Questions</p>
+  <div class="scorebar">
+    <div class="stat"><div class="stat-val" id="sc-answered">0</div><div class="stat-label">Answered</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-val" id="sc-correct">0</div><div class="stat-label">Correct</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-val" id="sc-wrong">0</div><div class="stat-label">Incorrect</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-val" id="sc-remain">50</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat" id="pointsStat"><div class="stat-val" id="points">0</div><div class="stat-label">Points</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat streak-stat" id="streakStat"><div class="stat-val"><span class="streak-fire">🔥</span> <span id="streak">0</span></div><div class="stat-label">Streak</div></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">Progress</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</header>
+
+<canvas id="fxCanvas"></canvas>
+
+<main id="quiz-main">
+
+  <!-- ════════════════════════════════════════════
+       SECTION A — Evolution of Licensing (Q1-10)
+  ═══════════════════════════════════════════════ -->
+  <div class="section-heading">Section A — Evolution of Licensing (Q1–10)</div>
+
+  <!-- Q1 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 1</div>
+    <div class="q-text">Which organization led the campaign to regulate the engineering profession in Canada in the late 19th century?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The Engineering Institute of Canada (EIC)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The Canadian Society of Civil Engineers (CSCE)</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Engineers Canada (formerly CCPE)</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The Professional Engineers of Ontario (PEO)</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The CSCE held its first general meeting in 1887 and led the campaign to regulate engineering. It later changed its name to the Engineering Institute of Canada (EIC) in 1918.</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 2</div>
+    <div class="q-text">What was the minimum age and experience requirement for admission to the CSCE in its early years?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>25 years of age with 5 years of experience</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>25 years of age with 10 years of experience</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>30 years of age with 10 years of experience</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>30 years of age with 5 years of experience</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> Applicants to the CSCE were required to be at least 30 years of age with at least 10 years of experience, and had to show responsible charge of work for at least five years.</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 3</div>
+    <div class="q-text">Which country first enacted a law to regulate engineering practice, and in what year?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>United States — 1907</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Canada — 1918</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>United Kingdom — 1900</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>United States — 1919</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> The United States enacted the first engineering licensing law in 1907, after many instances of gross incompetence were observed in construction.</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 4</div>
+    <div class="q-text">In what year did Ontario finally close its engineering Act, making licensing mandatory rather than voluntary?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>1920</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>1922</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>1930</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>1937</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> Ontario passed its licensing law in 1922 but it was "open." Ontario closed its Act in 1937. (Alberta closed its Act in 1930.)</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 5</div>
+    <div class="q-text">Which was the last Canadian province to enact closed engineering licensing legislation?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Saskatchewan — 1950</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Prince Edward Island — 1955</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Newfoundland — 1945</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Yukon — 1960</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> Prince Edward Island, in 1955, was the last province to enact closed legislation, making licensing mandatory across all of Canada.</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 6</div>
+    <div class="q-text">A key structural difference between Canadian and U.S. engineering licensing is that in Canada:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>State governments appoint licensing boards that regulate the profession</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Only about 15% of practicing engineers hold licences</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The profession is self-regulating through elected provincial Associations</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Engineers must write two sets of exams regardless of education</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> In Canada, the profession is self-regulating: each province/territory has passed an Act creating an Association whose governing council is elected by licensed members. In the U.S., state governments appoint licensing boards.</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 7</div>
+    <div class="q-text">Which tragic event is most directly credited with spurring the regulation of geoscientists in Canada, in the same way the Quebec Bridge collapse spurred engineer regulation?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The Bre-X mining fraud of 1997</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The Walkerton water tragedy of 2000</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The Mount Polley mine disaster</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The collapse of the Westray Mine</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> The Bre-X fraud, exposed in 1997, spurred the regulation of geoscientists the way the Quebec Bridge collapse spurred engineer regulation. The Walkerton tragedy reinforced this lesson but came later.</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 8</div>
+    <div class="q-text">In which year did the Canadian Engineering Institute publish the Model Act, and what percentage of members approved it by mail ballot?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>1918 — 65%</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>1918 — 90%</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>1919 — 65%</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>1919 — 77%</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> In September 1919, the EIC Journal announced that 77% of members had approved the Model Act by mail ballot, after the Act was drafted and published in the EIC Journal.</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 9</div>
+    <div class="q-text">The Walkerton water tragedy in 2000 resulted in seven deaths and more than 2,300 illnesses. Which Ontario legislation was passed shortly thereafter?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The Professional Engineers Act</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The Professional Geoscientists Act (2000)</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The Engineers and Geoscientists Act</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The Water Quality and Safety Act</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> Shortly after Walkerton, Ontario passed the Professional Geoscientists Act (2000), Quebec passed the Geologists Act (2001), and Nova Scotia passed the Geoscience Profession Act (2002).</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 10</div>
+    <div class="q-text">In the United Kingdom, engineering is NOT a licensed profession. What title is awarded by British engineering societies to qualified members who join voluntarily?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Professional Engineer (P.Eng.)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Fellow Engineer (F.Eng.)</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Chartered Engineer</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Registered Engineer (R.Eng.)</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> British engineering societies award the title of Chartered Engineer to members who join voluntarily and meet admission requirements. In the UK, licensing is not compulsory.</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION B — Regulatory Acts & Definitions (Q11-20)
+  ═══════════════════════════════════════════════ -->
+  <div class="section-heading">Section B — Regulatory Acts &amp; Definitions (Q11–20)</div>
+
+  <!-- Q11 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 11</div>
+    <div class="q-text">How many Canadian provinces or territories regulate engineering and geoscience under a single combined Act?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Eight</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Three</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Ten</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Five</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> Eight provinces or territories regulate engineering and geoscience in the same Act. Three provinces (Ontario, Quebec, Nova Scotia) have separate Acts for engineers and geoscientists.</div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 12</div>
+    <div class="q-text">Which two jurisdictions regulate engineering but do NOT yet regulate geoscience?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Nova Scotia and New Brunswick</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Nunavut and Northwest Territories</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Saskatchewan and Manitoba</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Prince Edward Island and Yukon</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> Prince Edward Island and Yukon regulate engineering but do not yet regulate geoscience, as stated in Table 2.1.</div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 13</div>
+    <div class="q-text">According to the Engineers Canada model definition, the practice of engineering concerns the safeguarding of which of the following?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Life, health, and property only</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Life, health, property, economic interests, the public welfare, and the environment</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Public welfare and the environment only</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Life, health, and the public welfare only</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The full Engineers Canada model definition includes the safeguarding of life, health, property, economic interests, the public welfare, and the environment.</div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 14</div>
+    <div class="q-text">What is the key calculation that typically determines whether an engineering design protects public life, health, property, or welfare?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Return on investment (ROI)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Net present value (NPV)</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Factor of safety</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Environmental impact score</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> The factor of safety — the ratio of load capacity to expected load on a component, system, or structure — is typically the key calculation deciding whether a design protects the public.</div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 15</div>
+    <div class="q-text">Under the Alberta definition of engineering, which of the following activities is explicitly included in the practice of engineering?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Teaching engineering at a university</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Consulting for foreign governments</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Researching environmental policy</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Managing human resources in a construction company</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> The Alberta definition explicitly includes teaching engineering at a university as part of the practice of engineering, in addition to the standard technical activities.</div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 16</div>
+    <div class="q-text">The Geoscientists Canada model definition states that the practice of geoscience involves advancing knowledge through:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Applied mathematics and engineering principles</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Commercial resource extraction activities</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Environmental monitoring and cleanup</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Scientific investigation and interpretation of the Earth and earth-forming processes</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> The model definition states: "The practice of geoscience is when a person, through specialized education, training and experience, advances knowledge of the Earth and earth-forming processes through scientific investigation and interpretation."</div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 17</div>
+    <div class="q-text">What is the distinction between "regulations" and "bylaws" within a provincial engineering Association?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Regulations govern elections; bylaws govern admission procedures</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Regulations clarify the Act or define procedures; bylaws govern running the Association itself</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Regulations are voluntary guides; bylaws are legally binding</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>They are interchangeable terms with no meaningful distinction</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> Regulations clarify the Act or define procedures (admission, professional conduct, disciplinary procedures). Bylaws are rules for running the Association itself, such as election procedures.</div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 18</div>
+    <div class="q-text">In Quebec, professional engineering and geoscience Associations are known by a different name. What are they called?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Guildes</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Conseils</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Ordres</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Syndicats</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> In Quebec, the Associations are called Ordres (e.g., Ordre des ingénieurs du Québec), following the Quebec professional regulatory framework.</div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 19</div>
+    <div class="q-text">Which of the following best describes the purpose stated in every provincial or territorial engineering Act?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>To protect the public</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>To promote the economic interests of engineers</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>To ensure engineers earn competitive salaries</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>To restrict entry into the profession</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> Every Act has the purpose of protecting the public. The licensing and regulatory framework exists to protect the public welfare, not to serve the interests of the profession itself.</div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 20</div>
+    <div class="q-text">A Canadian professional engineering or geoscience licence differs from a U.S. licence in that a Canadian licence confers:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Only the right to use the title (P.Eng. or P.Geo.)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Only the right to practise the profession</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Neither practice rights nor title rights — it is voluntary</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Both the right to practise the profession AND the right to the title</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> A Canadian licence confers both the right to practise the profession and the right to the title (P.Eng. or P.Geo.). In the United States, licensing only confers the right to use the title.</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION C — Licensing Requirements (Q21-33)
+  ═══════════════════════════════════════════════ -->
+  <div class="section-heading">Section C — Licensing Requirements (Q21–33)</div>
+
+  <!-- Q21 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 21</div>
+    <div class="q-text">How many years of suitable engineering or geoscience experience are required for licensing in most Canadian provinces (excluding Quebec)?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Two years</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Four years</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Five years</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Three years</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The experience requirement is four years of suitable engineering or geoscience experience. Quebec requires three years of experience.</div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 22</div>
+    <div class="q-text">The Professional Practice Examination (PPE) tests applicants on which of the following?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Advanced technical engineering calculations</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Engineering design fundamentals and laboratory safety</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Canadian law, ethics, professionalism, self-regulation, governance, and legal concepts</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Construction practices and environmental management</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> The PPE tests non-technical knowledge of professionalism, ethics, self-regulation, governance of the professions, law, and legal concepts. It does not test technical engineering knowledge.</div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 23</div>
+    <div class="q-text">Under the Canadian experience requirements, at least how many months of practical experience must be in a Canadian environment?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>12 months</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>6 months</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>24 months</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>18 months</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> All Associations require applicants to obtain 12 months of work experience in a Canadian environment. This usually means working in Canada under a licensed professional.</div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 24</div>
+    <div class="q-text">Graduates of programs accredited by the CEAB are exempt from which component of the licensing exam process?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The Professional Practice Examination</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The experience requirement</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Both technical and PPE examinations</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Technical examinations</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> CEAB-accredited graduates are exempt from technical exams, but all applicants must still write the Professional Practice Examination regardless of their academic credentials.</div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 25</div>
+    <div class="q-text">For each branch of engineering, approximately how many three-hour technical examinations are there in the Engineers Canada syllabus?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>5 to 10</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>14 to 18</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>20 to 25</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>8 to 12</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> For each branch of engineering, there are about 14 to 18 three-hour technical examinations. Associations normally do not admit applicants to the exam program if the subset assigned exceeds nine exams.</div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 26</div>
+    <div class="q-text">What is the maximum pre-graduate work experience credit granted by most Associations toward the experience requirement?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>6 months</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>24 months</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>12 months</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>18 months</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> Most Associations grant up to 12 months' credit for work experience obtained before university graduation. The pre-graduate experience should preferably be obtained after the midpoint of the academic program.</div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 27</div>
+    <div class="q-text">An applicant holds an engineering degree from a university whose program is accredited by the U.S. ABET. How would Engineers Canada typically treat this degree?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>As equivalent to a Canadian degree, exempting the applicant from technical exams (subject to Board review)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>As unacceptable — applicant must restart an accredited Canadian program</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Acceptable only if the applicant also writes the FE exam</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>As requiring all 14–18 technical examinations</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> Engineers Canada has a mutual recognition agreement with ABET, recognizing U.S. ABET-accredited degrees as equivalent to Canadian degrees. A Board of Examiners may still overrule if the record appears deficient.</div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 28</div>
+    <div class="q-text">The Fundamentals of Engineering (FE) examination is a comprehensive exam that can satisfy confirmatory exam requirements in Alberta and some other provinces. It is administered by:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Engineers Canada (CCPE)</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The Canadian Engineering Accreditation Board (CEAB)</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>APEGA directly</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The U.S. National Council of Examiners for Engineering and Surveying (NCEES)</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> The FE examination is administered by the U.S. NCEES. It is an eight-hour exam with 120 general questions in the morning session and 60 discipline-specific questions in the afternoon.</div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 29</div>
+    <div class="q-text">Which of the following is NOT listed as one of the six basic requirements for obtaining a professional engineering or geoscience licence in Canada?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Good character</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Canadian citizenship or permanent residency</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Education</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Knowledge of professional practice and ethics</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The six basic requirements are: education, experience, knowledge of local practices, language proficiency, good character, and knowledge of professional practice and ethics. Canadian citizenship is NOT a basic requirement (though some provinces like Alberta request it for full membership).</div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 30</div>
+    <div class="q-text">When must an applicant typically write the Professional Practice Examination relative to their work experience?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Before starting any work experience</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Only after completing the full four years of experience</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Usually during the second or third year of work experience</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>At the same time as technical examinations, before any work experience</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> The PPE is usually written during the second or third year of work experience. It is not necessary to complete all four years before writing it.</div>
+  </div>
+
+  <!-- Q31 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 31</div>
+    <div class="q-text">The "Application of theory" criterion for quality engineering experience requires which type of engagement above all others?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Analysis, design and synthesis, testing and implementation — and is mandatory</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Project scheduling and budgeting</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Site visits and practical equipment operation</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Writing reports for government regulators</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> Application of theory — analysis, design and synthesis, testing methods, and implementation — is mandatory and must involve substantial experience. It is one of five quality criteria for engineering experience.</div>
+  </div>
+
+  <!-- Q32 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 32</div>
+    <div class="q-text">Unlike engineering, geoscience degree programs in Canada have no accreditation process. This means that licensing bodies must:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Accept all geoscience degrees automatically as equivalent</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Require all geoscience applicants to write technical examinations</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Rely only on postgraduate qualifications for admission</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Examine the undergraduate transcript for each applicant with a course-by-course comparison against the GKE syllabus</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> Since no accreditation process exists for geoscience programs, licensing bodies must examine each applicant's undergraduate transcripts and make a course-by-course comparison with the Geoscience Knowledge and Experience Requirements (GKE).</div>
+  </div>
+
+  <!-- Q33 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 33</div>
+    <div class="q-text">Which province is unique in Canada in that it regulates the designation of "Consulting Engineer," and what is the minimum private practice experience required?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Alberta — one year</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Ontario — two years</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>British Columbia — three years</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Quebec — five years</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> Ontario is the only jurisdiction in Canada that regulates the designation of "Consulting Engineer." To qualify, a member must have been continuously engaged for at least two years in private practice and have at least five years of experience since licensing.</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION D — Seals, Ethics & Discipline (Q34-41)
+  ═══════════════════════════════════════════════ -->
+  <div class="section-heading">Section D — Seals, Discipline &amp; the Code of Ethics (Q34–41)</div>
+
+  <!-- Q34 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 34</div>
+    <div class="q-text">When should a professional engineer apply their professional seal to a document?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>On all documents, including preliminary drafts, to show ongoing involvement</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>On preliminary documents marked "not for construction" only</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Only on final documents that the professional has prepared or approved</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Whenever requested by the employer, regardless of document status</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> The seal must be applied only to final documents. Preliminary documents must be marked "preliminary" or "not for construction" and are NOT sealed. The seal implies intimate knowledge of and control over the document.</div>
+  </div>
+
+  <!-- Q35 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 35</div>
+    <div class="q-text">A professional engineer seals and signs a set of drawings that were prepared entirely by a junior colleague without the engineer's review or supervision. This is most likely to constitute:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Professional misconduct</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Acceptable delegation of professional responsibility</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>A minor administrative irregularity only</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>A standard industry practice with no legal significance</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> A professional who knowingly signs or seals a document not personally prepared (or prepared by assistants under supervision) may be charged with professional misconduct and may also be liable for damages if the misrepresentation results in a loss.</div>
+  </div>
+
+  <!-- Q36 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 36</div>
+    <div class="q-text">What is "professional misconduct" as defined in provincial engineering Acts?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Any failure to attend continuing education sessions</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Voluntary withdrawal from the Association</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Failure to pay annual licensing fees</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Negligence, incompetence, or corruption, including a serious infraction of the Code of Ethics</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> Professional misconduct means negligence, incompetence, or corruption, including a serious infraction of the Association's Code of Ethics. The Association may reprimand, suspend, or expel members found guilty of professional misconduct.</div>
+  </div>
+
+  <!-- Q37 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 37</div>
+    <div class="q-text">The voluntary oath called the "Obligation of the Engineer," first used in 1925, was written by which famous author?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Winston Churchill</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Rudyard Kipling</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Arthur Conan Doyle</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>H.G. Wells</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The Obligation of the Engineer is a voluntary oath written by Rudyard Kipling, first used in 1925. Engineers who take the oath wear an iron ring on their working hand.</div>
+  </div>
+
+  <!-- Q38 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 38</div>
+    <div class="q-text">What is the critical difference between the "Obligation of the Engineer" (iron ring ceremony) and the Code of Ethics?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The Obligation applies only to structural engineers; the Code applies to all engineers</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The Code is voluntary; the Obligation is legally enforceable</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The Obligation is a voluntary commitment; infractions of the Code are subject to discipline under the Act</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>They are equivalent — both are legally enforceable under the Act</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> The Obligation is a voluntary commitment to high standards. However, infractions of the Code of Ethics are subject to discipline under the provincial Act. They must not be confused.</div>
+  </div>
+
+  <!-- Q39 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 39</div>
+    <div class="q-text">The Code of Ethics in each provincial Act covers the professional's duties to which of the following groups?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>The public, the employer/client, fellow professionals, the profession, and oneself</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>The employer/client and the government only</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The public and the profession only</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The employer/client, fellow professionals, and the government</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> The Code of Ethics includes, in general terms, the duties of the professional to the public, to the employer or client, to fellow professionals, to the profession, and to oneself.</div>
+  </div>
+
+  <!-- Q40 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 40</div>
+    <div class="q-text">When two or more professionals collaborate on different aspects of a project and both seal a document, what must each professional do?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Use only one seal to avoid confusion about responsibility</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Obtain joint approval from the provincial Association</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The most senior professional's seal alone is required</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Each professional must specify their area of responsibility in writing next to the seal</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> When two or more professionals collaborate, both seals are applied and each professional specifies their area of responsibility in writing next to the seal to delineate accountability.</div>
+  </div>
+
+  <!-- Q41 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 41</div>
+    <div class="q-text">The wearing of an iron ring on the working hand signifies that the engineer has:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Received an accredited engineering degree</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Participated in the ring ceremony and voluntarily sworn to maintain high professional standards</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Obtained a full P.Eng. licence</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Completed the mandatory ethics certification required by the provincial Act</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> Wearing an iron ring does NOT mean the wearer has received a degree or holds a licence. It indicates participation in the ring ceremony and a voluntary oath to maintain high standards in professional work.</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SECTION E — National Bodies, QPs & Bre-X (Q42-50)
+  ═══════════════════════════════════════════════ -->
+  <div class="section-heading">Section E — National Bodies, Qualified Persons &amp; Bre-X (Q42–50)</div>
+
+  <!-- Q42 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 42</div>
+    <div class="q-text">Engineers Canada holds the Canadian trademarks for which of the following engineering titles?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Geoscientist and P.Geo. only</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Doctor of Engineering (D.Eng.) and related academic titles</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>P.Eng., Professional Engineer, Engineer, Engineering, and Consulting Engineer (plus French equivalents)</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>EIT (Engineer-in-Training) and MIT (Member-in-Training) only</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> Engineers Canada holds the Canadian trademarks for P.Eng., Professional Engineer, Engineer, Engineering, Consulting Engineer, and the French equivalents. This prevents unauthorized use of these titles.</div>
+  </div>
+
+  <!-- Q43 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 43</div>
+    <div class="q-text">The CEAB (Canadian Engineering Accreditation Board) is a committee of Engineers Canada whose primary role is to:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Evaluate and accredit undergraduate engineering programs at Canadian universities</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Administer the Professional Practice Examination across Canada</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Negotiate mobility agreements with foreign engineering associations</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>License individual engineers at the national level</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> The CEAB evaluates undergraduate engineering programs at Canadian universities, develops academic criteria, arranges accreditation visits, and recommends for or against accreditation.</div>
+  </div>
+
+  <!-- Q44 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 44</div>
+    <div class="q-text">Under National Instrument 43-101 (NI 43-101), who is the only person permitted to publicly disclose scientific or technical information regarding a mineral project?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Any licensed professional engineer</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>A CEO or CFO of the mining company</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Any university-educated geologist</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>A Qualified Person (QP) as defined by the CSA</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> NI 43-101 states that only a Qualified Person (QP) — as defined by the Canadian Securities Administrators — can disclose scientific or technical information to the public regarding a mineral project.</div>
+  </div>
+
+  <!-- Q45 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 45</div>
+    <div class="q-text">One of the requirements for a Qualified Person (QP) under NI 43-101 is a minimum of how many years of experience in mineral exploration, mine development, or mineral project assessment?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Three years</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Five years</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Seven years</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Ten years</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The CSA defines a QP as requiring at least five years of experience in mineral exploration, mine development or operation, or mineral project assessment (or combination thereof) that is relevant to their professional degree or area of practice.</div>
+  </div>
+
+  <!-- Q46 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 46</div>
+    <div class="q-text">In the Bre-X fraud, what was the most critical breach of accepted geological practice that allowed the salting to go undetected?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>Not hiring a licensed geoscientist as lead geologist</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Failing to disclose the discovery to the Indonesian government</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Not splitting and storing half of each drill core sample for independent verification</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Using a non-accredited laboratory to assay the gold samples</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> Drill cores are ordinarily sawn in half along the centreline — one half tested and one half stored for double-checking. Bre-X did not follow this practice, and a single individual controlled all sample testing, allowing salting to proceed undetected.</div>
+  </div>
+
+  <!-- Q47 -->
+  <div class="q-card" data-correct="A">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 47</div>
+    <div class="q-text">What were the estimated total investor losses due to the Bre-X fraud?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>As high as $6 billion</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Approximately $500 million</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>As high as $70 billion (the stated gold value)</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Approximately $1.5 billion</button>
+    </div>
+    <div class="explanation"><strong>Correct: A.</strong> Estimates of the total loss to investors because of the Bre-X fraud run as high as $6 billion. The fraud seriously damaged the Canadian mining industry, making it difficult for legitimate junior mining companies to raise capital.</div>
+  </div>
+
+  <!-- Q48 -->
+  <div class="q-card" data-correct="D">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 48</div>
+    <div class="q-text">Canada has an estimated 30,000 "brownfields." The restoration of these contaminated properties requires the supervision of a QP and professionals are governed by which legislation?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>National Instrument 43-101</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>National Instrument 51-101</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>The Canada Water Act</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>The provincial and territorial Environmental Protection Act</button>
+    </div>
+    <div class="explanation"><strong>Correct: D.</strong> Professionals in the role of a QP in brownfield restoration are governed by the provincial and territorial Environmental Protection Act. Brownfields are typically sites of former gas stations, toxic dumps, or abandoned mines.</div>
+  </div>
+
+  <!-- Q49 -->
+  <div class="q-card" data-correct="B">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 49</div>
+    <div class="q-text">Under Canada's Agreement on Internal Trade (AIT), what mobility rights do licensed professional engineers and geoscientists have?</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>They must re-apply and pass the PPE in each new province</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>Full mobility — a professional in good standing can be licensed easily in any other province or territory</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>Mobility is restricted to adjacent provinces only</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>They must obtain a temporary licence and renew it annually in the new province</button>
+    </div>
+    <div class="explanation"><strong>Correct: B.</strong> The AIT is federal law enabling any worker qualified for an occupation in any part of Canada to work in that occupation anywhere in Canada. Licensed professionals in good standing can be licensed easily in other jurisdictions.</div>
+  </div>
+
+  <!-- Q50 -->
+  <div class="q-card" data-correct="C">
+    <span class="result-tag"></span>
+    <div class="q-num">Question 50</div>
+    <div class="q-text">A corporation that provides professional engineering services to the public in most Canadian provinces must obtain:</div>
+    <div class="options">
+      <button class="option" data-opt="A"><span class="opt-letter">A</span>A personal P.Eng. licence for every employee, including administrative staff</button>
+      <button class="option" data-opt="B"><span class="opt-letter">B</span>No special permit, as long as at least one employee is a licensed P.Eng.</button>
+      <button class="option" data-opt="C"><span class="opt-letter">C</span>A Permit to Practise (Certificate of Authorization), employ a supervising professional, and carry liability insurance</button>
+      <button class="option" data-opt="D"><span class="opt-letter">D</span>Approval from Engineers Canada (the federal body)</button>
+    </div>
+    <div class="explanation"><strong>Correct: C.</strong> A corporation must obtain a Permit to Practise (Certificate of Authorization), employ a professional engineer or geoscientist who assumes personal supervisory responsibility, and obtain liability insurance. In Ontario, every entity offering services to the public requires this certificate.</div>
+  </div>
+
+  <!-- RESULTS PANEL -->
+  <div id="results-panel">
+    <h2>Exam Complete</h2>
+    <p>Here is your final score for Chapter 2</p>
+    <div class="grade-circle">
+      <div class="grade-pct" id="final-pct">—</div>
+      <div class="grade-lbl">Score</div>
+    </div>
+    <div class="grade-msg" id="final-msg"></div>
+    <button class="btn-reset" onclick="resetExam()">↺ &nbsp;Restart Exam</button>
+  </div>
+
+</main>
+
+<footer>
+  NPPE Practice · Chapter 2 · Canadian Professional Engineering &amp; Geoscience, 6th Ed. &nbsp;|&nbsp; 50 Questions
+</footer>
+
+<script>
+  /* ─────────  STATE & PERSISTENCE  ───────── */
+  const STORAGE_KEY = 'nppe_ch2_state_v2';
+  const total = 50;
+  const cards = Array.from(document.querySelectorAll('.q-card'));
+
+  function loadState() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      return {
+        answers: s.answers || {},
+        points: s.points || 0,
+        streak: s.streak || 0,
+        maxStreak: s.maxStreak || 0
+      };
+    } catch (e) { return { answers: {}, points: 0, streak: 0, maxStreak: 0 }; }
+  }
+
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  /* ─────────  ANSWER APPLICATION (used for both fresh clicks and restore)  ───────── */
+  function applyAnswerToCard(card, chosen, isCorrect, correctOpt, fresh) {
+    const buttons = card.querySelectorAll('.option');
+    const explanation = card.querySelector('.explanation');
+    const tag = card.querySelector('.result-tag');
+
+    buttons.forEach(b => {
+      b.disabled = true;
+      if (b.dataset.opt === chosen) {
+        b.classList.add(isCorrect ? 'correct' : 'wrong');
+        if (isCorrect && fresh) b.classList.add('fresh-correct');
+      }
+      if (!isCorrect && b.dataset.opt === correctOpt) {
+        b.classList.add('correct');
+      }
+    });
+
+    card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+    if (tag) {
+      tag.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+      tag.classList.add('show', isCorrect ? 'correct' : 'wrong');
+    }
+    if (explanation) explanation.classList.add('visible');
+  }
+
+  function restoreFromState() {
+    const state = loadState();
+    cards.forEach((card, idx) => {
+      const ans = state.answers[idx];
+      if (ans !== undefined) {
+        const correctOpt = card.dataset.correct;
+        const isCorrect = ans === correctOpt;
+        applyAnswerToCard(card, ans, isCorrect, correctOpt, false);
+      }
+    });
+    updateStats();
+    if (Object.keys(state.answers).length === total) {
+      showResults(false);
+    }
+  }
+
+  /* ─────────  STATS UPDATE  ───────── */
+  function updateStats() {
+    const state = loadState();
+    const answered = Object.keys(state.answers).length;
+    let correctCount = 0;
+    Object.entries(state.answers).forEach(([k, v]) => {
+      const card = cards[k];
+      if (card && card.dataset.correct === v) correctCount++;
+    });
+    const wrongCount = answered - correctCount;
+
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setText('sc-answered', answered);
+    setText('sc-correct', correctCount);
+    setText('sc-wrong', wrongCount);
+    setText('sc-remain', total - answered);
+    setText('points', state.points);
+    setText('streak', state.streak);
+
+    const fill = document.getElementById('progress-fill');
+    if (fill) fill.style.width = (answered / total * 100) + '%';
+
+    const streakStat = document.getElementById('streakStat');
+    if (streakStat) {
+      if (state.streak >= 3) streakStat.classList.add('hot');
+      else streakStat.classList.remove('hot');
+    }
+  }
+
+  /* ─────────  CLICK HANDLER WIRING  ───────── */
+  cards.forEach((card, idx) => {
+    const correctOpt = card.dataset.correct;
+    const buttons = card.querySelectorAll('.option');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const state = loadState();
+        if (state.answers[idx] !== undefined) return;
+
+        const chosen = this.dataset.opt;
+        const isCorrect = chosen === correctOpt;
+
+        state.answers[idx] = chosen;
+
+        let pointsEarned = 0;
+        if (isCorrect) {
+          state.streak += 1;
+          if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+          const bonus = Math.min((state.streak - 1) * 2, 20);
+          pointsEarned = 10 + bonus;
+          state.points += pointsEarned;
+        } else {
+          state.streak = 0;
+        }
+
+        saveState(state);
+        applyAnswerToCard(card, chosen, isCorrect, correctOpt, true);
+        updateStats();
+
+        requestAnimationFrame(() => {
+          if (isCorrect) celebrate(this, pointsEarned, state.streak);
+          else shakeWrong(this);
+
+          if (Object.keys(state.answers).length === total) {
+            setTimeout(() => {
+              completionCelebration(state);
+              showResults(true);
+            }, 900);
+          }
+        });
+      });
+    });
+  });
+
+  /* ─────────  RESULTS PANEL  ───────── */
+  function showResults(scrollTo) {
+    const panel = document.getElementById('results-panel');
+    if (!panel) return;
+    panel.style.display = 'block';
+    const state = loadState();
+    let correctCount = 0;
+    Object.entries(state.answers).forEach(([k, v]) => {
+      if (cards[k] && cards[k].dataset.correct === v) correctCount++;
+    });
+    const pct = Math.round(correctCount / total * 100);
+    const pctEl = document.getElementById('final-pct');
+    const msgEl = document.getElementById('final-msg');
+    if (pctEl) pctEl.textContent = pct + '%';
+    let msg = '';
+    if (pct >= 75) msg = 'Excellent — NPPE Ready';
+    else if (pct >= 60) msg = 'Good — Keep Reviewing';
+    else msg = 'Needs More Study';
+    if (msgEl) msgEl.textContent = msg;
+    if (scrollTo) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ─────────  RESET  ───────── */
+  function resetExam() {
+    if (!confirm('Reset all answers, points, and streaks? Start completely fresh?')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    cards.forEach(card => {
+      card.className = 'q-card';
+      card.querySelectorAll('.option').forEach(b => {
+        b.disabled = false;
+        b.className = 'option';
+      });
+      const exp = card.querySelector('.explanation');
+      if (exp) exp.classList.remove('visible');
+      const tag = card.querySelector('.result-tag');
+      if (tag) {
+        tag.className = 'result-tag';
+        tag.textContent = '';
+      }
+    });
+    const panel = document.getElementById('results-panel');
+    if (panel) panel.style.display = 'none';
+    updateStats();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      cards.forEach((c, i) => {
+        setTimeout(() => c.classList.add('in-view'), i * 30);
+      });
+    }, 100);
+  }
+
+  /* ─────────  CELEBRATION FX ENGINE  ───────── */
+  const canvas = document.getElementById('fxCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+  resizeCanvas();
+  addEventListener('resize', resizeCanvas);
+
+  function drawStar(x, y, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const radius = i % 2 === 0 ? r : r * 0.45;
+      const a = (i * Math.PI) / 5 - Math.PI / 2;
+      const px = x + Math.cos(a) * radius;
+      const py = y + Math.sin(a) * radius;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => {
+      p.vy += p.gravity;
+      p.vx *= 0.992;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 1;
+      p.rot = (p.rot || 0) + (p.spin || 0);
+      if (p.life <= 0 || p.y > canvas.height + 30) return false;
+      ctx.globalAlpha = Math.min(1, p.life / 40);
+      if (p.shape === 'star') {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        drawStar(0, 0, p.size, p.color);
+        ctx.restore();
+      } else if (p.shape === 'square') {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size, -p.size * 0.4, p.size * 2, p.size * 0.8);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      return true;
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  /* Palette tuned to the file's navy + gold theme */
+  const COLORS_GOLD  = ['#c9a84c','#e2c97e','#f5ecd0','#b8860b','#fbbf24','#fff8dc'];
+  const COLORS_PARTY = ['#c9a84c','#1e7a4a','#0d1b2a','#e2c97e','#fff','#fbbf24','#1a2d42'];
+
+  function fireworks(x, y, count, colors, power) {
+    count = count || 28;
+    colors = colors || COLORS_PARTY;
+    power = power || 1;
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+      const speed = (2.5 + Math.random() * 4) * power;
+      const shapes = ['circle', 'star', 'star', 'circle'];
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 55 + Math.random() * 35,
+        size: 2 + Math.random() * 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        gravity: 0.13,
+        shape: shapes[Math.floor(Math.random() * shapes.length)],
+        rot: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.2
+      });
+    }
+  }
+
+  function goldenShower(duration, intensity) {
+    duration = duration || 1800;
+    intensity = intensity || 5;
+    const start = Date.now();
+    const interval = setInterval(() => {
+      if (Date.now() - start > duration) { clearInterval(interval); return; }
+      for (let i = 0; i < intensity; i++) {
+        const shape = Math.random() > 0.5 ? 'star' : (Math.random() > 0.5 ? 'square' : 'circle');
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -15,
+          vx: (Math.random() - 0.5) * 1.8,
+          vy: 1.5 + Math.random() * 2.5,
+          life: 240,
+          size: 3 + Math.random() * 4,
+          color: COLORS_GOLD[Math.floor(Math.random() * COLORS_GOLD.length)],
+          gravity: 0.04,
+          shape,
+          rot: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.25
+        });
+      }
+    }, 35);
+  }
+
+  function floatPoints(x, y, points, streak) {
+    const el = document.createElement('div');
+    el.className = 'float-pts';
+    let emoji = '✨';
+    if (streak >= 10) emoji = '🌟';
+    else if (streak >= 5) emoji = '⭐';
+    else if (streak >= 3) emoji = '🔥';
+    let text = `+${points} ${emoji}`;
+    if (streak >= 2) text += ` ×${streak}`;
+    el.textContent = text;
+    el.style.left = x + 'px';
+    el.style.top = (y - 20) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  function happyFace(x, y) {
+    const faces = ['😊','😄','🎉','🌟','💫','✨'];
+    const el = document.createElement('div');
+    el.className = 'float-pts';
+    el.style.fontSize = '2.2rem';
+    el.textContent = faces[Math.floor(Math.random() * faces.length)];
+    el.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
+    el.style.top = y + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  function pulseStreak() {
+    const stat = document.getElementById('streakStat');
+    if (!stat) return;
+    stat.classList.add('pulse');
+    setTimeout(() => stat.classList.remove('pulse'), 700);
+  }
+
+  function shakeWrong(optEl) {
+    optEl.classList.add('shake');
+    setTimeout(() => optEl.classList.remove('shake'), 500);
+  }
+
+  function celebrate(optEl, points, streak) {
+    const rect = optEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    fireworks(cx, cy, 28, COLORS_PARTY, 1);
+    floatPoints(cx, rect.top, points, streak);
+    pulseStreak();
+    if (streak >= 3) {
+      setTimeout(() => fireworks(cx, cy, 18, COLORS_GOLD, 0.8), 100);
+      happyFace(cx, rect.top - 10);
+    }
+    if (streak >= 5) {
+      setTimeout(() => fireworks(80, 80, 20, COLORS_GOLD, 0.9), 150);
+      setTimeout(() => fireworks(canvas.width - 80, 80, 20, COLORS_GOLD, 0.9), 250);
+    }
+    if ([5, 10, 15, 20, 25].includes(streak)) {
+      showMilestone(streak);
+      goldenShower(2200, 7);
+    }
+  }
+
+  function showMilestone(streak) {
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    let title;
+    if (streak >= 25) title = '👑 LEGENDARY';
+    else if (streak >= 20) title = '🏆 Unstoppable!';
+    else if (streak >= 15) title = '💎 Phenomenal!';
+    else if (streak >= 10) title = '⭐ Brilliant!';
+    else title = '🔥 On Fire!';
+    banner.innerHTML = `${title}<span class="small">${streak} correct in a row</span>`;
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 2400);
+  }
+
+  function completionCelebration(state) {
+    const correct = Object.entries(state.answers).filter(([k, v]) => cards[k] && cards[k].dataset.correct === v).length;
+    const pct = Math.round(correct / total * 100);
+    goldenShower(4500, 10);
+    setTimeout(() => fireworks(innerWidth / 2, innerHeight / 3, 60, COLORS_PARTY, 1.4), 200);
+    setTimeout(() => fireworks(innerWidth * 0.25, innerHeight / 2.5, 45, COLORS_GOLD, 1.2), 700);
+    setTimeout(() => fireworks(innerWidth * 0.75, innerHeight / 2.5, 45, COLORS_GOLD, 1.2), 1100);
+    setTimeout(() => fireworks(innerWidth / 2, innerHeight / 2, 70, COLORS_PARTY, 1.5), 1700);
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    let title;
+    if (pct === 100) title = '🏆 PERFECT SCORE';
+    else if (pct >= 80) title = '🌟 Outstanding!';
+    else if (pct >= 65) title = '✅ You Pass!';
+    else title = '💪 Keep Studying!';
+    banner.innerHTML = `${title}<span class="small">${correct} / ${total} · ${state.points} pts · best streak ${state.maxStreak}</span>`;
+    banner.style.animationDuration = '4.5s';
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 4500);
+  }
+
+  /* ─────────  SCROLL-REVEAL OBSERVER (preserved from original)  ───────── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+  }, { threshold: 0.08 });
+  cards.forEach(c => observer.observe(c));
+
+  /* ─────────  INITIAL RESTORE  ───────── */
+  restoreFromState();
+</script>
+</body>
+</html>
