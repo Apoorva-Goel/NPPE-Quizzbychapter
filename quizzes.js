@@ -53,7 +53,13 @@ window.QUIZZES_DATA = {
         { num: 8,  title: "Diversity in the Professional Workplace",            file: "book1/chapter8.html",  questions: 50 },
         { num: 9,  title: "Principles of Ethics and Justice",                   file: "book1/chapter9.html",  questions: 50 },
         { num: 10, title: "Ethics & Employment",                                file: "book1/chapter10.html", questions: 50 },
-        { num: 11, title: "Ethics Concepts and Cases: Management",              file: "book1/chapter11.html", questions: 50 }
+        { num: 11, title: "Ethics Concepts and Cases: Management",              file: "book1/chapter11.html", questions: 50 },
+        { num: 12, title: "Ethics Cases: Professional Practice",                file: "book1/chapter12.html", questions: 50 },
+        { num: 13, title: "Environmental Ethics",                               file: "book1/chapter13.html", questions: 50 },
+        { num: 14, title: "Environmental Threats & Disasters",                  file: "book1/chapter14.html", questions: 50 },
+        { num: 15, title: "Environmental Sustainability",                       file: "book1/chapter15.html", questions: 50 },
+        { num: 17, title: "Maintaining Your Professional Competence",           file: "book1/chapter17.html", questions: 50 },
+        { num: 18, title: "Benefiting from Technical Societies",                file: "book1/chapter18.html", questions: 50 }
         // EXAMPLE — add chapter 12 like this when ready:
         // ,{ num: 12, title: "Ethics Cases: Professional Practice",             file: "book1/chapter12.html", questions: 50 }
       ]
