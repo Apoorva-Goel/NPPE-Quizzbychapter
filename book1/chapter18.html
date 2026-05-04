@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice — Chapter 18: Benefiting from Technical Societies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0a1628;
+    --navy-800:#0f1e36;
+    --navy-700:#152844;
+    --navy-600:#1c3457;
+    --navy-500:#264870;
+    --gold-500:#c9a961;
+    --gold-400:#d9bd7c;
+    --gold-300:#e6cf99;
+    --gold-200:#f1e0b8;
+    --cream:#f4ead5;
+    --paper:#fbf6e9;
+    --green:#5fb88a;
+    --red:#d96b6b;
+    --shadow:0 18px 40px -12px rgba(0,0,0,.55);
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    background:radial-gradient(ellipse at top, var(--navy-700), var(--navy-900) 70%);
+    color:var(--cream);
+    min-height:100vh;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(rgba(201,169,97,.05) 1px, transparent 1px);
+    background-size:24px 24px;
+    pointer-events:none;
+    z-index:0;
+  }
+  #celebration-canvas{
+    position:fixed;inset:0;pointer-events:none;z-index:9999;
+  }
+  .wrap{
+    max-width:980px;margin:0 auto;padding:32px 24px 64px;position:relative;z-index:1;
+  }
+  header.hero{
+    text-align:center;padding:24px 0 32px;
+    border-bottom:1px solid rgba(201,169,97,.18);
+    margin-bottom:32px;
+  }
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--gold-400);font-weight:500;margin-bottom:14px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    line-height:1.05;
+    letter-spacing:-.01em;
+    color:var(--paper);
+    margin-bottom:10px;
+  }
+  h1 em{
+    font-style:italic;color:var(--gold-300);font-weight:400;
+  }
+  .subtitle{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--gold-200);
+    opacity:.85;
+  }
+  .meta-row{
+    display:flex;justify-content:center;gap:20px;flex-wrap:wrap;
+    margin-top:18px;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold-400);opacity:.75;
+  }
+  .meta-row span::before{content:'◆ ';color:var(--gold-500);opacity:.6;}
+
+  /* Mode selection screen */
+  .mode-card{
+    background:linear-gradient(160deg, var(--navy-700), var(--navy-800));
+    border:1px solid rgba(201,169,97,.2);
+    border-radius:14px;padding:36px;
+    box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .mode-card h2{
+    font-family:var(--serif);font-weight:500;font-size:1.9rem;
+    color:var(--gold-300);margin-bottom:8px;
+  }
+  .mode-card p{color:rgba(244,234,213,.78);margin-bottom:24px;font-size:.97rem;}
+  .mode-options{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:600px){.mode-options{grid-template-columns:1fr}}
+  .mode-btn{
+    background:var(--navy-600);
+    border:1.5px solid rgba(201,169,97,.25);
+    color:var(--cream);
+    padding:22px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:left;
+    transition:all .25s ease;
+    font-family:var(--sans);
+  }
+  .mode-btn:hover{
+    border-color:var(--gold-400);
+    background:var(--navy-500);
+    transform:translateY(-2px);
+    box-shadow:0 12px 24px -8px rgba(0,0,0,.4);
+  }
+  .mode-btn .label{
+    font-family:var(--serif);font-size:1.45rem;font-weight:600;
+    color:var(--gold-300);display:block;margin-bottom:4px;
+  }
+  .mode-btn .desc{font-size:.86rem;color:rgba(244,234,213,.7);line-height:1.5;}
+
+  /* Progress + nav */
+  .progress-bar{
+    height:4px;background:rgba(201,169,97,.12);border-radius:4px;overflow:hidden;
+    margin-bottom:18px;
+  }
+  .progress-fill{
+    height:100%;background:linear-gradient(90deg,var(--gold-500),var(--gold-300));
+    transition:width .4s ease;width:0%;
+  }
+  .status-row{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:20px;font-size:.85rem;
+  }
+  .status-row .stat{color:var(--gold-400);letter-spacing:.12em;text-transform:uppercase;font-weight:500;}
+  .status-row .stat strong{color:var(--paper);font-family:var(--serif);font-size:1.15rem;font-weight:600;margin-left:6px;}
+  .streak-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(201,169,97,.12);border:1px solid rgba(201,169,97,.3);
+    padding:4px 12px;border-radius:20px;color:var(--gold-300);font-weight:500;
+    font-size:.78rem;
+  }
+  .streak-pill.hot{
+    background:rgba(217,107,107,.18);border-color:#e89070;color:#ffd9b8;
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  /* Question card */
+  .q-card{
+    background:linear-gradient(160deg, var(--navy-700), var(--navy-800));
+    border:1px solid rgba(201,169,97,.18);
+    border-radius:14px;
+    padding:32px 30px;
+    box-shadow:var(--shadow);
+    animation:fadein .35s ease;
+  }
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .q-num{
+    font-family:var(--serif);font-style:italic;color:var(--gold-400);
+    font-size:1.05rem;margin-bottom:8px;letter-spacing:.04em;
+  }
+  .q-text{
+    font-family:var(--serif);font-weight:500;
+    font-size:1.4rem;line-height:1.4;color:var(--paper);
+    margin-bottom:24px;
+  }
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{
+    background:var(--navy-600);
+    border:1.5px solid rgba(201,169,97,.18);
+    color:var(--cream);
+    padding:14px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:var(--sans);font-size:.96rem;
+    text-align:left;
+    transition:all .2s ease;
+    display:flex;align-items:flex-start;gap:14px;
+    line-height:1.5;
+  }
+  .option:hover:not(.disabled){
+    border-color:var(--gold-400);
+    background:var(--navy-500);
+    transform:translateX(4px);
+  }
+  .option .letter{
+    font-family:var(--serif);font-weight:600;
+    color:var(--gold-300);font-size:1.1rem;
+    flex-shrink:0;width:20px;
+  }
+  .option.disabled{cursor:default;opacity:.85;}
+  .option.selected{border-color:var(--gold-400);background:var(--navy-500);}
+  .option.correct{
+    border-color:var(--green);
+    background:rgba(95,184,138,.18);
+    color:#cfeede;
+  }
+  .option.correct .letter{color:var(--green);}
+  .option.incorrect{
+    border-color:var(--red);
+    background:rgba(217,107,107,.18);
+    color:#f4cccc;
+  }
+  .option.incorrect .letter{color:var(--red);}
+
+  .feedback{
+    margin-top:20px;
+    padding:16px 20px;
+    border-radius:8px;
+    font-size:.93rem;
+    line-height:1.6;
+    border-left:3px solid var(--gold-500);
+    background:rgba(15,30,54,.5);
+    animation:fadein .3s ease;
+  }
+  .feedback .verdict{
+    font-family:var(--serif);font-size:1.2rem;font-weight:600;
+    margin-bottom:8px;
+  }
+  .feedback.right .verdict{color:var(--green);}
+  .feedback.wrong .verdict{color:var(--red);}
+  .feedback .explanation{color:rgba(244,234,213,.85);}
+  .feedback .explanation strong{color:var(--gold-300);}
+
+  .controls{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    margin-top:24px;
+  }
+  .btn{
+    background:var(--gold-500);color:var(--navy-900);
+    border:none;padding:11px 22px;border-radius:6px;
+    font-family:var(--sans);font-weight:600;font-size:.88rem;
+    letter-spacing:.08em;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;
+  }
+  .btn:hover{background:var(--gold-400);transform:translateY(-1px);box-shadow:0 8px 16px -4px rgba(201,169,97,.4);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn.secondary{
+    background:transparent;color:var(--gold-300);
+    border:1.5px solid rgba(201,169,97,.4);
+  }
+  .btn.secondary:hover{background:rgba(201,169,97,.1);}
+  .btn.danger{background:transparent;color:#e89090;border:1.5px solid rgba(217,107,107,.4);}
+  .btn.danger:hover{background:rgba(217,107,107,.12);}
+
+  /* Question grid navigator */
+  .grid-nav{
+    margin-top:24px;
+    background:rgba(15,30,54,.5);
+    border:1px solid rgba(201,169,97,.15);
+    border-radius:10px;
+    padding:18px;
+  }
+  .grid-nav .label{
+    font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold-400);margin-bottom:12px;font-weight:500;
+  }
+  .grid-cells{
+    display:grid;grid-template-columns:repeat(10, 1fr);gap:6px;
+  }
+  @media (max-width:600px){.grid-cells{grid-template-columns:repeat(8, 1fr)}}
+  .grid-cell{
+    aspect-ratio:1;
+    background:var(--navy-600);
+    border:1px solid rgba(201,169,97,.15);
+    border-radius:5px;
+    color:var(--cream);
+    font-size:.78rem;
+    cursor:pointer;
+    font-family:var(--sans);font-weight:500;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s;
+  }
+  .grid-cell:hover{transform:scale(1.08);border-color:var(--gold-400);}
+  .grid-cell.current{border-color:var(--gold-400);background:var(--navy-500);box-shadow:0 0 0 2px rgba(201,169,97,.3);}
+  .grid-cell.correct{background:rgba(95,184,138,.25);border-color:var(--green);color:#cfeede;}
+  .grid-cell.incorrect{background:rgba(217,107,107,.22);border-color:var(--red);color:#f4cccc;}
+  .grid-cell.answered{background:var(--navy-500);border-color:rgba(201,169,97,.4);}
+
+  /* Results */
+  .results-card{
+    text-align:center;
+    background:linear-gradient(160deg, var(--navy-700), var(--navy-800));
+    border:1px solid rgba(201,169,97,.25);
+    border-radius:14px;
+    padding:48px 32px;
+    box-shadow:var(--shadow);
+  }
+  .results-card .score-num{
+    font-family:var(--serif);
+    font-size:5.5rem;font-weight:500;
+    color:var(--gold-300);
+    line-height:1;margin:14px 0;
+  }
+  .results-card .score-num em{font-style:normal;color:rgba(244,234,213,.45);font-size:.55em;}
+  .results-card h2{font-family:var(--serif);color:var(--paper);font-weight:500;font-size:2.2rem;margin-bottom:6px;}
+  .results-card .verdict-line{
+    font-family:var(--serif);font-style:italic;font-size:1.25rem;
+    color:var(--gold-300);margin-bottom:24px;
+  }
+  .stats-grid{
+    display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:16px;
+    margin:30px auto;max-width:600px;
+  }
+  .stat-box{
+    background:rgba(15,30,54,.5);
+    border:1px solid rgba(201,169,97,.18);
+    border-radius:8px;padding:16px;
+  }
+  .stat-box .num{
+    font-family:var(--serif);font-size:1.9rem;font-weight:600;color:var(--gold-300);
+    line-height:1;display:block;margin-bottom:4px;
+  }
+  .stat-box .lbl{
+    font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+    color:rgba(244,234,213,.65);
+  }
+  .results-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+
+  /* Modal */
+  .modal-back{
+    position:fixed;inset:0;background:rgba(0,0,0,.7);
+    display:none;align-items:center;justify-content:center;
+    z-index:1000;backdrop-filter:blur(3px);
+    padding:20px;
+  }
+  .modal-back.show{display:flex;}
+  .modal{
+    background:var(--navy-700);
+    border:1px solid rgba(201,169,97,.3);
+    border-radius:12px;
+    padding:30px;max-width:420px;
+    box-shadow:var(--shadow);text-align:center;
+  }
+  .modal h3{font-family:var(--serif);font-size:1.6rem;color:var(--gold-300);font-weight:500;margin-bottom:8px;}
+  .modal p{color:rgba(244,234,213,.8);margin-bottom:20px;font-size:.95rem;}
+  .modal-actions{display:flex;gap:12px;justify-content:center;}
+
+  /* Floating points */
+  .points-pop{
+    position:fixed;
+    pointer-events:none;
+    font-family:var(--serif);font-weight:600;font-size:2rem;
+    color:var(--gold-300);
+    text-shadow:0 2px 8px rgba(0,0,0,.5);
+    animation:floatup 1.4s ease-out forwards;
+    z-index:10000;
+  }
+  @keyframes floatup{
+    0%{opacity:0;transform:translateY(0) scale(.5);}
+    20%{opacity:1;transform:translateY(-20px) scale(1.2);}
+    100%{opacity:0;transform:translateY(-90px) scale(.9);}
+  }
+
+  footer{
+    margin-top:40px;text-align:center;font-size:.78rem;
+    color:rgba(201,169,97,.4);letter-spacing:.15em;text-transform:uppercase;
+  }
+  footer em{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;color:var(--gold-400);}
+</style>
+</head>
+<body>
+<canvas id="celebration-canvas"></canvas>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">NPPE Ontario · Practice Examination</div>
+    <h1>Chapter Eighteen<br><em>Benefiting from Technical Societies</em></h1>
+    <div class="subtitle">Canadian Professional Engineering &amp; Geoscience · 6th Edition</div>
+    <div class="meta-row">
+      <span>50 Questions</span>
+      <span>Two Modes</span>
+      <span>Streak Bonuses</span>
+    </div>
+  </header>
+
+  <!-- Mode selection -->
+  <div id="mode-screen">
+    <div class="mode-card">
+      <h2>Choose Your Mode</h2>
+      <p>Practice for instant feedback after each answer, or simulate the exam and review at the end.</p>
+      <div class="mode-options">
+        <button class="mode-btn" onclick="startQuiz('practice')">
+          <span class="label">Practice Mode</span>
+          <span class="desc">See the correct answer and explanation immediately after each question. Best for first pass through the chapter.</span>
+        </button>
+        <button class="mode-btn" onclick="startQuiz('exam')">
+          <span class="label">Exam Mode</span>
+          <span class="desc">Answer all 50 questions before reviewing. Mimics the timed-pressure feel of the real NPPE.</span>
+        </button>
+      </div>
+    </div>
+    <div id="resume-row" style="display:none">
+      <div class="mode-card" style="text-align:center">
+        <h2 style="font-size:1.4rem">Continue Previous Session?</h2>
+        <p id="resume-detail">A session is in progress.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" onclick="resumeSession()">Resume</button>
+          <button class="btn secondary" onclick="clearSession();location.reload()">Discard &amp; Start Over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz screen -->
+  <div id="quiz-screen" style="display:none">
+    <div class="status-row">
+      <div class="stat">Question <strong id="q-current">1</strong> <span style="opacity:.45">/ 50</span></div>
+      <div class="stat">Score <strong id="score-display">0</strong></div>
+      <div id="streak-pill-wrap"></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="q-card" id="q-card"></div>
+
+    <div class="controls">
+      <button class="btn secondary" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+      <button class="btn danger" onclick="confirmReset()">Reset Quiz</button>
+      <button class="btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+    </div>
+
+    <div class="grid-nav">
+      <div class="label">Question Navigator</div>
+      <div class="grid-cells" id="grid-cells"></div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="results-screen" style="display:none"></div>
+
+  <footer>
+    <em>Bona fide, sapientia, diligentia</em> · For exam preparation only
+  </footer>
+</div>
+
+<!-- Reset confirmation modal -->
+<div class="modal-back" id="reset-modal">
+  <div class="modal">
+    <h3>Reset the entire quiz?</h3>
+    <p>Your current score, streak, and answers will be cleared. The questions will be shuffled into a new order.</p>
+    <div class="modal-actions">
+      <button class="btn secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="resetQuiz()">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTION BANK — 50 NPPE-style MCQs on Chapter 18
+   ============================================================ */
+const QUESTIONS = [
+  {
+    q: "What is the principal role of technical societies in the engineering and geoscience professions?",
+    options: [
+      "To license practitioners and discipline members for professional misconduct",
+      "To encourage research, classify new information, and disseminate it through journals, codes, and standards",
+      "To negotiate salaries and working conditions on behalf of professionals",
+      "To set the legal scope of practice in each Canadian province"
+    ],
+    answer: 1,
+    why: "Technical societies have, for almost two centuries, encouraged research, collected and classified new information, and disseminated it to members through journals, conference proceedings, codes and standards. Licensing is the role of the provincial/territorial Associations, not technical societies."
+  },
+  {
+    q: "How do technical societies differ from provincial and territorial Associations such as PEO or APEGA?",
+    options: [
+      "Technical societies have larger budgets and more enforcement power",
+      "Provincial Associations are voluntary, while technical societies are mandatory",
+      "Provincial Associations license professionals; technical societies focus on knowledge dissemination and do not license",
+      "There is no meaningful difference; the terms are interchangeable"
+    ],
+    answer: 2,
+    why: "Provincial and territorial Associations are the bodies that license professional engineers and geoscientists in Canada. Technical societies should not be confused with these licensing Associations — they exist to stimulate thought, share information, and support professional development."
+  },
+  {
+    q: "In Britain, what title do many engineering technical societies confer through voluntary certification?",
+    options: [
+      "Registered Professional Engineer",
+      "Chartered Engineer",
+      "Licensed Practitioner of Engineering",
+      "Engineering Fellow of the Realm"
+    ],
+    answer: 1,
+    why: "In countries lacking Canada-style licensing laws, many British engineering societies — which began as technical societies — now award 'Chartered Engineer' status as a highly regarded voluntary certification. This does not, however, permit the holder to practise engineering in Canada."
+  },
+  {
+    q: "When and where was the first technical society for engineers established?",
+    options: [
+      "France, 1789",
+      "Britain, 1818",
+      "United States, 1852",
+      "Germany, 1875"
+    ],
+    answer: 1,
+    why: "The Institute of Civil Engineers, established in Britain in 1818, was the first technical society for engineers. It emerged during the Industrial Revolution as people gathered to discuss ideas and inventions for mechanizing work."
+  },
+  {
+    q: "Which was the first engineering society founded in the United States?",
+    options: [
+      "American Society of Mechanical Engineers (1880)",
+      "American Institute of Electrical Engineers (1884)",
+      "American Society of Civil Engineers (1852)",
+      "American Society of Heating and Ventilating Engineers (1894)"
+    ],
+    answer: 2,
+    why: "The American Society of Civil Engineers, founded in 1852, was the first engineering society established in the United States. Many other related societies followed in the late nineteenth century."
+  },
+  {
+    q: "The Geological Survey of Canada (G.S.C.), called one of the most successful scientific institutions of its time, dates from what year?",
+    options: [
+      "1842",
+      "1867",
+      "1885",
+      "1900"
+    ],
+    answer: 0,
+    why: "The Geological Survey of Canada is a government institution dating from 1842. It has been described as one of the most successful scientific societies of its time and continues to collect and disseminate vital geological data."
+  },
+  {
+    q: "What was the first engineering society to be formed in Canada?",
+    options: [
+      "The Engineering Institute of Canada",
+      "The Canadian Institute of Mining and Metallurgy",
+      "The Engineering Society of the University of Toronto (1885)",
+      "The Canadian Forestry Association"
+    ],
+    answer: 2,
+    why: "The Engineering Society of the University of Toronto, formed in 1885, was the first engineering society in Canada. It functioned as a learned society — publishing and disseminating technical information in addition to looking after undergraduate engineering students."
+  },
+  {
+    q: "The Engineering Institute of Canada (E.I.C.) was originally formed in 1887. When was the name 'Engineering Institute of Canada' actually adopted?",
+    options: [
+      "1887",
+      "1900",
+      "1917",
+      "1935"
+    ],
+    answer: 2,
+    why: "Although the predecessor society was formed in 1887, the name 'Engineering Institute of Canada' was not adopted until 1917."
+  },
+  {
+    q: "Under Canadian income tax law, technical society membership dues for practising professionals are:",
+    options: [
+      "Subject to GST/HST surcharges only",
+      "Deductible from personal income",
+      "Reimbursable directly by the federal government",
+      "Treated as a non-deductible personal expense"
+    ],
+    answer: 1,
+    why: "Because of the value and usefulness of technical societies to professional practice, their membership dues are deductible from personal income for practising professionals under Canadian income tax laws."
+  },
+  {
+    q: "Which of the following is NOT one of the typical organizing forms a technical society may take, as described in the chapter?",
+    options: [
+      "Discipline-oriented societies",
+      "Geographical societies",
+      "Federations of societies",
+      "Religious-affiliation societies"
+    ],
+    answer: 3,
+    why: "The chapter identifies four typical forms: discipline-oriented societies, geographical societies, federations of societies, and government/industrial organizations functioning as societies. Religious affiliation is not among them."
+  },
+  {
+    q: "The Engineering Institute of Canada has evolved into what kind of organization in its modern form?",
+    options: [
+      "A federation of member societies, also a leading provider of continuing professional development",
+      "A licensing body that issues P.Eng. designations directly",
+      "A charitable foundation funding scholarships only",
+      "A trade union for engineers"
+    ],
+    answer: 0,
+    why: "The E.I.C. is now a federation of member societies — including the C.G.S., C.S.C.E., C.S.M.E., C.S.Ch.E., I.E.E.E.-Canada, the C.N.S., and many others — and has become a leading provider and coordinating body for continuing professional development."
+  },
+  {
+    q: "The Canadian Society for Civil Engineering uses which abbreviation?",
+    options: [
+      "C.C.S.E.",
+      "C.S.C.E.",
+      "C.E.C.S.",
+      "S.C.C.E."
+    ],
+    answer: 1,
+    why: "The Canadian Society for Civil Engineering is abbreviated C.S.C.E. and is a member society of the E.I.C."
+  },
+  {
+    q: "Which umbrella organization represents three constituent societies for chemistry professionals — the Canadian Society for Chemical Engineering, the Canadian Society for Chemistry, and the Canadian Society for Chemical Technology?",
+    options: [
+      "The Engineering Institute of Canada (E.I.C.)",
+      "The Chemical Institute of Canada (C.I.C.)",
+      "The Canadian Federation of Earth Sciences (C.F.E.S.)",
+      "The Canadian Academy of Engineering"
+    ],
+    answer: 1,
+    why: "The Chemical Institute of Canada (C.I.C.) is an umbrella organization for three constituent societies: the Canadian Society for Chemical Engineering, the Canadian Society for Chemistry, and the Canadian Society for Chemical Technology."
+  },
+  {
+    q: "The Canadian Federation of Earth Sciences (C.F.E.S.) was previously known as:",
+    options: [
+      "The Canadian Geological Society",
+      "The Canadian Geoscience Council (C.G.C.)",
+      "The Geological Federation of Canada",
+      "The National Earth Sciences Alliance"
+    ],
+    answer: 1,
+    why: "The C.F.E.S. was called the Canadian Geoscience Council (C.G.C.) until 2007. Like the E.I.C., it is a federation of Canadian technical societies covering basic, specialized, and applied earth sciences."
+  },
+  {
+    q: "How many earth-sciences societies make up the C.F.E.S. federation, and what international body does it represent them in?",
+    options: [
+      "Seven societies; represents them in NATO",
+      "Thirteen societies; represents them in the International Union of Geological Sciences (I.U.G.S.)",
+      "Twenty-five societies; represents them in the United Nations",
+      "Five societies; represents them in NAFTA"
+    ],
+    answer: 1,
+    why: "The C.F.E.S. is a federation of thirteen earth-sciences societies and represents them in the I.U.G.S. — the International Union of Geological Sciences."
+  },
+  {
+    q: "Which Canadian society is uniquely an active member of BOTH the Engineering Institute of Canada and the Canadian Federation of Earth Sciences?",
+    options: [
+      "The Canadian Society for Chemical Engineering",
+      "The Canadian Geotechnical Society (C.G.S.)",
+      "The Canadian Nuclear Society",
+      "The Canadian Dam Association"
+    ],
+    answer: 1,
+    why: "The Canadian Geotechnical Society (C.G.S.) is an active member of both the E.I.C. and the C.F.E.S., reflecting its bridging role between engineering and earth sciences."
+  },
+  {
+    q: "The Institute of Electrical and Electronic Engineers (I.E.E.E.) is described as the world's largest technical society. Approximately how many members does it have?",
+    options: [
+      "About 50,000 members in 60 countries",
+      "About 423,000 members in over 160 countries",
+      "About 1.2 million members in 200 countries",
+      "About 10,000 members, all in the U.S. and Canada"
+    ],
+    answer: 1,
+    why: "The I.E.E.E. has more than 423,000 members — including about 117,000 student members — in over 160 countries, making it the largest technical society in the world."
+  },
+  {
+    q: "Which of the following best describes the publishing scope of the I.E.E.E.?",
+    options: [
+      "About 50 magazines and 100 conferences worldwide each year",
+      "About 200 transactions, journals, and magazines, and roughly 1,800 technical conferences worldwide each year",
+      "Only one journal but 5,000 conferences each year",
+      "It does not publish journals; it only certifies engineers"
+    ],
+    answer: 1,
+    why: "The I.E.E.E. publishes about 200 transactions, journals, and magazines, and arranges or co-sponsors approximately 1,800 technical conferences worldwide each year, across 39 specialty societies."
+  },
+  {
+    q: "The American Institute of Mining, Metallurgical and Petroleum Engineers (A.I.M.E.) supports four member societies. Which of the following is NOT one of them?",
+    options: [
+      "S.M.E. — Society for Mining, Metallurgy, and Exploration",
+      "T.M.S. — Minerals, Metals, and Materials Society",
+      "A.S.A.B.E. — American Society of Agricultural and Biological Engineers",
+      "S.P.E. — Society of Petroleum Engineers"
+    ],
+    answer: 2,
+    why: "A.I.M.E. supports S.M.E., T.M.S., A.I.S.T. (Association for Iron and Steel Technology), and S.P.E. The A.S.A.B.E. is a separate international agricultural and biological engineering society."
+  },
+  {
+    q: "What does the American Geosciences Institute (A.G.I.) describe itself as?",
+    options: [
+      "A government regulator of U.S. geological surveys",
+      "A federation of 51 geoscience societies promoting a united voice for the geoscience community",
+      "A subsidiary of the Geological Survey of Canada",
+      "A peer-reviewed journal publisher with no membership structure"
+    ],
+    answer: 1,
+    why: "The A.G.I. is a federation of 51 geoscience societies. It provides information and education services to its members and promotes a united voice for the geoscience community."
+  },
+  {
+    q: "The International Union of Geological Sciences (I.U.G.S.) is described as having:",
+    options: [
+      "About 10 member countries and 5 affiliated organizations",
+      "More than a million Earth scientists in 121 member countries and 56 affiliated organizations",
+      "Fifty thousand members exclusively from Europe",
+      "No members; it is purely a publishing house"
+    ],
+    answer: 1,
+    why: "The I.U.G.S. is a non-governmental union representing more than a million Earth scientists in 121 member countries and 56 affiliated organizations, encouraging international cooperation in the Earth sciences."
+  },
+  {
+    q: "How does the I.E.E.E. Code of Ethics differ in legal force from a Canadian provincial Code of Ethics?",
+    options: [
+      "Both are equally enforceable in Canadian courts",
+      "The I.E.E.E. Code is voluntary and not actively enforced; provincial Codes are enforceable under the licensing Acts",
+      "The I.E.E.E. Code has stricter penalties than provincial Codes",
+      "Provincial Codes are voluntary; the I.E.E.E. Code is mandatory in Canada"
+    ],
+    answer: 1,
+    why: "International Codes of Ethics like the I.E.E.E.'s are voluntary — the I.E.E.E. publishes a Code and encourages high ethical standards but does not solicit complaints. Canadian provincial Codes of Ethics are enforceable under the licensing Acts."
+  },
+  {
+    q: "What benefit do student chapters of technical societies typically offer to undergraduates?",
+    options: [
+      "Guaranteed employment after graduation",
+      "Free or inexpensive subscriptions, entry to meetings, short courses, field trips, and contact with practising professionals",
+      "Automatic licensing as a P.Eng. or P.Geo. on graduation",
+      "Voting rights at provincial Association elections"
+    ],
+    answer: 1,
+    why: "Student chapters offer free or inexpensive subscriptions to society publications, entrance to society meetings and short courses, field trips, and — importantly — opportunities for students to meet practising professionals in their fields."
+  },
+  {
+    q: "Which province's licensing Association runs the 'APEGA Student Advantage Program' (ASAP)?",
+    options: [
+      "Ontario",
+      "British Columbia",
+      "Alberta",
+      "Quebec"
+    ],
+    answer: 2,
+    why: "The APEGA Student Advantage Program (ASAP) is run by APEGA, the licensing Association for Alberta. Comparable programs include the APEGBC Student Membership Program in B.C. and the P.E.O. Student Membership Program (S.M.P.) in Ontario."
+  },
+  {
+    q: "The Canadian Federation of Engineering Students (C.F.E.S.) operates in which four regions?",
+    options: [
+      "British Columbia, Prairies, Central, and Maritimes",
+      "Western Canada, Ontario, Quebec, and the Atlantic region",
+      "Pacific, Northern, Eastern, and Central",
+      "It has no regional structure"
+    ],
+    answer: 1,
+    why: "The C.F.E.S. operates in four regions: Western Canada, Ontario, Quebec, and the Atlantic region. It serves as a liaison between roughly 81,000 Canadian engineering students and Engineers Canada and the National Council of Deans of Engineering and Applied Science (N.C.D.E.A.S.)."
+  },
+  {
+    q: "Where and when did the inaugural congress that traces the origins of the C.F.E.S. take place?",
+    options: [
+      "University of Toronto, October 1952",
+      "McGill University, February 1969",
+      "University of British Columbia, September 1981",
+      "Queen's University, May 1995"
+    ],
+    answer: 1,
+    why: "The C.F.E.S. traces its history back to a tumultuous inaugural congress of engineering students at McGill University in February 1969."
+  },
+  {
+    q: "Engineers Without Borders (E.W.B.) — Ingénieurs Sans Frontières — was established in:",
+    options: [
+      "January 1985 in Geneva",
+      "January 2000 in Canada",
+      "January 2008 in the United States",
+      "January 1972 in France"
+    ],
+    answer: 1,
+    why: "E.W.B. was established in January 2000 as a Canadian initiative. It is a registered charity dedicated to international development, focusing on water, food availability, health, energy, and communications in developing communities."
+  },
+  {
+    q: "Which approach best describes E.W.B.'s philosophy of technology transfer?",
+    options: [
+      "Bringing the most advanced Western technology to developing communities as quickly as possible",
+      "Encouraging simple technology developed with local input and innovation, promoting sustainability and self-sufficiency",
+      "Selling commercial products at reduced prices to overseas markets",
+      "Replacing local engineering practices with Canadian standards"
+    ],
+    answer: 1,
+    why: "E.W.B. does not bring technology from the West. Rather, it encourages simple technology developed with local input and innovation, because such solutions are longer-lasting and promote sustainability and self-sufficiency."
+  },
+  {
+    q: "Geoscientists Without Borders (G.W.B.) was established in 2008. Who founded it, and what is required of its projects?",
+    options: [
+      "The Canadian government founded it; projects must use Canadian-only contractors",
+      "The Society of Exploration Geophysicists Foundation founded it; projects specifically require the involvement of geoscience students",
+      "The United Nations founded it; projects must be located in the southern hemisphere",
+      "Engineers Canada founded it; projects are limited to mineral exploration only"
+    ],
+    answer: 1,
+    why: "G.W.B. was established in the United States by the Society of Exploration Geophysicists Foundation in 2008 with several large donations. It supports humanitarian geoscience projects, and its projects specifically require the involvement of geoscience students."
+  },
+  {
+    q: "The Canadian Engineering Memorial Foundation (C.E.M.F.) was created in 1990 in response to which event?",
+    options: [
+      "The Quebec Bridge collapse",
+      "The events at École Polytechnique in Montréal that resulted in the deaths of fourteen young women",
+      "The collapse of the Heron Road bridge",
+      "The closure of the Avro Arrow program"
+    ],
+    answer: 1,
+    why: "The C.E.M.F. was created in 1990 under the stewardship of Engineers Canada following the events at École Polytechnique in Montréal, where fourteen young women were killed. The Foundation grants scholarships to outstanding female engineering students."
+  },
+  {
+    q: "Whom does the C.E.M.F. specifically support through its scholarships?",
+    options: [
+      "Geoscience students working in northern Canada",
+      "Outstanding female engineering students at undergraduate and graduate levels",
+      "Children of engineers killed in workplace accidents",
+      "Indigenous students in any STEM discipline"
+    ],
+    answer: 1,
+    why: "Each year the C.E.M.F. grants scholarships to outstanding female engineering students at undergraduate and graduate levels, funded entirely through donations from individual engineers, corporations, and the public."
+  },
+  {
+    q: "The Canadian Society for Senior Engineers (C.S.S.E.) is affiliated with the E.I.C. and is best characterized as:",
+    options: [
+      "A trade association lobbying for senior-engineer pensions",
+      "A charitable organization promoting the advancement of science and engineering and supporting youth in engineering",
+      "A regulatory body for retired engineers' continued practice",
+      "A commercial consulting firm"
+    ],
+    answer: 1,
+    why: "The C.S.S.E. is a charitable organization affiliated with the E.I.C., incorporated in 1967 as the E.I.C. Life Members Organization. It promotes the advancement of science and engineering in Canada and provides benevolent donations supporting youth in engineering."
+  },
+  {
+    q: "What organization, supported by the C.S.S.E., recruits skilled volunteer engineers and technicians to build devices for people with disabilities?",
+    options: [
+      "The Tetra Society",
+      "The March of Dimes",
+      "Engineers Without Borders",
+      "The Canadian Disability Council"
+    ],
+    answer: 0,
+    why: "The C.S.S.E. assists the Tetra Society, which recruits skilled volunteer engineers and technicians to build devices to assist people with disabilities. The C.S.S.E. also engages in research projects and awards for science fairs."
+  },
+  {
+    q: "The Canadian Geological Foundation, incorporated in 1968, primarily exists to:",
+    options: [
+      "License professional geoscientists in Ontario",
+      "Receive gifts and bequests for the furtherance of geoscience in Canada, supporting education, outreach, and awareness",
+      "Conduct mineral exploration on behalf of the federal government",
+      "Operate a network of geological museums"
+    ],
+    answer: 1,
+    why: "The Canadian Geological Foundation is a charitable organization dedicated to the furtherance of geoscience in Canada. It receives gifts and bequests and has played a key role in sustaining geoscience education, outreach, and awareness."
+  },
+  {
+    q: "What is the Canadian Academy of Engineering, and where is it located?",
+    options: [
+      "A degree-granting university in Toronto",
+      "Canada's highest honorary engineering society — an independent, self-governing nonprofit located in Ottawa",
+      "A subsidiary of Engineers Canada that licenses senior engineers",
+      "A federal research lab located in Sherbrooke"
+    ],
+    answer: 1,
+    why: "The Canadian Academy of Engineering, located in Ottawa, is Canada's highest honorary engineering society. It is an independent, self-governing, nonprofit organization established in 1987. Its Fellows are elected on the basis of distinguished service and contributions."
+  },
+  {
+    q: "Approximately how many active Fellows does the Canadian Academy of Engineering currently have?",
+    options: [
+      "About 50",
+      "About 496",
+      "About 2,500",
+      "About 10,000"
+    ],
+    answer: 1,
+    why: "The Academy currently has about 496 active Fellows, plus 201 emeritus, 2 international, and 5 honorary fellows. Fellows are committed to ensuring Canada's engineering expertise benefits all Canadians."
+  },
+  {
+    q: "The Partnership Group for Science and Engineering (PAGSE), formed in 1995, represents the science and engineering community to which body?",
+    options: [
+      "The United Nations Education Programme",
+      "The Government of Canada",
+      "The European Union scientific council",
+      "The provincial premiers' council"
+    ],
+    answer: 1,
+    why: "PAGSE was formed in June 1995 at the invitation of the Academy of Science of the Royal Society of Canada to represent the Canadian science and engineering community to the Government of Canada. It comprises more than 25 national organizations and roughly 50,000 individual members."
+  },
+  {
+    q: "Which committee does PAGSE submit a brief to each fall, presenting consensus views on policy and research?",
+    options: [
+      "The Senate Committee on Banking",
+      "The House of Commons Standing Committee on Finance",
+      "The Privy Council Office",
+      "The Treasury Board Secretariat"
+    ],
+    answer: 1,
+    why: "Among its activities, PAGSE submits a brief to the House of Commons Standing Committee on Finance each fall, providing consensus views from the science and engineering research community on policy issues and initiatives."
+  },
+  {
+    q: "Who arranges the Iron Ring ceremonies on Canadian campuses?",
+    options: [
+      "Engineers Canada",
+      "The Corporation of the Seven Wardens",
+      "The Engineering Institute of Canada",
+      "Each provincial licensing Association independently"
+    ],
+    answer: 1,
+    why: "The Corporation of the Seven Wardens, founded in 1922 in Montreal, arranges the Iron Ring ceremonies — known as the Ritual of the Calling of an Engineer — on most Canadian campuses just before graduation day."
+  },
+  {
+    q: "The Iron Ring ritual was developed by which well-known author?",
+    options: [
+      "Robert Service",
+      "Stephen Leacock",
+      "Rudyard Kipling",
+      "Lucy Maud Montgomery"
+    ],
+    answer: 2,
+    why: "The seven prominent engineers who founded the Corporation of the Seven Wardens enlisted the late Rudyard Kipling, who developed the Ritual of the Calling of an Engineer and the symbolic Iron Ring."
+  },
+  {
+    q: "How many Camps of the Corporation of the Seven Wardens currently administer the Ritual of the Calling of an Engineer?",
+    options: [
+      "Seven",
+      "Twelve",
+      "Twenty-six",
+      "Forty"
+    ],
+    answer: 2,
+    why: "The Ritual is administered through a system of separate groups called Camps across Canada, of which there are presently twenty-six."
+  },
+  {
+    q: "Which of the following statements about the Iron Ring is correct?",
+    options: [
+      "Wearing the Iron Ring legally qualifies a person to practise engineering in Canada",
+      "Wearing the Iron Ring or taking the obligation does NOT imply legal acceptance or qualification as an engineer; only provincial bodies grant that",
+      "The Iron Ring is granted automatically with a B.Eng. degree",
+      "The Iron Ring is required by Engineers Canada for all P.Eng. licensure"
+    ],
+    answer: 1,
+    why: "The wearing of the Iron Ring, or the taking of the obligation, does NOT imply that an individual has gained legal acceptance or qualification as an engineer. Legal qualification can only be granted by the provincial bodies so appointed."
+  },
+  {
+    q: "The Iron Ring ceremony's relationship to a provincial Association or order is best described as:",
+    options: [
+      "Officially co-sponsored by every provincial Association",
+      "The Corporation of the Seven Wardens has no direct connection with any provincial Association or order",
+      "Iron Ring camps act as licensing bodies in remote areas",
+      "Provincial Associations require Iron Ring possession before issuing P.Eng. designations"
+    ],
+    answer: 1,
+    why: "The Corporation of the Seven Wardens has no direct connection with any provincial Association or order. The Iron Ring is symbolic; it does not replace the diploma, nor is it granted by any licensing body."
+  },
+  {
+    q: "Is the Iron Ring obligation mandatory for engineers practising in Canada?",
+    options: [
+      "Yes — every practising engineer must take it",
+      "No — the obligation is a matter of personal choice and does not affect the right to practise",
+      "Only for engineers who graduated after 1922",
+      "Only in Quebec"
+    ],
+    answer: 1,
+    why: "The chapter notes that a few people have chosen to refrain from being obligated and so cannot rightfully wear the Iron Ring. The Corporation of the Seven Wardens feels this in no way detracts from their right to practise the profession — the obligation is a matter of personal choice."
+  },
+  {
+    q: "Where and when did the Earth Science Ring ceremony for geoscientists begin?",
+    options: [
+      "Quebec, 1885",
+      "Alberta, 1975",
+      "Ontario, 2007",
+      "British Columbia, 1922"
+    ],
+    answer: 1,
+    why: "The Earth Science Ring ceremony — a ritual of welcome into the profession of newly qualified geologists and geophysicists — started in Alberta in 1975 and has spread to other provinces and jurisdictions in Canada."
+  },
+  {
+    q: "What material is the Earth Science Ring made of, and what symbols does it bear?",
+    options: [
+      "Iron, with a compass and rule",
+      "Silver, marked with the crossed hammer of geology and the seismic trace of geophysics",
+      "Gold, with a maple leaf and globe",
+      "Platinum, with a beaker and microscope"
+    ],
+    answer: 1,
+    why: "The Earth Science Ring is made of silver and marked with the crossed hammer of geology and with the seismic trace of geophysics, signifying both the immediate and the remote searching out of Nature's knowledge."
+  },
+  {
+    q: "Is receiving an Earth Science Ring a prerequisite or condition of professional membership with APEGA?",
+    options: [
+      "Yes — it is required for both registration and renewal",
+      "No — it is neither a prerequisite nor a later condition of professional membership",
+      "Yes — but only for geophysicists, not geologists",
+      "No — but it is required for working in the petroleum sector"
+    ],
+    answer: 1,
+    why: "Receiving an Earth Science Ring is neither a prerequisite nor a later condition of professional membership with APEGA. Although there is no obligation to obtain or wear the ring, almost no one in the graduating classes willingly misses the ceremony."
+  },
+  {
+    q: "An Ontario engineer is choosing between joining a small newer Canadian society and a larger U.S.-based international society. From the chapter's discussion, which of the following is the strongest reason to support a Canadian society?",
+    options: [
+      "International societies refuse to admit Canadian members",
+      "Canadian societies may be more effective at researching uniquely Canadian problems (e.g., Arctic construction or Canadian resource development) and giving a national voice on issues",
+      "Canadian membership is required for the P.Eng. designation",
+      "Canadian society dues are tax-free, while international dues are not"
+    ],
+    answer: 1,
+    why: "The chapter notes that geographical area is important to some societies — the special problems of construction in the Arctic, or development of Arctic resources, may be better researched by Canadian societies. Canadian societies are described as more effective at promoting Canadian interests on regional issues."
+  },
+  {
+    q: "Industrial standards organizations such as the American Gear Manufacturers Association (A.G.M.A.) function similarly to technical societies because they:",
+    options: [
+      "License professional engineers in their industry",
+      "Discipline members for ethical violations",
+      "Publish standards (e.g., the gear strength calculations used across North America) that engineers rely on professionally",
+      "Provide health insurance to engineers"
+    ],
+    answer: 2,
+    why: "Although the A.G.M.A. is an industrial organization rather than a true technical society, it publishes the standards used for most gear strength calculations in North America. Such government and industrial organizations are extremely valuable sources of information, similar to technical societies."
+  },
+  {
+    q: "Why does the chapter recommend that every practising professional engineer or geoscientist join at least one technical society?",
+    options: [
+      "Because the law requires it under the engineering Act",
+      "To maintain technical interests, stay connected to professional peers, and access a priceless store of organized information — at relatively low cost, and dues are tax-deductible",
+      "Because society membership replaces the need for licensing",
+      "To gain voting rights in federal elections"
+    ],
+    answer: 1,
+    why: "The chapter advises practitioners to maintain their technical interests and connections by joining at least one society. Costs of membership are not great, dues are tax-deductible, and societies provide a priceless store of well-organized information plus connections to professionals with similar technical interests."
+  }
+];
+
+/* ============================================================
+   STATE & STORAGE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_ch18_session_v1';
+let state = {
+  mode: null,           // 'practice' or 'exam'
+  order: [],            // shuffled indices into QUESTIONS
+  currentIdx: 0,        // pointer in `order`
+  answers: {},          // { questionOrderIdx: chosenOptionIdx }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  finished: false
+};
+
+/* Fisher-Yates shuffle */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(e){ return null; }
+}
+function clearSession(){
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+}
+
+/* ============================================================
+   CELEBRATION CANVAS — fireworks, confetti, stars, particles
+   ============================================================ */
+const canvas = document.getElementById('celebration-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle{
+  constructor(x,y,opts){
+    this.x = x; this.y = y;
+    this.vx = (opts.vx ?? (Math.random()-.5)*8);
+    this.vy = (opts.vy ?? (Math.random()*-12 - 4));
+    this.gravity = opts.gravity ?? .25;
+    this.life = opts.life ?? 80;
+    this.maxLife = this.life;
+    this.color = opts.color ?? '#c9a961';
+    this.size = opts.size ?? 4;
+    this.shape = opts.shape ?? 'circle';
+    this.rotation = Math.random()*Math.PI*2;
+    this.spin = (Math.random()-.5)*.2;
+  }
+  update(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.vx *= .99;
+    this.life--;
+    this.rotation += this.spin;
+  }
+  draw(c){
+    const alpha = Math.max(0, this.life/this.maxLife);
+    c.save();
+    c.globalAlpha = alpha;
+    c.translate(this.x, this.y);
+    c.rotate(this.rotation);
+    c.fillStyle = this.color;
+    c.shadowColor = this.color;
+    c.shadowBlur = 8;
+    if(this.shape === 'circle'){
+      c.beginPath();
+      c.arc(0,0,this.size,0,Math.PI*2);
+      c.fill();
+    } else if(this.shape === 'rect'){
+      c.fillRect(-this.size/2, -this.size/2, this.size, this.size*1.6);
+    } else if(this.shape === 'star'){
+      drawStar(c, 0, 0, 5, this.size, this.size/2);
+      c.fill();
+    } else if(this.shape === 'sparkle'){
+      c.beginPath();
+      c.moveTo(-this.size,0); c.lineTo(0,-this.size*1.5);
+      c.lineTo(this.size,0); c.lineTo(0,this.size*1.5);
+      c.closePath(); c.fill();
+    }
+    c.restore();
+  }
+  alive(){ return this.life > 0 && this.y < canvas.height + 40; }
+}
+
+function drawStar(c, cx, cy, spikes, outerR, innerR){
+  let rot = Math.PI/2 * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  c.beginPath();
+  c.moveTo(cx, cy - outerR);
+  for(let i=0;i<spikes;i++){
+    x = cx + Math.cos(rot)*outerR;
+    y = cy + Math.sin(rot)*outerR;
+    c.lineTo(x,y); rot += step;
+    x = cx + Math.cos(rot)*innerR;
+    y = cy + Math.sin(rot)*innerR;
+    c.lineTo(x,y); rot += step;
+  }
+  c.lineTo(cx, cy - outerR);
+  c.closePath();
+}
+
+const PALETTE = ['#c9a961','#e6cf99','#f1e0b8','#5fb88a','#d9bd7c','#fbf6e9','#ffd700'];
+
+function fireworkBurst(x,y){
+  const colors = PALETTE;
+  const count = 38;
+  for(let i=0;i<count;i++){
+    const angle = (Math.PI*2/count)*i;
+    const speed = 4 + Math.random()*5;
+    particles.push(new Particle(x,y,{
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      gravity:.1,
+      life:60+Math.random()*30,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      size:3+Math.random()*2,
+      shape:'circle'
+    }));
+  }
+}
+
+function goldShower(x,y){
+  for(let i=0;i<60;i++){
+    particles.push(new Particle(
+      x + (Math.random()-.5)*240,
+      y - 100 - Math.random()*60,
+      {
+        vx:(Math.random()-.5)*3,
+        vy:Math.random()*3+1,
+        gravity:.15,
+        life:90+Math.random()*40,
+        color: ['#c9a961','#e6cf99','#ffd700','#f1e0b8'][Math.floor(Math.random()*4)],
+        size:3+Math.random()*3,
+        shape:'rect'
+      }
+    ));
+  }
+}
+
+function starBurst(x,y){
+  for(let i=0;i<22;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = 2+Math.random()*4;
+    particles.push(new Particle(x,y,{
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed - 2,
+      gravity:.12,
+      life:70+Math.random()*30,
+      color: ['#ffd700','#c9a961','#fbf6e9','#e6cf99'][Math.floor(Math.random()*4)],
+      size:5+Math.random()*4,
+      shape:'star'
+    }));
+  }
+}
+
+function confettiRain(){
+  for(let i=0;i<70;i++){
+    particles.push(new Particle(
+      Math.random()*canvas.width,
+      -20 - Math.random()*60,
+      {
+        vx:(Math.random()-.5)*2,
+        vy:Math.random()*2+1,
+        gravity:.1,
+        life:140+Math.random()*60,
+        color: PALETTE[Math.floor(Math.random()*PALETTE.length)],
+        size:4+Math.random()*4,
+        shape:'rect'
+      }
+    ));
+  }
+}
+
+function celebrate(streakLevel){
+  // Choose effect based on streak excitement
+  const cx = canvas.width/2;
+  const cy = canvas.height/2;
+  if(streakLevel >= 5){
+    confettiRain();
+    setTimeout(()=>fireworkBurst(cx-150, cy-80), 100);
+    setTimeout(()=>fireworkBurst(cx+150, cy-100), 250);
+    setTimeout(()=>fireworkBurst(cx, cy-60), 400);
+    starBurst(cx, cy);
+  } else if(streakLevel >= 3){
+    fireworkBurst(cx-80, cy-50);
+    setTimeout(()=>fireworkBurst(cx+80, cy-80), 200);
+    starBurst(cx, cy-30);
+  } else if(streakLevel >= 1){
+    goldShower(cx, cy);
+    starBurst(cx, cy);
+  } else {
+    starBurst(cx, cy);
+  }
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles = particles.filter(p => p.alive());
+  particles.forEach(p => { p.update(); p.draw(ctx); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* Floating points popup */
+function popPoints(text, x, y){
+  const el = document.createElement('div');
+  el.className = 'points-pop';
+  el.textContent = text;
+  el.style.left = (x - 40) + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1500);
+}
+
+/* ============================================================
+   QUIZ FLOW
+   ============================================================ */
+function startQuiz(mode){
+  state.mode = mode;
+  state.order = shuffle(QUESTIONS.map((_,i)=>i));
+  state.currentIdx = 0;
+  state.answers = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.finished = false;
+  saveState();
+  showQuiz();
+}
+
+function resumeSession(){
+  if(state.finished){
+    showResults();
+  } else {
+    showQuiz();
+  }
+}
+
+function showQuiz(){
+  document.getElementById('mode-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  renderQuestion();
+  renderGrid();
+}
+
+function renderQuestion(){
+  const orderIdx = state.currentIdx;
+  const qIdx = state.order[orderIdx];
+  const q = QUESTIONS[qIdx];
+  const answered = state.answers.hasOwnProperty(orderIdx);
+  const chosen = state.answers[orderIdx];
+
+  // Header status
+  document.getElementById('q-current').textContent = orderIdx+1;
+  document.getElementById('score-display').textContent = state.score;
+  document.getElementById('progress-fill').style.width =
+    ((Object.keys(state.answers).length/QUESTIONS.length)*100) + '%';
+
+  // Streak pill
+  const streakWrap = document.getElementById('streak-pill-wrap');
+  if(state.streak >= 2){
+    streakWrap.innerHTML = `<span class="streak-pill ${state.streak>=4?'hot':''}">🔥 Streak ${state.streak}</span>`;
+  } else {
+    streakWrap.innerHTML = '';
+  }
+
+  // Question card
+  let html = `
+    <div class="q-num">Question ${orderIdx+1} of ${QUESTIONS.length}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="options">
+  `;
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    let cls = 'option';
+    if(answered){
+      cls += ' disabled';
+      if(i === q.answer) cls += ' correct';
+      else if(i === chosen) cls += ' incorrect';
+    }
+    html += `
+      <button class="${cls}" onclick="answerQuestion(${i}, event)">
+        <span class="letter">${letters[i]}.</span>
+        <span class="text">${opt}</span>
+      </button>
+    `;
+  });
+  html += `</div>`;
+
+  // Feedback (practice mode only, shown after answering)
+  if(answered && state.mode === 'practice'){
+    const right = chosen === q.answer;
+    html += `
+      <div class="feedback ${right?'right':'wrong'}">
+        <div class="verdict">${right ? '✓ Correct' : '✗ Not quite'}</div>
+        <div class="explanation">
+          ${right ? '' : `<strong>Correct answer: ${letters[q.answer]}.</strong> `}
+          ${q.why}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('q-card').innerHTML = html;
+
+  // Nav buttons
+  document.getElementById('prev-btn').disabled = (orderIdx === 0);
+  const nextBtn = document.getElementById('next-btn');
+  if(orderIdx === QUESTIONS.length - 1){
+    nextBtn.textContent = 'Finish Quiz →';
+  } else {
+    nextBtn.textContent = 'Next →';
+  }
+}
+
+function answerQuestion(choice, evt){
+  const orderIdx = state.currentIdx;
+  if(state.answers.hasOwnProperty(orderIdx)) return; // already answered
+  const qIdx = state.order[orderIdx];
+  const q = QUESTIONS[qIdx];
+  state.answers[orderIdx] = choice;
+
+  const right = (choice === q.answer);
+  if(right){
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    // Base 10 points + streak bonus
+    const base = 10;
+    const bonus = Math.max(0, (state.streak-1)*2);
+    const totalPts = base + bonus;
+    state.score += totalPts;
+
+    // Celebration
+    celebrate(state.streak);
+    const rect = evt.target.closest('.option').getBoundingClientRect();
+    popPoints(`+${totalPts}${bonus>0?' ★':''}`, rect.right - 30, rect.top);
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+  renderQuestion();
+  renderGrid();
+
+  // In exam mode, auto-advance after a brief moment
+  if(state.mode === 'exam'){
+    setTimeout(()=>{
+      if(state.currentIdx < QUESTIONS.length-1){
+        state.currentIdx++;
+        saveState();
+        renderQuestion();
+        renderGrid();
+      }
+    }, 350);
+  }
+}
+
+function nextQuestion(){
+  if(state.currentIdx < QUESTIONS.length - 1){
+    state.currentIdx++;
+    saveState();
+    renderQuestion();
+    renderGrid();
+  } else {
+    finishQuiz();
+  }
+}
+
+function prevQuestion(){
+  if(state.currentIdx > 0){
+    state.currentIdx--;
+    saveState();
+    renderQuestion();
+    renderGrid();
+  }
+}
+
+function jumpTo(idx){
+  state.currentIdx = idx;
+  saveState();
+  renderQuestion();
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid-cells');
+  let html = '';
+  for(let i=0;i<QUESTIONS.length;i++){
+    const orderIdx = i;
+    const qIdx = state.order[orderIdx];
+    const q = QUESTIONS[qIdx];
+    let cls = 'grid-cell';
+    if(orderIdx === state.currentIdx) cls += ' current';
+    if(state.answers.hasOwnProperty(orderIdx)){
+      if(state.mode === 'practice'){
+        cls += (state.answers[orderIdx] === q.answer) ? ' correct' : ' incorrect';
+      } else {
+        cls += ' answered';
+      }
+    }
+    html += `<button class="${cls}" onclick="jumpTo(${orderIdx})">${orderIdx+1}</button>`;
+  }
+  grid.innerHTML = html;
+}
+
+function finishQuiz(){
+  state.finished = true;
+  saveState();
+  showResults();
+}
+
+function showResults(){
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('mode-screen').style.display = 'none';
+  const resWrap = document.getElementById('results-screen');
+  resWrap.style.display = 'block';
+
+  // Calculate stats
+  let correct = 0;
+  Object.keys(state.answers).forEach(k=>{
+    const q = QUESTIONS[state.order[+k]];
+    if(state.answers[k] === q.answer) correct++;
+  });
+  const total = QUESTIONS.length;
+  const pct = Math.round((correct/total)*100);
+  const answered = Object.keys(state.answers).length;
+  const skipped = total - answered;
+
+  let verdict, eyebrow;
+  if(pct >= 90){ verdict='Exemplary command of the chapter.'; eyebrow='Outstanding'; }
+  else if(pct >= 75){ verdict='Solid grasp — exam-ready with light review.'; eyebrow='Strong Pass'; }
+  else if(pct >= 60){ verdict='Decent foundation — revisit weaker sections.'; eyebrow='Pass'; }
+  else if(pct >= 40){ verdict='More review recommended before the NPPE.'; eyebrow='Review Needed'; }
+  else { verdict='A second pass through the chapter would help.'; eyebrow='Keep Studying'; }
+
+  // Big celebration if high score
+  if(pct >= 80){
+    setTimeout(()=>confettiRain(), 200);
+    setTimeout(()=>{
+      fireworkBurst(canvas.width*.3, canvas.height*.4);
+      fireworkBurst(canvas.width*.7, canvas.height*.4);
+    }, 400);
+  }
+
+  // Build review list
+  let reviewHTML = '';
+  for(let i=0;i<total;i++){
+    const qIdx = state.order[i];
+    const q = QUESTIONS[qIdx];
+    const chosen = state.answers[i];
+    const right = chosen === q.answer;
+    const letters = ['A','B','C','D'];
+    reviewHTML += `
+      <div style="background:rgba(15,30,54,.5);border:1px solid rgba(201,169,97,.15);border-left:3px solid ${chosen===undefined?'#888':right?'var(--green)':'var(--red)'};border-radius:8px;padding:18px 20px;margin-bottom:12px;text-align:left">
+        <div style="font-family:var(--serif);color:var(--gold-400);font-size:.92rem;margin-bottom:6px;font-style:italic">Question ${i+1} ${chosen===undefined?'· skipped':right?'· ✓ correct':'· ✗ incorrect'}</div>
+        <div style="font-family:var(--serif);font-size:1.1rem;color:var(--paper);margin-bottom:10px;line-height:1.4">${q.q}</div>
+        <div style="font-size:.9rem;color:rgba(244,234,213,.85);line-height:1.6">
+          <strong style="color:var(--green)">Correct: ${letters[q.answer]}.</strong> ${q.options[q.answer]}<br>
+          ${chosen!==undefined && !right ? `<strong style="color:var(--red)">Your answer: ${letters[chosen]}.</strong> ${q.options[chosen]}<br>`:''}
+          <em style="color:var(--gold-200);display:block;margin-top:8px;font-family:var(--serif);font-style:italic;font-size:.95rem">${q.why}</em>
+        </div>
+      </div>
+    `;
+  }
+
+  resWrap.innerHTML = `
+    <div class="results-card">
+      <div class="eyebrow" style="color:var(--gold-400)">${eyebrow}</div>
+      <h2>Results</h2>
+      <div class="score-num">${correct}<em>/${total}</em></div>
+      <div class="verdict-line">${verdict}</div>
+      <div class="stats-grid">
+        <div class="stat-box"><span class="num">${pct}%</span><span class="lbl">Accuracy</span></div>
+        <div class="stat-box"><span class="num">${state.score}</span><span class="lbl">Total Points</span></div>
+        <div class="stat-box"><span class="num">${state.bestStreak}</span><span class="lbl">Best Streak</span></div>
+        <div class="stat-box"><span class="num">${skipped}</span><span class="lbl">Skipped</span></div>
+      </div>
+      <div class="results-actions">
+        <button class="btn" onclick="confirmReset()">Try Again</button>
+        <button class="btn secondary" onclick="toggleReview()">Toggle Full Review</button>
+      </div>
+      <div id="review-list" style="display:none;margin-top:32px;text-align:left">
+        <h3 style="font-family:var(--serif);color:var(--gold-300);font-weight:500;font-size:1.5rem;margin-bottom:18px;text-align:center">Detailed Review</h3>
+        ${reviewHTML}
+      </div>
+    </div>
+  `;
+}
+
+function toggleReview(){
+  const list = document.getElementById('review-list');
+  list.style.display = list.style.display === 'none' ? 'block' : 'none';
+}
+
+/* ============================================================
+   RESET / MODAL
+   ============================================================ */
+function confirmReset(){
+  document.getElementById('reset-modal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('reset-modal').classList.remove('show');
+}
+function resetQuiz(){
+  closeModal();
+  clearSession();
+  // reset state
+  state = {
+    mode: null, order: [], currentIdx: 0,
+    answers: {}, score: 0, streak: 0, bestStreak: 0, finished: false
+  };
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('mode-screen').style.display = 'block';
+  document.getElementById('resume-row').style.display = 'none';
+}
+
+/* ============================================================
+   INIT — check for resumable session
+   ============================================================ */
+(function init(){
+  const saved = loadState();
+  if(saved && saved.mode && saved.order && saved.order.length === QUESTIONS.length){
+    state = saved;
+    if(state.finished){
+      // show results directly
+      showResults();
+    } else {
+      const detail = document.getElementById('resume-detail');
+      const answered = Object.keys(state.answers).length;
+      detail.textContent = `${answered} of ${QUESTIONS.length} answered · ${state.score} points · ${state.mode === 'practice' ? 'Practice Mode' : 'Exam Mode'}`;
+      document.getElementById('resume-row').style.display = 'block';
+    }
+  }
+})();
+
+// Close modal on backdrop click
+document.getElementById('reset-modal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
