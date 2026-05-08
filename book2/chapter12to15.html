@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice — BOOK1 Chapters 12–15: Legality, Statute of Frauds, Misrepresentation, Mistake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #0a1628;
+    --navy-800: #0f1f3a;
+    --navy-700: #15294d;
+    --navy-600: #1d3461;
+    --navy-500: #2a4373;
+    --navy-400: #3a5687;
+    --gold-500: #d4a946;
+    --gold-400: #e6c068;
+    --gold-300: #f0d488;
+    --gold-200: #f7e3a8;
+    --cream: #f5efe0;
+    --cream-dim: #d9d3c4;
+    --green: #6cc88a;
+    --green-bg: rgba(108,200,138,0.12);
+    --red: #e57878;
+    --red-bg: rgba(229,120,120,0.12);
+    --shadow-deep: 0 20px 60px rgba(0,0,0,0.45);
+    --shadow-mid: 0 8px 24px rgba(0,0,0,0.28);
+    --shadow-soft: 0 2px 10px rgba(0,0,0,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background:
+      radial-gradient(ellipse at 18% 0%, rgba(212,169,70,0.10) 0%, transparent 42%),
+      radial-gradient(ellipse at 82% 100%, rgba(212,169,70,0.07) 0%, transparent 50%),
+      linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 100%);
+    color: var(--cream);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(212,169,70,0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+    pointer-events: none; z-index: 0;
+  }
+
+  .container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 36px 24px 28px;
+    border-top: 1px solid rgba(212,169,70,0.32);
+    border-bottom: 1px solid rgba(212,169,70,0.32);
+    position: relative;
+  }
+  header::before, header::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold-500);
+    font-size: 14px;
+    top: -10px; background: var(--navy-900); padding: 0 14px;
+  }
+  header::before { left: 50%; transform: translateX(-50%); }
+  header::after { content: '✦'; bottom: -10px; left: 50%; transform: translateX(-50%); top: auto; }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-400);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 4.4vw, 42px);
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-300);
+    font-weight: 400;
+  }
+  .subtitle {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--cream-dim);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Mode Toggle ---------- */
+  .mode-bar {
+    display: flex; gap: 10px; justify-content: center;
+    margin: 26px 0 20px;
+    flex-wrap: wrap;
+  }
+  .mode-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,169,70,0.25);
+    color: var(--cream-dim);
+    padding: 9px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.4px; text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .mode-pill:hover { border-color: var(--gold-400); color: var(--cream); }
+  .mode-pill.active {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+    color: var(--navy-900);
+    border-color: var(--gold-300);
+    box-shadow: 0 4px 14px rgba(212,169,70,0.35);
+  }
+
+  /* ---------- Stats Bar ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+    background: rgba(10,22,40,0.55);
+    border: 1px solid rgba(212,169,70,0.18);
+    border-radius: 14px;
+    padding: 16px 14px;
+    backdrop-filter: blur(8px);
+  }
+  .stat {
+    text-align: center;
+    border-right: 1px solid rgba(212,169,70,0.14);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    font-size: 9.5px; font-weight: 600;
+    color: var(--gold-400);
+    letter-spacing: 1.6px; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .stat-value.streak.fire { color: var(--gold-300); }
+  .stat-value .small { font-size: 14px; color: var(--cream-dim); }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .stat:nth-child(3) { border-right: none; }
+    .stat:nth-child(4), .stat:nth-child(5) { border-top: 1px solid rgba(212,169,70,0.12); padding-top: 10px; margin-top: 4px; }
+    .stat:nth-child(4) { border-right: 1px solid rgba(212,169,70,0.14); }
+  }
+
+  /* ---------- Progress ---------- */
+  .progress-wrap {
+    height: 5px; background: rgba(255,255,255,0.06);
+    border-radius: 999px; overflow: hidden; margin-bottom: 24px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-500), var(--gold-300));
+    width: 0%; transition: width 0.45s ease;
+    box-shadow: 0 0 12px rgba(212,169,70,0.5);
+  }
+
+  /* ---------- Question Card ---------- */
+  .card {
+    background: linear-gradient(180deg, rgba(21,41,77,0.85), rgba(15,31,58,0.85));
+    border: 1px solid rgba(212,169,70,0.22);
+    border-radius: 18px;
+    padding: 32px clamp(20px, 4vw, 40px);
+    box-shadow: var(--shadow-deep);
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+
+  .q-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; flex-wrap: wrap; gap: 8px;
+  }
+  .q-num {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-300);
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+  }
+  .q-num em { font-style: italic; color: var(--cream-dim); }
+  .q-tag {
+    background: rgba(212,169,70,0.12);
+    border: 1px solid rgba(212,169,70,0.28);
+    color: var(--gold-300);
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+  }
+
+  .q-text {
+    font-family: 'Lora', serif;
+    font-size: clamp(17px, 2.1vw, 19px);
+    line-height: 1.55;
+    color: var(--cream);
+    margin-bottom: 22px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .option {
+    background: rgba(255,255,255,0.03);
+    border: 1.5px solid rgba(212,169,70,0.18);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex; align-items: flex-start; gap: 14px;
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; line-height: 1.5;
+    text-align: left;
+    position: relative;
+  }
+  .option:hover:not(.disabled) {
+    border-color: var(--gold-400);
+    background: rgba(212,169,70,0.06);
+    transform: translateX(2px);
+  }
+  .option.disabled { cursor: default; }
+  .option .letter {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(212,169,70,0.12);
+    border: 1px solid rgba(212,169,70,0.32);
+    color: var(--gold-300);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600; font-size: 15px;
+    border-radius: 6px;
+  }
+  .option.correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+  }
+  .option.correct .letter {
+    background: var(--green); color: var(--navy-900); border-color: var(--green);
+  }
+  .option.incorrect {
+    border-color: var(--red);
+    background: var(--red-bg);
+  }
+  .option.incorrect .letter {
+    background: var(--red); color: var(--navy-900); border-color: var(--red);
+  }
+  .option.reveal-correct {
+    border-color: var(--green);
+    background: rgba(108,200,138,0.06);
+  }
+  .option.reveal-correct .letter {
+    background: var(--green); color: var(--navy-900); border-color: var(--green);
+  }
+
+  /* ---------- Explanation ---------- */
+  .explanation {
+    margin-top: 20px;
+    padding: 18px 20px;
+    background: rgba(10,22,40,0.6);
+    border-left: 3px solid var(--gold-500);
+    border-radius: 0 10px 10px 0;
+    font-family: 'Lora', serif;
+    font-size: 15px; line-height: 1.65;
+    color: var(--cream);
+    display: none;
+    animation: slideIn 0.35s ease;
+  }
+  .explanation.show { display: block; }
+  .explanation .label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 11px;
+    color: var(--gold-400);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 6px; display: block;
+  }
+  .explanation em { color: var(--gold-300); font-style: italic; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    display: flex; gap: 12px; justify-content: space-between;
+    align-items: center; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,169,70,0.32);
+    color: var(--cream);
+    padding: 11px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px; font-weight: 600;
+    letter-spacing: 1.4px; text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .btn:hover:not(:disabled) {
+    background: rgba(212,169,70,0.12);
+    border-color: var(--gold-400);
+    transform: translateY(-1px);
+  }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+    color: var(--navy-900);
+    border-color: var(--gold-300);
+    box-shadow: 0 4px 16px rgba(212,169,70,0.35);
+  }
+  .btn.primary:hover:not(:disabled) {
+    box-shadow: 0 6px 22px rgba(212,169,70,0.5);
+  }
+  .btn.danger {
+    background: rgba(229,120,120,0.1);
+    border-color: rgba(229,120,120,0.4);
+    color: var(--red);
+  }
+  .btn.danger:hover { background: rgba(229,120,120,0.2); }
+
+  /* ---------- Question Grid ---------- */
+  .grid-wrap {
+    background: rgba(10,22,40,0.55);
+    border: 1px solid rgba(212,169,70,0.18);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .grid-title {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-300); font-size: 13px;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 12px; text-align: center;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+  }
+  @media (max-width: 580px) {
+    .grid { grid-template-columns: repeat(8, 1fr); }
+  }
+  .cell {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,169,70,0.16);
+    color: var(--cream-dim);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .cell:hover { border-color: var(--gold-400); transform: scale(1.08); }
+  .cell.current { border-color: var(--gold-300); box-shadow: 0 0 0 2px rgba(240,212,136,0.35); color: var(--cream); background: rgba(212,169,70,0.1); }
+  .cell.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+  .cell.wrong { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+  .cell.answered.exam { background: rgba(212,169,70,0.16); border-color: var(--gold-400); color: var(--gold-300); }
+
+  /* ---------- FX Layer ---------- */
+  #fx-canvas {
+    position: fixed; inset: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 9000;
+  }
+
+  /* Floating points */
+  .float-pts {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700; font-size: 38px;
+    color: var(--gold-300);
+    text-shadow: 0 0 18px rgba(240,212,136,0.7), 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 9100;
+    animation: floatUp 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translate(-50%,-30%) scale(0.5) rotate(-4deg); }
+    20%  { opacity: 1; transform: translate(-50%,-50%) scale(1.15) rotate(2deg); }
+    100% { opacity: 0; transform: translate(-50%,-160%) scale(0.9) rotate(-2deg); }
+  }
+
+  /* Happy face popup */
+  .face-pop {
+    position: fixed;
+    pointer-events: none;
+    font-size: 78px;
+    z-index: 9100;
+    animation: facePop 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes facePop {
+    0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-15deg); }
+    35%  { opacity: 1; transform: translate(-50%,-50%) scale(1.3) rotate(10deg); }
+    65%  { transform: translate(-50%,-50%) scale(1) rotate(-5deg); }
+    100% { opacity: 0; transform: translate(-50%,-90%) scale(0.85) rotate(0); }
+  }
+
+  /* Achievement toast */
+  .toast {
+    position: fixed;
+    top: 24px; right: 24px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+    color: var(--navy-900);
+    padding: 14px 22px 14px 18px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; font-size: 14px;
+    box-shadow: 0 12px 36px rgba(212,169,70,0.45);
+    z-index: 9200;
+    display: flex; align-items: center; gap: 12px;
+    transform: translateX(120%);
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 320px;
+  }
+  .toast.show { transform: translateX(0); }
+  .toast .toast-icon { font-size: 28px; line-height: 1; }
+  .toast .toast-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; line-height: 1.1; }
+  .toast .toast-sub { font-size: 11.5px; opacity: 0.85; letter-spacing: 0.4px; }
+
+  /* Result modal */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9500;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(6px);
+  }
+  .modal-bg.show { display: flex; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: linear-gradient(180deg, var(--navy-700), var(--navy-800));
+    border: 1px solid rgba(212,169,70,0.4);
+    border-radius: 18px;
+    padding: 36px 32px;
+    max-width: 520px; width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-deep);
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-height: 90vh; overflow-y: auto;
+  }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+  .modal h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 600;
+    color: var(--gold-300);
+    margin-bottom: 6px;
+  }
+  .modal .verdict {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--cream-dim);
+    margin-bottom: 22px;
+  }
+  .ring-wrap { display: flex; justify-content: center; margin: 8px 0 22px; }
+  .ring { width: 150px; height: 150px; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 10; }
+  .ring .bg { stroke: rgba(212,169,70,0.18); }
+  .ring .fg {
+    stroke: url(#g);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .ring-text {
+    position: relative;
+    margin-top: -150px; height: 150px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-pct {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 700;
+    color: var(--cream); line-height: 1;
+  }
+  .ring-lbl {
+    font-size: 10.5px; letter-spacing: 2px;
+    color: var(--gold-400); text-transform: uppercase; margin-top: 2px;
+  }
+
+  .breakdown {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin-bottom: 22px;
+  }
+  .bd-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,169,70,0.2);
+    border-radius: 10px;
+    padding: 10px 8px;
+  }
+  .bd-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 600;
+    color: var(--cream);
+  }
+  .bd-num.green { color: var(--green); }
+  .bd-num.red { color: var(--red); }
+  .bd-num.gold { color: var(--gold-300); }
+  .bd-lbl {
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--cream-dim); text-transform: uppercase;
+  }
+  .modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* Confirm dialog */
+  .confirm {
+    background: var(--navy-700);
+    border: 1px solid rgba(229,120,120,0.4);
+    max-width: 380px;
+  }
+  .confirm h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--red); font-size: 24px; margin-bottom: 8px;
+  }
+  .confirm p {
+    font-family: 'Lora', serif;
+    color: var(--cream-dim); margin-bottom: 18px;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(212,169,70,0.16);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--cream-dim);
+    opacity: 0.7;
+  }
+
+  /* Shake animation for wrong */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  .shake { animation: shake 0.4s ease; }
+
+  /* Glow on correct */
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 0 rgba(108,200,138,0); }
+    50% { box-shadow: 0 0 30px rgba(108,200,138,0.55); }
+  }
+  .glow { animation: glow 0.7s ease; }
+
+  /* Streak fire */
+  .fire-emoji {
+    display: inline-block;
+    margin-left: 4px;
+    animation: flicker 0.6s ease infinite alternate;
+  }
+  @keyframes flicker {
+    from { transform: scale(1) rotate(-3deg); }
+    to { transform: scale(1.12) rotate(3deg); }
+  }
+
+  /* Star burst on selected */
+  .star-burst {
+    position: absolute;
+    pointer-events: none;
+    width: 200px; height: 200px;
+    z-index: 50;
+  }
+  .star-burst span {
+    position: absolute; top: 50%; left: 50%;
+    width: 14px; height: 14px;
+    color: var(--gold-300);
+    font-size: 16px;
+    animation: starOut 0.9s ease-out forwards;
+    text-shadow: 0 0 8px var(--gold-400);
+  }
+  @keyframes starOut {
+    0%   { opacity: 1; transform: translate(-50%, -50%) translate(0,0) scale(1) rotate(0); }
+    100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx,0), var(--dy,0)) scale(0.3) rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+<canvas id="fx-canvas"></canvas>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">NPPE Practice · Ontario · BOOK1</div>
+    <h1>Contract Law for the Engineer<br><em>Chapters 12 – 15</em></h1>
+    <div class="subtitle">Legality · Statute of Frauds · Misrepresentation, Duress &amp; Undue Influence · Mistake — fifty scenario-based questions drawn from <em>Law for Professional Engineers: Canadian and Global Insights</em>.</div>
+  </header>
+
+  <div class="mode-bar">
+    <div class="mode-pill active" data-mode="practice" onclick="setMode('practice')">Practice Mode</div>
+    <div class="mode-pill" data-mode="exam" onclick="setMode('exam')">Exam Mode</div>
+    <div class="mode-pill" id="shuffleBtn" onclick="toggleShuffle()">Shuffle: Off</div>
+  </div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="stat-label">Question</div><div class="stat-value" id="sQuestion">1<span class="small">/50</span></div></div>
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="sScore">0</div></div>
+    <div class="stat"><div class="stat-label">Streak</div><div class="stat-value streak" id="sStreak">0</div></div>
+    <div class="stat"><div class="stat-label">Correct</div><div class="stat-value" id="sCorrect" style="color:var(--green)">0</div></div>
+    <div class="stat"><div class="stat-label">Wrong</div><div class="stat-value" id="sWrong" style="color:var(--red)">0</div></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="card" id="card">
+    <div class="q-meta">
+      <div class="q-num" id="qNum">Question <em>01</em></div>
+      <div class="q-tag" id="qTag">Chapter 12</div>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation">
+      <span class="label">Explanation</span>
+      <div id="explText"></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" id="prevBtn" onclick="prev()">← Previous</button>
+    <button class="btn primary" id="nextBtn" onclick="next()">Next →</button>
+    <button class="btn" id="finishBtn" onclick="finishExam()" style="display:none">Submit Exam</button>
+    <button class="btn danger" onclick="confirmReset()">Reset</button>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="grid-title">Question Navigator</div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <footer>
+    NPPE pass threshold ≈ 65–70%. Answers cite case law and provisions from chapters 12–15 of <em>Law for Professional Engineers</em>.
+  </footer>
+</div>
+
+<!-- Result modal -->
+<div class="modal-bg" id="resultModal">
+  <div class="modal">
+    <h2 id="resultTitle">Examination Complete</h2>
+    <div class="verdict" id="resultVerdict">A measured demonstration of contract-law fluency.</div>
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e6c068"/>
+            <stop offset="100%" stop-color="#d4a946"/>
+          </linearGradient>
+        </defs>
+        <circle class="bg" cx="60" cy="60" r="52"/>
+        <circle class="fg" id="ringFg" cx="60" cy="60" r="52"
+                stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+      </svg>
+      <div class="ring-text">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-lbl">Final Score</div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <div class="bd-item"><div class="bd-num green" id="bdCorrect">0</div><div class="bd-lbl">Correct</div></div>
+      <div class="bd-item"><div class="bd-num red" id="bdWrong">0</div><div class="bd-lbl">Wrong</div></div>
+      <div class="bd-item"><div class="bd-num gold" id="bdPoints">0</div><div class="bd-lbl">Points</div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="reviewAnswers()">Review Answers</button>
+      <button class="btn primary" onclick="restartFromModal()">Take Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm reset dialog -->
+<div class="modal-bg" id="confirmModal">
+  <div class="modal confirm">
+    <h3>Reset the quiz?</h3>
+    <p>This will clear your score, streak, and all answers. There is no undo.</p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeConfirm()">Cancel</button>
+      <button class="btn danger" onclick="doReset()">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   QUESTION BANK — 50 questions across BOOK1 Chapters 12–15
+   ========================================================================= */
+const BANK = [
+  {
+    ch: "Ch 12",
+    q: "An engineer-contractor in Ontario performs electrical work without holding the licence required by a municipal by-law. After completing the job, the contractor sues the homeowner for non-payment. Following <em>Kocotis v D'Angelo</em> (1958, Ont CA), the most likely outcome is:",
+    opts: [
+      "The contract is enforced because the by-law was only intended to raise revenue.",
+      "The contract is enforceable so long as the work was performed competently.",
+      "The contract is illegal and unenforceable; the court will not order payment.",
+      "The contract is automatically void, and the contractor must repay any deposit received."
+    ],
+    a: 2,
+    e: "In <em>Kocotis</em>, the Ontario Court of Appeal held that the by-law existed to <em>protect the public</em> from unqualified electricians, not to raise revenue. A contract to perform work the contractor was not licensed to perform was therefore <em>illegal and could not be enforced in the courts</em>."
+  },
+  {
+    ch: "Ch 12",
+    q: "Which of the following is NOT given in the chapter as an example of a contract that may be illegal as contrary to statute law?",
+    opts: [
+      "A contract between two private parties with no consideration provided by one side.",
+      "A property transfer between related parties within one year of bankruptcy, contrary to the Bankruptcy and Insolvency Act.",
+      "A construction contract that purports to waive lien rights contrary to Ontario's Construction Act.",
+      "A contract that engages in bid-rigging contrary to the Competition Act."
+    ],
+    a: 0,
+    e: "Lack of consideration is a separate doctrine (formation), not 'contrary to statute law.' The other three are exactly the statutory examples cited: <em>Bankruptcy and Insolvency Act</em> transfer voiding, <em>Competition Act</em> bid-rigging, and waiver of lien rights contrary to the Construction Act."
+  },
+  {
+    ch: "Ch 12",
+    q: "The 1979 decision in <em>Monticchio v Torcema Construction Ltd</em> represented a departure from earlier precedents because the court held that:",
+    opts: [
+      "A licensed contractor is always entitled to recover full contract price regardless of by-law breaches.",
+      "An unlicensed contractor automatically becomes licensed upon completion of the work.",
+      "Licensing by-laws are unconstitutional and cannot bar recovery on a contract.",
+      "Even where a service contract was illegal due to failure to license, the unlicensed contractor could at least recover for materials supplied."
+    ],
+    a: 3,
+    e: "<em>Monticchio</em> distinguished the by-law (which required licensing for services) from the supply of materials, which the by-law did not prohibit. The court held the contractor should at least be paid for materials supplied, and suggested time-basis service claims might also succeed — a softening of the earlier blanket rule in <em>Kocotis</em> and <em>Calax</em>."
+  },
+  {
+    ch: "Ch 12",
+    q: "A purchaser buys an engineering consulting business and asks the vendor to sign a non-competition agreement. When will an Ontario court enforce that restrictive covenant?",
+    opts: [
+      "Always, because the parties freely agreed to its terms.",
+      "Only if the covenant is reasonable in time and geographic area as between the parties, and does not adversely affect the public interest.",
+      "Only if the covenant lasts no more than two years and is restricted to one municipality.",
+      "Only if the vendor is paid additional consideration specifically for the covenant."
+    ],
+    a: 1,
+    e: "The court starts from the presumption that any restraint of trade is against public policy and void. The party seeking enforcement must rebut that presumption by proving the covenant is <em>reasonable between the parties</em> and does not <em>adversely affect the public interest</em>. There are no fixed time or geographic ceilings — every case turns on its facts."
+  },
+  {
+    ch: "Ch 12",
+    q: "An employment contract restricts an engineer from practising professional engineering anywhere in Ontario for ten years after leaving the employer. The court determines this restraint is unreasonable. What will the court most likely do?",
+    opts: [
+      "Rewrite the clause to make it reasonable (e.g., reduce the period to two years and the area to one city).",
+      "Enforce the clause as written, since the engineer signed it.",
+      "Refuse to enforce the restrictive clause; courts will not 'blue-pencil' or rewrite an unreasonable restraint into a reasonable one.",
+      "Strike down the entire employment contract."
+    ],
+    a: 2,
+    e: "The text is explicit: 'If the court determines that the provisions are unreasonable, it will not intervene to enforce more reasonable terms.' Courts decline to rewrite unreasonable restraints; they simply refuse to enforce them, particularly given the reluctance to limit a former employee's livelihood."
+  },
+  {
+    ch: "Ch 12",
+    q: "A contract that contravenes statutory law may be illegal or void. By contrast, a contract that is held to be against <strong>public policy</strong> is illegal or void according to:",
+    opts: [
+      "Common law.",
+      "International convention only.",
+      "The Charter of Rights and Freedoms.",
+      "The Civil Code of Quebec."
+    ],
+    a: 0,
+    e: "The text distinguishes the two sources: statutory illegality is grounded in legislation, while contracts against public policy are illegal/void at <em>common law</em>. Restraint-of-trade and certain restrictive covenants are common-law examples."
+  },
+  {
+    ch: "Ch 12",
+    q: "Cheshire and Fifoot, cited in <em>Calax Construction Inc v Lepofsky</em>, state that any transaction tainted by illegality where both parties are equally involved is 'beyond the pale of the law.' The practical consequence is that:",
+    opts: [
+      "Both parties may sue each other for damages on the contract.",
+      "The court will award restitution to the innocent party only.",
+      "The party with greater bargaining power may enforce the contract.",
+      "No party can claim any right or remedy under an illegal transaction in which they participated."
+    ],
+    a: 3,
+    e: "The quoted excerpt — applied in <em>Calax</em> — is the classic <em>ex turpi causa</em> principle: '<em>No person can claim any right or remedy whatsoever under an illegal transaction in which he has participated.</em>'"
+  },
+  {
+    ch: "Ch 12",
+    q: "Under the Bankruptcy and Insolvency Act (Canada) example given in Chapter 12, if an insolvent party transfers property to a creditor within three months before bankruptcy with the intent of preferring that creditor over others, the transfer is:",
+    opts: [
+      "Valid, but reduced to 50% of its value.",
+      "Fraudulent and void.",
+      "Voidable only if the trustee can prove insolvency at the moment of transfer.",
+      "Subject to ratification by the other creditors."
+    ],
+    a: 1,
+    e: "The Act treats such a transfer as <em>fraudulent and void</em> — it is presumed to be a fraudulent preference because it deprives other creditors of property that should be available in the bankruptcy."
+  },
+  {
+    ch: "Ch 12",
+    q: "An engineer signs an employment contract containing a five-year, province-wide non-competition clause. Three years later the engineer leaves and starts a competing firm in a different city. The former employer sues for an injunction. Which of the following is the BEST description of how a court will analyze the case?",
+    opts: [
+      "The court will enforce the clause because the engineer freely accepted it.",
+      "The court will refuse to consider the clause and ask only whether the engineer has actually competed.",
+      "The court will start from the presumption that any restraint of trade is void, then ask whether the duration, geography, and impact on the engineer's livelihood are reasonable and consistent with the public interest.",
+      "The court will refer the matter to mandatory arbitration before considering enforceability."
+    ],
+    a: 2,
+    e: "The chapter's sample case sets out exactly this framework: presumption against restraint, then case-by-case reasonableness analysis on time, geography, public policy and the employee's ability to earn a livelihood. Courts are particularly reluctant to enforce restraints that severely limit livelihood."
+  },
+  {
+    ch: "Ch 12",
+    q: "Under the <em>Competition Act</em>, two contractors privately agree before tender submission that one will submit an artificially high bid so the other can win at a higher-than-competitive price. This arrangement is best characterized as:",
+    opts: [
+      "Bid-rigging, an illegal contract contrary to statute law.",
+      "A joint venture exempt from the Act.",
+      "A lawful pre-bid alignment.",
+      "A legitimate competitive strategy provided no third party complains."
+    ],
+    a: 0,
+    e: "Bid-rigging is the textbook example given in Chapter 12 of a contract contrary to the <em>Competition Act</em>. Such an agreement is illegal at law and unenforceable between the parties."
+  },
+  {
+    ch: "Ch 12",
+    q: "Engineers most often encounter restrictive covenants in two contexts. Which pair best matches the chapter's discussion?",
+    opts: [
+      "Land sale contracts and tenancy agreements.",
+      "Subcontractor warranties and bond instruments.",
+      "Procurement contracts and joint-venture agreements.",
+      "Sale-of-business agreements and employment contracts."
+    ],
+    a: 3,
+    e: "Chapter 12 discusses restrictive covenants principally in the contexts of (i) the sale of a business (vendor's non-competition covenant) and (ii) employment contracts restricting engineers after departure."
+  },
+  {
+    ch: "Ch 13",
+    q: "Section 4 of Ontario's <em>Statute of Frauds</em> requires certain contracts to be evidenced by a written memorandum signed by the party to be charged. Which two categories most commonly affect the practising engineer?",
+    opts: [
+      "Contracts of employment and contracts for the sale of goods over $50.",
+      "Contracts relating to interests in land, and guarantees of indebtedness.",
+      "Contracts with the Crown, and shareholders' agreements.",
+      "Marriage contracts, and contracts not to be performed within one year."
+    ],
+    a: 1,
+    e: "Chapter 13 expressly identifies the two relevant categories for engineers: (1) <em>contracts or sale of lands, tenements or hereditaments, or any interest in or concerning them</em>, and (2) <em>guarantees</em>."
+  },
+  {
+    ch: "Ch 13",
+    q: "Under the Ontario Statute of Frauds, a verbal agreement to convey land is:",
+    opts: [
+      "Void from inception and incapable of any legal recognition.",
+      "Fully enforceable provided two witnesses can attest to the agreement.",
+      "Unenforceable through court action, but not void — courts will recognize it for limited purposes such as recovery of a deposit.",
+      "Enforceable only if the buyer has paid more than 10% of the purchase price."
+    ],
+    a: 2,
+    e: "The chapter is clear: a verbal land agreement is <em>unenforceable</em> but <em>not void</em>. Courts will not let a defaulting party retain a deposit cheque under such a verbal arrangement — they recognize the agreement to that limited extent."
+  },
+  {
+    ch: "Ch 13",
+    q: "A guarantee of indebtedness must be in writing under the Statute of Frauds. An <strong>indemnification</strong>, by contrast:",
+    opts: [
+      "Need not be in writing to be enforceable, although in practice it should be put in writing because the line between guarantee and indemnification can be difficult to draw.",
+      "Must also be in writing or it is unenforceable.",
+      "Is automatically void unless registered with a court.",
+      "Is enforceable only if signed under seal."
+    ],
+    a: 0,
+    e: "The text distinguishes the two: a <em>guarantee</em> is caught by the Statute (must be written), but an <em>indemnification</em> is not. However, because the distinction can be difficult, the chapter recommends putting both in writing."
+  },
+  {
+    ch: "Ch 13",
+    q: "An engineer enters into a verbal lease for office space. After several months, a dispute arises and the landlord seeks to enforce the verbal lease. Most likely, under the Statute of Frauds:",
+    opts: [
+      "The lease is fully enforceable because rent has been paid.",
+      "Verbal leases are always exempt from the Statute of Frauds.",
+      "The lease is enforceable only if the tenant is a corporation.",
+      "Because leasehold interests in land are caught by the Statute, the verbal lease is unenforceable absent a sufficient written memorandum signed by the party to be charged."
+    ],
+    a: 3,
+    e: "Leasehold interests are interests in land. Chapter 13 states that 'agreements relating to ownership interests and leasehold interests in land must be in writing to be enforceable.'"
+  },
+  {
+    ch: "Ch 13",
+    q: "The Canadian provincial statutes of frauds derive from:",
+    opts: [
+      "The U.S. Uniform Commercial Code.",
+      "The English Statute of Frauds.",
+      "The French Civil Code.",
+      "Section 92 of the Constitution Act, 1867."
+    ],
+    a: 1,
+    e: "The chapter notes that statutes of frauds in the common-law provinces are <em>derived from the English Statute of Frauds</em>."
+  },
+  {
+    ch: "Ch 13",
+    q: "What was the original purpose of the English Statute of Frauds, as identified in the chapter?",
+    opts: [
+      "To replace common-law contract doctrine entirely.",
+      "To impose stamp duty on written contracts.",
+      "To prevent loss of property interests through fraudulent testimony about verbal agreements to convey property.",
+      "To force all contracts to be registered with the courts."
+    ],
+    a: 2,
+    e: "The chapter explains that the original Statute aimed to prevent <em>property interests being lost through fraudulent testimony about verbal agreements to convey property interests</em>."
+  },
+  {
+    ch: "Ch 13",
+    q: "Although a contract may be unenforceable for non-compliance with the Statute of Frauds, it is not void. Which of the following best illustrates that distinction in practice?",
+    opts: [
+      "Courts will recognize the verbal agreement to the extent of refusing to allow a defaulting party to retain a deposit, even though the agreement itself cannot be sued upon.",
+      "The defaulting party may keep a deposit because the verbal agreement is treated as a nullity.",
+      "The non-defaulting party may sue for full performance even though the contract is in writing.",
+      "The Statute of Frauds applies only to commercial parties, never to individuals."
+    ],
+    a: 0,
+    e: "The chapter's example: a buyer who pays a deposit on a verbal land deal, where the seller refuses to convey, can recover the deposit. The court recognizes the verbal contract to that limited extent — it is unenforceable but not void."
+  },
+  {
+    ch: "Ch 13",
+    q: "Which of the following requirements does Section 4 of Ontario's Statute of Frauds impose on contracts within its scope?",
+    opts: [
+      "The agreement must be sworn before a notary.",
+      "The agreement must be registered with the Land Registry within 30 days.",
+      "Both parties must sign, with two witnesses present.",
+      "The agreement, or some memorandum or note thereof, must be in writing and signed by the party to be charged or that party's lawful agent."
+    ],
+    a: 3,
+    e: "Section 4 (quoted in the chapter) requires that '<em>the agreement upon which the action is brought, or some memorandum or note thereof is in writing and signed by the party to be charged therewith or some person thereunto lawfully authorized by the party.</em>' Witnesses, notarization and registration are not required by the Statute itself."
+  },
+  {
+    ch: "Ch 13",
+    q: "Why does the chapter recommend reducing both guarantees AND indemnifications to writing, even though the Statute of Frauds technically requires only the former?",
+    opts: [
+      "Because indemnifications are illegal unless written.",
+      "Because the line between a guarantee and an indemnification can be difficult to draw, and a court might recharacterize an indemnification as a guarantee that fails for want of writing.",
+      "Because the Law Society requires it.",
+      "Because writing converts the indemnification into a sealed instrument."
+    ],
+    a: 1,
+    e: "The chapter notes that distinguishing a guarantee (caught by the Statute) from an indemnification (not caught) can be difficult. Putting both in writing avoids the risk of the agreement being recharacterized and held unenforceable."
+  },
+  {
+    ch: "Ch 13",
+    q: "An engineer relies on an oral promise from a parent company to 'stand behind' a subsidiary's debt to a supplier. The supplier later seeks to enforce that promise. Under Ontario's Statute of Frauds, the supplier's claim is:",
+    opts: [
+      "Automatically successful because the promise was specific.",
+      "Successful, because oral guarantees of corporate debt are exempt.",
+      "Likely unenforceable, because the promise to answer for the debt of another (a guarantee) is caught by Section 4 and must be in writing signed by the parent.",
+      "Successful, but only if the engineer also signed."
+    ],
+    a: 2,
+    e: "The Section 4 wording — '<em>any special promise to answer for the debt, default or miscarriage of any other person</em>' — directly captures this verbal guarantee. Without a sufficient written, signed memorandum, the supplier's claim is unenforceable."
+  },
+  {
+    ch: "Ch 13",
+    q: "From a practising-engineer's risk-management perspective, the chapter's overarching message about the form of contracts is best summarized as:",
+    opts: [
+      "Since substantiating the terms of a verbal agreement is difficult, all contracts are best reduced to a single, clear written document.",
+      "Verbal contracts are equivalent to written ones in all respects.",
+      "Written contracts are required only for engineering services worth over $100,000.",
+      "Contracts are best formed in part by correspondence and in part by undocumented discussions for flexibility."
+    ],
+    a: 0,
+    e: "The chapter warns of the obvious evidentiary problem with verbal agreements — proving terms — and concludes that 'this difficulty is best avoided by ensuring that all contracts are in written form,' ideally as a single written contract that clearly details the agreement."
+  },
+  {
+    ch: "Ch 14",
+    q: "An <em>innocent misrepresentation</em> is best defined as:",
+    opts: [
+      "A statement made knowingly false with intent to deceive.",
+      "A statement of opinion that turns out to be wrong.",
+      "A statement made recklessly, without belief in its truth.",
+      "A false assertion of fact made by a party who does not appreciate that the statement is false."
+    ],
+    a: 3,
+    e: "The chapter defines an innocent misrepresentation as a false assertion made <em>by a party who does not appreciate that the statement is false</em> — distinguishing it from fraudulent misrepresentation, which involves knowledge or recklessness."
+  },
+  {
+    ch: "Ch 14",
+    q: "In <em>Derry v Peek</em>, the English Court of Appeal described a fraudulent misrepresentation as a statement made:",
+    opts: [
+      "Negligently and in breach of a duty of care.",
+      "(1) knowingly, or (2) without belief in its truth, or (3) recklessly, careless whether it be true or false.",
+      "Innocently, but with material consequences.",
+      "Under economic pressure."
+    ],
+    a: 1,
+    e: "The classic <em>Derry v Peek</em> formulation, quoted directly in the chapter, identifies three branches: <em>knowingly</em>, <em>without belief in its truth</em>, or <em>recklessly</em>, careless whether it is true or false."
+  },
+  {
+    ch: "Ch 14",
+    q: "Which remedies are available to a party who entered a contract because of an <strong>innocent</strong> misrepresentation?",
+    opts: [
+      "Rescission and damages for deceit.",
+      "Specific performance only.",
+      "Rescission and compensation for reasonable costs sustained as a result of entering into the contract; the contract is voidable at the option of the misled party.",
+      "Punitive damages and injunction."
+    ],
+    a: 2,
+    e: "Innocent misrepresentation gives rise to <em>rescission</em> (the contract is voidable at the option of the misled party, who must repudiate within a reasonable time) plus reasonable costs incurred. Damages for deceit are reserved for <em>fraudulent</em> misrepresentation."
+  },
+  {
+    ch: "Ch 14",
+    q: "If a party is induced to contract by a <strong>fraudulent</strong> misrepresentation, that party may:",
+    opts: [
+      "Rescind the contract, claim reasonable costs, AND sue for damages for deceit; potential liability for negligent misrepresentation may also exist following Hedley Byrne.",
+      "Only rescind the contract.",
+      "Only sue for damages for deceit.",
+      "Only obtain an injunction prohibiting future contracts."
+    ],
+    a: 0,
+    e: "Fraudulent misrepresentation gives the deceived party the fullest set of remedies: rescission, reasonable costs, AND damages for deceit. The chapter also notes that <em>Hedley Byrne</em> establishes potential liability for <em>negligent</em> misrepresentation/misstatement."
+  },
+  {
+    ch: "Ch 14",
+    q: "In <em>Township of McKillop v Pidgeon and Foley</em>, the contractor terminated a construction contract after discovering that the actual excavation required was approximately 16% greater than the engineer's estimate provided in the tender documents. The court held that:",
+    opts: [
+      "The contractor was bound by the contract because engineering estimates are never binding.",
+      "The error was immaterial because it was below 20%.",
+      "The contractor was guilty of fraud for terminating.",
+      "The contractor had been induced to enter the contract by an innocent misrepresentation in the tender documents and was entitled to repudiate."
+    ],
+    a: 3,
+    e: "The court accepted expert evidence that a 16% error was excessive and would deprive the contractor of any profit (and could cause loss). The judge concluded a mistake had arisen from an <em>innocent misrepresentation</em> in the tendering documents, entitling the contractor to repudiate."
+  },
+  {
+    ch: "Ch 14",
+    q: "<em>Duress</em>, in classic contract law, refers to:",
+    opts: [
+      "Any uncomfortable bargaining position.",
+      "Threatened or actual violence or imprisonment, directed at the contracting party or a close relative, used to persuade entry into the contract.",
+      "Misleading representations about price.",
+      "Failure to disclose material information."
+    ],
+    a: 1,
+    e: "The chapter defines duress as <em>threatened or actual violence or imprisonment</em>, directed at the contracting party or a close relative. A contract induced by duress is voidable."
+  },
+  {
+    ch: "Ch 14",
+    q: "In <em>Mutual Finance Co Ltd v John Wetton & Sons Ltd</em>, why was the second guarantee held unenforceable?",
+    opts: [
+      "Because it was not under seal.",
+      "Because the guarantor was a minor.",
+      "Because the guarantee was procured by threatening to disclose a family member's forgery, knowing the disclosure could kill the alleged forger's ill father — equitable relief was given against duress.",
+      "Because the original debt had been forgiven."
+    ],
+    a: 2,
+    e: "The threatened disclosure of the forgery, combined with knowledge that the father's ill health meant the shock could kill him, amounted to coercion. The court provided equitable relief and held the guarantee unenforceable, even though the threatened disclosure (of a real crime) was technically lawful."
+  },
+  {
+    ch: "Ch 14",
+    q: "The British Columbia Supreme Court's 1993 decision in <em>Gotaverken Energy Systems Ltd v Cariboo Pulp & Paper Co</em> dealt with which doctrine?",
+    opts: [
+      "Economic duress.",
+      "Specific performance.",
+      "Frustration.",
+      "Promissory estoppel."
+    ],
+    a: 0,
+    e: "<em>Gotaverken</em> is the chapter's leading Canadian illustration of <em>economic duress</em> — coercion through threatened economic harm rather than through threatened violence or imprisonment."
+  },
+  {
+    ch: "Ch 14",
+    q: "In <em>Gotaverken Energy Systems</em>, the contractor threatened to reduce its work schedule on a pulp-mill recovery-boiler retrofit unless the owner converted the contract from fixed-price to a time-and-materials basis. The court ultimately held that the amending agreement:",
+    opts: [
+      "Was valid because the owner signed it.",
+      "Was a frustrated contract.",
+      "Was valid as long as the contractor performed in good faith.",
+      "Was invalid because it had been entered into under economic duress; the contractor recovered substantial extras under the original contract but not the full claimed amount."
+    ],
+    a: 3,
+    e: "The court held the pressure was not legitimate — the owner was effectively given no alternative — and refused to enforce the time-and-material amending agreement. The contractor (which sued for over $10M) ultimately recovered over $6M as extras under the original contract."
+  },
+  {
+    ch: "Ch 14",
+    q: "The English decision in <em>Atlas Express Ltd v Kafco (Importers & Distributors) Ltd</em>, cited in <em>Gotaverken</em>, stands for the proposition that:",
+    opts: [
+      "Economic duress is not recognized in modern contract law.",
+      "A new agreement extracted under economic duress is not enforceable, especially where it is repudiated after the illegitimate pressure ceases.",
+      "Verbal contracts are unenforceable.",
+      "Force majeure clauses must be in writing."
+    ],
+    a: 1,
+    e: "<em>Atlas Express v Kafco</em> involved a party forced to renegotiate to its disadvantage with no alternative. The case is cited as authority that a new agreement procured under economic duress will not be enforced where it is revoked once the illegitimate pressure has ceased."
+  },
+  {
+    ch: "Ch 14",
+    q: "<em>Undue influence</em> is distinguished from duress because:",
+    opts: [
+      "It is a statutory rather than a common-law concept.",
+      "It applies only between corporations.",
+      "It involves the dominant party coercing the dominated party into an unfair agreement through their relationship — less drastic than duress, an equitable concept that arises most often where parties are not at arms' length (e.g., parent–minor child, spouses).",
+      "It requires actual physical violence."
+    ],
+    a: 2,
+    e: "The chapter explains that undue influence arises in <em>less drastic</em> circumstances than duress, is <em>equitable</em>, and is uncommon between arms-length business parties. It typically arises in family relationships where bargaining positions are unequal."
+  },
+  {
+    ch: "Ch 14",
+    q: "If a contractor relies on engineering plans containing material misrepresentations, the chapter indicates that the contractor may be entitled to:",
+    opts: [
+      "Rescind the construction contract (and may have other remedies depending on whether the misrepresentation was innocent or fraudulent).",
+      "Specific performance of the original tender.",
+      "Sue only the engineer's professional regulator.",
+      "Continue performance and recover an automatic 16% premium."
+    ],
+    a: 0,
+    e: "Where engineering plans/specifications contain misrepresentations on which the contractor reasonably relied, the contract may be rescinded — as in <em>Township of McKillop</em>. The remedies available depend on whether the misrepresentation was innocent, negligent or fraudulent."
+  },
+  {
+    ch: "Ch 14",
+    q: "Why did the court in <em>Township of McKillop</em> note that 'it would be unreasonable to expect the contractor to do the work of the engineer'?",
+    opts: [
+      "Because the contractor was not licensed to do engineering.",
+      "Because the engineer was the contractor's employee.",
+      "Because contractors must always perform engineering as an implied term.",
+      "Because the contractor had relied on the engineer's estimate in tendering, and shifting the burden of independently verifying the estimate onto the contractor would defeat the purpose of providing an estimate."
+    ],
+    a: 3,
+    e: "The judge observed that the contractor had entered the contract <em>upon the faith of the estimate</em>. While estimates are often expressly non-binding, the duty to compute the work cannot be wholly transferred to the bidding contractor; that would be unreasonable."
+  },
+  {
+    ch: "Ch 14",
+    q: "Which of the following statements about misrepresentation, duress and undue influence is MOST accurate?",
+    opts: [
+      "All three render a contract automatically void from inception.",
+      "All three render the contract <em>voidable</em> at the option of the affected party, with rescission as the principal equitable remedy and additional damages where appropriate.",
+      "Only fraudulent misrepresentation renders a contract voidable.",
+      "Duress renders a contract void; the others have no effect."
+    ],
+    a: 1,
+    e: "Each of these vitiating factors makes the contract <em>voidable</em> at the option of the affected party. The party may rescind (set aside) the contract, with damages additionally available for fraudulent (and potentially negligent) misrepresentation."
+  },
+  {
+    ch: "Ch 15",
+    q: "The remedy of <strong>rectification</strong> applies where:",
+    opts: [
+      "A party realizes after signing that the deal was a bad bargain.",
+      "Only one party made a mistake about the price.",
+      "Both parties clearly reached agreement, but the written contract inaccurately records what they agreed — a 'common mistake' of a secretarial or recording nature.",
+      "The contract turns out to be impossible to perform."
+    ],
+    a: 2,
+    e: "Rectification is reserved for a <em>common mistake</em> in recording the agreement. The party seeking rectification must persuade the court that the writing is inconsistent with what the parties actually agreed."
+  },
+  {
+    ch: "Ch 15",
+    q: "In the British Columbia Court of Appeal's 1960 decision in <em>Imperial Glass Ltd v Consolidated Supplies Ltd</em>, the contractor used the wrong figure in calculating its price. The offeree was aware of the mistake but had not induced it. The court refused relief because:",
+    opts: [
+      "The offeree's conduct, although possibly questionable on moral or ethical grounds, was not fraudulent — the court would not relieve the contractor of its own unilateral calculation mistake.",
+      "The contract had already been substantially performed.",
+      "The offeree had specifically denied knowing about the mistake.",
+      "The mistake was less than 5% of the contract price."
+    ],
+    a: 0,
+    e: "The court held that the offeree's conduct, even if questionable on moral or ethical grounds, was <em>not fraudulent</em>, and the law would not relieve the contractor of the consequences of its own unilateral calculation mistake. The court did not intervene."
+  },
+  {
+    ch: "Ch 15",
+    q: "In <em>Belle River Community Arena Inc v WJC Kaufmann Co</em>, the contractor failed to transfer a figure from a summary sheet, producing a bid roughly $70,000 below intent. The Ontario courts ultimately held in favour of the contractor on the principle that:",
+    opts: [
+      "Unilateral mistakes always entitle the bidder to withdraw.",
+      "Tendering processes are governed entirely by statute.",
+      "Bid deposits must always be returned where mistakes occur.",
+      "An offeree cannot accept an offer that he knows has been made by mistake and that affects a fundamental term of the contract."
+    ],
+    a: 3,
+    e: "The Court of Appeal articulated the now-classic principle: an offeree cannot accept an offer he <em>knows</em> contains a mistake affecting a <em>fundamental term</em>. The mistake meant the offer was not the offer the offeror intended to make, and the offeree knew that."
+  },
+  {
+    ch: "Ch 15",
+    q: "What was the key factual distinction the courts drew between the mistake in <em>Imperial Glass</em> and the mistake in <em>Belle River</em>?",
+    opts: [
+      "<em>Imperial Glass</em> involved a corporation; <em>Belle River</em> involved an individual.",
+      "<em>Imperial Glass</em> involved using the wrong price in the calculation, while <em>Belle River</em> involved omitting to transfer a figure from a summary sheet to an adding-machine tape.",
+      "<em>Imperial Glass</em> was decided in B.C., while <em>Belle River</em> was decided in Quebec.",
+      "<em>Imperial Glass</em> involved a public tender; <em>Belle River</em> did not."
+    ],
+    a: 1,
+    e: "The Belle River court explicitly drew this distinction: <em>Imperial Glass</em>'s mistake was using the wrong figure within a calculation; <em>Belle River</em>'s mistake was an omission in transferring a figure between documents — a different kind of mistake that the court treated more sympathetically."
+  },
+  {
+    ch: "Ch 15",
+    q: "In <em>Ron Engineering et al v The Queen in right of Ontario</em>, the contractor's tender of $2,748,000 had inadvertently omitted an amount of:",
+    opts: [
+      "$70,058",
+      "$150,000",
+      "$750,058",
+      "$2,748,000"
+    ],
+    a: 2,
+    e: "The omitted amount was $750,058 from a $2,748,000 tender, accompanied by a $150,000 bid deposit. The contractor was unable to contact the Commission before tenders were opened."
+  },
+  {
+    ch: "Ch 15",
+    q: "The 1981 Supreme Court of Canada decision in <em>Ron Engineering</em> introduced which transformative concept into Canadian tendering law?",
+    opts: [
+      "The 'two contracts' analysis — Contract A (tendering contract) is formed when a compliant bid is submitted in response to an invitation to tender, and is separate from Contract B (the construction contract awarded after acceptance).",
+      "The doctrine of frustration in construction contracts.",
+      "Mandatory bid bonds for all public tenders.",
+      "Strict liability for engineers' tendering errors."
+    ],
+    a: 0,
+    e: "The Supreme Court's identification of <em>Contract A</em> — the tendering contract that arises on bid submission, distinct from the eventual construction contract <em>Contract B</em> — fundamentally changed Canadian tendering law and created a new framework for analyzing tender obligations and remedies."
+  },
+  {
+    ch: "Ch 15",
+    q: "Why did the Supreme Court of Canada in <em>Ron Engineering</em> conclude that the $150,000 bid deposit was forfeit?",
+    opts: [
+      "Because the contractor had failed to provide a performance bond.",
+      "Because the deposit was below 10% of the contract value.",
+      "Because the contractor had committed fraud.",
+      "Because the Information for Tenderers contained a clause expressly entitling the Commission to retain the tender deposit if the tenderer withdrew the bid or failed to deliver the required executed agreement and bonds — and the unilateral mistake had not been communicated at the time of submission."
+    ],
+    a: 3,
+    e: "The Court relied on the express forfeiture provision in the Information for Tenderers and held that, because the mistake was not communicated at submission and did not affect Contract A itself, the contractual right to retain the deposit was triggered."
+  },
+  {
+    ch: "Ch 15",
+    q: "A 'unilateral mistake' is best described as:",
+    opts: [
+      "A mistake by both parties in recording an agreed term.",
+      "A mistake made by only one party to a contract.",
+      "A mistake by the court in interpreting the agreement.",
+      "Any clerical error in a written contract."
+    ],
+    a: 1,
+    e: "The chapter defines unilateral mistake as a mistake made by <em>only one party</em>. Common mistakes (made by both parties in recording the agreement) are addressed by rectification."
+  },
+  {
+    ch: "Ch 15",
+    q: "Did the Supreme Court of Canada in <em>Ron Engineering</em> expressly overrule <em>Belle River Community Arena Inc v Kaufmann</em>?",
+    opts: [
+      "Yes — Belle River is no longer good law.",
+      "Yes — both cases were expressly overruled.",
+      "No — <em>Ron Engineering</em> did not expressly overrule <em>Belle River</em>, which has fuelled some speculation that future cases might distinguish the two on their facts, though that has not yet been of much practical assistance to contractors.",
+      "Belle River was decided after Ron Engineering."
+    ],
+    a: 2,
+    e: "The chapter notes that the Supreme Court did <em>not</em> expressly overrule <em>Belle River</em>, leaving room for argument that a sufficiently distinguishable mistake could still attract relief — although in practice that argument has had limited success."
+  },
+  {
+    ch: "Ch 15",
+    q: "Under the Contract A framework, the obligations of an owner and a tendering contractor at the moment of bid submission arise from:",
+    opts: [
+      "The provisions of the tender documents (Information for Tenderers, instructions to bidders, etc.) plus certain implied terms recognized by the courts.",
+      "Only the eventual construction contract once it is signed.",
+      "Provincial procurement legislation alone.",
+      "The general law of negotiation, with no contractual obligations until award."
+    ],
+    a: 0,
+    e: "The chapter notes that Contract A's content is determined principally by the tender documents themselves, plus implied terms that Canadian courts (especially the Supreme Court of Canada) have recognized in subsequent jurisprudence — a topic developed further in Chapter 16."
+  },
+  {
+    ch: "Ch 15",
+    q: "Why is the <em>Ron Engineering</em> decision particularly important for engineers involved in the tendering process?",
+    opts: [
+      "Because it makes engineers personally liable for any tendering mistake.",
+      "Because it makes all bid deposits non-refundable.",
+      "Because it eliminates the need for tender documents.",
+      "Because Contract A imposes binding obligations on tendering parties from the moment a compliant bid is submitted, and engineers who advise on, draft or evaluate tender documents must understand those obligations and the potential liabilities they create for project participants."
+    ],
+    a: 3,
+    e: "The chapter stresses that engineers are deeply involved in the tendering process — drafting tender packages, evaluating bids, advising owners — and the Contract A framework creates obligations and potential liabilities that engineers must understand to discharge their professional responsibilities."
+  },
+  {
+    ch: "Ch 15",
+    q: "When a court applies the principle from <em>Belle River</em> to a unilateral tendering mistake, the central question is whether:",
+    opts: [
+      "The mistake was below a fixed dollar threshold.",
+      "The offeree (typically the owner) knew of the mistake AND the mistake affected a fundamental term of the contract.",
+      "The contractor was a member of an industry association.",
+      "The tender was opened in public."
+    ],
+    a: 1,
+    e: "The Belle River principle has two requirements: (i) the offeree knew of the mistake, and (ii) the mistake affected a <em>fundamental term</em>. Both must be satisfied for the offeree to be precluded from snapping up the bid."
+  },
+  {
+    ch: "Ch 15",
+    q: "The Corbin on Contracts excerpt cited in the <em>Belle River</em> decision argues that:",
+    opts: [
+      "Courts should always enforce mistaken bids to preserve certainty.",
+      "Mistakes in calculation are never grounds for relief.",
+      "Inflexible and mechanical rules on mistake lead to fiction and camouflage; sufficient stability is maintained if courts carefully weigh the combination of factors in each case and require strong, convincing proof of the mistake.",
+      "American law has now uniformly rejected relief for unilateral mistake."
+    ],
+    a: 2,
+    e: "The Corbin passage urges a fact-sensitive approach over rigid rules, observing that 'certainty in the law is largely an illusion' and that 'a just and reasonable man will not insist upon profiting by the other's mistake.' The court found this view persuasive."
+  },
+  {
+    ch: "Ch 15",
+    q: "An engineer reviewing a tender on behalf of an owner notices what appears to be a calculation error of approximately $200,000 — a fundamental term — in the lowest bid before the contract has been awarded. The most professionally and legally appropriate response is to:",
+    opts: [
+      "Recommend the owner contact the contractor to verify the bid (and consult counsel), recognizing that knowingly snapping up a bid that contains a fundamental mistake may render any resulting contract unenforceable on Belle River principles, while nuances flowing from Ron Engineering must also be considered.",
+      "Recommend immediate award to lock in the favourable price.",
+      "Ignore the issue because tendering is purely a legal matter outside the engineer's role.",
+      "Add the missing amount to the bid silently and proceed."
+    ],
+    a: 0,
+    e: "The legal landscape blends <em>Belle River</em> (a known fundamental mistake cannot simply be accepted) with <em>Ron Engineering</em> (Contract A and its express terms govern, including bid-deposit forfeiture clauses). The professionally responsible course is to verify with the bidder, document, and obtain legal advice."
+  }
+];
+
+/* =========================================================================
+   STATE & PERSISTENCE
+   ========================================================================= */
+const STORAGE_KEY = "nppe_book1_ch12_15_state_v1";
+const PASS_THRESHOLD = 0.65;
+
+let state = {
+  mode: "practice",        // "practice" | "exam"
+  shuffle: false,
+  order: [],               // indices into BANK
+  current: 0,              // index into order
+  answers: {},             // questionIdx -> selectedOptIdx
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  achievements: {},        // achievementId -> true
+  finished: false
+};
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.order) && parsed.order.length === BANK.length) {
+        state = Object.assign(state, parsed);
+        return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
+function freshOrder() {
+  const arr = BANK.map((_, i) => i);
+  if (state.shuffle) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+  return arr;
+}
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+function render() {
+  const qIdx = state.order[state.current];
+  const q = BANK[qIdx];
+
+  // header
+  document.getElementById("qNum").innerHTML = `Question <em>${String(state.current + 1).padStart(2, "0")}</em>`;
+  document.getElementById("qTag").textContent = q.ch;
+  document.getElementById("qText").innerHTML = q.q;
+
+  // options
+  const optsEl = document.getElementById("options");
+  optsEl.innerHTML = "";
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement("button");
+    div.className = "option";
+    div.innerHTML = `<span class="letter">${String.fromCharCode(65 + i)}</span><span>${opt}</span>`;
+    div.onclick = () => answer(i, div);
+
+    const ans = state.answers[qIdx];
+    if (ans !== undefined) {
+      div.classList.add("disabled");
+      if (state.mode === "practice") {
+        if (i === q.a) div.classList.add(i === ans ? "correct" : "reveal-correct");
+        else if (i === ans) div.classList.add("incorrect");
+      } else if (state.finished) {
+        if (i === q.a) div.classList.add(i === ans ? "correct" : "reveal-correct");
+        else if (i === ans) div.classList.add("incorrect");
+      } else {
+        if (i === ans) {
+          div.style.borderColor = "var(--gold-400)";
+          div.style.background = "rgba(212,169,70,0.10)";
+        }
+      }
+    }
+    optsEl.appendChild(div);
+  });
+
+  // explanation
+  const expl = document.getElementById("explanation");
+  const ans = state.answers[qIdx];
+  const showExpl = ans !== undefined && (state.mode === "practice" || state.finished);
+  if (showExpl) {
+    document.getElementById("explText").innerHTML = q.e;
+    expl.classList.add("show");
+  } else {
+    expl.classList.remove("show");
+  }
+
+  // nav buttons
+  document.getElementById("prevBtn").disabled = state.current === 0;
+  document.getElementById("nextBtn").disabled = state.current === state.order.length - 1;
+  document.getElementById("nextBtn").textContent = state.current === state.order.length - 1 ? "Finish →" : "Next →";
+
+  if (state.mode === "exam" && !state.finished) {
+    const allAnswered = state.order.every((i) => state.answers[i] !== undefined);
+    const fb = document.getElementById("finishBtn");
+    fb.style.display = allAnswered ? "inline-block" : "none";
+  } else {
+    document.getElementById("finishBtn").style.display = "none";
+  }
+
+  updateStats();
+  renderGrid();
+}
+
+function updateStats() {
+  document.getElementById("sQuestion").innerHTML = `${state.current + 1}<span class="small">/${state.order.length}</span>`;
+  document.getElementById("sScore").textContent = state.score;
+
+  const streakEl = document.getElementById("sStreak");
+  const fire = state.streak >= 10 ? '<span class="fire-emoji">🔥🔥</span>' :
+               state.streak >= 5  ? '<span class="fire-emoji">🔥</span>' : '';
+  streakEl.innerHTML = state.streak + fire;
+  streakEl.classList.toggle("fire", state.streak >= 5);
+
+  let correct = 0, wrong = 0;
+  state.order.forEach((qIdx) => {
+    const a = state.answers[qIdx];
+    if (a === undefined) return;
+    if (a === BANK[qIdx].a) correct++; else wrong++;
+  });
+  document.getElementById("sCorrect").textContent = correct;
+  document.getElementById("sWrong").textContent = wrong;
+
+  const total = state.order.length;
+  const answered = Object.keys(state.answers).length;
+  document.getElementById("progressBar").style.width = (answered / total * 100) + "%";
+}
+
+function renderGrid() {
+  const g = document.getElementById("grid");
+  g.innerHTML = "";
+  state.order.forEach((qIdx, ord) => {
+    const c = document.createElement("div");
+    c.className = "cell";
+    c.textContent = ord + 1;
+    if (ord === state.current) c.classList.add("current");
+    const a = state.answers[qIdx];
+    if (a !== undefined) {
+      if (state.mode === "practice" || state.finished) {
+        if (a === BANK[qIdx].a) c.classList.add("correct");
+        else c.classList.add("wrong");
+      } else {
+        c.classList.add("answered", "exam");
+      }
+    }
+    c.onclick = () => { state.current = ord; saveState(); render(); window.scrollTo({top: 0, behavior: "smooth"}); };
+    g.appendChild(c);
+  });
+}
+
+/* =========================================================================
+   ANSWER HANDLING
+   ========================================================================= */
+function answer(optIdx, btnEl) {
+  const qIdx = state.order[state.current];
+  if (state.answers[qIdx] !== undefined) return; // already answered
+  if (state.finished) return;
+
+  state.answers[qIdx] = optIdx;
+  const correct = optIdx === BANK[qIdx].a;
+
+  if (state.mode === "practice") {
+    if (correct) {
+      state.streak++;
+      if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+      const base = 100;
+      const bonus = Math.min(state.streak * 10, 100);
+      const total = base + bonus;
+      state.score += total;
+
+      celebrate(btnEl, total);
+      checkAchievements();
+    } else {
+      state.streak = 0;
+      btnEl.classList.add("shake");
+      setTimeout(() => btnEl.classList.remove("shake"), 450);
+    }
+  } else {
+    // exam mode — defer feedback
+    if (correct) state.score += 100;
+  }
+
+  saveState();
+  render();
+}
+
+/* =========================================================================
+   CELEBRATIONS
+   ========================================================================= */
+function celebrate(btnEl, points) {
+  const rect = btnEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // glow
+  btnEl.classList.add("glow");
+  setTimeout(() => btnEl.classList.remove("glow"), 700);
+
+  // floating points
+  const fp = document.createElement("div");
+  fp.className = "float-pts";
+  fp.textContent = `+${points}`;
+  fp.style.left = cx + "px";
+  fp.style.top = cy + "px";
+  document.body.appendChild(fp);
+  setTimeout(() => fp.remove(), 1500);
+
+  // star burst on the option button
+  const burst = document.createElement("div");
+  burst.className = "star-burst";
+  burst.style.left = (cx - 100) + "px";
+  burst.style.top  = (cy - 100) + "px";
+  burst.style.position = "fixed";
+  document.body.appendChild(burst);
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement("span");
+    s.textContent = "★";
+    const angle = (Math.PI * 2 * i) / 12;
+    const dist = 90 + Math.random() * 40;
+    s.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+    s.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+    s.style.animationDelay = (Math.random() * 0.1) + "s";
+    burst.appendChild(s);
+  }
+  setTimeout(() => burst.remove(), 1100);
+
+  // tiered animations
+  if (state.streak >= 10) {
+    fireworks(3);
+    goldenShower(60);
+    facePop("🤩", cx, cy);
+  } else if (state.streak >= 5) {
+    fireworks(2);
+    goldenShower(40);
+    facePop("😄", cx, cy);
+  } else if (state.streak >= 3) {
+    confetti(35);
+    facePop("😊", cx, cy);
+  } else {
+    confetti(20);
+    if (state.streak >= 1) facePop("🙂", cx, cy);
+  }
+}
+
+function facePop(emoji, x, y) {
+  const f = document.createElement("div");
+  f.className = "face-pop";
+  f.textContent = emoji;
+  f.style.left = x + "px";
+  f.style.top  = (y - 40) + "px";
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 1100);
+}
+
+/* ----- Particle engine ----- */
+const canvas = document.getElementById("fx-canvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+function spawn(p) { particles.push(p); }
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update();
+    p.draw(ctx);
+    if (p.dead()) particles.splice(i, 1);
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* Confetti */
+function confetti(count) {
+  const colors = ["#d4a946", "#e6c068", "#f0d488", "#6cc88a", "#f5efe0", "#b8d4ff"];
+  for (let i = 0; i < count; i++) {
+    spawn(new ConfettiP(
+      Math.random() * canvas.width,
+      -10,
+      colors[Math.floor(Math.random() * colors.length)]
+    ));
+  }
+}
+class ConfettiP {
+  constructor(x, y, c) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 4;
+    this.vy = Math.random() * 3 + 2;
+    this.r = Math.random() * 5 + 3;
+    this.c = c;
+    this.rot = Math.random() * Math.PI * 2;
+    this.vr = (Math.random() - 0.5) * 0.3;
+    this.life = 0;
+    this.maxLife = 120 + Math.random() * 40;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    this.vy += 0.05;
+    this.rot += this.vr;
+    this.life++;
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.globalAlpha = Math.max(0, 1 - this.life / this.maxLife);
+    ctx.fillStyle = this.c;
+    ctx.fillRect(-this.r/2, -this.r/4, this.r, this.r/2);
+    ctx.restore();
+  }
+  dead() { return this.life > this.maxLife || this.y > canvas.height + 20; }
+}
+
+/* Golden shower — coins/stars dropping */
+function goldenShower(count) {
+  for (let i = 0; i < count; i++) {
+    spawn(new Coin(
+      Math.random() * canvas.width,
+      -20 - Math.random() * 200
+    ));
+  }
+}
+class Coin {
+  constructor(x, y) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 1.5;
+    this.vy = Math.random() * 2 + 3;
+    this.r = Math.random() * 8 + 6;
+    this.rot = Math.random() * Math.PI * 2;
+    this.vr = (Math.random() - 0.5) * 0.2;
+    this.life = 0;
+    this.maxLife = 180;
+    this.glyph = Math.random() < 0.5 ? "★" : "✦";
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += 0.08; this.rot += this.vr; this.life++; }
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.globalAlpha = Math.max(0, 1 - this.life / this.maxLife);
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#f0d488";
+    ctx.fillStyle = "#f0d488";
+    ctx.font = `${this.r * 2}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.glyph, 0, 0);
+    ctx.restore();
+  }
+  dead() { return this.y > canvas.height + 20 || this.life > this.maxLife; }
+}
+
+/* Fireworks */
+function fireworks(bursts) {
+  for (let b = 0; b < bursts; b++) {
+    setTimeout(() => {
+      const x = canvas.width * (0.2 + Math.random() * 0.6);
+      const y = canvas.height * (0.2 + Math.random() * 0.4);
+      const colors = [["#d4a946", "#e6c068"], ["#6cc88a", "#a3e0b8"], ["#f0d488", "#f7e3a8"], ["#e57878", "#f5b3b3"], ["#b8d4ff", "#dfe9ff"]];
+      const pair = colors[Math.floor(Math.random() * colors.length)];
+      for (let i = 0; i < 60; i++) {
+        const angle = (Math.PI * 2 * i) / 60;
+        const speed = 2 + Math.random() * 4;
+        spawn(new Spark(x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, pair[i % 2]));
+      }
+    }, b * 280);
+  }
+}
+class Spark {
+  constructor(x, y, vx, vy, c) {
+    this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.c = c;
+    this.life = 0; this.maxLife = 70 + Math.random() * 30;
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += 0.06; this.vx *= 0.985; this.vy *= 0.985; this.life++; }
+  draw(ctx) {
+    const a = Math.max(0, 1 - this.life / this.maxLife);
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.shadowBlur = 12; ctx.shadowColor = this.c;
+    ctx.fillStyle = this.c;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  dead() { return this.life > this.maxLife; }
+}
+
+/* =========================================================================
+   ACHIEVEMENTS
+   ========================================================================= */
+const ACHIEVEMENTS = [
+  { id: "first_blood",  cond: () => state.score > 0 && Object.keys(state.answers).length === 1 && state.streak === 1, icon: "🎯", title: "First Blood", sub: "First correct answer" },
+  { id: "high_five",    cond: () => state.streak === 5,  icon: "🖐️", title: "High Five", sub: "5-in-a-row streak" },
+  { id: "on_fire",      cond: () => state.streak === 7,  icon: "🔥", title: "On Fire", sub: "7-in-a-row streak" },
+  { id: "inferno",      cond: () => state.streak === 10, icon: "🔥", title: "Inferno", sub: "10-in-a-row streak" },
+  { id: "untouchable",  cond: () => state.streak === 15, icon: "💎", title: "Untouchable", sub: "15-in-a-row streak" },
+  { id: "thousand",     cond: () => state.score >= 1000 && state.score - 1000 < 200, icon: "💰", title: "Four Figures", sub: "Crossed 1,000 points" },
+  { id: "three_k",      cond: () => state.score >= 3000 && state.score - 3000 < 200, icon: "👑", title: "Distinguished", sub: "Crossed 3,000 points" },
+  { id: "halfway",      cond: () => Object.keys(state.answers).length === Math.floor(state.order.length / 2), icon: "⛳", title: "Halfway There", sub: "25 questions answered" },
+  { id: "ch_complete",  cond: () => Object.keys(state.answers).length === state.order.length, icon: "🏛️", title: "Quiz Complete", sub: "All 50 questions answered" },
+  { id: "perfect",      cond: () => Object.keys(state.answers).length === state.order.length && state.streak === state.order.length, icon: "🏆", title: "Perfect Score", sub: "50 of 50 correct" }
+];
+
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    if (!state.achievements[a.id] && a.cond()) {
+      state.achievements[a.id] = true;
+      showToast(a);
+    }
+  });
+}
+
+function showToast(a) {
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<div class="toast-icon">${a.icon}</div><div><div class="toast-title">${a.title}</div><div class="toast-sub">${a.sub}</div></div>`;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.classList.add("show"));
+  setTimeout(() => {
+    t.classList.remove("show");
+    setTimeout(() => t.remove(), 500);
+  }, 3000);
+}
+
+/* =========================================================================
+   NAV / MODE
+   ========================================================================= */
+function next() {
+  if (state.current < state.order.length - 1) {
+    state.current++;
+    saveState();
+    render();
+    window.scrollTo({top: 0, behavior: "smooth"});
+  } else if (state.mode === "practice") {
+    finishPractice();
+  } else {
+    finishExam();
+  }
+}
+function prev() {
+  if (state.current > 0) {
+    state.current--;
+    saveState();
+    render();
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+}
+
+function setMode(m) {
+  if (state.mode === m) return;
+  if (Object.keys(state.answers).length > 0) {
+    if (!confirm("Switching mode will reset your progress. Continue?")) return;
+    doReset(false);
+  }
+  state.mode = m;
+  document.querySelectorAll(".mode-pill[data-mode]").forEach(p => {
+    p.classList.toggle("active", p.dataset.mode === m);
+  });
+  saveState();
+  render();
+}
+
+function toggleShuffle() {
+  if (Object.keys(state.answers).length > 0) {
+    if (!confirm("Toggling shuffle will reset your progress. Continue?")) return;
+    doReset(false);
+  }
+  state.shuffle = !state.shuffle;
+  state.order = freshOrder();
+  document.getElementById("shuffleBtn").textContent = "Shuffle: " + (state.shuffle ? "On" : "Off");
+  saveState();
+  render();
+}
+
+/* =========================================================================
+   FINISH / RESULT
+   ========================================================================= */
+function finishPractice() {
+  state.finished = true;
+  saveState();
+  render();
+  showResult();
+}
+
+function finishExam() {
+  // compute score
+  let correct = 0;
+  state.order.forEach(qIdx => { if (state.answers[qIdx] === BANK[qIdx].a) correct++; });
+  state.score = correct * 100;
+  state.streak = 0;
+  state.order.forEach(qIdx => {
+    if (state.answers[qIdx] === BANK[qIdx].a) state.streak++;
+    else state.streak = 0;
+  });
+  state.finished = true;
+  saveState();
+  render();
+  showResult();
+}
+
+function showResult() {
+  let correct = 0;
+  state.order.forEach(qIdx => { if (state.answers[qIdx] === BANK[qIdx].a) correct++; });
+  const total = state.order.length;
+  const wrong = total - correct - state.order.filter(i => state.answers[i] === undefined).length;
+  const pct = Math.round((correct / total) * 100);
+
+  document.getElementById("ringPct").textContent = pct + "%";
+  document.getElementById("bdCorrect").textContent = correct;
+  document.getElementById("bdWrong").textContent = total - correct;
+  document.getElementById("bdPoints").textContent = state.score;
+
+  const ring = document.getElementById("ringFg");
+  const C = 2 * Math.PI * 52; // ≈ 326.7
+  const offset = C - (pct / 100) * C;
+  ring.setAttribute("stroke-dasharray", C);
+  ring.setAttribute("stroke-dashoffset", C);
+  setTimeout(() => ring.setAttribute("stroke-dashoffset", offset), 80);
+
+  const title = document.getElementById("resultTitle");
+  const verdict = document.getElementById("resultVerdict");
+  if (pct === 100) {
+    title.textContent = "Flawless Execution";
+    verdict.innerHTML = "Perfect command of contract-law principles. <em>Distinction-level performance.</em>";
+  } else if (pct >= 85) {
+    title.textContent = "Excellent Showing";
+    verdict.innerHTML = "Strong fluency in legality, mistake, misrepresentation, and the Statute of Frauds.";
+  } else if (pct >= PASS_THRESHOLD * 100) {
+    title.textContent = "NPPE Pass-Level Performance";
+    verdict.innerHTML = `${pct}% — comfortably above the 65–70% NPPE threshold.`;
+  } else {
+    title.textContent = "Review Recommended";
+    verdict.innerHTML = `${pct}% — review the Ron Engineering, Belle River and Gotaverken cases, and revisit Section 4 of the Statute of Frauds.`;
+  }
+
+  document.getElementById("resultModal").classList.add("show");
+
+  if (pct === 100) {
+    setTimeout(() => fireworks(6), 400);
+    setTimeout(() => goldenShower(120), 600);
+  } else if (pct >= PASS_THRESHOLD * 100) {
+    setTimeout(() => fireworks(3), 400);
+    setTimeout(() => goldenShower(60), 600);
+  }
+}
+
+function reviewAnswers() {
+  document.getElementById("resultModal").classList.remove("show");
+  state.current = 0;
+  render();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function restartFromModal() {
+  document.getElementById("resultModal").classList.remove("show");
+  doReset();
+}
+
+/* =========================================================================
+   RESET
+   ========================================================================= */
+function confirmReset() {
+  document.getElementById("confirmModal").classList.add("show");
+}
+function closeConfirm() {
+  document.getElementById("confirmModal").classList.remove("show");
+}
+function doReset(closeUI) {
+  state = {
+    mode: state.mode,
+    shuffle: state.shuffle,
+    order: freshOrder(),
+    current: 0,
+    answers: {},
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    achievements: {},
+    finished: false
+  };
+  saveState();
+  if (closeUI !== false) closeConfirm();
+  document.getElementById("resultModal").classList.remove("show");
+  render();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+/* =========================================================================
+   INIT
+   ========================================================================= */
+function init() {
+  if (!loadState()) {
+    state.order = freshOrder();
+  }
+  document.querySelectorAll(".mode-pill[data-mode]").forEach(p => {
+    p.classList.toggle("active", p.dataset.mode === state.mode);
+  });
+  document.getElementById("shuffleBtn").textContent = "Shuffle: " + (state.shuffle ? "On" : "Off");
+  render();
+}
+init();
+</script>
+</body>
+</html>

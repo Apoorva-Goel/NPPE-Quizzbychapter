@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice — Chapter 5: Limitation Periods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0a1628;
+    --navy: #0f2138;
+    --navy-light: #1a3151;
+    --navy-card: #14283f;
+    --gold: #d4af37;
+    --gold-bright: #e8c863;
+    --gold-soft: #b8941f;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --cream: #f4ecd8;
+    --text: #e8ddc4;
+    --text-dim: #a89878;
+    --green: #6fbf7a;
+    --green-bg: rgba(111, 191, 122, 0.12);
+    --red: #d96062;
+    --red-bg: rgba(217, 96, 98, 0.12);
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--navy-deep);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, var(--navy-light) 0%, var(--navy-deep) 70%),
+      var(--navy-deep);
+    padding: 32px 16px 64px;
+    line-height: 1.6;
+  }
+
+  #fxCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ───── HEADER ───── */
+  header.title-block {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 36px 24px 28px;
+    border-top: 1px solid var(--gold-soft);
+    border-bottom: 1px solid var(--gold-soft);
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.05), transparent);
+    position: relative;
+  }
+
+  header.title-block::before,
+  header.title-block::after {
+    content: "❦";
+    position: absolute;
+    color: var(--gold);
+    font-size: 18px;
+    background: var(--navy-deep);
+    padding: 0 12px;
+  }
+  header.title-block::before { top: -10px; left: 50%; transform: translateX(-50%); }
+  header.title-block::after  { bottom: -10px; left: 50%; transform: translateX(-50%); }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 44px);
+    color: var(--cream);
+    line-height: 1.15;
+    letter-spacing: 0.5px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-bright);
+    font-weight: 500;
+  }
+
+  .subtitle {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  /* ───── CONTROL BAR ───── */
+  .control-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--navy-card);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+  }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--navy-deep);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 3px;
+    padding: 3px;
+  }
+
+  .mode-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+  }
+  .mode-toggle button.active {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+
+  .stats {
+    display: flex;
+    gap: 22px;
+    font-family: 'Inter', sans-serif;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold-bright);
+  }
+  .stat-value.points { color: var(--cream); }
+
+  .icon-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--gold);
+    width: 38px;
+    height: 38px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold);
+  }
+
+  /* ───── PROGRESS ───── */
+  .progress-wrap {
+    background: var(--navy-card);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .progress-label span:last-child {
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--navy-deep);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px var(--gold-glow);
+  }
+
+  /* ───── QUESTION GRID ───── */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+    gap: 4px;
+    background: var(--navy-card);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 14px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    background: var(--navy-deep);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 2px;
+    font-size: 10px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-cell:hover { transform: scale(1.1); border-color: var(--gold); }
+  .nav-cell.current {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 700;
+    border-color: var(--gold-bright);
+  }
+  .nav-cell.correct {
+    background: var(--green-bg);
+    color: var(--green);
+    border-color: var(--green);
+  }
+  .nav-cell.wrong {
+    background: var(--red-bg);
+    color: var(--red);
+    border-color: var(--red);
+  }
+  .nav-cell.answered {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-bright);
+    border-color: var(--gold);
+  }
+
+  /* ───── QUESTION CARD ───── */
+  .card {
+    background: var(--navy-card);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
+    padding: 36px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .q-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--cream);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option {
+    background: var(--navy-deep);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 3px;
+    padding: 16px 18px 16px 56px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    position: relative;
+    transition: all 0.2s;
+    overflow: hidden;
+  }
+
+  .option::before {
+    content: attr(data-letter);
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--gold-bright);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .option:hover:not(.locked) {
+    border-color: var(--gold);
+    background: var(--navy-light);
+    transform: translateX(2px);
+  }
+  .option:hover:not(.locked)::before {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  .option.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    animation: rightAnswer 0.6s;
+  }
+  .option.correct::before {
+    background: var(--green);
+    color: var(--navy-deep);
+    border-color: var(--green);
+  }
+
+  .option.wrong {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+    animation: shake 0.4s;
+  }
+  .option.wrong::before {
+    background: var(--red);
+    color: var(--cream);
+    border-color: var(--red);
+  }
+
+  .option.locked {
+    cursor: default;
+    opacity: 0.7;
+  }
+  .option.locked.correct,
+  .option.locked.wrong { opacity: 1; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  @keyframes rightAnswer {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(111, 191, 122, 0.5); }
+    100% { transform: scale(1); }
+  }
+
+  /* ───── EXPLANATION ───── */
+  .explanation {
+    margin-top: 22px;
+    padding: 18px 20px;
+    background: rgba(212, 175, 55, 0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+    display: none;
+  }
+  .explanation.show { display: block; animation: fadeIn 0.4s; }
+  .explanation strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ───── NAV BUTTONS ───── */
+  .nav-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 26px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 3px;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .btn.primary {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+  .btn.primary:hover:not(:disabled) {
+    background: var(--gold-bright);
+  }
+
+  /* ───── STREAK BADGE ───── */
+  .streak-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--navy-card);
+    border: 1px solid var(--gold);
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--gold-bright);
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: none;
+    animation: badgePop 0.4s;
+  }
+  .streak-badge.show { display: block; }
+  @keyframes badgePop {
+    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  /* ───── FLOATING SCORE ───── */
+  .float-score {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px var(--gold-glow);
+    z-index: 1000;
+    animation: floatUp 1.5s forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-120px) scale(1); opacity: 0; }
+  }
+
+  /* ───── COMPLETION SCREEN ───── */
+  .completion {
+    background: var(--navy-card);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 56px 32px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    display: none;
+    position: relative;
+  }
+  .completion.show { display: block; animation: fadeIn 0.6s; }
+
+  .completion::before,
+  .completion::after {
+    content: "❦";
+    position: absolute;
+    color: var(--gold);
+    font-size: 24px;
+  }
+  .completion::before { top: 20px; left: 50%; transform: translateX(-50%); }
+  .completion::after { bottom: 20px; left: 50%; transform: translateX(-50%); }
+
+  .completion h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    color: var(--cream);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .completion .subtitle-finale {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 36px;
+  }
+
+  .score-ring {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 30px;
+    position: relative;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+
+  .score-ring .ring-bg { stroke: var(--navy-deep); }
+  .score-ring .ring-fill {
+    stroke: var(--gold);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s ease;
+    filter: drop-shadow(0 0 8px var(--gold-glow));
+  }
+
+  .score-ring .score-percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .score-ring .score-num {
+    font-size: 56px;
+    font-weight: 600;
+    color: var(--gold-bright);
+    line-height: 1;
+  }
+  .score-ring .score-of {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .verdict {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--gold-bright);
+    margin-bottom: 24px;
+  }
+  .verdict.fail { color: var(--red); }
+
+  .summary-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+  .summary-stat .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .summary-stat .value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  .completion-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  /* ───── MODAL ───── */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 22, 40, 0.85);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--navy-card);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 36px 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .modal p {
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  /* ───── RESPONSIVE ───── */
+  @media (max-width: 600px) {
+    body { padding: 16px 8px 32px; }
+    .card { padding: 24px 18px; }
+    .q-text { font-size: 16px; }
+    .option { padding: 14px 14px 14px 50px; font-size: 13px; }
+    .stats { gap: 14px; }
+    .stat-value { font-size: 18px; }
+    h1 { font-size: 26px; }
+    .completion { padding: 40px 20px; }
+    .completion h2 { font-size: 30px; }
+    .summary-stats { gap: 24px; }
+    .streak-badge { top: 10px; right: 10px; font-size: 11px; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+<div id="streakBadge" class="streak-badge"></div>
+
+<div class="container">
+
+  <header class="title-block">
+    <div class="eyebrow">NPPE Practice · Ontario</div>
+    <h1>Chapter 5 · <em>Limitation Periods</em></h1>
+    <div class="subtitle">From <em>Law for Professional Engineers — Canadian and Global Insights</em></div>
+  </header>
+
+  <div class="control-bar">
+    <div class="mode-toggle" role="tablist">
+      <button id="modePractice" class="active" type="button">Practice</button>
+      <button id="modeExam" type="button">Exam</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Score</div>
+        <div class="stat-value points" id="statPoints">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value" id="statStreak">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Correct</div>
+        <div class="stat-value" id="statCorrect">0</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px;">
+      <button id="btnShuffle" class="icon-btn" title="Shuffle questions" type="button">⇆</button>
+      <button id="btnReset" class="icon-btn" title="Reset quiz" type="button">↺</button>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="nav-grid" id="navGrid"></div>
+
+  <!-- Question Card -->
+  <div class="card" id="questionCard">
+    <div class="q-number" id="qNumber">Question I</div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="optionsList"></div>
+    <div class="explanation" id="explanation"></div>
+    <div class="nav-controls">
+      <button class="btn" id="btnPrev" type="button">◂ Previous</button>
+      <button class="btn primary" id="btnNext" type="button">Next ▸</button>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion" id="completion">
+    <h2 id="finaleTitle">Quiz Complete</h2>
+    <div class="subtitle-finale">Chapter 5 — Limitation Periods</div>
+
+    <div class="score-ring">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle class="ring-bg" cx="100" cy="100" r="86" fill="none" stroke-width="10"/>
+        <circle class="ring-fill" id="ringFill" cx="100" cy="100" r="86" fill="none" stroke-width="10"
+                stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+      </svg>
+      <div class="score-percent">
+        <div class="score-num" id="finalPercent">0%</div>
+        <div class="score-of">Result</div>
+      </div>
+    </div>
+
+    <div class="verdict" id="verdict"></div>
+
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <div class="label">Correct</div>
+        <div class="value" id="finalCorrect">0</div>
+      </div>
+      <div class="summary-stat">
+        <div class="label">Total Score</div>
+        <div class="value" id="finalPoints">0</div>
+      </div>
+      <div class="summary-stat">
+        <div class="label">Best Streak</div>
+        <div class="value" id="finalStreak">0</div>
+      </div>
+    </div>
+
+    <div class="completion-actions">
+      <button class="btn" id="btnReview" type="button">Review Answers</button>
+      <button class="btn primary" id="btnRestart" type="button">Take Again</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div class="modal-bg" id="resetModal">
+  <div class="modal">
+    <h3>Reset Quiz?</h3>
+    <p>All progress, scores, and streaks will be cleared. This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelReset" type="button">Cancel</button>
+      <button class="btn primary" id="confirmReset" type="button">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ───────────────────────────────────────────────────────────
+   QUESTION BANK — Chapter 5: Limitation Periods
+   ─────────────────────────────────────────────────────────── */
+const QUESTIONS = [
+  {
+    q: "An engineer asks you what 'statute barred' means in the context of a limitation period. The most accurate explanation is that an action is statute barred when:",
+    options: [
+      "It has been dismissed by a judge on its merits",
+      "It is commenced after the prescribed limitation period has expired",
+      "It has been settled out of court before trial",
+      "It has been filed in the wrong jurisdiction"
+    ],
+    a: 1,
+    e: "An action commenced after the prescribed time period has expired is said to be 'statute barred' and will normally fail. The dismissal is procedural — a function of the limitation statute — not an adjudication on the merits."
+  },
+  {
+    q: "Which of the following best describes how limitation periods are organized within Canada?",
+    options: [
+      "They are uniform across all Canadian provinces by federal statute",
+      "They are governed exclusively by the Supreme Court of Canada",
+      "Statutory limitation periods may differ from province to province, and may differ for various legal actions",
+      "They apply only to actions in contract, not actions in tort"
+    ],
+    a: 2,
+    e: "Limitation statutes are provincial, so prescribed time periods may differ from province to province. Different limitation periods may also apply to different types of legal actions within a single jurisdiction, including tort and breach of contract actions."
+  },
+  {
+    q: "In its 1984 decision in City of Kamloops v Nielsen et al, the Supreme Court of Canada confirmed that a limitation period commences when:",
+    options: [
+      "The defendant performs the negligent act, regardless of when discovered",
+      "The plaintiff retains legal counsel",
+      "The damage is first discovered, or ought with reasonable diligence to have been discovered, by the plaintiff",
+      "The contract that is the subject of the action is signed"
+    ],
+    a: 2,
+    e: "The Supreme Court of Canada confirmed in Kamloops that the limitation period commences when damage is first discovered, or ought with reasonable diligence to have been discovered, by the plaintiff. This is the 'discoverability' principle."
+  },
+  {
+    q: "The 'discoverability' concept established by the Supreme Court of Canada is principally used to determine:",
+    options: [
+      "The proper measure of damages",
+      "The commencement date of the applicable limitation period",
+      "Whether a duty of care is owed to a third party",
+      "Whether a defendant has standing to defend"
+    ],
+    a: 1,
+    e: "Discoverability addresses when the limitation period clock starts running. It postpones commencement until the plaintiff knew, or ought reasonably to have known, of the damage."
+  },
+  {
+    q: "The Ontario Limitations Act, 2002 came into force on:",
+    options: [
+      "January 1, 2002",
+      "October 16, 2002",
+      "January 1, 2004",
+      "October 16, 2006"
+    ],
+    a: 2,
+    e: "Although enacted in 2002, the Limitations Act, 2002 (Ontario) — known as the '2002 Act' — came into force on January 1, 2004. October 16, 2006 is the later date on which the Access to Justice Act, 2006 amendments came into force."
+  },
+  {
+    q: "Under the Ontario Limitations Act, 2002, the basic limitation period for both tort and contract claims is:",
+    options: [
+      "One year from the date of the act or omission",
+      "Two years from the date the claim is discovered",
+      "Six years from the date the claim is discovered",
+      "Fifteen years from the date the claim is discovered"
+    ],
+    a: 1,
+    e: "The 2002 Act introduced a basic limitation period of two years, premised on the discoverability concept, running from the date the claim is discovered, applicable to both tort and contract actions."
+  },
+  {
+    q: "Prior to the Limitations Act, 2002 coming into force, the general limitation period in Ontario was:",
+    options: [
+      "Two years",
+      "Four years",
+      "Six years",
+      "Ten years"
+    ],
+    a: 2,
+    e: "The 2002 Act reduced the general limitation period from six years to two years for tort and contract actions, while introducing the new ultimate 15-year longstop."
+  },
+  {
+    q: "The ultimate limitation period under the Ontario Limitations Act, 2002 runs for:",
+    options: [
+      "10 years from the date the claim is discovered",
+      "15 years from the date the claim is discovered",
+      "15 years from the date the act or omission on which the claim was based took place",
+      "20 years from the date the act or omission on which the claim was based took place"
+    ],
+    a: 2,
+    e: "The ultimate (longstop) limitation period in Ontario is 15 years, and it runs from the date of the act or omission on which the claim is based — not from the date of discovery. This addresses the long-standing concern about indefinite tort exposure under the discoverability rule."
+  },
+  {
+    q: "An undiscovered claim that has been ongoing for 16 years since the act or omission complained of will, in Ontario, generally be:",
+    options: [
+      "Permitted to proceed because discoverability has not been triggered",
+      "Permitted to proceed because the basic two-year period has not begun running",
+      "Statute barred under the ultimate 15-year limitation period",
+      "Permitted to proceed only with leave of the court"
+    ],
+    a: 2,
+    e: "Even where the basic two-year period has not been triggered through discovery, the ultimate 15-year longstop in Ontario will generally bar the claim. Both periods must be satisfied — an action is statute barred if either has expired."
+  },
+  {
+    q: "The 2006 Ontario amendments that allowed parties to contract out of statutory limitation periods are contained in:",
+    options: [
+      "The Limitations Reform Act, 2006",
+      "The Access to Justice Act, 2006",
+      "The Construction Lien Amendment Act, 2006",
+      "The Professional Engineers Amendment Act, 2006"
+    ],
+    a: 1,
+    e: "The 2006 amendments are found in the Access to Justice Act, 2006. These amendments came into force October 16, 2006 and provided relief from the original 'no contracting out' provisions of the 2002 Act."
+  },
+  {
+    q: "Under the Access to Justice Act, 2006, parties may agree to vary statutory limitation periods only in:",
+    options: [
+      "Any agreement, including consumer agreements",
+      "Government contracts only",
+      "Business agreements entered into after October 16, 2006",
+      "Agreements involving licensed professionals only"
+    ],
+    a: 2,
+    e: "The 2006 amendments permit variation of limitation periods only in business agreements entered into after October 16, 2006, subject to certain restrictions. Consumer agreements remain subject to the statutory periods."
+  },
+  {
+    q: "Under the 2006 Ontario amendments, business parties to a contract may, subject to certain restrictions, agree to:",
+    options: [
+      "Shorten or extend the basic two-year limitation period",
+      "Shorten the ultimate 15-year limitation period",
+      "Extend or suspend the ultimate 15-year limitation period (but only where the relevant claim has been discovered)",
+      "All of the above"
+    ],
+    a: 3,
+    e: "Each of these is permitted under the 2006 amendments. Business parties may shorten or extend the two-year basic period; shorten the 15-year ultimate period; or extend/suspend the 15-year ultimate period — but the extension/suspension of the 15-year period is permitted only where the claim has already been discovered."
+  },
+  {
+    q: "A 'consumer agreement' under the Consumer Protection Act, 2002 (Ontario) involves a party acting for:",
+    options: [
+      "Personal, family, and household purposes, rather than business purposes",
+      "Charitable purposes only",
+      "Government procurement purposes",
+      "Educational purposes only"
+    ],
+    a: 0,
+    e: "A consumer is defined as someone acting for personal, family, and household purposes, as distinct from business purposes. The 2006 amendments distinguish business agreements from consumer agreements; consumer agreements remain subject to the statutory limitation periods."
+  },
+  {
+    q: "Section 5(1) of the Ontario Limitations Act, 2002 sets out the four matters of which the claimant must have knowledge for a claim to be 'discovered.' Which of the following is NOT one of those four matters?",
+    options: [
+      "That the injury, loss, or damage had occurred",
+      "That the injury, loss, or damage was caused by or contributed to by an act or omission",
+      "That the plaintiff has retained legal counsel",
+      "That a proceeding would be an appropriate means to seek to remedy the injury, loss, or damage"
+    ],
+    a: 2,
+    e: "The four matters under Section 5(1)(a) are: (i) that the injury, loss, or damage had occurred; (ii) that it was caused by or contributed to by an act or omission; (iii) that the act or omission was that of the person against whom the claim is made; and (iv) that a proceeding would be an appropriate means to seek to remedy it. Retention of legal counsel is not a discoverability factor."
+  },
+  {
+    q: "Section 5(1)(b) of the Ontario Limitations Act, 2002 measures discoverability against:",
+    options: [
+      "What an expert in the field would have known",
+      "What a reasonable person with the abilities and in the circumstances of the person with the claim first ought to have known",
+      "What an average person off the street would have known",
+      "What the defendant ought to have known"
+    ],
+    a: 1,
+    e: "The objective component of the test in clause (b) is what 'a reasonable person with the abilities and in the circumstances of the person with the claim' first ought to have known of the matters listed in clause (a). The test is a reasonable-person test, calibrated to the abilities and circumstances of the actual claimant."
+  },
+  {
+    q: "Section 5(1) of the Ontario Limitations Act, 2002 fixes the discovery date as the EARLIER of two specified dates. What is the practical effect of this rule?",
+    options: [
+      "Only actual subjective knowledge will start the clock",
+      "Only constructive (objective) knowledge will start the clock",
+      "The clock starts on whichever date arises first — actual knowledge or the date a reasonable person ought to have known",
+      "Discovery does not occur until both subjective and objective knowledge are established"
+    ],
+    a: 2,
+    e: "Section 5(1) prescribes the earlier of (a) actual knowledge of the four matters, or (b) the date a reasonable person ought to have known of those matters. Whichever happens first triggers the start of the basic two-year period."
+  },
+  {
+    q: "The Ontario Limitations Act, 2002 includes a provision that a limitation period does NOT run during any time in which:",
+    options: [
+      "The plaintiff is travelling internationally",
+      "There is willful concealment from the plaintiff that injury, loss, or damage has occurred",
+      "The defendant is a corporation in receivership",
+      "There is a labour dispute affecting either party"
+    ],
+    a: 1,
+    e: "The 2002 Act suspends the limitation period during any time in which there is willful concealment of the fact that injury, loss, or damage has occurred. This protects plaintiffs from defendants who actively hide damage from them."
+  },
+  {
+    q: "The 12-month limitation period that was previously set out in Section 46 of the Ontario Professional Engineers Act was:",
+    options: [
+      "Extended to 24 months",
+      "Reduced to 6 months",
+      "Repealed by the 2002 Act",
+      "Replaced by a 5-year limitation"
+    ],
+    a: 2,
+    e: "The 2002 Act repealed Section 46 of the Professional Engineers Act, which had previously set a 12-month limitation period. Engineers now fall under the general two-year basic period (and 15-year ultimate period) like other claimants."
+  },
+  {
+    q: "The limitation period provisions in Ontario's Construction Lien Act were:",
+    options: [
+      "Repealed by the 2002 Act",
+      "Unaffected by the 2002 Act and its 2006 amendments",
+      "Replaced with provisions of the 2002 Act",
+      "Doubled in length by the 2002 Act"
+    ],
+    a: 1,
+    e: "The important limitation period provisions in the Construction Lien Act were unaffected by the 2002 Act and its 2006 amendments. Lien claimants must continue to comply with those statute-specific time periods."
+  },
+  {
+    q: "In City of Kamloops v Nielsen et al, the Supreme Court of Canada held the municipality liable for what proportion of the plaintiff's economic loss?",
+    options: [
+      "10 percent",
+      "25 percent",
+      "50 percent",
+      "75 percent"
+    ],
+    a: 1,
+    e: "The trial judge found the original homeowner 75 percent responsible and the municipality 25 percent responsible. The Supreme Court of Canada confirmed that the municipality was liable for 25 percent of the plaintiff's economic loss."
+  },
+  {
+    q: "In the Kamloops case, what proportion of fault was attributed to the original owner of the home?",
+    options: [
+      "25 percent",
+      "50 percent",
+      "75 percent",
+      "100 percent"
+    ],
+    a: 2,
+    e: "The trial judge found the original owner 75 percent responsible. The owner had refused to comply with the stop work order issued by the building inspector and proceeded with construction despite the foundations not having been built in accordance with the approved plans."
+  },
+  {
+    q: "In the Kamloops case, the building inspector issued a stop work order because:",
+    options: [
+      "The contractor lacked proper licensing",
+      "The foundations had not been constructed in accordance with the approved plans",
+      "The owner had not paid municipal fees",
+      "The setback from the property line was insufficient"
+    ],
+    a: 1,
+    e: "The stop work order was issued because the foundations had not been constructed in accordance with the approved plans. The owner did not want to comply with the stop work order, and construction continued anyway."
+  },
+  {
+    q: "Approximately how long after the stop work order in the Kamloops case was a plumbing permit issued?",
+    options: [
+      "About one month",
+      "About three months",
+      "About eight months",
+      "About two years"
+    ],
+    a: 2,
+    e: "About eight months after the stop work order was issued, a plumbing permit was issued — illustrating the apparent inconsistency in the municipality's enforcement actions despite the unresolved foundation issues."
+  },
+  {
+    q: "The 'loss' awarded to the plaintiff in the Kamloops case consisted of:",
+    options: [
+      "Punitive damages plus emotional distress",
+      "The cost of reconstruction plus ancillary expenses",
+      "Lost rental income only",
+      "Diminution in market value only"
+    ],
+    a: 1,
+    e: "The recognized 'economic loss' in Kamloops was the cost of reconstruction plus ancillary expenses — i.e., the cost to remediate the defective foundations and related expenses."
+  },
+  {
+    q: "The successful plaintiff in the Kamloops case was:",
+    options: [
+      "The original homeowner who built the house",
+      "The municipality, suing the contractor",
+      "A subsequent purchaser of the house, with no contract with the municipality",
+      "The contractor who built the foundations"
+    ],
+    a: 2,
+    e: "The plaintiff was a subsequent purchaser of the house, who bought it about two years after construction was completed and later discovered that the foundations had subsided. The plaintiff had no contractual relationship with the municipality."
+  },
+  {
+    q: "Was an occupancy permit issued for the house in the Kamloops case?",
+    options: [
+      "Yes, before construction was complete",
+      "Yes, after the foundation issues were noticed",
+      "No occupancy permit was issued",
+      "Only a temporary occupancy permit was issued"
+    ],
+    a: 2,
+    e: "No occupancy permit was issued in the Kamloops case. Despite this, a plumbing permit had been issued about eight months after the stop work order, and construction was completed. The house was then sold to the plaintiff."
+  },
+  {
+    q: "Approximately how long after the house in Kamloops was finished was it sold to the plaintiff?",
+    options: [
+      "Six months",
+      "One year",
+      "Two years",
+      "Five years"
+    ],
+    a: 2,
+    e: "About two years after the house was finished, it was sold to the plaintiff, who then discovered that the foundations had subsided."
+  },
+  {
+    q: "The discoverability concept primarily benefits:",
+    options: [
+      "Defendants by limiting their exposure to liability",
+      "The plaintiff who has suffered the damage",
+      "Insurance companies by providing certainty",
+      "The courts by reducing case backlogs"
+    ],
+    a: 1,
+    e: "Discoverability is plaintiff-favourable: it postpones the start of the limitation period until the plaintiff knew or ought to have known of the damage, ensuring plaintiffs are not deprived of remedy for damage they could not yet have discovered."
+  },
+  {
+    q: "From an engineer's perspective, the principal concern about applying the discoverability concept WITHOUT a longstop date is:",
+    options: [
+      "That courts may award excessive damages",
+      "The possibility of a claim being made many years after the engineering services have been performed",
+      "That trial dates are too quickly scheduled",
+      "That juries cannot understand technical evidence"
+    ],
+    a: 1,
+    e: "The chapter notes that the application of discoverability creates the possibility of a claim being made many years after services have been performed — an understandable concern for engineers and others who might face liability decades after delivering work."
+  },
+  {
+    q: "A 'final longstop date' for limitation purposes refers to:",
+    options: [
+      "The latest possible date at which a trial can be heard",
+      "The deadline for serving discovery materials",
+      "An ultimate limitation period beyond which no action can be brought, regardless of when damage was discovered",
+      "The deadline for filing an appeal"
+    ],
+    a: 2,
+    e: "A longstop date is an ultimate limitation period that cuts off liability after a fixed time from the act or omission, regardless of discoverability. Ontario's 15-year ultimate period under the 2002 Act is an example of a longstop date."
+  },
+  {
+    q: "Which of the following is true of provinces and territories OUTSIDE Ontario, regarding longstop dates?",
+    options: [
+      "All provinces have adopted Ontario's 15-year ultimate limitation period",
+      "Except where ultimate limitation periods have been created by legislation, the discoverability concept continues to result in the lack of final longstop dates in tort",
+      "The federal government has imposed uniform longstop dates nationally",
+      "The discoverability concept has been rejected outside Ontario"
+    ],
+    a: 1,
+    e: "Outside Ontario, except to the extent ultimate limitation periods have been created by legislation in particular provinces or territories, the SCC's endorsement of discoverability continues to result in the lack of final longstop dates in tort."
+  },
+  {
+    q: "An engineer working in a province with no statutory longstop date is most prudent to:",
+    options: [
+      "Refuse to take projects in that jurisdiction",
+      "Negotiate reasonable and manageable limitation periods in the contract, and consider professional liability insurance for residual third-party tort exposure",
+      "Buy out competing firms in that jurisdiction",
+      "Lobby for federal limitations legislation"
+    ],
+    a: 1,
+    e: "The chapter advises that, in jurisdictions without longstop dates, negotiation of reasonable and manageable limitation periods in contracts remains advisable, and that protection through professional liability and other insurance coverage should be carefully considered for residual third-party tort exposure."
+  },
+  {
+    q: "Why does a contractually agreed limitation period not protect an engineer from third-party tort claims?",
+    options: [
+      "Tort actions are governed by federal law and override provincial contracts",
+      "A contractual relationship is essential to limit the duration of contractual responsibilities and liabilities — third parties are not in privity and are not bound by the contract",
+      "Tort claims always take priority over contract claims",
+      "Contract law has no defence mechanisms"
+    ],
+    a: 1,
+    e: "A contractual relationship is essential to limit the duration of contractual responsibilities and liabilities. Because third parties (such as a subsequent purchaser) are not in privity, they cannot be bound by limitations agreed between the original contracting parties."
+  },
+  {
+    q: "The doctrinal significance of City of Kamloops v Nielsen et al for engineers is:",
+    options: [
+      "It confirmed that municipalities are immune from suit",
+      "It confirmed that a municipality could be liable in tort to a subsequent purchaser with whom no contractual relationship existed, and endorsed the discoverability concept",
+      "It overruled the duty of care in negligence",
+      "It introduced a 15-year longstop applicable nationwide"
+    ],
+    a: 1,
+    e: "Kamloops is significant on two fronts: it confirmed liability of the municipality to a subsequent purchaser absent any contractual relationship (showing tort exposure to non-contracting parties), and it endorsed the discoverability concept for limitation period commencement."
+  },
+  {
+    q: "Which type of insurance is most relevant for engineers concerned about long-tail third-party tort claims under discoverability without a longstop?",
+    options: [
+      "Property insurance only",
+      "Professional liability insurance and other appropriate coverage",
+      "Title insurance only",
+      "Travel insurance"
+    ],
+    a: 1,
+    e: "The chapter recommends that protection through professional liability and other insurance coverage be carefully considered. Professional liability insurance is the principal mechanism for managing the long-tail tort risk that follows from discoverability without a longstop date."
+  },
+  {
+    q: "Under the Ontario Limitations Act, 2002, the 15-year ultimate limitation period runs from:",
+    options: [
+      "The date the contract was signed",
+      "The date the act or omission on which the claim was based took place",
+      "The date the project was completed and turned over to the owner",
+      "The date the claim was first filed in court"
+    ],
+    a: 1,
+    e: "The 15-year ultimate (longstop) period runs from the date of the act or omission on which the claim is based, irrespective of discoverability. The two-year basic period, by contrast, runs from the date of discovery."
+  },
+  {
+    q: "Which statement about the original 2002 Act and the subsequent 2006 amendments is correct?",
+    options: [
+      "The 2002 Act allowed contracting out of limitation periods from the outset",
+      "The 2002 Act originally prevented contracting out of limitation periods, but this was relaxed by the 2006 amendments for business agreements",
+      "The 2002 Act applied only to contractual claims, not tort claims",
+      "The 2006 amendments removed the ultimate 15-year limitation period"
+    ],
+    a: 1,
+    e: "The 2002 Act, as originally enacted, contained a provision preventing contracting out of the statutory limitation periods. This was unpopular with business parties; the 2006 amendments (Access to Justice Act, 2006) provided relief by allowing business parties to vary the periods, subject to restrictions."
+  },
+  {
+    q: "Why was the original 'no contracting out' provision in the 2002 Act unpopular with business parties?",
+    options: [
+      "It increased insurance premiums",
+      "Business parties had often agreed to other limitation periods, and the rigid statutory regime removed contracting flexibility",
+      "It conflicted with federal law",
+      "It made cross-border contracting impossible"
+    ],
+    a: 1,
+    e: "Business parties had often agreed to limitation periods that suited their commercial circumstances. The 'no contracting out' rule meant the statutory periods would override their negotiated arrangements, which was viewed as a loss of contracting freedom."
+  },
+  {
+    q: "Where reason for a lawsuit arises, the chapter advises engineers to:",
+    options: [
+      "Wait until the discoverability date is precisely established before consulting anyone",
+      "File the lawsuit immediately, without legal advice",
+      "Seek legal advice expeditiously to confirm the effect of the applicable limitation period on the rights of the parties",
+      "Refer the matter to the engineering regulator first"
+    ],
+    a: 2,
+    e: "Limitation periods are normally strictly applied, and missing one can have very serious consequences. The chapter therefore stresses obtaining legal advice expeditiously to confirm what effect, if any, the applicable limitation period may have on the parties' rights."
+  },
+  {
+    q: "Globally, limitation periods for engineering services contracts:",
+    options: [
+      "Are uniform under international convention",
+      "Differ from country to country",
+      "Are governed by the law of the plaintiff's home jurisdiction by default",
+      "Do not apply to engineering contracts"
+    ],
+    a: 1,
+    e: "Limitation periods differ from country to country. Where engineering services or contracts are governed by the laws of another country, legal advice on the applicable limitation periods should be obtained as early as possible."
+  },
+  {
+    q: "When engineering services or contracts are governed by the laws of another country, when should legal advice on the applicable limitation periods be obtained?",
+    options: [
+      "Only after a claim has actually arisen",
+      "As early as possible",
+      "Only if a claim is already anticipated",
+      "After the project has been completed"
+    ],
+    a: 1,
+    e: "The chapter advises taking legal advice as early as possible — before a claim arises — to determine applicable limitation periods in jurisdictions other than the engineer's own."
+  },
+  {
+    q: "The case citation '(1984) 29 CCLT 97' refers to which decision?",
+    options: [
+      "Donoghue v Stevenson",
+      "Hedley Byrne v Heller",
+      "City of Kamloops v Nielsen et al",
+      "Anns v Merton London Borough Council"
+    ],
+    a: 2,
+    e: "The bracketed citation in the chapter — (1984) 29 CCLT 97 — refers to the Supreme Court of Canada's decision in City of Kamloops v Nielsen et al, the leading Canadian authority on the discoverability concept."
+  },
+  {
+    q: "The Supreme Court of Canada in Kamloops acknowledged what difficulty inherent in applying the discoverability concept without a longstop date?",
+    options: [
+      "Excessive litigation costs at trial",
+      "That courts may be required to investigate facts many years after their occurrence",
+      "Difficulty in calculating damages accurately",
+      "Conflicts with criminal law"
+    ],
+    a: 1,
+    e: "The court acknowledged that postponing the limitation period until discoverability may involve courts in the investigation of facts many years after their occurrence — a recognized cost of plaintiff-favourable discoverability without a longstop."
+  },
+  {
+    q: "The basic two-year limitation period in the Ontario Limitations Act, 2002 is:",
+    options: [
+      "An alternative to the discoverability concept",
+      "Premised on the discoverability concept",
+      "Independent of the discoverability concept",
+      "Applied only after the ultimate 15-year period has expired"
+    ],
+    a: 1,
+    e: "The basic two-year limitation period is premised on the discoverability concept; it begins running from the date the claim is discovered (as defined under Section 5(1)), rather than from the date of the act or omission."
+  },
+  {
+    q: "If a plaintiff has not yet discovered a claim under the basic two-year period, can the claim still be barred?",
+    options: [
+      "No — the limitation period cannot run until discovery",
+      "Yes — by the ultimate 15-year limitation period running from the act or omission",
+      "Only if the defendant is bankrupt",
+      "Only if the plaintiff explicitly waives the right"
+    ],
+    a: 1,
+    e: "Yes — even an undiscovered claim can be barred by the ultimate 15-year longstop period, which runs from the act or omission and operates independently of the basic two-year period."
+  },
+  {
+    q: "Which statement best describes the relationship between the basic two-year and ultimate 15-year limitation periods under the 2002 Act?",
+    options: [
+      "Plaintiffs may rely on whichever period is longer",
+      "Both periods apply concurrently — an action will be statute barred if either period has expired",
+      "The 15-year period applies only to government bodies",
+      "The 2-year period applies only to contract; the 15-year period only to tort"
+    ],
+    a: 1,
+    e: "Both periods apply concurrently. An action is statute barred if EITHER the basic two-year discoverability period has expired OR the ultimate 15-year longstop has expired."
+  },
+  {
+    q: "The transition provisions of the 2002 Act addressed:",
+    options: [
+      "Cross-border enforcement of judgments",
+      "Indigenous land claims",
+      "Circumstances arising before and after the 2002 Act became effective on January 1, 2004",
+      "The treatment of maritime law claims"
+    ],
+    a: 2,
+    e: "The transition provisions deal with the application of limitation rules to circumstances spanning the period before and after the 2002 Act came into force on January 1, 2004 — and the further effect of the 'no contracting out' rule from January 1, 2004 to October 16, 2006. They are notoriously complex and underscore the need for legal advice."
+  },
+  {
+    q: "Which of the following is the most accurate one-line summary of Ontario's current limitation periods for engineers and contractors?",
+    options: [
+      "Six years for contract, two years for tort, with no ultimate longstop",
+      "Two years from the date of discoverability for both tort and contract, with an ultimate 15-year longstop running from the act or omission",
+      "Ten years for both tort and contract, with no longstop",
+      "One year from the act or omission for both tort and contract"
+    ],
+    a: 1,
+    e: "This is the answer suggested by the sample case study commentary: a basic two-year limitation period from discoverability for both tort and contract, plus an ultimate 15-year longstop running from the act or omission on which the claim is based."
+  },
+  {
+    q: "The category of damages at issue in the Kamloops case is best described as:",
+    options: [
+      "Personal injury damages",
+      "Pure economic loss — including the cost of reconstruction plus ancillary expenses",
+      "Punitive damages",
+      "Loss of consortium"
+    ],
+    a: 1,
+    e: "The 'loss' in Kamloops was characterized as economic loss — specifically the cost of reconstructing the defective foundations plus ancillary expenses. Recovery of pure economic loss in tort against a public authority was a notable feature of the decision."
+  },
+  {
+    q: "Why is it important for Ontario engineers, consultants, and contractors to be aware of the 2006 amendments?",
+    options: [
+      "Because the amendments require all engineers to register with the regulator annually",
+      "Because the amendments give them the entitlement to negotiate or otherwise agree upon limitation periods in business agreements that may differ from the statutory periods",
+      "Because the amendments increased professional liability insurance requirements",
+      "Because the amendments imposed mandatory continuing professional development hours"
+    ],
+    a: 1,
+    e: "The 2006 amendments are practically important to engineers because, in business agreements after October 16, 2006, the parties may negotiate limitation periods that differ from the statutory ones — subject to certain restrictions. This restores significant contracting flexibility for managing long-tail risk."
+  }
+];
+
+/* ───────────────────────────────────────────────────────────
+   STATE
+   ─────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'nppe_book1_ch5_v1';
+const PASS_THRESHOLD = 0.65;
+const POINTS_PER_CORRECT = 100;
+const STREAK_BONUS = 25;
+
+let state = {
+  order: [],
+  current: 0,
+  answers: {},     // index -> {selected, correct}
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  mode: 'practice'
+};
+
+/* ───────────────────────────────────────────────────────────
+   PERSISTENCE
+   ─────────────────────────────────────────────────────────── */
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.order && parsed.order.length === QUESTIONS.length) {
+        state = parsed;
+        return true;
+      }
+    }
+  } catch (e) {}
+  return false;
+}
+function initOrder() {
+  state.order = QUESTIONS.map((_, i) => i);
+}
+function shuffleOrder() {
+  // Fisher–Yates
+  for (let i = state.order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   FX CANVAS — fireworks, golden showers, stars
+   ─────────────────────────────────────────────────────────── */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+  constructor(x, y, opts = {}) {
+    this.x = x;
+    this.y = y;
+    this.vx = opts.vx ?? (Math.random() - 0.5) * 12;
+    this.vy = opts.vy ?? (Math.random() - 0.5) * 12 - 4;
+    this.gravity = opts.gravity ?? 0.18;
+    this.life = opts.life ?? 80 + Math.random() * 40;
+    this.maxLife = this.life;
+    this.color = opts.color ?? '#d4af37';
+    this.size = opts.size ?? 2 + Math.random() * 3;
+    this.shape = opts.shape ?? 'circle';
+    this.rotation = 0;
+    this.rotSpeed = (Math.random() - 0.5) * 0.3;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.vx *= 0.99;
+    this.life--;
+    this.rotation += this.rotSpeed;
+  }
+  draw() {
+    const alpha = Math.max(0, this.life / this.maxLife);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = this.color;
+    if (this.shape === 'star') {
+      drawStar(0, 0, 5, this.size * 1.6, this.size * 0.7);
+    } else if (this.shape === 'square') {
+      ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+function drawStar(cx, cy, spikes, outerR, innerR) {
+  let rot = (Math.PI / 2) * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outerR);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outerR;
+    y = cy + Math.sin(rot) * outerR;
+    ctx.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * innerR;
+    y = cy + Math.sin(rot) * innerR;
+    ctx.lineTo(x, y);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outerR);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => { p.update(); p.draw(); });
+  if (particles.length > 0) requestAnimationFrame(animateParticles);
+}
+
+const GOLD_PALETTE = ['#d4af37', '#e8c863', '#b8941f', '#f4ecd8', '#fff5d1'];
+const FIREWORK_PALETTE = ['#d4af37', '#e8c863', '#6fbf7a', '#f4ecd8', '#ffe066', '#fff'];
+
+function startAnim() { if (particles.length === 0) requestAnimationFrame(animateParticles); animateParticles(); }
+
+function burstConfetti(x, y) {
+  for (let i = 0; i < 50; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 4 + Math.random() * 8;
+    particles.push(new Particle(x, y, {
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      color: GOLD_PALETTE[Math.floor(Math.random() * GOLD_PALETTE.length)],
+      shape: Math.random() > 0.6 ? 'star' : 'square',
+      size: 2 + Math.random() * 4
+    }));
+  }
+  startAnim();
+}
+
+function goldenShower() {
+  for (let i = 0; i < 80; i++) {
+    particles.push(new Particle(
+      Math.random() * canvas.width,
+      -10 - Math.random() * 200,
+      {
+        vx: (Math.random() - 0.5) * 2,
+        vy: 2 + Math.random() * 4,
+        gravity: 0.08,
+        life: 200,
+        color: GOLD_PALETTE[Math.floor(Math.random() * GOLD_PALETTE.length)],
+        shape: Math.random() > 0.5 ? 'star' : 'circle',
+        size: 1 + Math.random() * 3
+      }
+    ));
+  }
+  startAnim();
+}
+
+function starBurst(x, y) {
+  for (let i = 0; i < 12; i++) {
+    const angle = (i / 12) * Math.PI * 2;
+    particles.push(new Particle(x, y, {
+      vx: Math.cos(angle) * 6,
+      vy: Math.sin(angle) * 6,
+      gravity: 0.05,
+      color: '#e8c863',
+      shape: 'star',
+      size: 4,
+      life: 60
+    }));
+  }
+  startAnim();
+}
+
+function fireworksFinale() {
+  let bursts = 0;
+  const maxBursts = 12;
+  function loop() {
+    if (bursts >= maxBursts) return;
+    const x = canvas.width * (0.15 + Math.random() * 0.7);
+    const y = canvas.height * (0.15 + Math.random() * 0.45);
+    const color = FIREWORK_PALETTE[Math.floor(Math.random() * FIREWORK_PALETTE.length)];
+    for (let i = 0; i < 60; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 3 + Math.random() * 7;
+      particles.push(new Particle(x, y, {
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        gravity: 0.12,
+        color: color,
+        shape: Math.random() > 0.7 ? 'star' : 'circle',
+        size: 1.5 + Math.random() * 3,
+        life: 80
+      }));
+    }
+    startAnim();
+    bursts++;
+    setTimeout(loop, 350 + Math.random() * 300);
+  }
+  loop();
+  goldenShower();
+}
+
+/* ───────────────────────────────────────────────────────────
+   FLOATING SCORE & STREAK BADGE
+   ─────────────────────────────────────────────────────────── */
+function floatScore(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'float-score';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function showStreakBadge(text) {
+  const badge = document.getElementById('streakBadge');
+  badge.textContent = text;
+  badge.classList.add('show');
+  setTimeout(() => badge.classList.remove('show'), 2200);
+}
+
+const STREAK_FACES = ['😊', '😄', '🤩', '🌟', '🔥', '⚡', '🏆', '👑'];
+function getStreakMessage(streak) {
+  if (streak === 3) return STREAK_FACES[0] + ' 3 in a row!';
+  if (streak === 5) return STREAK_FACES[2] + ' Five streak!';
+  if (streak === 7) return STREAK_FACES[3] + ' Seven straight!';
+  if (streak === 10) return STREAK_FACES[5] + ' Ten in a row — on fire!';
+  if (streak === 15) return STREAK_FACES[6] + ' Fifteen streak — masterful!';
+  if (streak === 20) return STREAK_FACES[7] + ' Twenty streak — legendary!';
+  if (streak >= 25 && streak % 5 === 0) return STREAK_FACES[7] + ' ' + streak + ' in a row!';
+  return null;
+}
+
+/* ───────────────────────────────────────────────────────────
+   RENDERING
+   ─────────────────────────────────────────────────────────── */
+function romanize(num) {
+  const values = [50, 40, 10, 9, 5, 4, 1];
+  const symbols = ['L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+  let result = '';
+  for (let i = 0; i < values.length; i++) {
+    while (num >= values[i]) { result += symbols[i]; num -= values[i]; }
+  }
+  return result;
+}
+
+function render() {
+  const total = QUESTIONS.length;
+  if (state.current >= total) { showCompletion(); return; }
+
+  document.getElementById('completion').classList.remove('show');
+  document.getElementById('questionCard').style.display = 'block';
+
+  const qIdx = state.order[state.current];
+  const q = QUESTIONS[qIdx];
+
+  document.getElementById('qNumber').textContent = 'Question ' + romanize(state.current + 1);
+  document.getElementById('qText').textContent = q.q;
+
+  const optsList = document.getElementById('optionsList');
+  optsList.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  const answered = state.answers[qIdx];
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.dataset.letter = letters[i];
+    btn.textContent = opt;
+    btn.type = 'button';
+
+    if (answered) {
+      btn.classList.add('locked');
+      if (state.mode === 'practice') {
+        if (i === q.a) btn.classList.add('correct');
+        else if (i === answered.selected) btn.classList.add('wrong');
+      } else {
+        if (i === answered.selected) btn.classList.add(answered.correct ? 'correct' : 'wrong');
+      }
+    } else {
+      btn.addEventListener('click', (e) => handleAnswer(qIdx, i, btn, e));
+    }
+    optsList.appendChild(btn);
+  });
+
+  const expEl = document.getElementById('explanation');
+  if (answered && state.mode === 'practice') {
+    expEl.innerHTML = '<strong>Explanation</strong>' + q.e;
+    expEl.classList.add('show');
+  } else {
+    expEl.classList.remove('show');
+  }
+
+  // Stats
+  const correctCount = Object.values(state.answers).filter(a => a.correct).length;
+  document.getElementById('statPoints').textContent = state.points;
+  document.getElementById('statStreak').textContent = state.streak;
+  document.getElementById('statCorrect').textContent = correctCount + '/' + total;
+
+  // Progress
+  const answeredCount = Object.keys(state.answers).length;
+  const pct = Math.round((answeredCount / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + (state.current + 1) + ' of ' + total;
+  document.getElementById('progressPercent').textContent = pct + '%';
+
+  // Nav grid
+  renderNavGrid();
+
+  // Buttons
+  document.getElementById('btnPrev').disabled = state.current === 0;
+  document.getElementById('btnNext').textContent = (state.current === total - 1) ? 'Finish ✓' : 'Next ▸';
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  state.order.forEach((qIdx, displayIdx) => {
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.textContent = displayIdx + 1;
+    cell.type = 'button';
+    if (displayIdx === state.current) cell.classList.add('current');
+    else if (state.answers[qIdx]) {
+      if (state.mode === 'practice') {
+        cell.classList.add(state.answers[qIdx].correct ? 'correct' : 'wrong');
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    cell.addEventListener('click', () => { state.current = displayIdx; render(); });
+    grid.appendChild(cell);
+  });
+}
+
+/* ───────────────────────────────────────────────────────────
+   INTERACTIONS
+   ─────────────────────────────────────────────────────────── */
+function handleAnswer(qIdx, selected, btnEl, evt) {
+  const q = QUESTIONS[qIdx];
+  const correct = selected === q.a;
+
+  state.answers[qIdx] = { selected, correct };
+
+  if (correct) {
+    state.streak++;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    const bonus = (state.streak >= 2) ? STREAK_BONUS * (state.streak - 1) : 0;
+    const earned = POINTS_PER_CORRECT + bonus;
+    state.points += earned;
+
+    // Visuals
+    const rect = btnEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    burstConfetti(cx, cy);
+    starBurst(cx, cy);
+    floatScore(cx, rect.top, '+' + earned);
+
+    if (state.streak === 3 || state.streak === 5) goldenShower();
+    const msg = getStreakMessage(state.streak);
+    if (msg) showStreakBadge(msg);
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+
+  // Re-render the card
+  render();
+
+  // After last question — auto-advance to completion if all answered (in exam mode)
+  if (state.mode === 'exam' && Object.keys(state.answers).length === QUESTIONS.length) {
+    setTimeout(() => { state.current = QUESTIONS.length; render(); }, 600);
+  }
+}
+
+function nextQuestion() {
+  if (state.current < QUESTIONS.length - 1) {
+    state.current++;
+    render();
+    saveState();
+  } else {
+    state.current = QUESTIONS.length;
+    render();
+    saveState();
+  }
+}
+
+function prevQuestion() {
+  if (state.current > 0) {
+    state.current--;
+    render();
+    saveState();
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   COMPLETION
+   ─────────────────────────────────────────────────────────── */
+function showCompletion() {
+  document.getElementById('questionCard').style.display = 'none';
+  const completion = document.getElementById('completion');
+  completion.classList.add('show');
+
+  const total = QUESTIONS.length;
+  const correctCount = Object.values(state.answers).filter(a => a.correct).length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('finalPercent').textContent = pct + '%';
+  document.getElementById('finalCorrect').textContent = correctCount + '/' + total;
+  document.getElementById('finalPoints').textContent = state.points;
+  document.getElementById('finalStreak').textContent = state.bestStreak;
+
+  // Animate ring
+  const circumference = 2 * Math.PI * 86;
+  const offset = circumference * (1 - pct / 100);
+  setTimeout(() => {
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+  }, 100);
+
+  // Verdict
+  const verdict = document.getElementById('verdict');
+  if (pct >= 70) {
+    verdict.textContent = '✦ Excellent — well above the NPPE pass threshold ✦';
+    verdict.classList.remove('fail');
+    fireworksFinale();
+  } else if (pct >= PASS_THRESHOLD * 100) {
+    verdict.textContent = '✦ A pass — keep practising for confidence ✦';
+    verdict.classList.remove('fail');
+    goldenShower();
+  } else {
+    verdict.textContent = 'Below the NPPE pass threshold — review and try again';
+    verdict.classList.add('fail');
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   RESET
+   ─────────────────────────────────────────────────────────── */
+function showResetModal() { document.getElementById('resetModal').classList.add('show'); }
+function hideResetModal() { document.getElementById('resetModal').classList.remove('show'); }
+function performReset() {
+  state = {
+    order: [],
+    current: 0,
+    answers: {},
+    points: 0,
+    streak: 0,
+    bestStreak: 0,
+    mode: state.mode
+  };
+  initOrder();
+  saveState();
+  hideResetModal();
+  document.getElementById('completion').classList.remove('show');
+  document.getElementById('questionCard').style.display = 'block';
+  document.getElementById('ringFill').style.strokeDashoffset = (2 * Math.PI * 86);
+  render();
+}
+
+/* ───────────────────────────────────────────────────────────
+   EVENT WIRING
+   ─────────────────────────────────────────────────────────── */
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnPrev').addEventListener('click', prevQuestion);
+
+document.getElementById('btnReset').addEventListener('click', showResetModal);
+document.getElementById('confirmReset').addEventListener('click', performReset);
+document.getElementById('cancelReset').addEventListener('click', hideResetModal);
+document.getElementById('resetModal').addEventListener('click', (e) => {
+  if (e.target.id === 'resetModal') hideResetModal();
+});
+
+document.getElementById('btnShuffle').addEventListener('click', () => {
+  shuffleOrder();
+  state.current = 0;
+  saveState();
+  render();
+});
+
+document.getElementById('modePractice').addEventListener('click', () => {
+  state.mode = 'practice';
+  document.getElementById('modePractice').classList.add('active');
+  document.getElementById('modeExam').classList.remove('active');
+  saveState();
+  render();
+});
+document.getElementById('modeExam').addEventListener('click', () => {
+  state.mode = 'exam';
+  document.getElementById('modeExam').classList.add('active');
+  document.getElementById('modePractice').classList.remove('active');
+  saveState();
+  render();
+});
+
+document.getElementById('btnReview').addEventListener('click', () => {
+  state.current = 0;
+  document.getElementById('completion').classList.remove('show');
+  document.getElementById('questionCard').style.display = 'block';
+  render();
+});
+document.getElementById('btnRestart').addEventListener('click', performReset);
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') nextQuestion();
+  else if (e.key === 'ArrowLeft') prevQuestion();
+  else if (['1','2','3','4','a','b','c','d','A','B','C','D'].includes(e.key)) {
+    const map = {'1':0,'2':1,'3':2,'4':3,'a':0,'A':0,'b':1,'B':1,'c':2,'C':2,'d':3,'D':3};
+    const idx = map[e.key];
+    const qIdx = state.order[state.current];
+    if (!state.answers[qIdx] && idx !== undefined) {
+      const buttons = document.querySelectorAll('.option');
+      if (buttons[idx]) buttons[idx].click();
+    }
+  }
+});
+
+/* ───────────────────────────────────────────────────────────
+   BOOT
+   ─────────────────────────────────────────────────────────── */
+if (!loadState()) {
+  initOrder();
+  saveState();
+}
+
+// Sync mode toggle with loaded state
+if (state.mode === 'exam') {
+  document.getElementById('modeExam').classList.add('active');
+  document.getElementById('modePractice').classList.remove('active');
+}
+
+render();
+</script>
+</body>
+</html>

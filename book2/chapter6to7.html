@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Quiz — Chapters 6 & 7: Proof and Contracts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-900: #0a1530;
+    --navy-800: #0f1d3f;
+    --navy-700: #16284f;
+    --navy-600: #1e3360;
+    --navy-500: #2a4275;
+    --gold: #d4af37;
+    --gold-bright: #f0c75e;
+    --gold-soft: #b8941f;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --cream: #f5efdf;
+    --cream-dim: #d8cfb8;
+    --correct: #4ea96b;
+    --correct-bg: rgba(78, 169, 107, 0.12);
+    --wrong: #c94f4f;
+    --wrong-bg: rgba(201, 79, 79, 0.12);
+    --shadow-deep: 0 25px 60px rgba(0, 0, 0, 0.6);
+    --serif-display: 'Cormorant Garamond', serif;
+    --serif-body: 'Lora', Georgia, serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: radial-gradient(ellipse at top, var(--navy-700) 0%, var(--navy-900) 60%, #050a1c 100%);
+    color: var(--cream);
+    font-family: var(--serif-body);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    position: relative;
+  }
+  .header::after {
+    content: '❦';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy-900);
+    padding: 0 14px;
+    color: var(--gold);
+    font-size: 20px;
+  }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--serif-display);
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  h1 em {
+    color: var(--gold-bright);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .subtitle {
+    font-family: var(--serif-body);
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 16px;
+    margin-top: 6px;
+  }
+
+  /* ========== START SCREEN ========== */
+  .start-screen {
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-700));
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
+    padding: 44px 36px;
+    box-shadow: var(--shadow-deep);
+    text-align: center;
+  }
+  .start-screen h2 {
+    font-family: var(--serif-display);
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    color: var(--gold-bright);
+  }
+  .start-screen p {
+    color: var(--cream-dim);
+    margin-bottom: 28px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+  }
+  @media (max-width: 540px) { .mode-grid { grid-template-columns: 1fr; } }
+
+  .mode-card {
+    background: rgba(10, 21, 48, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 22px 18px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transition: left 0.6s ease;
+  }
+  .mode-card:hover::before { left: 100%; }
+  .mode-card:hover {
+    border-color: var(--gold);
+    background: rgba(15, 29, 63, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+  }
+  .mode-card h3 {
+    font-family: var(--serif-display);
+    font-size: 22px;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .mode-card p {
+    color: var(--cream-dim);
+    font-size: 14px;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ========== QUIZ AREA ========== */
+  .quiz-area { display: none; }
+  .quiz-area.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 14px 20px;
+    background: var(--navy-800);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 2px;
+  }
+  .status-item {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--cream-dim);
+    letter-spacing: 0.5px;
+  }
+  .status-item strong {
+    color: var(--gold-bright);
+    font-weight: 600;
+    font-size: 15px;
+    margin-left: 4px;
+  }
+  .streak-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .streak-flame {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  .streak-flame.fire {
+    animation: flameDance 0.6s ease;
+  }
+  @keyframes flameDance {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.4) rotate(-8deg); }
+    75% { transform: scale(1.4) rotate(8deg); }
+  }
+
+  .progress-track {
+    height: 3px;
+    background: rgba(212, 175, 55, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px var(--gold-glow);
+  }
+
+  /* ========== QUESTION CARD ========== */
+  .question-card {
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-700));
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    padding: 36px 32px;
+    border-radius: 4px;
+    box-shadow: var(--shadow-deep);
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 60px; height: 60px;
+    border-top: 1px solid var(--gold);
+    border-left: 1px solid var(--gold);
+    opacity: 0.5;
+  }
+  .question-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 60px; height: 60px;
+    border-bottom: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    opacity: 0.5;
+  }
+  .q-number {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .question-text {
+    font-family: var(--serif-body);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--cream);
+    margin-bottom: 28px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option {
+    background: rgba(10, 21, 48, 0.5);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 16px 20px 16px 56px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--serif-body);
+    font-size: 15.5px;
+    color: var(--cream);
+    text-align: left;
+    position: relative;
+    line-height: 1.5;
+  }
+  .option-letter {
+    position: absolute;
+    left: 18px;
+    top: 16px;
+    font-family: var(--serif-display);
+    font-size: 16px;
+    color: var(--gold);
+    font-weight: 600;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .option:hover:not(.disabled) {
+    border-color: var(--gold);
+    background: rgba(15, 29, 63, 0.9);
+    transform: translateX(4px);
+  }
+  .option:hover:not(.disabled) .option-letter {
+    background: var(--gold);
+    color: var(--navy-900);
+  }
+  .option.disabled { cursor: default; }
+
+  .option.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+    animation: correctPulse 0.5s ease;
+  }
+  .option.correct .option-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: white;
+  }
+  @keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); box-shadow: 0 0 24px rgba(78, 169, 107, 0.4); }
+    100% { transform: scale(1); }
+  }
+
+  .option.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+  }
+  .option.wrong .option-letter {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: white;
+  }
+
+  /* ========== EXPLANATION ========== */
+  .explanation {
+    margin-top: 22px;
+    padding: 20px 22px;
+    background: rgba(212, 175, 55, 0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 2px 2px 0;
+    font-family: var(--serif-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--cream-dim);
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .explanation.visible { display: block; }
+  .explanation strong {
+    font-family: var(--serif-display);
+    color: var(--gold-bright);
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .explanation em {
+    color: var(--cream);
+    font-style: italic;
+  }
+
+  /* ========== CONTROLS ========== */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 12px 26px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-radius: 2px;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--gold);
+    color: var(--navy-900);
+    box-shadow: 0 0 16px var(--gold-glow);
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.primary { background: var(--gold); color: var(--navy-900); font-weight: 600; }
+  .btn.primary:hover:not(:disabled) { background: var(--gold-bright); border-color: var(--gold-bright); }
+  .btn.danger { border-color: rgba(201, 79, 79, 0.6); color: rgba(201, 79, 79, 0.9); }
+  .btn.danger:hover { background: var(--wrong); color: white; border-color: var(--wrong); }
+
+  /* ========== NAV GRID ========== */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    gap: 6px;
+    margin-top: 22px;
+    padding: 18px;
+    background: var(--navy-800);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 2px;
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    background: rgba(10, 21, 48, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: var(--cream-dim);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+  }
+  .nav-cell:hover { border-color: var(--gold); color: var(--gold); }
+  .nav-cell.current { background: var(--gold); color: var(--navy-900); border-color: var(--gold); font-weight: 700; }
+  .nav-cell.answered-correct { border-color: var(--correct); color: var(--correct); }
+  .nav-cell.answered-wrong { border-color: var(--wrong); color: var(--wrong); }
+  .nav-cell.answered-exam { border-color: var(--gold-soft); color: var(--gold); }
+
+  /* ========== RESULTS ========== */
+  .results-screen {
+    display: none;
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-700));
+    border: 1px solid var(--gold);
+    padding: 50px 40px;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: var(--shadow-deep);
+    position: relative;
+  }
+  .results-screen.active { display: block; animation: fadeIn 0.5s ease; }
+  .results-screen h2 {
+    font-family: var(--serif-display);
+    font-size: 36px;
+    color: var(--gold-bright);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .score-display {
+    font-family: var(--serif-display);
+    font-size: 88px;
+    font-weight: 600;
+    line-height: 1;
+    margin: 24px 0 10px;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold-soft));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .score-pct {
+    font-family: var(--sans);
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .verdict {
+    font-family: var(--serif-body);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--cream);
+    max-width: 480px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+  }
+  .results-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 480px;
+    margin: 0 auto 30px;
+  }
+  .stat {
+    padding: 16px 8px;
+    background: rgba(10, 21, 48, 0.5);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 2px;
+  }
+  .stat-value {
+    font-family: var(--serif-display);
+    font-size: 28px;
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .stat-label {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    margin-top: 4px;
+  }
+
+  /* ========== MODAL ========== */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 28, 0.85);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-bg.active { display: flex; animation: fadeIn 0.2s ease; }
+  .modal {
+    background: var(--navy-800);
+    border: 1px solid var(--gold);
+    padding: 32px 28px;
+    max-width: 420px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .modal h3 {
+    font-family: var(--serif-display);
+    font-size: 24px;
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+  }
+  .modal p {
+    color: var(--cream-dim);
+    margin-bottom: 22px;
+    font-size: 15px;
+  }
+  .modal-buttons { display: flex; gap: 10px; justify-content: center; }
+
+  /* ========== CELEBRATION CANVAS ========== */
+  #fxCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Floating happy face */
+  .happy-burst {
+    position: fixed;
+    font-size: 64px;
+    pointer-events: none;
+    z-index: 998;
+    animation: happyPop 1.2s ease-out forwards;
+  }
+  @keyframes happyPop {
+    0%   { transform: translate(-50%, -50%) scale(0) rotate(-180deg); opacity: 0; }
+    30%  { transform: translate(-50%, -50%) scale(1.4) rotate(0deg); opacity: 1; }
+    70%  { transform: translate(-50%, -120%) scale(1.2) rotate(15deg); opacity: 1; }
+    100% { transform: translate(-50%, -240%) scale(0.8) rotate(-15deg); opacity: 0; }
+  }
+
+  /* +Points pop */
+  .points-pop {
+    position: fixed;
+    font-family: var(--serif-display);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px var(--gold-glow), 0 0 40px var(--gold-glow);
+    pointer-events: none;
+    z-index: 998;
+    animation: pointsRise 1.4s ease-out forwards;
+  }
+  @keyframes pointsRise {
+    0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+    20%  { transform: translate(-50%, -60%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -180%) scale(1); opacity: 0; }
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 50px;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(216, 207, 184, 0.4);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="container">
+  <header class="header">
+    <div class="eyebrow">NPPE Examination Preparation</div>
+    <h1>Proof &amp; <em>Contracts</em></h1>
+    <div class="subtitle">BOOK1 — Law for Professional Engineers · Chapters 6 &amp; 7</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <section class="start-screen" id="startScreen">
+    <h2>Choose Your Mode</h2>
+    <p>Twenty-five Ontario NPPE-style questions on burden of proof, expert witness duties, the essential elements of a contract, assignment, and the duty of good faith established in <em>Bhasin v. Hrynew</em>.</p>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="startQuiz('practice')">
+        <h3>Practice Mode</h3>
+        <p>Immediate feedback after each question with detailed explanations. Build understanding question by question.</p>
+      </div>
+      <div class="mode-card" onclick="startQuiz('exam')">
+        <h3>Exam Mode</h3>
+        <p>Full simulation. Lock in your answers, then review all results at the end. Mirrors the NPPE experience.</p>
+      </div>
+    </div>
+    <p style="font-size: 13px; opacity: 0.7; margin-top: 18px;">Pass threshold: 65% &nbsp;·&nbsp; 25 questions &nbsp;·&nbsp; Shuffled each session</p>
+  </section>
+
+  <!-- QUIZ AREA -->
+  <section class="quiz-area" id="quizArea">
+    <div class="status-bar">
+      <span class="status-item">Question <strong id="qCurrent">1</strong> / <strong id="qTotal">25</strong></span>
+      <span class="status-item">Score <strong id="scoreDisp">0</strong></span>
+      <span class="status-item">Streak <span class="streak-display"><span class="streak-flame" id="streakFlame">🔥</span><strong id="streakDisp">0</strong></span></span>
+      <span class="status-item">Mode <strong id="modeDisp">Practice</strong></span>
+    </div>
+
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="question-card">
+      <div class="q-number" id="qNumLabel">Question I</div>
+      <div class="question-text" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+      <div class="explanation" id="qExplanation"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn danger" onclick="confirmReset()">Reset Quiz</button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn" id="prevBtn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+
+    <div class="nav-grid" id="navGrid"></div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="results-screen" id="resultsScreen">
+    <div class="eyebrow" style="margin-bottom: 8px;">Examination Complete</div>
+    <h2 id="resultsTitle">Your Performance</h2>
+    <div class="score-display"><span id="finalScore">0</span><span style="font-size:48px; opacity:0.5;">/25</span></div>
+    <div class="score-pct" id="finalPct">0% · NOT YET</div>
+    <p class="verdict" id="verdictText"></p>
+    <div class="results-stats">
+      <div class="stat"><div class="stat-value" id="statCorrect">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat"><div class="stat-value" id="statBest">0</div><div class="stat-label">Best Streak</div></div>
+      <div class="stat"><div class="stat-value" id="statPoints">0</div><div class="stat-label">Total Points</div></div>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn" onclick="reviewAnswers()">Review Answers</button>
+      <button class="btn primary" onclick="confirmReset(true)">Start New Quiz</button>
+    </div>
+  </section>
+
+  <!-- RESET MODAL -->
+  <div class="modal-bg" id="resetModal">
+    <div class="modal">
+      <h3>Reset the quiz?</h3>
+      <p>All current progress, your score, and your streak will be cleared. The questions will be reshuffled.</p>
+      <div class="modal-buttons">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn danger" onclick="performReset()">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Apoorva · NPPE Self-Study · BOOK1</div>
+</div>
+
+<script>
+/* =========================================================================
+   QUESTION BANK — 25 questions on Chapters 6 (Proof) & 7 (Contracts)
+   ========================================================================= */
+const QUESTIONS = [
+  {
+    chapter: 7,
+    q: "An engineer enters into a contract to provide design services. Which of the following is NOT one of the five essential elements required for a binding and enforceable contract in Canadian common-law jurisdictions?",
+    options: [
+      "An offer made and accepted",
+      "Mutual intent to enter into the contract",
+      "Consideration",
+      "The contract being in written form and signed by both parties"
+    ],
+    answer: 3,
+    explanation: "The five essential elements are: (1) an offer made and accepted, (2) mutual intent to enter into the contract, (3) consideration, (4) capacity to contract, and (5) lawful purpose. A contract being in writing is generally NOT a required element under common law (though writing may be required for certain types of contracts under specific statutes)."
+  },
+  {
+    chapter: 6,
+    q: "In a civil lawsuit alleging breach of contract against an engineer, what standard of proof must the plaintiff meet?",
+    options: [
+      "Beyond a reasonable doubt",
+      "On the balance of probabilities",
+      "Clear and convincing evidence",
+      "Absolute certainty"
+    ],
+    answer: 1,
+    explanation: "In civil lawsuits in tort or for breach of contract, the plaintiff must prove the case by persuading the court on a 'balance of probabilities' that the facts are as alleged. The 'beyond a reasonable doubt' standard is reserved for criminal proceedings and is a notably higher threshold."
+  },
+  {
+    chapter: 6,
+    q: "An engineer is retained as an expert witness by one party in a construction dispute. Which of the following best describes the engineer's duty in giving testimony?",
+    options: [
+      "To advocate strongly for the party who retained them",
+      "To provide objective and independent testimony notwithstanding having been engaged by one party",
+      "To withhold information that could harm the retaining party's position",
+      "To restrict testimony only to facts personally observed"
+    ],
+    answer: 1,
+    explanation: "Although enlisted by one of the disputants, an engineer acting as an expert witness must take these duties seriously and provide objective and independent testimony. The expert witness is allied (or perceived to be allied) with one side, but professional integrity demands objectivity."
+  },
+  {
+    chapter: 7,
+    q: "The 2014 Supreme Court of Canada decision in Bhasin v. Hrynew established which of the following principles?",
+    options: [
+      "All commercial contracts must be in writing to be enforceable",
+      "There is a general organizing principle of good faith requiring parties to perform contracts honestly",
+      "Courts may rewrite contract terms that are commercially unreasonable",
+      "Verbal contracts are unenforceable in commercial settings"
+    ],
+    answer: 1,
+    explanation: "In Bhasin v. Hrynew (2014), the Supreme Court of Canada identified a general organizing principle of good faith and recognized a common-law duty to perform contracts honestly. It is essentially a requirement not to lie or knowingly mislead the other party in performance of the contract."
+  },
+  {
+    chapter: 7,
+    q: "After signing a services agreement, an engineer realizes the negotiated terms are financially unfavourable. Which of the following is true?",
+    options: [
+      "The court will revise the terms to make them fair",
+      "The court will void the contract on grounds of bad bargain",
+      "The court will not impose more favourable terms simply because the deal is bad",
+      "The contract is automatically voidable for being one-sided"
+    ],
+    answer: 2,
+    explanation: "A basic premise of contract law: if a 'bad business deal' is negotiated, the courts will not impose more favourable terms. The law enforces the provisions of valid contracts; it does not intervene to rewrite the bargain merely because one party regrets it."
+  },
+  {
+    chapter: 7,
+    q: "A consulting engineer wishes to assign the right to receive payment under an existing engineering services contract to a third-party financing company. Under Canadian common law, which of the following is correct?",
+    options: [
+      "Contractual benefits cannot be assigned to third parties",
+      "Contractual benefits can generally be assigned without the other party's consent unless the contract restricts assignment",
+      "Both contracting parties must consent in writing for any assignment to occur",
+      "Assignment of contractual benefits requires court approval"
+    ],
+    answer: 1,
+    explanation: "Contractual benefits (i.e., rights such as the right to receive payment) can be assigned to a third party by one of the contracting parties without the consent of the other party. If parties wish to limit such assignment, they should expressly provide that no rights are assignable without written consent."
+  },
+  {
+    chapter: 6,
+    q: "In court proceedings involving an engineering negligence claim, which statement best distinguishes an expert witness from a non-expert witness?",
+    options: [
+      "Expert witnesses are not subject to cross-examination, but non-expert witnesses are",
+      "Expert witnesses may express opinions in their area of expertise, while non-expert witnesses are generally restricted to establishing facts",
+      "Expert witnesses must be neutral parties not engaged by either side",
+      "Non-expert witnesses are restricted to testifying only on technical matters"
+    ],
+    answer: 1,
+    explanation: "The expert witness is permitted to express opinions with respect to their area of expertise. Non-expert witnesses are generally not permitted to express opinions; they are restricted to establishing the facts of the case. This is the central distinction."
+  },
+  {
+    chapter: 7,
+    q: "In Bhasin v. Hrynew, the Supreme Court of Canada held that the duty of good faith in contractual performance:",
+    options: [
+      "Requires parties to disclose all advantages they obtain from the contract",
+      "Imposes a fiduciary duty of loyalty between contracting parties",
+      "Is essentially a requirement not to lie or knowingly mislead the other party about contractual performance",
+      "Can be excluded if the contract expressly says so"
+    ],
+    answer: 2,
+    explanation: "The court was clear that the duty of good faith does not impose a duty of loyalty or of disclosure, nor does it require a party to forego advantages flowing from the contract. It is a simple requirement not to lie or mislead the other party about one's contractual performance."
+  },
+  {
+    chapter: 7,
+    q: "An engineer is appointed as a director of a small engineering corporation. The fiduciary duty of the engineer-director requires them to:",
+    options: [
+      "Act in their own personal best interests as a shareholder",
+      "Act honestly and in good faith with a view to the best interests of the corporation",
+      "Follow only the instructions of the majority shareholder",
+      "Maximize short-term profit at all costs"
+    ],
+    answer: 1,
+    explanation: "When an engineer assumes responsibility as a director of a corporation, the engineer is required to act honestly and in good faith with a view to the best interests of the corporation. This fiduciary duty emphasizes the importance the legal system attaches to honesty and integrity."
+  },
+  {
+    chapter: 7,
+    q: "Two parties who have validly executed an engineering services contract subsequently wish to change a payment provision. Which statement is correct?",
+    options: [
+      "Contracts cannot be amended once executed",
+      "Only the courts have the power to amend an existing contract",
+      "Parties may alter an existing contract by mutual agreement, provided the amendment is effected within the framework of the essential contract elements",
+      "Amendments require unanimous consent of all parties indirectly affected"
+    ],
+    answer: 2,
+    explanation: "Parties can always alter an existing contractual arrangement by mutual agreement, provided the amendment is effected within the framework of the essential contract elements (offer and acceptance, mutual intent, consideration, capacity, and lawful purpose)."
+  },
+  {
+    chapter: 6,
+    q: "An engineer is approached to act as an expert witness in a complex structural-failure lawsuit. Which approach is most appropriate?",
+    options: [
+      "Accept the engagement immediately to support the retaining client",
+      "Refuse all expert witness work as inherently a conflict of interest",
+      "Decline unless confident in handling cross-examination and prepared to provide objective testimony within the scope of the engineer's expertise",
+      "Limit testimony to information the retaining party prefers be disclosed"
+    ],
+    answer: 2,
+    explanation: "An engineer should not undertake to appear as an expert witness unless confident of handling cross-examination. The engineer must be prepared, restrict testimony to areas of expertise, and provide objective independent opinions despite being engaged by one party."
+  },
+  {
+    chapter: 7,
+    q: "Two parties drafting an engineering services contract specifically wish to ensure that no rights under the contract may be transferred to outsiders. Which statement about the duty of good faith and the right to limit assignment is correct?",
+    options: [
+      "Parties cannot contract out of the duty of good faith, but they CAN expressly restrict assignment of contractual rights",
+      "Parties can contract out of both the duty of good faith AND restrict assignment",
+      "Parties cannot contract out of either the duty of good faith OR restrict assignment",
+      "Parties can contract out of the duty of good faith, but cannot restrict assignment"
+    ],
+    answer: 0,
+    explanation: "Two distinct rules apply. First, the Supreme Court in Bhasin v. Hrynew was explicit that contracting parties are NOT entitled to contract out of the duty of good faith. Second, parties CAN expressly limit assignment by providing that no rights are assignable without written consent."
+  },
+  {
+    chapter: 6,
+    q: "A judge hearing an engineering negligence dispute is faced with conflicting testimony from two credible-seeming witnesses. The judge's task is to:",
+    options: [
+      "Dismiss the case where witnesses materially disagree",
+      "Decide which witness is more credible and accept that testimony",
+      "Order an automatic retrial with new witnesses",
+      "Average the two conflicting accounts to reach a finding"
+    ],
+    answer: 1,
+    explanation: "When faced with conflicting testimony, the court must decide which of the witnesses is more credible. A judge may have to accept one person's word rather than another's; this is not unusual judicial work."
+  },
+  {
+    chapter: 7,
+    q: "Before the Bhasin v. Hrynew decision, the duty of good faith in contracting:",
+    options: [
+      "Had been firmly established in Canadian common law for many decades",
+      "Had already been recognized in jurisdictions including Quebec (civil law) and the United States, but had not been clearly established in Canadian common-law provinces",
+      "Did not exist in any jurisdiction worldwide prior to 2014",
+      "Was recognized only in international trade law contexts"
+    ],
+    answer: 1,
+    explanation: "A surprising aspect of the timing of the 2014 Bhasin decision is that legal jurisdictions other than Canadian common-law provinces and territories — including the civil-law province of Quebec and the United States, among others — had much earlier established this general duty of good faith in contract law."
+  },
+  {
+    chapter: 7,
+    q: "During performance of an engineering supply contract, the supplier knowingly makes false assertions of fact about its delivery capability to gain commercial advantage. Under Bhasin v. Hrynew, this conduct:",
+    options: [
+      "Is acceptable as ordinary commercial puffery",
+      "Constitutes a breach of the duty of honesty and good faith in contractual performance",
+      "Is only problematic if expressly prohibited in the contract",
+      "Is permitted unless it causes financial harm above a statutory threshold"
+    ],
+    answer: 1,
+    explanation: "The Supreme Court was explicit: false assertions of fact knowingly made in contracting will constitute a breach of this duty of honesty and good faith. Honesty is now, more than ever, central to the Rule of Law in Canada."
+  },
+  {
+    chapter: 7,
+    q: "An engineering firm wants to ensure that its consulting agreements cannot be assigned by a client without notice. The most effective approach is to:",
+    options: [
+      "Rely on a presumption against assignment under common law",
+      "Expressly provide in the contract that no rights are assignable without the written consent of the other contracting party",
+      "Verbally agree at the start of the engagement that no assignment will occur",
+      "Register the contract with a regulator"
+    ],
+    answer: 1,
+    explanation: "If contracting parties wish to limit assignment rights, they should expressly provide that no rights under the contract are assignable to a third party without the written consent of the contracting party. The default rule is that benefits ARE assignable."
+  },
+  {
+    chapter: 6,
+    q: "An engineer testifying as an expert witness is being cross-examined by opposing counsel. The most appropriate strategy is to:",
+    options: [
+      "Refuse to answer questions posed by opposing counsel",
+      "Be well prepared, clearly understand the issues, and anticipate the scope of questions reasonably expected",
+      "Provide deliberately ambiguous answers to avoid commitment",
+      "Defer to the lawyer who retained them for guidance during cross-examination"
+    ],
+    answer: 1,
+    explanation: "Preparation is of the utmost importance in litigation. The expert witness should clearly understand the issues in the lawsuit and be aware of the scope of questions that can be reasonably expected. Counsel for the other side will likely attempt to dissuade the court from accepting the engineer's opinions, so readiness is essential."
+  },
+  {
+    chapter: 6,
+    q: "Which of the following statements about the standards of proof is correct?",
+    options: [
+      "'Balance of probabilities' is a higher standard than 'beyond a reasonable doubt'",
+      "'Beyond a reasonable doubt' is the standard typically applied in civil proceedings",
+      "'On the balance of probabilities' represents a lower standard of proof than 'beyond a reasonable doubt'",
+      "Both standards are functionally identical in practice"
+    ],
+    answer: 2,
+    explanation: "The degree of proof implied by 'on the balance of probabilities' (used in civil cases) is obviously less than the degree of proof required to establish guilt 'beyond a reasonable doubt' (used in certain criminal proceedings)."
+  },
+  {
+    chapter: 7,
+    q: "A contract administrator is granted discretion to make decisions about contractual performance issues. The administrator exercises this discretion in a misleading manner toward one of the parties. Under the duty of good faith:",
+    options: [
+      "The administrator's actions are immune from challenge because discretion was granted",
+      "Such conduct may potentially constitute a breach of the duty of honesty in contractual performance",
+      "The duty of good faith does not apply where discretion has been delegated",
+      "Only the contracting parties themselves, not administrators, are subject to the duty"
+    ],
+    answer: 1,
+    explanation: "Breach of the duty of honesty in contractual performance may potentially arise in circumstances where contracts provide for discretion to be exercised — for example, where contract administrators are authorized to make decisions relating to contractual performance issues."
+  },
+  {
+    chapter: 7,
+    q: "The duty of good faith in contractual performance, as articulated in Bhasin v. Hrynew, requires contracting parties to:",
+    options: [
+      "Disclose all material information to one another at all stages",
+      "Forego advantages flowing from the contract where the other party is disadvantaged",
+      "Refrain from lying or knowingly misleading each other regarding contractual performance",
+      "Act with loyalty and place the other party's interests above their own"
+    ],
+    answer: 2,
+    explanation: "The court emphasized that the duty 'simply means that parties must not lie or otherwise knowingly mislead each other about matters directly linked to the performance of the contract.' It is not a duty of loyalty, disclosure, or to forego advantages flowing from the contract."
+  },
+  {
+    chapter: 6,
+    q: "An engineer is retained to give expert testimony on a geotechnical issue but is asked questions during cross-examination about structural design — an area outside the engineer's expertise. The engineer should:",
+    options: [
+      "Answer all questions to be helpful to the court",
+      "Restrict opinion testimony to areas within the engineer's expertise",
+      "Decline to testify any further on any matter",
+      "Defer to the retaining lawyer for guidance on each question asked"
+    ],
+    answer: 1,
+    explanation: "The expert is permitted to express opinions with respect to their area of expertise. The witness should be cautious and restrict testimony to such areas. Straying into areas outside expertise undermines credibility and is professionally inappropriate."
+  },
+  {
+    chapter: 7,
+    q: "A consulting engineer enters into a service contract that contains no provision restricting assignment. Without notifying the client, the engineer assigns the right to receive payment under the contract to a financing company. Which of the following is most accurate?",
+    options: [
+      "The assignment is invalid because the client did not consent",
+      "The assignment is generally permissible because contractual benefits can be assigned without the other party's consent unless restricted by the contract",
+      "The assignment is automatically void as a breach of professional ethics",
+      "Only a regulator can authorize the assignment"
+    ],
+    answer: 1,
+    explanation: "Contractual benefits can be assigned to a third party by one of the contracting parties WITHOUT the consent of the other party — unless the contract expressly limits assignment. Since the contract contained no such restriction, the assignment is generally permissible."
+  },
+  {
+    chapter: 7,
+    q: "Which of the following best describes the role of the courts in enforcing contracts?",
+    options: [
+      "Courts will rewrite contract terms to ensure overall fairness",
+      "The law will enforce the provisions of a valid contract; it will not intervene to impose more favourable terms than those negotiated by the parties",
+      "Courts routinely declare commercial contracts unenforceable for being one-sided",
+      "Courts have no role in contract enforcement once a contract is signed"
+    ],
+    answer: 1,
+    explanation: "The law will enforce the provisions of a valid contract; it will not intervene to impose contract terms more favourable than those negotiated between the parties. In limited circumstances the law may declare a contract void, voidable, or unenforceable, but it will not improve a bad bargain."
+  },
+  {
+    chapter: 7,
+    q: "In the Bhasin v. Hrynew case itself, Mr. Bhasin was found to have lost the value of his business because:",
+    options: [
+      "He himself breached his own contractual obligations",
+      "He was repeatedly misled and, as a result of dishonest conduct by the other contracting party, manipulated out of exercising his important renewal right",
+      "He failed to register his agency with the appropriate regulator",
+      "The contract he had signed was determined to be illegal in its formation"
+    ],
+    answer: 1,
+    explanation: "Mr. Bhasin sold education savings plans through an agency. The agency was terminated in circumstances where the court held that he was repeatedly misled and, in effect, as a result of dishonest conduct by the other contracting party, manipulated out of exercising his important renewal right — resulting in the loss of the value of his business."
+  },
+  {
+    chapter: 6,
+    q: "An engineer giving expert evidence is concerned about being perceived as biased toward the party who retained them. The engineer's professional duty is best fulfilled by:",
+    options: [
+      "Closely aligning testimony with the retaining party's preferred position",
+      "Providing objective and independent testimony notwithstanding having been engaged by one of the parties",
+      "Refusing to testify until appointed jointly by both parties",
+      "Limiting testimony to general principles without applying them to the case"
+    ],
+    answer: 1,
+    explanation: "An engineer who acts as an expert witness must take these duties seriously and provide objective and independent testimony, notwithstanding having been engaged by one of the parties. Professional integrity, not advocacy, is the standard."
+  }
+];
+
+/* =========================================================================
+   STATE MANAGEMENT
+   ========================================================================= */
+const STORAGE_KEY = 'nppe_book1_ch6_7_quiz_state';
+let state = null;
+
+function defaultState() {
+  return {
+    mode: 'practice',
+    order: shuffle([...Array(QUESTIONS.length).keys()]),
+    answers: {},          // { questionIndex: chosenOptionIndex }
+    revealed: {},         // { questionIndex: true }
+    currentIdx: 0,
+    score: 0,
+    points: 0,
+    streak: 0,
+    bestStreak: 0,
+    finished: false
+  };
+}
+
+function shuffle(arr) {
+  // Fisher-Yates
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed.order || parsed.order.length !== QUESTIONS.length) return null;
+    return parsed;
+  } catch(e) { return null; }
+}
+
+/* =========================================================================
+   SCREENS
+   ========================================================================= */
+function startQuiz(mode) {
+  const existing = loadState();
+  if (existing && !existing.finished) {
+    if (confirm('A quiz is already in progress. Continue where you left off?\n\nClick OK to continue, or Cancel to start fresh.')) {
+      state = existing;
+    } else {
+      state = defaultState();
+      state.mode = mode;
+    }
+  } else {
+    state = defaultState();
+    state.mode = mode;
+  }
+  saveState();
+  showQuiz();
+}
+
+function showQuiz() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('quizArea').classList.add('active');
+  document.getElementById('modeDisp').textContent = state.mode === 'practice' ? 'Practice' : 'Exam';
+  document.getElementById('qTotal').textContent = QUESTIONS.length;
+  renderQuestion();
+  renderNavGrid();
+}
+
+function renderQuestion() {
+  const qIdx = state.order[state.currentIdx];
+  const q = QUESTIONS[qIdx];
+
+  // Header info
+  document.getElementById('qCurrent').textContent = state.currentIdx + 1;
+  document.getElementById('scoreDisp').textContent = state.score;
+  document.getElementById('streakDisp').textContent = state.streak;
+  document.getElementById('progressFill').style.width =
+    ((state.currentIdx + 1) / QUESTIONS.length * 100) + '%';
+
+  document.getElementById('qNumLabel').textContent =
+    'Question ' + toRoman(state.currentIdx + 1) + ' · Chapter ' + q.chapter;
+  document.getElementById('qText').textContent = q.q;
+
+  // Options
+  const optsDiv = document.getElementById('qOptions');
+  optsDiv.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>' + escapeHtml(opt);
+    btn.onclick = () => selectAnswer(i);
+
+    // Re-apply state if already answered
+    if (state.answers[qIdx] !== undefined) {
+      btn.classList.add('disabled');
+      const chosen = state.answers[qIdx];
+      if (state.mode === 'practice' || state.revealed[qIdx]) {
+        if (i === q.answer) btn.classList.add('correct');
+        else if (i === chosen) btn.classList.add('wrong');
+      } else {
+        // Exam mode, not yet revealed — just mark chosen
+        if (i === chosen) {
+          btn.style.borderColor = 'var(--gold)';
+          btn.style.background = 'rgba(212,175,55,0.08)';
+        }
+      }
+    }
+    optsDiv.appendChild(btn);
+  });
+
+  // Explanation (practice mode after answering, OR review)
+  const expl = document.getElementById('qExplanation');
+  if (state.answers[qIdx] !== undefined && (state.mode === 'practice' || state.revealed[qIdx])) {
+    const correct = state.answers[qIdx] === q.answer;
+    expl.innerHTML = '<strong>' + (correct ? '✓ Correct' : '✗ Review') +
+      '</strong>' + escapeHtml(q.explanation);
+    expl.classList.add('visible');
+  } else {
+    expl.classList.remove('visible');
+  }
+
+  // Buttons
+  document.getElementById('prevBtn').disabled = state.currentIdx === 0;
+  const nextBtn = document.getElementById('nextBtn');
+  if (state.currentIdx === QUESTIONS.length - 1) {
+    nextBtn.textContent = 'Finish ✓';
+  } else {
+    nextBtn.textContent = 'Next →';
+  }
+
+  renderNavGrid();
+}
+
+function selectAnswer(chosen) {
+  const qIdx = state.order[state.currentIdx];
+  if (state.answers[qIdx] !== undefined) return; // already answered
+
+  const q = QUESTIONS[qIdx];
+  state.answers[qIdx] = chosen;
+  const correct = chosen === q.answer;
+
+  if (correct) {
+    state.score++;
+    state.streak++;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    // Points scale with streak
+    const earned = 100 + (state.streak - 1) * 25;
+    state.points += earned;
+    triggerCelebration(earned);
+  } else {
+    state.streak = 0;
+  }
+
+  if (state.mode === 'practice') {
+    state.revealed[qIdx] = true;
+  }
+
+  saveState();
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (state.currentIdx === QUESTIONS.length - 1) {
+    finishQuiz();
+    return;
+  }
+  state.currentIdx++;
+  saveState();
+  renderQuestion();
+}
+function prevQuestion() {
+  if (state.currentIdx === 0) return;
+  state.currentIdx--;
+  saveState();
+  renderQuestion();
+}
+function jumpTo(i) {
+  state.currentIdx = i;
+  saveState();
+  renderQuestion();
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  state.order.forEach((qIdx, i) => {
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    cell.onclick = () => jumpTo(i);
+    if (i === state.currentIdx) cell.classList.add('current');
+    else if (state.answers[qIdx] !== undefined) {
+      if (state.mode === 'practice') {
+        cell.classList.add(state.answers[qIdx] === QUESTIONS[qIdx].answer
+          ? 'answered-correct' : 'answered-wrong');
+      } else {
+        cell.classList.add('answered-exam');
+      }
+    }
+    grid.appendChild(cell);
+  });
+}
+
+function finishQuiz() {
+  state.finished = true;
+  // Reveal all answers in exam mode
+  state.order.forEach(qIdx => { state.revealed[qIdx] = true; });
+  saveState();
+
+  document.getElementById('quizArea').classList.remove('active');
+  const screen = document.getElementById('resultsScreen');
+  screen.classList.add('active');
+
+  const total = QUESTIONS.length;
+  const pct = Math.round(state.score / total * 100);
+  document.getElementById('finalScore').textContent = state.score;
+  document.getElementById('statCorrect').textContent = state.score;
+  document.getElementById('statBest').textContent = state.bestStreak;
+  document.getElementById('statPoints').textContent = state.points;
+
+  let verdict = '';
+  let pctLabel = pct + '% · ';
+  if (pct >= 85) {
+    pctLabel += 'EXCELLENT';
+    verdict = 'Outstanding command of Chapters 6 and 7. You\'re demonstrating NPPE-ready understanding of proof standards, expert witness duties, and the principles in Bhasin v. Hrynew.';
+    grandFinaleCelebration();
+  } else if (pct >= 70) {
+    pctLabel += 'STRONG';
+    verdict = 'A solid pass. Review the questions you missed — particularly any nuances of the duty of good faith — and you\'ll be in excellent shape for the NPPE.';
+    setTimeout(() => fireFireworks(3), 200);
+  } else if (pct >= 65) {
+    pctLabel += 'PASSING';
+    verdict = 'Above the 65% NPPE threshold. Worth another pass through these chapters before the actual exam to build a margin of safety.';
+  } else {
+    pctLabel += 'BELOW THRESHOLD';
+    verdict = 'Below the 65% NPPE threshold. Re-read Chapters 6 and 7 carefully — particularly the five essential elements of a contract and the scope of the duty of good faith — and try again.';
+  }
+  document.getElementById('finalPct').textContent = pctLabel;
+  document.getElementById('verdictText').textContent = verdict;
+}
+
+function reviewAnswers() {
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('quizArea').classList.add('active');
+  state.currentIdx = 0;
+  renderQuestion();
+}
+
+/* =========================================================================
+   RESET
+   ========================================================================= */
+function confirmReset(skipConfirmIfFinished) {
+  if (skipConfirmIfFinished) {
+    performReset();
+    return;
+  }
+  document.getElementById('resetModal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('resetModal').classList.remove('active');
+}
+function performReset() {
+  closeModal();
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  state = null;
+  document.getElementById('quizArea').classList.remove('active');
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('startScreen').style.display = 'block';
+}
+
+/* =========================================================================
+   CELEBRATIONS — fireworks, gold particles, stars, happy face, points pop
+   ========================================================================= */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.vy += p.gravity || 0.15;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+    p.alpha = Math.max(0, p.life / p.maxLife);
+
+    if (p.type === 'star') {
+      drawStar(p.x, p.y, 5, p.size, p.size / 2, p.color, p.alpha, p.rotation || 0);
+      p.rotation = (p.rotation || 0) + 0.15;
+    } else if (p.type === 'spark') {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else if (p.type === 'coin') {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = '#d4af37';
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y, p.size, p.size * Math.abs(Math.cos(p.life * 0.1)), 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  });
+  if (particles.length > 0) requestAnimationFrame(animateParticles);
+}
+
+function drawStar(cx, cy, spikes, outerR, innerR, color, alpha, rot) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.beginPath();
+  let r;
+  for (let i = 0; i < spikes * 2; i++) {
+    r = i % 2 === 0 ? outerR : innerR;
+    const a = (i * Math.PI) / spikes - Math.PI / 2;
+    ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.restore();
+}
+
+function fireFirework(x, y, colorPalette) {
+  const colors = colorPalette || ['#f0c75e', '#d4af37', '#fff8d6', '#ffd700'];
+  const count = 36;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+    const speed = 3 + Math.random() * 4;
+    particles.push({
+      type: 'spark',
+      x: x, y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 2.5 + Math.random() * 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      gravity: 0.08,
+      life: 60 + Math.random() * 30,
+      maxLife: 80
+    });
+  }
+  if (particles.length === count) requestAnimationFrame(animateParticles);
+}
+
+function fireFireworks(n) {
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const x = canvas.width * (0.2 + Math.random() * 0.6);
+      const y = canvas.height * (0.2 + Math.random() * 0.4);
+      fireFirework(x, y);
+    }, i * 250);
+  }
+}
+
+function goldShower(x, y) {
+  for (let i = 0; i < 25; i++) {
+    particles.push({
+      type: 'coin',
+      x: x + (Math.random() - 0.5) * 60,
+      y: y - 20,
+      vx: (Math.random() - 0.5) * 2,
+      vy: -5 - Math.random() * 3,
+      size: 4 + Math.random() * 4,
+      color: ['#f0c75e', '#d4af37', '#ffd700'][Math.floor(Math.random() * 3)],
+      gravity: 0.25,
+      life: 80 + Math.random() * 30,
+      maxLife: 100
+    });
+  }
+  for (let i = 0; i < 12; i++) {
+    particles.push({
+      type: 'star',
+      x: x + (Math.random() - 0.5) * 100,
+      y: y - 10,
+      vx: (Math.random() - 0.5) * 3,
+      vy: -3 - Math.random() * 4,
+      size: 6 + Math.random() * 4,
+      color: '#f0c75e',
+      gravity: 0.18,
+      rotation: Math.random() * Math.PI * 2,
+      life: 70 + Math.random() * 30,
+      maxLife: 90
+    });
+  }
+  if (particles.length > 0) requestAnimationFrame(animateParticles);
+}
+
+function popHappyFace(x, y) {
+  const faces = ['😊', '🎉', '⭐', '✨', '🌟', '💫'];
+  const face = faces[Math.floor(Math.random() * faces.length)];
+  const el = document.createElement('div');
+  el.className = 'happy-burst';
+  el.textContent = face;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+function popPoints(x, y, points) {
+  const el = document.createElement('div');
+  el.className = 'points-pop';
+  el.textContent = '+' + points;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function flashFlame() {
+  const f = document.getElementById('streakFlame');
+  f.classList.remove('fire');
+  void f.offsetWidth;
+  f.classList.add('fire');
+}
+
+function triggerCelebration(pointsEarned) {
+  // Find a good origin near the question card
+  const card = document.querySelector('.question-card');
+  const rect = card.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+
+  // Always: gold shower + happy face + points pop
+  goldShower(x, y);
+  popHappyFace(x, y - 40);
+  popPoints(x + 80, y - 40, pointsEarned);
+
+  // Streak-scaled extras
+  if (state.streak >= 3) fireFirework(x - 200, y - 80);
+  if (state.streak >= 5) fireFirework(x + 200, y - 80);
+  if (state.streak >= 7) {
+    setTimeout(() => fireFirework(canvas.width * 0.3, canvas.height * 0.3), 200);
+    setTimeout(() => fireFirework(canvas.width * 0.7, canvas.height * 0.3), 400);
+  }
+  if (state.streak >= 10) {
+    grandFinaleCelebration();
+  }
+  flashFlame();
+}
+
+function grandFinaleCelebration() {
+  // Big multi-burst fireworks display
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      const x = canvas.width * (0.15 + Math.random() * 0.7);
+      const y = canvas.height * (0.15 + Math.random() * 0.4);
+      fireFirework(x, y);
+    }, i * 180);
+  }
+}
+
+/* =========================================================================
+   UTILITIES
+   ========================================================================= */
+function toRoman(num) {
+  const map = [
+    ['XXV',25],['XXIV',24],['XXIII',23],['XXII',22],['XXI',21],
+    ['XX',20],['XIX',19],['XVIII',18],['XVII',17],['XVI',16],
+    ['XV',15],['XIV',14],['XIII',13],['XII',12],['XI',11],
+    ['X',10],['IX',9],['VIII',8],['VII',7],['VI',6],
+    ['V',5],['IV',4],['III',3],['II',2],['I',1]
+  ];
+  for (const [r, n] of map) if (num === n) return r;
+  return num.toString();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+/* =========================================================================
+   AUTO-RESUME
+   ========================================================================= */
+window.addEventListener('DOMContentLoaded', () => {
+  const existing = loadState();
+  if (existing && !existing.finished) {
+    // Show start screen normally; resume happens when they pick a mode.
+    // Optionally we could surface a "Resume" button — left as-is so user always sees mode pick.
+  }
+});
+</script>
+</body>
+</html>

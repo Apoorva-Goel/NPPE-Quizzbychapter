@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NPPE Practice — Chapter 1: The Canadian Legal System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#070F22;
+    --navy:#0E1E40;
+    --navy-2:#142A55;
+    --navy-3:#1E3A78;
+    --gold:#D4AF37;
+    --gold-bright:#F4D078;
+    --gold-soft:#A88824;
+    --cream:#F5EFE0;
+    --cream-dim:#E2D9C2;
+    --good:#5DD39E;
+    --bad:#E25555;
+    --shadow-1:0 10px 30px rgba(0,0,0,.35);
+    --shadow-2:0 25px 60px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 85% -10%, rgba(212,175,55,.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, rgba(30,58,120,.55), transparent 55%),
+      linear-gradient(180deg, var(--navy-deep) 0%, #050A18 100%);
+    color:var(--cream);
+    font-family:'Inter', system-ui, sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .grain{
+    pointer-events:none; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.93  0 0 0 0 0.85  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:.5; mix-blend-mode:overlay; z-index:1;
+  }
+  canvas#fx{position:fixed; inset:0; pointer-events:none; z-index:9999}
+  .wrap{position:relative; z-index:2; max-width:980px; margin:0 auto; padding:48px 24px 96px;}
+  header.top{
+    text-align:center; margin-bottom:36px;
+    padding:32px 24px 28px;
+    border-top:1px solid rgba(212,175,55,.35);
+    border-bottom:1px solid rgba(212,175,55,.35);
+  }
+  .eyebrow{
+    font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600; font-size:clamp(28px, 4.6vw, 44px);
+    margin:0 0 6px; line-height:1.15; color:var(--cream);
+    letter-spacing:.5px;
+  }
+  h1 .accent{color:var(--gold-bright); font-style:italic}
+  .subtitle{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(15px, 2vw, 19px); color:var(--cream-dim);
+    font-style:italic; margin-top:4px;
+  }
+  .ornament{
+    color:var(--gold); margin:14px auto 0; opacity:.85;
+    letter-spacing:8px; font-size:14px;
+  }
+
+  /* HUD */
+  .hud{
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:14px; margin:28px 0 22px;
+  }
+  .stat{
+    background:linear-gradient(180deg, rgba(20,42,85,.85), rgba(14,30,64,.85));
+    border:1px solid rgba(212,175,55,.25);
+    border-radius:14px; padding:14px 16px; text-align:center;
+    box-shadow:var(--shadow-1);
+    position:relative; overflow:hidden;
+  }
+  .stat::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity:.6;
+  }
+  .stat .label{
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-bottom:6px;
+  }
+  .stat .value{
+    font-family:'Cormorant Garamond', serif;
+    font-size:28px; font-weight:600; color:var(--cream);
+  }
+  .stat.streak.hot .value{color:var(--gold-bright); text-shadow:0 0 12px rgba(244,208,120,.5)}
+
+  /* Mode/control bar */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    justify-content:space-between; margin-bottom:24px;
+  }
+  .mode-toggle{
+    display:inline-flex; background:rgba(7,15,34,.6);
+    border:1px solid rgba(212,175,55,.3); border-radius:999px; padding:4px;
+  }
+  .mode-toggle button{
+    background:transparent; border:0; color:var(--cream-dim);
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:.12em; text-transform:uppercase;
+    padding:8px 18px; border-radius:999px; cursor:pointer;
+    transition:all .25s ease;
+  }
+  .mode-toggle button.active{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:var(--navy-deep); box-shadow:0 4px 14px rgba(212,175,55,.35);
+  }
+  .btn{
+    background:transparent; color:var(--cream-dim);
+    border:1px solid rgba(212,175,55,.35); border-radius:999px;
+    padding:8px 16px; font-family:'Inter',sans-serif; font-size:12px;
+    font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+    cursor:pointer; transition:all .25s;
+  }
+  .btn:hover{border-color:var(--gold); color:var(--gold-bright); background:rgba(212,175,55,.06)}
+  .btn.danger:hover{border-color:var(--bad); color:var(--bad); background:rgba(226,85,85,.06)}
+
+  /* Progress */
+  .progress-track{
+    height:6px; background:rgba(7,15,34,.7); border-radius:999px; overflow:hidden;
+    border:1px solid rgba(212,175,55,.18); margin-bottom:18px;
+  }
+  .progress-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    transition:width .4s ease; box-shadow:0 0 12px rgba(212,175,55,.4);
+  }
+
+  /* Question card */
+  .qcard{
+    background:linear-gradient(180deg, rgba(20,42,85,.85), rgba(14,30,64,.92));
+    border:1px solid rgba(212,175,55,.28);
+    border-radius:18px; padding:32px 30px; box-shadow:var(--shadow-2);
+    position:relative;
+  }
+  .qcard::before{
+    content:''; position:absolute; top:0; left:24px; right:24px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .qmeta{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:18px; gap:14px;
+  }
+  .qnum{
+    font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--gold); font-weight:700;
+  }
+  .qtag{
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--cream-dim); padding:4px 10px;
+    border:1px solid rgba(212,175,55,.25); border-radius:999px;
+  }
+  .qtext{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(18px, 2.4vw, 22px); line-height:1.5;
+    color:var(--cream); margin-bottom:24px; font-weight:500;
+  }
+  .options{display:flex; flex-direction:column; gap:11px}
+  .opt{
+    display:flex; align-items:flex-start; gap:14px;
+    padding:14px 18px; background:rgba(7,15,34,.45);
+    border:1px solid rgba(212,175,55,.18); border-radius:12px;
+    cursor:pointer; transition:all .22s ease;
+    font-size:15px; line-height:1.5; color:var(--cream);
+    position:relative; overflow:hidden;
+  }
+  .opt:hover{
+    border-color:rgba(212,175,55,.55); background:rgba(212,175,55,.06);
+    transform:translateX(4px);
+  }
+  .opt .lbl{
+    flex-shrink:0; width:26px; height:26px; border-radius:50%;
+    background:rgba(212,175,55,.12); border:1px solid rgba(212,175,55,.45);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; color:var(--gold-bright);
+    font-family:'Inter',sans-serif;
+  }
+  .opt.selected{
+    border-color:var(--gold); background:rgba(212,175,55,.1);
+    box-shadow:0 0 0 1px rgba(212,175,55,.5) inset;
+  }
+  .opt.correct{
+    border-color:var(--good); background:rgba(93,211,158,.1);
+    box-shadow:0 0 0 1px var(--good) inset, 0 0 24px rgba(93,211,158,.18);
+  }
+  .opt.correct .lbl{background:var(--good); color:#062013; border-color:var(--good)}
+  .opt.wrong{
+    border-color:var(--bad); background:rgba(226,85,85,.08);
+    box-shadow:0 0 0 1px var(--bad) inset;
+  }
+  .opt.wrong .lbl{background:var(--bad); color:#fff; border-color:var(--bad)}
+  .opt.locked{cursor:default; pointer-events:none}
+  .opt.locked:hover{transform:none}
+
+  /* Star burst on selection */
+  .opt .stars{
+    position:absolute; inset:0; pointer-events:none;
+  }
+
+  /* Rationale */
+  .rationale{
+    margin-top:20px; padding:18px 20px;
+    background:rgba(7,15,34,.55); border-left:3px solid var(--gold);
+    border-radius:6px; font-family:'Cormorant Garamond', serif;
+    font-size:17px; line-height:1.55; color:var(--cream-dim);
+    display:none; animation:fadeUp .35s ease;
+  }
+  .rationale.show{display:block}
+  .rationale strong{color:var(--gold-bright); font-weight:600}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:translateY(0)}}
+
+  /* Nav buttons */
+  .nav{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:26px; gap:12px;
+  }
+  .nav-btn{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:var(--navy-deep); border:0; padding:13px 28px;
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:700;
+    letter-spacing:.16em; text-transform:uppercase;
+    border-radius:999px; cursor:pointer; transition:all .25s;
+    box-shadow:0 6px 18px rgba(212,175,55,.35);
+  }
+  .nav-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(212,175,55,.5)}
+  .nav-btn:disabled{opacity:.35; cursor:not-allowed; transform:none; box-shadow:none}
+  .nav-btn.ghost{
+    background:transparent; color:var(--cream-dim);
+    border:1px solid rgba(212,175,55,.35); box-shadow:none;
+  }
+  .nav-btn.ghost:hover{color:var(--gold-bright); border-color:var(--gold); transform:none}
+
+  /* Question grid navigator */
+  .qgrid{
+    margin-top:28px; padding:18px;
+    background:rgba(7,15,34,.45); border:1px solid rgba(212,175,55,.18);
+    border-radius:14px;
+  }
+  .qgrid-title{
+    font-size:10px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-bottom:12px;
+  }
+  .qgrid-cells{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(34px, 1fr));
+    gap:6px;
+  }
+  .qcell{
+    aspect-ratio:1/1; border-radius:6px;
+    background:rgba(20,42,85,.6); border:1px solid rgba(212,175,55,.18);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:600; color:var(--cream-dim);
+    cursor:pointer; transition:all .2s;
+  }
+  .qcell:hover{border-color:var(--gold); transform:scale(1.08)}
+  .qcell.current{border-color:var(--gold-bright); background:rgba(212,175,55,.18); color:var(--gold-bright)}
+  .qcell.correct{background:rgba(93,211,158,.22); border-color:var(--good); color:var(--good)}
+  .qcell.wrong{background:rgba(226,85,85,.18); border-color:var(--bad); color:var(--bad)}
+  .qcell.answered{background:rgba(212,175,55,.14); border-color:rgba(212,175,55,.45); color:var(--gold-bright)}
+
+  /* Result screen */
+  .result{display:none; text-align:center; animation:fadeUp .5s ease}
+  .result.show{display:block}
+  .ring-wrap{position:relative; width:220px; height:220px; margin:0 auto 28px}
+  .ring-bg, .ring-fg{
+    position:absolute; inset:0; border-radius:50%;
+  }
+  .ring-bg{
+    background:conic-gradient(rgba(212,175,55,.18) 0deg, rgba(212,175,55,.18) 360deg);
+  }
+  .ring-fg{
+    background:conic-gradient(var(--gold-bright) 0deg, var(--gold-bright) var(--deg, 0deg), transparent var(--deg, 0deg) 360deg);
+    transition:--deg 1.5s ease;
+    filter:drop-shadow(0 0 18px rgba(212,175,55,.4));
+  }
+  .ring-inner{
+    position:absolute; inset:14px; border-radius:50%;
+    background:linear-gradient(180deg, var(--navy-2), var(--navy-deep));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border:1px solid rgba(212,175,55,.25);
+  }
+  .ring-pct{
+    font-family:'Cormorant Garamond', serif;
+    font-size:54px; font-weight:600; color:var(--cream);
+    line-height:1;
+  }
+  .ring-label{
+    font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-top:8px;
+  }
+  .verdict{
+    font-family:'Cormorant Garamond', serif;
+    font-size:34px; font-weight:600; margin-bottom:8px;
+  }
+  .verdict.pass{color:var(--good)}
+  .verdict.fail{color:#e6a96a}
+  .verdict-sub{
+    font-size:15px; color:var(--cream-dim); margin-bottom:28px;
+    line-height:1.6;
+  }
+  .result-stats{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+    gap:14px; max-width:520px; margin:0 auto 32px;
+  }
+  .result-stats .stat{padding:18px 12px}
+  .result-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+
+  /* Floating score popup */
+  .score-pop{
+    position:fixed; pointer-events:none; z-index:10000;
+    font-family:'Cormorant Garamond', serif;
+    font-size:36px; font-weight:700; color:var(--gold-bright);
+    text-shadow:0 0 12px rgba(244,208,120,.7);
+    animation:scorePop 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  @keyframes scorePop{
+    0%{opacity:0; transform:translate(-50%, 0) scale(.6)}
+    20%{opacity:1; transform:translate(-50%, -12px) scale(1.1)}
+    100%{opacity:0; transform:translate(-50%, -90px) scale(1)}
+  }
+
+  /* Streak emoji */
+  .emoji-pop{
+    position:fixed; pointer-events:none; z-index:10000;
+    font-size:88px; animation:emojiPop 1.6s ease forwards;
+  }
+  @keyframes emojiPop{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.3) rotate(-10deg)}
+    25%{opacity:1; transform:translate(-50%,-50%) scale(1.2) rotate(5deg)}
+    75%{opacity:1; transform:translate(-50%,-50%) scale(1) rotate(-3deg)}
+    100%{opacity:0; transform:translate(-50%,-150%) scale(1) rotate(0deg)}
+  }
+
+  /* Modal */
+  .modal-bg{
+    position:fixed; inset:0; background:rgba(5,10,24,.78);
+    backdrop-filter:blur(6px); z-index:5000;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-bg.show{display:flex}
+  .modal{
+    background:linear-gradient(180deg, var(--navy-2), var(--navy-deep));
+    border:1px solid rgba(212,175,55,.4); border-radius:18px;
+    padding:30px 30px 26px; max-width:440px; box-shadow:var(--shadow-2);
+    text-align:center; animation:modalIn .3s ease;
+  }
+  @keyframes modalIn{from{opacity:0; transform:scale(.94)}to{opacity:1; transform:scale(1)}}
+  .modal h3{
+    font-family:'Cormorant Garamond', serif; font-size:24px;
+    color:var(--gold-bright); margin:0 0 12px; font-weight:600;
+  }
+  .modal p{color:var(--cream-dim); font-size:15px; line-height:1.6; margin:0 0 22px}
+  .modal-actions{display:flex; gap:12px; justify-content:center}
+
+  /* Footer */
+  footer{
+    text-align:center; margin-top:48px; padding-top:24px;
+    border-top:1px solid rgba(212,175,55,.18);
+    font-size:12px; color:var(--cream-dim); letter-spacing:.04em;
+  }
+  footer .ornament{margin-bottom:10px}
+
+  @media (max-width:600px){
+    .hud{grid-template-columns:repeat(2, 1fr)}
+    .qcard{padding:24px 20px}
+    .controls{flex-direction:column; align-items:stretch}
+    .mode-toggle{justify-content:center}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<canvas id="fx"></canvas>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">National Professional Practice Examination · Ontario</div>
+    <h1>Chapter I &nbsp;·&nbsp; <span class="accent">The Canadian Legal System</span></h1>
+    <div class="subtitle">Fifty practice questions on common law, the Constitution, the Charter, and the courts.</div>
+    <div class="ornament">✦ ✦ ✦</div>
+  </header>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="stat"><div class="label">Question</div><div class="value"><span id="qnow">1</span><span style="color:var(--cream-dim); font-size:18px"> / 50</span></div></div>
+    <div class="stat"><div class="label">Score</div><div class="value" id="score">0</div></div>
+    <div class="stat streak" id="streakStat"><div class="label">Streak</div><div class="value"><span id="streak">0</span><span id="flame" style="font-size:20px; margin-left:4px"></span></div></div>
+    <div class="stat"><div class="label">Correct</div><div class="value" id="correctCount">0<span style="color:var(--cream-dim); font-size:18px"> / 50</span></div></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="mode-toggle" id="modeToggle">
+      <button class="active" data-mode="practice">Practice Mode</button>
+      <button data-mode="exam">Exam Mode</button>
+    </div>
+    <div style="display:flex; gap:8px">
+      <button class="btn" id="shuffleBtn">⤭ Shuffle</button>
+      <button class="btn danger" id="resetBtn">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+
+  <!-- Quiz body -->
+  <div id="quizBody">
+    <div class="qcard" id="qcard">
+      <div class="qmeta">
+        <div class="qnum">Question <span id="qnumLabel">1</span> of 50</div>
+        <div class="qtag" id="qtag">Common Law</div>
+      </div>
+      <div class="qtext" id="qtext">…</div>
+      <div class="options" id="options"></div>
+      <div class="rationale" id="rationale"></div>
+      <div class="nav">
+        <button class="nav-btn ghost" id="prevBtn">← Previous</button>
+        <button class="nav-btn" id="nextBtn">Next →</button>
+      </div>
+    </div>
+
+    <div class="qgrid">
+      <div class="qgrid-title">Question Navigator</div>
+      <div class="qgrid-cells" id="qgrid"></div>
+    </div>
+  </div>
+
+  <!-- Result screen -->
+  <div class="result" id="result">
+    <div class="ring-wrap"><div class="ring-bg"></div><div class="ring-fg" id="ringFg"></div>
+      <div class="ring-inner"><div class="ring-pct" id="ringPct">0%</div><div class="ring-label">Final Score</div></div>
+    </div>
+    <div class="verdict" id="verdict">—</div>
+    <div class="verdict-sub" id="verdictSub"></div>
+    <div class="result-stats">
+      <div class="stat"><div class="label">Correct</div><div class="value" id="rCorrect">0</div></div>
+      <div class="stat"><div class="label">Points</div><div class="value" id="rPoints">0</div></div>
+      <div class="stat"><div class="label">Best Streak</div><div class="value" id="rStreak">0</div></div>
+    </div>
+    <div class="result-actions">
+      <button class="nav-btn" id="reviewBtn">Review Answers</button>
+      <button class="nav-btn ghost" id="restartBtn">↺ New Attempt</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ornament">✦ ✦ ✦</div>
+    Source: <em>Law for Professional Engineers — Canadian and Global Insights</em>, Chapter 1.<br>
+    Built for self-study · Pass threshold 65%
+  </footer>
+</div>
+
+<!-- Reset confirm modal -->
+<div class="modal-bg" id="resetModal">
+  <div class="modal">
+    <h3>Reset the quiz?</h3>
+    <p>All progress, your score, and streak will be cleared. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="nav-btn ghost" id="cancelReset">Cancel</button>
+      <button class="nav-btn" id="confirmReset" style="background:linear-gradient(180deg,#ff8a8a,var(--bad)); color:#fff">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====================================================================
+   QUESTION BANK — Chapter 1: The Canadian Legal System
+   ==================================================================== */
+const QUESTIONS = [
+  { tag:"Historical Basis", q:"The legal system of the nine common-law provinces and the territories of Canada is based upon which legal tradition?",
+    options:["The Napoleonic Code","The English common-law system","The Roman civil law system","Indigenous customary law"],
+    answer:1,
+    rationale:"The Canadian common-law system in the nine common-law provinces and the territories evolved from the <strong>English common-law system</strong>. Quebec is the exception — its civil law evolved from the Napoleonic Code." },
+
+  { tag:"Historical Basis", q:"In the early stages of the English legal system, why were 'courts of equity' developed as a separate court system?",
+    options:["To handle exclusively criminal matters","Because the specific remedies provided by the common-law courts were not sufficient","To replace the role of Parliament in lawmaking","To allow the monarch to delegate criminal jurisdiction"],
+    answer:1,
+    rationale:"The early English common-law system was rigid and offered only certain specific remedies. Where relief beyond the scope of the common law was sought, special appeals were made to the monarch, eventually giving rise to the separate <strong>courts of equity</strong>." },
+
+  { tag:"Historical Basis", q:"According to Black's Law Dictionary (as cited in the chapter), the term 'equity,' in its broadest and most general sense, denotes:",
+    options:["A formal proceeding in the House of Lords","A spirit of fairness, justness, and right dealing grounded in the precepts of conscience","A statutory right granted only to landowners","A monetary remedy issued exclusively by the monarch"],
+    answer:1,
+    rationale:"The chapter quotes Black's Law Dictionary: equity denotes <strong>“a spirit of fairness, justness, and right dealing … grounded in the precepts of conscience.”</strong>" },
+
+  { tag:"Historical Basis", q:"After the old common-law system and the courts of equity were combined, what happened to the resulting improved system?",
+    options:["It was renamed 'the law of equity'","It continued to be called the common law","It was abolished and replaced by the Civil Code","It became known as 'Royal Court Law'"],
+    answer:1,
+    rationale:"The two systems were combined to produce remedies premised on both common-law precedents and equitable principles. This improved system <strong>continued to be called the common law</strong>." },
+
+  { tag:"Theory of Precedent", q:"The 'theory of precedent' requires courts to:",
+    options:["Apply only the most recent statutes regardless of prior decisions","Apply legal principles established in previous court decisions involving similar or analogous fact situations","Defer to the opinion of the highest-ranking judge in the country","Reach decisions by jury trial only"],
+    answer:1,
+    rationale:"The theory of precedent: courts apply legal principles established in <strong>previous court decisions involving similar or analogous fact situations</strong>." },
+
+  { tag:"Theory of Precedent", q:"Why does the theory of precedent allow some flexibility in court decision-making?",
+    options:["A judge may simply ignore precedents that are inconvenient","Courts may dispense equitable relief and may distinguish cases on factual grounds","Precedents apply only in criminal matters","Precedents lose their authority every ten years"],
+    answer:1,
+    rationale:"Flexibility comes from two sources: (1) the court's <strong>equitable discretion</strong>, and (2) the ability to distinguish cases on minor <strong>factual differences</strong> between the precedent and the case before the court." },
+
+  { tag:"Theory of Precedent", q:"The slow evolution of legal principles through precedent is best described as:",
+    options:["A defect that has been entirely eliminated by Charter litigation","A characteristic of our legal system that provides predictability","A practice abandoned by Canadian courts in the 1980s","Unique to Quebec's legal system"],
+    answer:1,
+    rationale:"While slow evolution is sometimes criticized, the chapter emphasizes that the theory of precedent is the basis of <strong>predictability</strong> in our legal system." },
+
+  { tag:"Sources of Law", q:"In Canadian common law, 'judge-made law' refers to:",
+    options:["Statutes drafted by judges and enacted by Parliament","Court decisions establishing legal principles","Regulations made under the Criminal Code","Bylaws passed by municipal councils"],
+    answer:1,
+    rationale:"A major source of law is judge-made law — the body of <strong>court decisions establishing legal principles</strong>." },
+
+  { tag:"Sources of Law", q:"A 'statute' is best described as:",
+    options:["A non-binding declaration of policy by a court","A codification of the law as the legislature determines at the time of enactment","A type of equitable remedy","An informal agreement between government departments"],
+    answer:1,
+    rationale:"A statute is a <strong>codification of the law as the legislature determines at the time of enactment</strong>. It can codify existing common law or enact new law." },
+
+  { tag:"Sources of Law", q:"Statutes can:",
+    options:["Only codify existing common law","Only create entirely new law","Either codify existing common law or enact new law","Be enacted only by the federal Parliament"],
+    answer:2,
+    rationale:"A statute may be a codification of <strong>existing common law</strong> or the enactment of <strong>new law</strong>. It is up to the courts to determine whether a statute applies to the facts of a particular case." },
+
+  { tag:"Sources of Law", q:"When a statute provides for 'regulations,' those regulations are:",
+    options:["Automatically void if they contradict the parent statute","Another source of law, when made in accordance with the authorizing statute","Treated as guidelines without legal force","Equivalent in authority to a constitutional amendment"],
+    answer:1,
+    rationale:"When made in accordance with an authorizing statute, regulations are <strong>another source of law</strong>." },
+
+  { tag:"Sources of Law", q:"Under the Professional Engineers Act of Ontario, the elected and appointed Council may, among other things:",
+    options:["Override decisions of the Supreme Court of Canada","Prescribe the scope and conduct of examinations of candidates for registration","Levy income tax on engineers","Issue criminal sanctions against unlicensed practitioners"],
+    answer:1,
+    rationale:"The Act authorizes Council to <strong>prescribe the scope and conduct of examinations</strong> of candidates for registration, and to regulate other matters such as the designation of specialists." },
+
+  { tag:"Constitution", q:"The Canadian Constitution that establishes the federal/provincial division of powers was originally enacted as:",
+    options:["The Charter of Rights and Freedoms, 1982","The British North America Act, 1867 (renamed the Constitution Act, 1982)","The Statute of Westminster, 1931","The Bill of Rights, 1960"],
+    answer:1,
+    rationale:"The division of powers is set out in the <strong>British North America Act, 1867</strong>, which was renamed the <strong>Constitution Act, 1982</strong>." },
+
+  { tag:"Constitution", q:"Which sections of the Constitution Act, 1867 set out the division of legislative powers between the federal and provincial governments?",
+    options:["Sections 1 and 2","Sections 7 and 15","Sections 91 and 92","Sections 33 and 52"],
+    answer:2,
+    rationale:"<strong>Section 91</strong> enumerates federal powers; <strong>Section 92</strong> enumerates exclusive provincial powers." },
+
+  { tag:"Federal Powers (s. 91)", q:"Which of the following falls within the exclusive legislative authority of the Parliament of Canada under Section 91?",
+    options:["Property and civil rights in a province","The administration of justice in the province","Bankruptcy and insolvency","The management and sale of public lands belonging to the province"],
+    answer:2,
+    rationale:"<strong>Bankruptcy and insolvency</strong> is an enumerated federal power under Section 91. Property and civil rights, the administration of justice in the province, and management of provincial public lands are all provincial under Section 92." },
+
+  { tag:"Federal Powers (s. 91)", q:"Which of the following is enumerated as a federal power in Section 91 of the Constitution Act, 1867?",
+    options:["Direct taxation within the province","Patents of invention and discovery","Local works and undertakings","Incorporation of companies with provincial objects"],
+    answer:1,
+    rationale:"<strong>Patents of invention and discovery</strong> are enumerated under Section 91 (federal). The other three are provincial under Section 92." },
+
+  { tag:"Federal Powers (s. 91)", q:"Which of the following is NOT a Section 91 federal power listed in the chapter?",
+    options:["Banking and the issue of paper money","Navigation and shipping","The criminal law","Property and civil rights in the province"],
+    answer:3,
+    rationale:"<strong>Property and civil rights in the province</strong> is a Section 92 provincial power. Banking, navigation and shipping, and criminal law are all Section 91 federal powers." },
+
+  { tag:"Federal Powers (s. 91)", q:"Section 91 also provides the federal Parliament with authority to make laws for the:",
+    options:["Peace, Order, and good Government of Canada, in relation to matters not assigned exclusively to the provinces","Strict regulation of all provincial undertakings","Direct taxation of provinces","Re-organization of provincial courts"],
+    answer:0,
+    rationale:"The general 'POGG' clause — <strong>Peace, Order, and good Government of Canada</strong> — gives Parliament residual authority over matters not within the exclusive authority of the provinces, and is open to broad interpretation." },
+
+  { tag:"Provincial Powers (s. 92)", q:"Which of the following is a power assigned exclusively to the provincial legislatures under Section 92?",
+    options:["Banking and the issue of paper money","Navigation and shipping","Property and civil rights in the province","Copyrights"],
+    answer:2,
+    rationale:"<strong>Property and civil rights in the province</strong> is a key Section 92 provincial power. The others are federal under Section 91." },
+
+  { tag:"Provincial Powers (s. 92)", q:"Which of the following is enumerated under Section 92 as exclusively provincial?",
+    options:["Bankruptcy and insolvency","Direct taxation within the province for provincial purposes","Patents of invention","The criminal law"],
+    answer:1,
+    rationale:"<strong>Direct taxation within the Province</strong> for the raising of revenue for provincial purposes is enumerated in Section 92. The others are federal under Section 91." },
+
+  { tag:"Provincial Powers (s. 92)", q:"Mechanics', construction, or builders' lien legislation is identified in the chapter as an example of:",
+    options:["A federal statute under Section 91","Provincial statute law of particular importance to the engineer","An equitable doctrine without statutory basis","A Charter-protected right"],
+    answer:1,
+    rationale:"Lien legislation is <strong>provincial statute law</strong> (it deals with property rights in the province) and is of particular importance to engineers working in construction." },
+
+  { tag:"Ultra Vires", q:"A statute that has been enacted by a government beyond the scope of its constitutional authority is described as:",
+    options:["Intra vires","Ultra vires","Stare decisis","Sub judice"],
+    answer:1,
+    rationale:"<strong>Ultra vires</strong> means 'beyond the powers.' A statute found ultra vires is effectively rendered void." },
+
+  { tag:"Ultra Vires", q:"If a court determines that a statute is ultra vires, the statute will be:",
+    options:["Amended automatically by the Governor General","Effectively rendered void","Referred to the Senate for reconsideration","Treated as a regulation rather than a statute"],
+    answer:1,
+    rationale:"A statute that is ultra vires the enacting government is <strong>effectively rendered void</strong>." },
+
+  { tag:"Ultra Vires", q:"Traditionally, a provincial statute could be challenged as ultra vires on the basis that it dealt with:",
+    options:["A matter assigned to the federal Parliament under Section 91 (e.g., regulation of trade and commerce or criminal law)","A matter of merely local or private nature in the province","Direct taxation within the province","Property in the province"],
+    answer:0,
+    rationale:"Provincial statutes have been challenged on the basis that they intruded on matters assigned to the <strong>federal Parliament under Section 91</strong>, such as the regulation of trade and commerce or the criminal law." },
+
+  { tag:"Charter", q:"Before the Canadian Charter of Rights and Freedoms was enacted, Canadian courts:",
+    options:["Routinely struck down statutes for violating civil liberties","Could not void a law because it offended civil liberties, having adopted the British doctrine of Parliamentary Supremacy","Had no power to invalidate any statute","Applied the Civil Code of Quebec to all legal questions"],
+    answer:1,
+    rationale:"Pre-Charter, Canadian courts followed the British <strong>doctrine of Parliamentary Supremacy</strong>: they could rule a statute beyond a particular government's authority, but they could not void a law simply because it offended civil liberties." },
+
+  { tag:"Charter", q:"The Canadian Charter of Rights and Freedoms was enacted as part of:",
+    options:["The British North America Act, 1867","The Statute of Westminster, 1931","The Constitution Act, 1982","The Criminal Code of Canada"],
+    answer:2,
+    rationale:"The Charter is part of the <strong>Constitution Act, 1982</strong>." },
+
+  { tag:"Charter", q:"Which of the following is identified in Section 2 of the Charter as a fundamental freedom?",
+    options:["Freedom from taxation","Freedom of conscience and religion","Freedom from civil liability","Freedom to practise any profession without licensing"],
+    answer:1,
+    rationale:"Section 2(a) of the Charter guarantees <strong>freedom of conscience and religion</strong>. Section 2 also includes freedom of thought/belief/expression, peaceful assembly, and association." },
+
+  { tag:"Charter", q:"Which of the following is NOT one of the fundamental freedoms enumerated in Section 2 of the Charter?",
+    options:["Freedom of peaceful assembly","Freedom of association","Freedom of thought, belief, opinion and expression","Freedom from professional regulation"],
+    answer:3,
+    rationale:"There is no Charter freedom from professional regulation. Section 2 lists: conscience and religion; thought/belief/opinion/expression (incl. press); peaceful assembly; and association." },
+
+  { tag:"Charter", q:"Section 52(1) of the Constitution Act, 1982 provides that:",
+    options:["The provinces have supremacy over the federal government in matters of property","The Constitution of Canada is the supreme law of Canada, and any inconsistent law is, to the extent of the inconsistency, of no force or effect","Charter rights cannot be limited under any circumstances","The Supreme Court of Canada may amend the Charter"],
+    answer:1,
+    rationale:"<strong>Section 52(1)</strong> establishes the Constitution as the supreme law of Canada. Any law inconsistent with it is, to the extent of the inconsistency, of no force or effect. This gives courts the power to strike down statutes that violate Charter rights." },
+
+  { tag:"Charter", q:"Section 1 of the Charter provides that the rights and freedoms guaranteed are:",
+    options:["Absolute and cannot be limited","Subject to reasonable limits prescribed by law","Subject to approval of the Governor General","Available only to Canadian citizens"],
+    answer:1,
+    rationale:"Section 1 makes Charter rights subject to <strong>reasonable limits prescribed by law</strong> as can be demonstrably justified in a free and democratic society." },
+
+  { tag:"Charter", q:"Section 33 of the Charter (the 'notwithstanding clause') allows a government to:",
+    options:["Permanently strip Charter rights without expiry","Declare that a statute will be valid even if it violates certain Charter rights","Override Supreme Court decisions on any subject","Repeal Section 91 of the Constitution"],
+    answer:1,
+    rationale:"<strong>Section 33</strong> allows a government to declare a statute valid even if it violates certain Charter rights. The chapter notes governments are expected to use this clause sparingly." },
+
+  { tag:"Charter", q:"The Charter has affected the doctrine of Parliamentary Supremacy in Canada in which way?",
+    options:["It has entirely eliminated Parliamentary Supremacy","It has reduced the effect of Parliamentary Supremacy by placing some limits on the powers of Parliament and the provincial legislatures","It has expanded Parliamentary Supremacy to override Charter rights","It has had no measurable effect on Parliamentary Supremacy"],
+    answer:1,
+    rationale:"The Charter has <strong>reduced</strong> — but not eliminated — Parliamentary Supremacy. Sections 1 and 33 preserve a measure of legislative authority over Charter rights." },
+
+  { tag:"Court System", q:"Within the court hierarchy of a common-law province, the highest-ranking court is usually:",
+    options:["The Small Claims Court","The provincial Court of Appeal","The Federal Court of Canada","The Lieutenant Governor's chambers"],
+    answer:1,
+    rationale:"The <strong>Court of Appeal</strong> of a province is usually the highest-ranking court within the province." },
+
+  { tag:"Court System", q:"Decisions of which court are binding on all Canadian courts?",
+    options:["The Federal Court of Canada","The Supreme Court of Canada","The Court of Appeal for Ontario","The English House of Lords"],
+    answer:1,
+    rationale:"The <strong>Supreme Court of Canada</strong> is Canada's highest court; its precedents are binding on all Canadian courts." },
+
+  { tag:"Court System", q:"Common-law decisions from another province, England, or the United States are best described as:",
+    options:["Strictly binding on Canadian courts","Persuasive precedents that may be followed but are not binding","Inadmissible in Canadian courts","Treated as superior to local provincial precedents"],
+    answer:1,
+    rationale:"Out-of-province, English, and U.S. common-law decisions are <strong>persuasive</strong> — they may be followed but are not binding. Canadian courts generally prefer precedents from their own province's higher courts." },
+
+  { tag:"Court System", q:"In Ontario, the Superior Court of Justice (formerly the Ontario Court General Division):",
+    options:["Hears only matters of provincial offences","Deals with large claims and federal criminal matters","Has been abolished","Has jurisdiction only over patents and copyright"],
+    answer:1,
+    rationale:"The <strong>Superior Court of Justice</strong> deals with large claims and federal criminal matters. Small Claims Court is a branch of it." },
+
+  { tag:"Court System", q:"In Ontario, Small Claims Court is best described as:",
+    options:["A separate division of the Ontario Court of Justice","A branch of the Superior Court of Justice that deals with disputes involving relatively small amounts of money","A federal tribunal","A municipal court system"],
+    answer:1,
+    rationale:"Small Claims Court is a <strong>branch of the Superior Court of Justice</strong> that handles disputes involving relatively small amounts of money." },
+
+  { tag:"Court System", q:"In Ontario, the Ontario Court of Justice (formerly the Ontario Court Provincial Division) deals with:",
+    options:["Patent and trademark disputes","Domestic matters (except divorce) and criminal matters involving provincial offences","Civil claims exceeding $1 million","International commercial arbitration"],
+    answer:1,
+    rationale:"The <strong>Ontario Court of Justice</strong> handles domestic matters (except divorce) and criminal matters involving provincial offences." },
+
+  { tag:"Court System", q:"In Ontario, how many regions is the province divided into for the purposes of court administration, and who manages judicial resources within each region?",
+    options:["Five regions, each managed by a Chief Justice","Eight regions, each with a regional Senior Judge for each Division","Twelve regions, each managed by the Attorney General","Three regions, each managed by an elected Justice of the Peace"],
+    answer:1,
+    rationale:"The chapter states the province is divided into <strong>eight regions</strong>, each with a regional Senior Judge for each Division managing judicial resources." },
+
+  { tag:"Court System", q:"The Federal Court of Canada has jurisdiction over:",
+    options:["Provincial highway traffic offences","Wills and estates","Federal matters such as patents, trade-marks, and copyright","Mechanics' lien claims"],
+    answer:2,
+    rationale:"The <strong>Federal Court of Canada</strong> has jurisdiction over federal matters including <strong>patents, trade-marks, and copyright</strong>." },
+
+  { tag:"Public vs. Private Law", q:"Which of the following is identified in the chapter as an example of public law?",
+    options:["Contract law","Tort law","Criminal law","Mechanics' lien law"],
+    answer:2,
+    rationale:"<strong>Public law</strong> deals with the rights and obligations of government on one hand and individuals/private organizations on the other. Examples in the chapter: <strong>criminal law</strong> and <strong>constitutional law</strong>." },
+
+  { tag:"Public vs. Private Law", q:"Which of the following is identified in the chapter as an example of private law?",
+    options:["Constitutional law","Criminal law","Tort law","Charter litigation"],
+    answer:2,
+    rationale:"<strong>Private law</strong> deals with the rights and obligations of individuals or private organizations. The chapter cites <strong>contracts</strong> and <strong>torts</strong> as examples." },
+
+  { tag:"Quebec / Civil Law", q:"Quebec's legal system is founded on:",
+    options:["The English common-law system","Indigenous customary law","The civil law tradition / Civil Code of Quebec, evolved from the Napoleonic Code","Roman canon law"],
+    answer:2,
+    rationale:"Quebec's legal system is founded on the <strong>civil law (Civil Code of Quebec)</strong>, which evolved from the <strong>Napoleonic Code</strong>. Engineers doing business in Quebec should obtain advice from a Quebec lawyer." },
+
+  { tag:"Quebec / Civil Law", q:"In the common-law system, the term 'civil' usually means:",
+    options:["Public","Criminal","Private","Constitutional"],
+    answer:2,
+    rationale:"In the common-law system, '<strong>civil</strong>' usually means '<strong>private</strong>.' 'Civil litigation' is a dispute under private law (not a criminal dispute) — distinct from the 'civil law' tradition of Quebec." },
+
+  { tag:"Rule of Law", q:"The most fundamental premise of the Rule of Law in Canada is that:",
+    options:["The Crown is exempt from prosecution","No one is above the law","Federal law always overrides provincial law","Lawyers are immune from civil suits"],
+    answer:1,
+    rationale:"The Rule of Law's most fundamental premise is that <strong>no one is above the law</strong>. An independent judiciary is key to this." },
+
+  { tag:"Rule of Law", q:"Which of the following best supports the Rule of Law in Canada?",
+    options:["The doctrine of Parliamentary Supremacy applied without limit","An independent judiciary and court system that enforce laws and protect fundamental rights and freedoms","Direct ministerial control over judicial appointments at every level","The replacement of statutes by ad hoc administrative orders"],
+    answer:1,
+    rationale:"An <strong>independent judiciary</strong> and court system are key. They enforce laws, protect rights and freedoms, and ensure no one is above the law." },
+
+  { tag:"Terminology", q:"In civil litigation, the party bringing the action or making the claim is called:",
+    options:["The defendant","The plaintiff","The appellant","The respondent"],
+    answer:1,
+    rationale:"The <strong>plaintiff</strong> brings the action or makes the claim in civil litigation. In criminal matters, the 'plaintiff' is usually the Crown." },
+
+  { tag:"Terminology", q:"In a criminal matter, the 'defendant' is more commonly referred to as:",
+    options:["The plaintiff","The accused","The respondent","The complainant"],
+    answer:1,
+    rationale:"In criminal matters, the defendant is called the <strong>accused</strong>." },
+
+  { tag:"Terminology", q:"The party appealing the decision of a lower court (in either civil litigation or criminal matters) is called:",
+    options:["The defendant","The plaintiff","The appellant","The respondent"],
+    answer:2,
+    rationale:"The <strong>appellant</strong> appeals the lower court's decision. The <strong>respondent</strong> seeks to uphold it." },
+
+  /* Note: array intentionally has 50 entries below this comment */
+];
+
+/* The 50th item (index 49) is added here to keep the bank exactly 50 long. */
+QUESTIONS.push({
+  tag:"Terminology",
+  q:"What is the essential difference between a guarantee and an indemnification?",
+  options:[
+    "A guarantee creates no enforceable obligation, while an indemnification does",
+    "A guarantee requires the primary debtor to default and the creditor to first look to the debtor for payment, while an indemnification allows the creditor to require payment directly from the indemnifier without first pursuing the primary debtor",
+    "Indemnifications are governed by criminal law, while guarantees are governed by civil law",
+    "Only indemnifications can be enforced in court"
+  ],
+  answer:1,
+  rationale:"Both create payment obligations, but the key difference is enforcement: a <strong>guarantee</strong> requires the primary debtor to default and the creditor to <strong>first look to the debtor</strong>; an <strong>indemnification</strong> can be exercised <strong>directly</strong> against the indemnifier without first pursuing the debtor."
+});
+
+/* Sanity: ensure exactly 50. (Array has 49 + 1 push = 50.) */
+console.assert(QUESTIONS.length === 50, "Question bank should have 50 items, has " + QUESTIONS.length);
+
+/* ====================================================================
+   STATE
+   ==================================================================== */
+const STORAGE_KEY = "nppe_ch1_legal_v1";
+let state = {
+  mode: "practice",
+  order: [...Array(QUESTIONS.length).keys()],
+  current: 0,
+  answers: {},        // { qIdx: chosenOptIdx }
+  correct: new Set(), // qIdx that were answered correctly
+  wrong: new Set(),   // qIdx that were answered incorrectly
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  finished: false,
+};
+
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({
+  ...state,
+  correct:[...state.correct],
+  wrong:[...state.wrong],
+}));}catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    state = { ...state, ...s, correct:new Set(s.correct||[]), wrong:new Set(s.wrong||[]) };
+  }catch(e){}
+}
+
+/* ====================================================================
+   PARTICLE FX (canvas)
+   ==================================================================== */
+const fx = document.getElementById("fx");
+const ctx = fx.getContext("2d");
+let parts = [];
+
+function resizeFx(){ fx.width = window.innerWidth; fx.height = window.innerHeight; }
+window.addEventListener("resize", resizeFx); resizeFx();
+
+function tickFx(){
+  ctx.clearRect(0,0,fx.width,fx.height);
+  for(let i=parts.length-1;i>=0;i--){
+    const p = parts[i];
+    p.vy += p.g||0.18;
+    p.vx *= 0.995;
+    p.x += p.vx; p.y += p.vy;
+    p.life -= 1;
+    p.rot = (p.rot||0) + (p.vr||0);
+    const alpha = Math.max(0, p.life / p.maxLife);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot||0);
+    ctx.globalAlpha = alpha;
+    if(p.kind === "star"){
+      drawStar(0, 0, 5, p.r, p.r/2.2, p.color);
+    } else if(p.kind === "ring"){
+      ctx.strokeStyle = p.color; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.stroke();
+      p.r += 4;
+    } else { /* confetti rectangle */
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+    }
+    ctx.restore();
+    if(p.life <= 0 || p.y > fx.height + 60) parts.splice(i,1);
+  }
+  requestAnimationFrame(tickFx);
+}
+tickFx();
+
+function drawStar(cx,cy,spikes,outer,inner,color){
+  let rot = Math.PI/2*3, x=cx, y=cy, step = Math.PI/spikes;
+  ctx.beginPath(); ctx.moveTo(cx, cy-outer);
+  for(let i=0;i<spikes;i++){
+    x = cx + Math.cos(rot)*outer; y = cy + Math.sin(rot)*outer;
+    ctx.lineTo(x,y); rot += step;
+    x = cx + Math.cos(rot)*inner; y = cy + Math.sin(rot)*inner;
+    ctx.lineTo(x,y); rot += step;
+  }
+  ctx.lineTo(cx, cy-outer); ctx.closePath();
+  ctx.fillStyle = color; ctx.fill();
+}
+
+const GOLDS = ["#D4AF37","#F4D078","#E6C068","#FFE9A8","#A88824","#FFC857"];
+const FLAVOURS = ["#5DD39E","#6CB4FF","#FFB454","#FF6BAA","#C792EA"];
+
+function burstConfetti(x,y,n=80,colors=GOLDS){
+  for(let i=0;i<n;i++){
+    const a = Math.random()*Math.PI*2, s = 3 + Math.random()*7;
+    parts.push({
+      kind:"confetti", x, y,
+      vx:Math.cos(a)*s, vy:Math.sin(a)*s - 4,
+      g:0.2, w:5+Math.random()*5, h:8+Math.random()*8,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+      life:90+Math.random()*60, maxLife:140
+    });
+  }
+}
+function goldShower(){
+  for(let i=0;i<60;i++){
+    parts.push({
+      kind:"confetti",
+      x: Math.random()*fx.width,
+      y: -20 - Math.random()*200,
+      vx:(Math.random()-.5)*1.4, vy:2+Math.random()*3,
+      g:0.05, w:4+Math.random()*5, h:8+Math.random()*10,
+      color:GOLDS[Math.floor(Math.random()*GOLDS.length)],
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.25,
+      life:200, maxLife:200
+    });
+  }
+}
+function starsAt(x,y,n=14){
+  for(let i=0;i<n;i++){
+    const a = Math.random()*Math.PI*2, s = 2+Math.random()*4;
+    parts.push({
+      kind:"star", x, y,
+      vx:Math.cos(a)*s, vy:Math.sin(a)*s - 1.5,
+      g:0.12, r:5+Math.random()*7,
+      color:GOLDS[Math.floor(Math.random()*GOLDS.length)],
+      rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.2,
+      life:60+Math.random()*30, maxLife:90
+    });
+  }
+  parts.push({kind:"ring", x, y, vx:0, vy:0, r:4, color:"rgba(244,208,120,.7)", life:30, maxLife:30});
+}
+function fireworks(){
+  // Multi-burst finale across the screen
+  let bursts = 0;
+  const total = 12;
+  const id = setInterval(()=>{
+    const x = 80 + Math.random()*(fx.width-160);
+    const y = 80 + Math.random()*(fx.height*0.55);
+    const palette = (bursts%2===0) ? GOLDS : [...GOLDS, ...FLAVOURS];
+    burstConfetti(x,y,90,palette);
+    starsAt(x,y,18);
+    bursts++;
+    if(bursts>=total) clearInterval(id);
+  }, 280);
+  goldShower();
+  setTimeout(goldShower, 800);
+  setTimeout(goldShower, 1600);
+}
+
+/* Floating score popup */
+function popScore(text, x, y){
+  const el = document.createElement("div");
+  el.className = "score-pop";
+  el.textContent = text;
+  el.style.left = x+"px"; el.style.top = y+"px";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1400);
+}
+function popEmoji(emoji){
+  const el = document.createElement("div");
+  el.className = "emoji-pop";
+  el.textContent = emoji;
+  el.style.left = "50%"; el.style.top = "55%";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1600);
+}
+
+/* ====================================================================
+   QUIZ RENDERING
+   ==================================================================== */
+const $ = id => document.getElementById(id);
+const LETTERS = ["A","B","C","D","E"];
+
+function renderHud(){
+  $("qnow").textContent = state.current+1;
+  $("score").textContent = state.score;
+  $("streak").textContent = state.streak;
+  $("flame").textContent = state.streak>=5 ? "🔥" : state.streak>=3 ? "✨" : "";
+  $("streakStat").classList.toggle("hot", state.streak>=3);
+  $("correctCount").innerHTML = state.correct.size + '<span style="color:var(--cream-dim); font-size:18px"> / '+QUESTIONS.length+'</span>';
+  const pct = Math.round((Object.keys(state.answers).length / QUESTIONS.length)*100);
+  $("progress").style.width = pct + "%";
+}
+
+function renderGrid(){
+  const g = $("qgrid"); g.innerHTML = "";
+  state.order.forEach((qIdx, pos)=>{
+    const cell = document.createElement("div");
+    cell.className = "qcell";
+    cell.textContent = pos+1;
+    if(pos === state.current) cell.classList.add("current");
+    if(state.mode==="practice"){
+      if(state.correct.has(qIdx)) cell.classList.add("correct");
+      else if(state.wrong.has(qIdx)) cell.classList.add("wrong");
+    } else {
+      if(state.answers[qIdx]!==undefined) cell.classList.add("answered");
+    }
+    cell.addEventListener("click", ()=>{ state.current = pos; renderQuestion(); });
+    g.appendChild(cell);
+  });
+}
+
+function renderQuestion(){
+  const qIdx = state.order[state.current];
+  const Q = QUESTIONS[qIdx];
+  $("qnumLabel").textContent = state.current+1;
+  $("qtag").textContent = Q.tag;
+  $("qtext").textContent = Q.q;
+
+  const optsEl = $("options"); optsEl.innerHTML = "";
+  Q.options.forEach((opt, i)=>{
+    const div = document.createElement("div");
+    div.className = "opt";
+    div.innerHTML = `<div class="lbl">${LETTERS[i]}</div><div class="txt">${opt}</div>`;
+    div.addEventListener("click", e => onPick(qIdx, i, div, e));
+    if(state.answers[qIdx] !== undefined){
+      const chosen = state.answers[qIdx];
+      div.classList.add("locked");
+      if(state.mode==="practice"){
+        if(i===Q.answer) div.classList.add("correct");
+        else if(i===chosen) div.classList.add("wrong");
+      } else {
+        if(i===chosen) div.classList.add("selected");
+      }
+    }
+    optsEl.appendChild(div);
+  });
+
+  const r = $("rationale");
+  if(state.mode==="practice" && state.answers[qIdx] !== undefined){
+    r.innerHTML = `<strong>Why:</strong> ${Q.rationale}`;
+    r.classList.add("show");
+  } else {
+    r.classList.remove("show");
+    r.innerHTML = "";
+  }
+
+  $("prevBtn").disabled = state.current === 0;
+  const isLast = state.current === QUESTIONS.length - 1;
+  $("nextBtn").textContent = isLast ? "Finish ✓" : "Next →";
+
+  // In exam mode: enable Next only after a pick (so users don't skip blindly is optional;
+  // here we allow free navigation).
+  $("nextBtn").disabled = false;
+
+  renderHud();
+  renderGrid();
+}
+
+function onPick(qIdx, optIdx, el, evt){
+  if(state.answers[qIdx] !== undefined) return; // already answered
+  state.answers[qIdx] = optIdx;
+  const Q = QUESTIONS[qIdx];
+  const isRight = optIdx === Q.answer;
+
+  // Lock all options
+  [...$("options").children].forEach(c => c.classList.add("locked"));
+
+  // Visual styling
+  if(state.mode === "practice"){
+    [...$("options").children].forEach((c,i)=>{
+      if(i===Q.answer) c.classList.add("correct");
+      else if(i===optIdx) c.classList.add("wrong");
+    });
+    $("rationale").innerHTML = `<strong>Why:</strong> ${Q.rationale}`;
+    $("rationale").classList.add("show");
+  } else {
+    el.classList.add("selected");
+  }
+
+  // Score & celebration
+  if(isRight){
+    state.correct.add(qIdx);
+    state.streak += 1;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    const base = 10;
+    const bonus = Math.min(20, Math.max(0, (state.streak-1)*2));
+    const gained = base + bonus;
+    state.score += gained;
+
+    // Effects
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+    starsAt(cx, cy, 16);
+    burstConfetti(cx, cy, 40, GOLDS);
+    popScore(`+${gained}`, evt.clientX || cx, (evt.clientY || cy) - 10);
+
+    // Streak milestones
+    if(state.streak === 3) popEmoji("😀");
+    else if(state.streak === 5){ popEmoji("🤩"); goldShower(); }
+    else if(state.streak === 10){ popEmoji("🏆"); fireworks(); }
+    else if(state.streak > 0 && state.streak % 5 === 0){ popEmoji("🔥"); goldShower(); }
+  } else {
+    state.wrong.add(qIdx);
+    state.streak = 0;
+  }
+
+  save();
+  renderHud();
+  renderGrid();
+}
+
+/* ====================================================================
+   NAV / MODE / RESET / RESULT
+   ==================================================================== */
+$("prevBtn").addEventListener("click", ()=>{
+  if(state.current>0){ state.current--; renderQuestion(); }
+});
+$("nextBtn").addEventListener("click", ()=>{
+  if(state.current < QUESTIONS.length - 1){
+    state.current++;
+    renderQuestion();
+  } else {
+    finish();
+  }
+});
+
+document.querySelectorAll("#modeToggle button").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    document.querySelectorAll("#modeToggle button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    state.mode = b.dataset.mode;
+    save();
+    renderQuestion();
+  });
+});
+
+$("shuffleBtn").addEventListener("click", ()=>{
+  // Fisher–Yates over the order, keep current question pointer at 0
+  for(let i=state.order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
+  }
+  state.current = 0;
+  save(); renderQuestion();
+});
+
+$("resetBtn").addEventListener("click", ()=> $("resetModal").classList.add("show"));
+$("cancelReset").addEventListener("click", ()=> $("resetModal").classList.remove("show"));
+$("confirmReset").addEventListener("click", ()=>{
+  state = {
+    mode: state.mode,
+    order: [...Array(QUESTIONS.length).keys()],
+    current: 0,
+    answers: {}, correct:new Set(), wrong:new Set(),
+    score: 0, streak: 0, bestStreak: 0, finished:false,
+  };
+  save();
+  $("resetModal").classList.remove("show");
+  $("result").classList.remove("show");
+  $("quizBody").style.display = "";
+  renderQuestion();
+});
+
+function finish(){
+  state.finished = true; save();
+  const total = QUESTIONS.length;
+  const correct = state.correct.size;
+  const pct = Math.round((correct/total)*100);
+
+  $("rCorrect").innerHTML = correct + '<span style="color:var(--cream-dim); font-size:18px"> / '+total+'</span>';
+  $("rPoints").textContent = state.score;
+  $("rStreak").textContent = state.bestStreak;
+  $("ringPct").textContent = pct + "%";
+  $("ringFg").style.setProperty("--deg", (pct*3.6)+"deg");
+  // Manually animate the conic via JS since CSS @property isn't universal:
+  animateRing(pct);
+
+  const passed = pct >= 65;
+  $("verdict").textContent = passed ? "Pass" : "Below threshold";
+  $("verdict").className = "verdict " + (passed ? "pass" : "fail");
+  $("verdictSub").textContent = passed
+    ? `Above the 65% NPPE pass threshold. Best streak: ${state.bestStreak} in a row.`
+    : `The NPPE pass mark is 65%. Review the misses below and try again — your best streak was ${state.bestStreak}.`;
+
+  $("quizBody").style.display = "none";
+  $("result").classList.add("show");
+  window.scrollTo({top:0, behavior:"smooth"});
+
+  if(passed){
+    setTimeout(fireworks, 350);
+    setTimeout(()=>popEmoji(pct>=85 ? "🏆" : "🎉"), 500);
+  } else {
+    setTimeout(goldShower, 350);
+  }
+}
+function animateRing(targetPct){
+  const ring = $("ringFg");
+  let cur = 0;
+  const step = ()=>{
+    cur += Math.max(1, (targetPct-cur)*0.08);
+    if(cur > targetPct) cur = targetPct;
+    ring.style.background = `conic-gradient(var(--gold-bright) 0deg, var(--gold-bright) ${cur*3.6}deg, transparent ${cur*3.6}deg 360deg)`;
+    if(cur < targetPct) requestAnimationFrame(step);
+  };
+  step();
+}
+
+$("reviewBtn").addEventListener("click", ()=>{
+  // Switch to practice mode, jump to first wrong question (or first if none wrong)
+  state.mode = "practice";
+  document.querySelectorAll("#modeToggle button").forEach(x=>x.classList.toggle("active", x.dataset.mode==="practice"));
+  let firstWrong = state.order.findIndex(qi => state.wrong.has(qi));
+  state.current = firstWrong >= 0 ? firstWrong : 0;
+  $("result").classList.remove("show");
+  $("quizBody").style.display = "";
+  renderQuestion();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+
+$("restartBtn").addEventListener("click", ()=>{
+  $("confirmReset").click();
+});
+
+/* ====================================================================
+   INIT
+   ==================================================================== */
+function init(){
+  load();
+  // Sync mode toggle UI to loaded state
+  document.querySelectorAll("#modeToggle button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.mode === state.mode);
+  });
+  // If finished, show result; else show quiz
+  if(state.finished && Object.keys(state.answers).length === QUESTIONS.length){
+    $("quizBody").style.display = "none";
+    $("result").classList.add("show");
+    finish();
+  } else {
+    renderQuestion();
+  }
+}
+init();
+</script>
+</body>
+</html>

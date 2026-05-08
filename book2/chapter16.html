@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Chapter 16 — Tendering Issues: Contract A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --navy-deep: #0a1628;
+    --navy: #102a43;
+    --navy-light: #1a3a5c;
+    --gold: #d4af37;
+    --gold-bright: #f4d160;
+    --gold-soft: #e8c468;
+    --cream: #f5f0e1;
+    --ivory: #fbf8f0;
+    --green: #4ade80;
+    --green-deep: #16a34a;
+    --red: #f87171;
+    --red-deep: #dc2626;
+    --shadow: 0 10px 40px rgba(0,0,0,.4);
+    --shadow-gold: 0 0 30px rgba(212,175,55,.3);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 50%, var(--navy-deep) 100%);
+    color: var(--ivory);
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 20px;
+    position: relative;
+}
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(212,175,55,.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(212,175,55,.06) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+}
+.wrap { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* Header */
+header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    border-bottom: 1px solid rgba(212,175,55,.25);
+    margin-bottom: 30px;
+}
+.eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 600;
+    color: var(--ivory);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+h1 em {
+    color: var(--gold-bright);
+    font-style: italic;
+    font-weight: 500;
+}
+.subtitle {
+    font-size: 14px;
+    color: rgba(245,240,225,.7);
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.divider-ornament {
+    margin: 18px auto 0;
+    width: 100px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    position: relative;
+}
+.divider-ornament::after {
+    content: '◆';
+    position: absolute; top: -10px; left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold); background: var(--navy-deep);
+    padding: 0 10px; font-size: 12px;
+}
+
+/* Mode selector */
+.mode-bar {
+    display: flex; justify-content: center; gap: 12px;
+    margin-bottom: 24px; flex-wrap: wrap;
+}
+.mode-btn {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(212,175,55,.4);
+    padding: 10px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    cursor: pointer;
+    transition: all .25s ease;
+    border-radius: 2px;
+}
+.mode-btn:hover { background: rgba(212,175,55,.1); border-color: var(--gold); }
+.mode-btn.active {
+    background: var(--gold);
+    color: var(--navy-deep);
+    border-color: var(--gold);
+    font-weight: 600;
+    box-shadow: var(--shadow-gold);
+}
+
+/* Stats bar */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+    background: rgba(10,22,40,.6);
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 4px;
+    padding: 18px;
+    backdrop-filter: blur(10px);
+}
+.stat { text-align: center; }
+.stat-label {
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,225,.55);
+    margin-bottom: 6px; font-weight: 500;
+}
+.stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600;
+    color: var(--gold-bright);
+    line-height: 1;
+}
+.stat-value.streak { color: #ff8c42; }
+.stat-value.fire::after { content: ' 🔥'; }
+
+/* Progress */
+.progress-track {
+    width: 100%; height: 4px;
+    background: rgba(212,175,55,.15);
+    border-radius: 2px; overflow: hidden;
+    margin-bottom: 24px;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 0 12px rgba(244,209,96,.5);
+}
+
+/* Card */
+.card {
+    background: rgba(10,22,40,.7);
+    border: 1px solid rgba(212,175,55,.25);
+    border-radius: 4px;
+    padding: 36px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+.card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.q-meta {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 18px;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(212,175,55,.7); font-weight: 500;
+}
+.q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; line-height: 1.45;
+    color: var(--ivory); font-weight: 500;
+    margin-bottom: 28px;
+}
+
+/* Options */
+.options { display: flex; flex-direction: column; gap: 12px; }
+.option {
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(212,175,55,.18);
+    border-radius: 3px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: flex; align-items: flex-start; gap: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--cream); font-size: 15px;
+    text-align: left; width: 100%;
+    line-height: 1.5;
+}
+.option:hover:not(:disabled) {
+    background: rgba(212,175,55,.06);
+    border-color: rgba(212,175,55,.5);
+    transform: translateX(4px);
+}
+.option:disabled { cursor: default; }
+.option-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--gold); min-width: 24px;
+    line-height: 1.4;
+}
+.option.selected {
+    background: rgba(212,175,55,.12);
+    border-color: var(--gold);
+}
+.option.correct {
+    background: rgba(74,222,128,.13);
+    border-color: var(--green);
+    color: #d1fae5;
+}
+.option.correct .option-letter { color: var(--green); }
+.option.incorrect {
+    background: rgba(248,113,113,.13);
+    border-color: var(--red);
+    color: #fee2e2;
+}
+.option.incorrect .option-letter { color: var(--red); }
+.option.dim { opacity: 0.45; }
+
+/* Rationale */
+.rationale {
+    margin-top: 24px;
+    padding: 20px 22px;
+    background: rgba(212,175,55,.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(245,240,225,.92);
+    animation: slideIn .35s ease;
+}
+.rationale-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Controls */
+.controls {
+    display: flex; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+}
+.btn {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(212,175,55,.4);
+    padding: 12px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    cursor: pointer;
+    transition: all .25s ease;
+    border-radius: 2px;
+}
+.btn:hover:not(:disabled) {
+    background: rgba(212,175,55,.1);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+}
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-primary {
+    background: var(--gold);
+    color: var(--navy-deep);
+    border-color: var(--gold);
+    font-weight: 600;
+}
+.btn-primary:hover:not(:disabled) {
+    background: var(--gold-bright);
+    border-color: var(--gold-bright);
+    box-shadow: var(--shadow-gold);
+}
+.btn-danger { border-color: rgba(248,113,113,.4); color: #fca5a5; }
+.btn-danger:hover { background: rgba(248,113,113,.1); border-color: var(--red); }
+
+/* Nav grid */
+.nav-grid-wrap {
+    background: rgba(10,22,40,.5);
+    border: 1px solid rgba(212,175,55,.18);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+.nav-grid-label {
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,225,.55);
+    margin-bottom: 12px; font-weight: 500;
+    text-align: center;
+}
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 6px;
+}
+.nav-cell {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 2px;
+    color: rgba(245,240,225,.7);
+    font-size: 11px; font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+    display: flex; align-items: center; justify-content: center;
+}
+.nav-cell:hover { border-color: var(--gold); transform: scale(1.08); }
+.nav-cell.current {
+    background: var(--gold); color: var(--navy-deep);
+    border-color: var(--gold); font-weight: 700;
+}
+.nav-cell.correct {
+    background: rgba(74,222,128,.18);
+    border-color: var(--green);
+    color: var(--green);
+}
+.nav-cell.incorrect {
+    background: rgba(248,113,113,.18);
+    border-color: var(--red);
+    color: var(--red);
+}
+.nav-cell.answered { background: rgba(212,175,55,.15); color: var(--gold-bright); }
+
+/* Results */
+.results {
+    background: rgba(10,22,40,.85);
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    padding: 50px 36px;
+    text-align: center;
+    box-shadow: var(--shadow), var(--shadow-gold);
+}
+.results h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 600;
+    margin-bottom: 8px; color: var(--ivory);
+}
+.results h2 em {
+    color: var(--gold-bright); font-style: italic;
+    font-weight: 500;
+}
+.score-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 96px; font-weight: 600;
+    color: var(--gold-bright);
+    line-height: 1; margin: 24px 0 8px;
+    text-shadow: 0 0 30px rgba(244,209,96,.4);
+}
+.score-fraction {
+    font-size: 18px;
+    color: rgba(245,240,225,.7);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+.verdict {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; letter-spacing: 4px;
+    text-transform: uppercase; font-weight: 600;
+    padding: 12px 28px;
+    display: inline-block;
+    border-radius: 2px;
+    margin-bottom: 28px;
+}
+.verdict.pass {
+    background: rgba(74,222,128,.15);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+.verdict.fail {
+    background: rgba(248,113,113,.15);
+    color: var(--red);
+    border: 1px solid var(--red);
+}
+.results-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin: 28px 0 32px;
+    text-align: center;
+}
+.results-stats .stat-value { font-size: 30px; }
+.results-actions {
+    display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+}
+
+/* Floating popup score */
+.popup {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px var(--gold), 0 2px 4px rgba(0,0,0,.6);
+    z-index: 9999;
+    animation: popup-float 1.4s cubic-bezier(.2,.8,.4,1) forwards;
+}
+@keyframes popup-float {
+    0% { transform: translate(-50%, 0) scale(.5); opacity: 0; }
+    20% { transform: translate(-50%, -10px) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -120px) scale(1); opacity: 0; }
+}
+.streak-popup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 64px;
+    color: #ff8c42;
+    text-shadow: 0 0 40px #ff8c42, 0 0 80px #ff5722;
+    z-index: 9998;
+    pointer-events: none;
+    animation: streak-burst 1.6s cubic-bezier(.2,.8,.4,1) forwards;
+    text-align: center;
+    white-space: nowrap;
+}
+@keyframes streak-burst {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    25% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 1; }
+    60% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(.9) rotate(0); opacity: 0; }
+}
+
+/* Canvas overlay */
+#fxCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9997;
+}
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Smaller on mobile */
+@media (max-width: 600px) {
+    .card { padding: 24px 20px; }
+    .q-text { font-size: 17px; }
+    .option { padding: 14px 16px; font-size: 14px; }
+    .results { padding: 36px 20px; }
+    .score-display { font-size: 72px; }
+}
+</style>
+</head>
+<body>
+<canvas id="fxCanvas"></canvas>
+
+<div class="wrap">
+    <header>
+        <div class="eyebrow">NPPE • Ontario • Chapter 16</div>
+        <h1>Tendering Issues — <em>Contract A</em></h1>
+        <div class="subtitle">50-question practice quiz · Ron Engineering and the two-contract framework</div>
+        <div class="divider-ornament"></div>
+    </header>
+
+    <div class="mode-bar">
+        <button class="mode-btn active" data-mode="practice">Practice Mode</button>
+        <button class="mode-btn" data-mode="exam">Exam Mode</button>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><div class="stat-label">Question</div><div class="stat-value" id="statQ">1 / 50</div></div>
+        <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="statScore">0</div></div>
+        <div class="stat"><div class="stat-label">Correct</div><div class="stat-value" id="statCorrect">0</div></div>
+        <div class="stat"><div class="stat-label">Streak</div><div class="stat-value streak" id="statStreak">0</div></div>
+        <div class="stat"><div class="stat-label">Best Streak</div><div class="stat-value" id="statBest">0</div></div>
+    </div>
+
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:2%"></div></div>
+
+    <div id="quizArea">
+        <div class="card">
+            <div class="q-meta">
+                <span id="qNum">Question 1 of 50</span>
+                <span id="qTopic">Contract A Foundations</span>
+            </div>
+            <div class="q-text" id="qText">Loading…</div>
+            <div class="options" id="qOptions"></div>
+            <div class="rationale hidden" id="rationale">
+                <div class="rationale-label">Rationale</div>
+                <div id="rationaleText"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="btnPrev">◀ Previous</button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn" id="btnShuffle">Shuffle</button>
+                <button class="btn btn-danger" id="btnReset">Reset Quiz</button>
+            </div>
+            <button class="btn btn-primary" id="btnNext">Next ▶</button>
+        </div>
+    </div>
+
+    <div id="resultsArea" class="hidden">
+        <div class="results">
+            <h2 id="resultsTitle">Quiz <em>Complete</em></h2>
+            <div class="score-display" id="finalPct">0%</div>
+            <div class="score-fraction" id="finalFraction">0 / 50 correct</div>
+            <div class="verdict" id="verdict">—</div>
+            <div class="results-stats">
+                <div class="stat"><div class="stat-label">Correct</div><div class="stat-value" id="rsCorrect">0</div></div>
+                <div class="stat"><div class="stat-label">Incorrect</div><div class="stat-value" id="rsIncorrect">0</div></div>
+                <div class="stat"><div class="stat-label">Best Streak</div><div class="stat-value" id="rsBest">0</div></div>
+                <div class="stat"><div class="stat-label">Total Score</div><div class="stat-value" id="rsScore">0</div></div>
+            </div>
+            <div class="results-actions">
+                <button class="btn" id="btnReview">Review Answers</button>
+                <button class="btn btn-primary" id="btnRetry">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-grid-wrap">
+        <div class="nav-grid-label">Question Navigation · Click to jump</div>
+        <div class="nav-grid" id="navGrid"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:30px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,225,.4);">
+        Source · Law for Professional Engineers · Canadian and Global Insights · Chapter 16<br>
+        <span style="font-size:10px;letter-spacing:1px;text-transform:none;">Keyboard: 1-4 select · ← → navigate · R reset · S shuffle</span>
+    </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTION BANK · 50 NPPE-style questions for Chapter 16
+   ============================================================ */
+const QUESTIONS = [
+    {
+        topic: "Contract A Foundations",
+        q: "In which landmark Supreme Court of Canada decision was the two-contract (Contract A / Contract B) framework for tendering established?",
+        opts: [
+            "Martel Building Ltd. v. Canada",
+            "M.J.B. Enterprises Ltd. v. Defence Construction (1951) Ltd.",
+            "Ron Engineering",
+            "Double N Earthmovers Ltd. v. Edmonton (City)"
+        ],
+        ans: 2,
+        why: "Ron Engineering is the 1981 Supreme Court of Canada decision that established the now-familiar Contract A / Contract B framework. M.J.B. Enterprises (1999), Martel Building (2000), and Double N Earthmovers (2007) all built on, refined, or applied principles flowing from Ron Engineering."
+    },
+    {
+        topic: "Formation of Contract A",
+        q: "Under the Contract A / Contract B framework, when is Contract A formed?",
+        opts: [
+            "When the contractor begins the work",
+            "When the owner issues the invitation to tender",
+            "When the owner awards the contract to the winning bidder",
+            "When a compliant bid is submitted in response to the owner's tender call"
+        ],
+        ans: 3,
+        why: "The Supreme Court of Canada in Ron Engineering held that the owner's request for tenders constitutes an offer, and that offer is accepted upon submission of a compliant bid, creating Contract A. Award of the contract creates Contract B."
+    },
+    {
+        topic: "Multiple Contracts A",
+        q: "How many Contracts A are formed when several bidders submit compliant tenders in response to a single tender call?",
+        opts: [
+            "Only one — between the owner and the eventual winning bidder",
+            "One Contract A per compliant tender submitted",
+            "None — Contract A only arises if a bid is accepted",
+            "Two — between the owner and the two lowest bidders"
+        ],
+        ans: 1,
+        why: "As many Contracts A are formed as the number of compliant bids submitted. Each bidder enters its own Contract A with the owner, governed by the tender package terms. Only one Contract B is later formed, with the successful bidder."
+    },
+    {
+        topic: "Pre-Ron Engineering Doctrine",
+        q: "Prior to the Ron Engineering decision, how were tenders typically characterized in offer-and-acceptance terms?",
+        opts: [
+            "A bilateral contract was formed at the close of the bidding window.",
+            "The bid itself was treated as the offer; the award of the contract was acceptance.",
+            "Tenders were viewed as non-binding expressions of interest only.",
+            "The owner's invitation to tender was the offer; the bid was acceptance."
+        ],
+        ans: 1,
+        why: "Before Ron Engineering, each tender was treated as the offer and the final award was treated as acceptance. Ron Engineering reversed this characterization by treating the invitation to tender as the offer, with submission of a compliant bid as acceptance forming Contract A."
+    },
+    {
+        topic: "Scope of Contract A",
+        q: "The Contract A concept established in Ron Engineering applies to which of the following types of contracts?",
+        opts: [
+            "Only contracts above a specified monetary threshold",
+            "Construction, equipment supply, engineering design, environmental, and software services contracts where bidders compete",
+            "Only construction contracts",
+            "Only public-sector procurement contracts"
+        ],
+        ans: 1,
+        why: "Although Ron Engineering involved a construction contract, the tendering law principle applies to any type of contract for which bidders competitively respond to instructions to bidders, including equipment supply, engineering design, environmental, and software services contracts."
+    },
+    {
+        topic: "Ben Bruinsma v. Chatham",
+        q: "In Ben Bruinsma and Sons Ltd. v. Chatham, the owner deleted an item from the tender package after bid submission. The result was that:",
+        opts: [
+            "The court held that owners always have an inherent right to delete items.",
+            "The court held the owner could delete items only with bidder consent.",
+            "The original lowest bidder remained the lowest, so no liability arose.",
+            "A different bidder became the lowest, and the court held Contract A had been breached."
+        ],
+        ans: 3,
+        why: "The deletion changed the ranking so a different bidder became the lowest. The original low bidder claimed damages for breach of Contract A, and the court agreed because the tender package did not authorize deletions. This case is the classic warning to owners about drafting flexibility into the tender package."
+    },
+    {
+        topic: "Drafting Tender Documents",
+        q: "To minimize the risk of breach-of-Contract-A claims when circumstances change, sophisticated owners typically draft instructions to bidders that:",
+        opts: [
+            "Promise the contract will be awarded to the lowest bidder regardless of compliance.",
+            "Require all bidders to waive their rights under Contract A.",
+            "Forbid any communication with bidders during the tender period.",
+            "Reserve flexibility, including rights to delete items, make changes, overlook mistakes, and selectively negotiate where appropriate."
+        ],
+        ans: 3,
+        why: "Drafting flexibility into the instructions to bidders (rights to delete items, make changes, overlook mistakes, even selectively negotiate) helps protect owners. However, such provisions must remain reasonable and fair, or contractors may refuse to bid or inflate their prices sensing an overly aggressive contracting approach."
+    },
+    {
+        topic: "M.J.B. Enterprises (1999)",
+        q: "In M.J.B. Enterprises Ltd. v. Defence Construction (1951) Ltd., the Supreme Court of Canada confirmed which of the following?",
+        opts: [
+            "Whether Contract A is formed depends on the terms and conditions of the tender call and the parties' intentions.",
+            "Irrevocability of the tender is always a term of Contract A.",
+            "Contract A is always formed when tenders are submitted.",
+            "Contract A imposes no obligations on the owner."
+        ],
+        ans: 0,
+        why: "M.J.B. Enterprises clarified that Ron Engineering does not stand for the proposition that Contract A will always be formed, nor that irrevocability is always a term. Whether a Contract A arises depends on the tender call terms and the parties' intent to enter contractual relations."
+    },
+    {
+        topic: "Implied Terms of Contract A",
+        q: "According to M.J.B. Enterprises, implied obligations in Contract A may arise based on:",
+        opts: [
+            "Verbal assurances given during pre-bid meetings only",
+            "The amount of the tender deposit",
+            "Custom or usage, the legal incidents of the class of contract, or the presumed intention of the parties to give the contract business efficacy",
+            "Only the express written terms of the tender documents"
+        ],
+        ans: 2,
+        why: "The Supreme Court of Canada noted that, like all contracts, Contract A may include implied terms based on (1) custom or usage, (2) the legal incidents of the particular class of contract, or (3) the presumed intention of the parties where necessary to give business efficacy."
+    },
+    {
+        topic: "Martel Building (2000)",
+        q: "In Martel Building Ltd. v. Canada, the Supreme Court of Canada highlighted which implied contractual term in tender contracts?",
+        opts: [
+            "An implied duty for owners to accept the lowest bid",
+            "An implied duty to award the contract within 30 days",
+            "An implied duty to disclose the owner's budget",
+            "An implied duty to treat all bidders fairly and equally"
+        ],
+        ans: 3,
+        why: "Martel Building confirms that appellate courts have implied a contractual term into Contract A requiring owners to treat all bidders fairly and equally. This duty is now well-established and supports the integrity of the bidding process."
+    },
+    {
+        topic: "Chinook Aggregates",
+        q: "In Chinook Aggregates Ltd. v. Abbotsford, the British Columbia Court of Appeal found a breach of Contract A because the owner:",
+        opts: [
+            "Awarded the contract to the lowest bidder despite quality concerns",
+            "Cancelled the tender call altogether",
+            "Required all bidders to provide bid bonds",
+            "Adopted an undisclosed policy preferring local contractors whose bids were within 10 percent of the lowest bid"
+        ],
+        ans: 3,
+        why: "The owner secretly applied a 10-percent local-contractor preference policy that was not disclosed in the tender documents. This was a breach of the implied duty to treat all bidders fairly and equally; the privilege clause did not authorize undisclosed conditions."
+    },
+    {
+        topic: "Privilege Clauses",
+        q: "According to Chinook Aggregates, a privilege clause stating \"the lowest or any tender will not necessarily be accepted\" gives the owner:",
+        opts: [
+            "The right to ignore implied duties of fairness",
+            "The right to renegotiate the price after submission",
+            "Discretion in selection but not the right to apply hidden preferences",
+            "The right to attach undisclosed conditions to its offer"
+        ],
+        ans: 2,
+        why: "A privilege clause provides the owner with discretion not to take the lowest tender, but does not authorize undisclosed conditions or override the implied duty to treat bidders fairly and equally."
+    },
+    {
+        topic: "Compliant Bids",
+        q: "A \"compliant bid\" is best described as a bid that:",
+        opts: [
+            "Is the lowest in price among all submitted tenders",
+            "Includes a tender deposit equal to at least 10 percent of the bid price",
+            "Complies with the terms and conditions set out in the tender documents",
+            "Is submitted by a pre-qualified contractor"
+        ],
+        ans: 2,
+        why: "A compliant bid is one that meets the terms and conditions of the tender documents. Compliance — not lowest price — is the threshold for participation in the Contract A framework. Owners are not obligated to accept non-compliant bids."
+    },
+    {
+        topic: "Bids Exceed Budget",
+        q: "An owner who finds that all submitted bids exceed the project budget should generally:",
+        opts: [
+            "Reject all bids (as the privilege clause typically allows), revisit the scope, and retender",
+            "Negotiate a price reduction with the lowest bidder",
+            "Disclose the budget to bidders and ask them to revise downward",
+            "Award the contract to the lowest bidder and absorb the difference"
+        ],
+        ans: 0,
+        why: "Negotiating a reduced price with one bidder could breach Contract A and the implied duty of fairness owed to the others. The privilege clause typically allows an owner to reject all bids, revise scope, and start the bidding process anew."
+    },
+    {
+        topic: "Peddlesden — Subcontract Bid",
+        q: "In Peddlesden Ltd. v. Liddell Construction Ltd., the British Columbia Supreme Court found in favour of the subcontractor whose bid bond was missing a seal because:",
+        opts: [
+            "The subcontractor had not actually been used in the general contractor's tender.",
+            "The bid bond requirement was unenforceable.",
+            "The general contractor failed to provide adequate notice of bid requirements.",
+            "The mistake could be corrected without affecting the rights or obligations of other bidders, and the bonding company confirmed enforceability."
+        ],
+        ans: 3,
+        why: "The court took an equitable approach: the subcontractor was willing to apply the seal afterward and the bonding company confirmed enforceability. Because the mistake could be corrected without prejudicing other bidders, the general contractor was obligated to use the subcontractor whose bid it had used in its tender to the owner."
+    },
+    {
+        topic: "Mawson Gage — Negligent Misrepresentation",
+        q: "In Mawson Gage Associates Ltd. v. R., a subcontractor recovered against the owner in tort because:",
+        opts: [
+            "The general contractor breached its subcontract.",
+            "The owner committed bid shopping.",
+            "The owner negligently provided incomplete specifications, causing losses (negligent misrepresentation).",
+            "The owner failed to pay the contract price."
+        ],
+        ans: 2,
+        why: "Several pages of specifications were missing because of the owner's error. Despite the subcontractor's repeated efforts, the issue was not resolved. The court allowed recovery in tort for negligent misrepresentation; otherwise the owner would have been unjustly enriched."
+    },
+    {
+        topic: "Gloge Heating — Withdrawal Window",
+        q: "In Gloge Heating and Plumbing Ltd. v. Northern Construction Company Ltd., the Alberta Court of Appeal held that a subcontractor who phoned in a bid containing a mathematical error could only have withdrawn its bid:",
+        opts: [
+            "Within 24 hours of submission",
+            "Only with the consent of the owner",
+            "At any time before the contract was signed",
+            "Prior to the close of the general contractor's bidding period"
+        ],
+        ans: 3,
+        why: "The subcontractor's bid was irrevocable for the same time period as the general contractor's bid (consistent with the Contract A approach). Withdrawal could only have occurred before the close of the general contract bidding."
+    },
+    {
+        topic: "Telephone Bids — Practice",
+        q: "Last-minute telephone bids from subcontractors to general contractors are commonly used to:",
+        opts: [
+            "Confirm bid bonding requirements",
+            "Reduce the risk of bid shopping by general contractors",
+            "Allow the owner to confirm compliance",
+            "Comply with regulatory deadlines"
+        ],
+        ans: 1,
+        why: "As noted in Gloge Heating, subcontractors often phone in bids minutes before tender close to make it harder for general contractors to \"shop\" their numbers among competitors before bid submission to the owner."
+    },
+    {
+        topic: "Forest Contract Management",
+        q: "In Forest Contract Management Ltd. v. C and M Elevator Ltd., the contractor who tried to withdraw after the subcontractor omitted an elevator from its estimate was:",
+        opts: [
+            "Excused from performance because of mutual mistake",
+            "Held in breach of the contract; the owner was awarded damages",
+            "Permitted to substitute another subcontractor without consequence",
+            "Allowed to renegotiate the contract terms"
+        ],
+        ans: 1,
+        why: "The court found the contractor in breach. The owner retendered and recovered the difference between the original and new bid prices. The decision is consistent with Gloge Heating, the Contract A approach, and the enforceability of the conditions in the tender package."
+    },
+    {
+        topic: "Westgate — Counter-Offer Doctrine",
+        q: "In Westgate Mechanical Contractors Ltd. v. PCL Construction Ltd., the renegotiation of contract terms between the owner and the general contractor:",
+        opts: [
+            "Bound the original subcontractor to the new terms automatically",
+            "Required the owner to compensate the original subcontractor",
+            "Was treated as a counter-offer that released the general contractor's commitment to the original subcontractor",
+            "Was held to be illegal bid shopping"
+        ],
+        ans: 2,
+        why: "Negotiations between the owner and the lowest three tenderers — without involving the subcontractor — produced reduced price and completion terms. The court held this constituted a counter-offer that released the general contractor from its commitment to the original subcontractor."
+    },
+    {
+        topic: "Tectonic Infrastructure",
+        q: "Tectonic Infrastructure, Inc. v. Middlesex Centre (Township) et al. resulted in liability for the consulting engineer because:",
+        opts: [
+            "The engineer entered a side agreement with one bidder.",
+            "The engineer disclosed confidential information.",
+            "The engineer failed to pay its subcontractors on time.",
+            "The engineer negligently failed to identify a non-compliant bid as non-compliant when recommending the contract award."
+        ],
+        ans: 3,
+        why: "The court found the consulting engineering firm had been negligent in recommending a non-compliant bid (with uncalled-for additions and ambiguous price). The owner reasonably relied on the recommendation. The engineer was required to indemnify the owner for $554,000 in damages plus $107,000 in costs."
+    },
+    {
+        topic: "Tectonic — Implied Term",
+        q: "In Tectonic Infrastructure, the court concluded that an implied term of Contract A — confirmed by M.J.B. Enterprises — was that:",
+        opts: [
+            "Only bids compliant with the tender documents would be accepted.",
+            "Owners must disclose their internal budget.",
+            "Bidders waive all rights to legal action.",
+            "The lowest tender must always be accepted."
+        ],
+        ans: 0,
+        why: "Drawing on M.J.B. Enterprises, the court implied a term that only compliant bids would be accepted, having regard to the parties' presumed intentions based on a review of the tender documents and witness testimony at trial."
+    },
+    {
+        topic: "Stanco Projects (2006)",
+        q: "In Stanco Projects Ltd. v. British Columbia (Ministry of Water, Land and Air Protection), the British Columbia Court of Appeal held the consulting engineering firm liable to indemnify the Ministry because:",
+        opts: [
+            "The engineer drafted the tender documents without authority.",
+            "The Ministry had in fact relied on the engineering firm in running the tendering process, and the firm failed to meet the required standard.",
+            "The engineer had a conflict of interest.",
+            "The Ministry had not relied on the engineer's recommendations."
+        ],
+        ans: 1,
+        why: "While the trial judge had absolved the engineer because the Ministry chose to evaluate the situation itself, the BC Court of Appeal disagreed and concluded that the Ministry did rely on the engineer, who failed to meet the required professional standard. The engineer had to indemnify the Ministry for the full damages owing to Stanco Projects."
+    },
+    {
+        topic: "Bid Shopping — Definition",
+        q: "\"Bid shopping\" can best be described as:",
+        opts: [
+            "Inviting bids from contractors with whom one has a long-standing relationship",
+            "Holding multiple competitive tender calls in a transparent process",
+            "Allowing bidders to revise their bids during a public bid opening",
+            "Post-tender price negotiations not expressly authorized by the tender documents, used to drive prices down or extract advantages"
+        ],
+        ans: 3,
+        why: "Bid shopping involves post-tender price negotiations not expressly provided for in the tender documents. It has long been viewed as unethical and inconsistent with the implied duty of fairness under Contract A — described in case law as a \"nefarious\" practice."
+    },
+    {
+        topic: "Bid Manipulation (Stanco)",
+        q: "According to the trial judge in Stanco Projects, the term \"bid shopping\" should be interpreted:",
+        opts: [
+            "Expansively, to encompass any tender-process conduct that uses bids as a negotiating tool, expressly or clandestinely, to obtain better prices or contractual advantages — i.e., \"bid manipulation\"",
+            "Only when a privilege clause is absent from the tender documents",
+            "Only in cases involving public-sector projects",
+            "Narrowly, applying only to direct after-the-fact price negotiations"
+        ],
+        ans: 0,
+        why: "The trial judge in Stanco Projects favoured an expansive interpretation embracing \"bid manipulation\" — using submitted bids as a negotiating tool, openly or covertly, to obtain better prices or other contractual advantages outside the established tendering protocol."
+    },
+    {
+        topic: "Double N Earthmovers (2007)",
+        q: "In Double N Earthmovers Ltd. v. Edmonton (City), the Supreme Court of Canada held that the city's post-bid negotiations did not breach Contract A because:",
+        opts: [
+            "The bidder had failed to submit a compliant bid.",
+            "Bid shopping is permitted in Alberta.",
+            "The tender documents expressly allowed changes to be negotiated with the lowest evaluated tenderer.",
+            "The city had not formed a Contract A."
+        ],
+        ans: 2,
+        why: "The tender documents in Double N Earthmovers expressly stated that changes would not be permitted after bid opening \"unless negotiated with the lowest evaluated tenderer.\" Because such negotiation was a part of Contract A's express terms, the city had not violated any duty to Double N."
+    },
+    {
+        topic: "Double N — Decision Character",
+        q: "The Supreme Court of Canada's decision in Double N Earthmovers was:",
+        opts: [
+            "Decided 9–0 in favour of strict construction of privilege clauses",
+            "Unanimous in favour of the bidder",
+            "Far from unanimous, illustrating the complexity and controversy of tendering law",
+            "Unanimous in favour of the city"
+        ],
+        ans: 2,
+        why: "The chapter notes the decision was \"far from unanimous,\" underscoring how complex and controversial Canadian tendering litigation can be — and reinforcing the value of timely legal advice before contract award."
+    },
+    {
+        topic: "Expansive Privilege Clauses",
+        q: "A privilege clause in tender documents may include which of the following expansive provisions in addition to the standard \"lowest or any tender will not necessarily be accepted\"?",
+        opts: [
+            "The owner may award the contract without forming Contract A.",
+            "The owner may cancel any subcontract without notice.",
+            "The owner may negotiate terms with bidders.",
+            "The owner may waive any safety statute applicable to the work."
+        ],
+        ans: 2,
+        why: "Privilege clauses may expressly provide rights to negotiate with bidders. As Double N Earthmovers shows, such express provisions can authorize conduct that might otherwise be regarded as breaching Contract A."
+    },
+    {
+        topic: "Rationale of Tendering",
+        q: "The fundamental rationale for the tendering process, as emphasized by the Supreme Court of Canada in M.J.B. Enterprises, is to:",
+        opts: [
+            "Replace negotiation with competition",
+            "Provide owners with maximum opportunity for unilateral changes",
+            "Replace competition with negotiation",
+            "Allow bidders to revise their offers in real time"
+        ],
+        ans: 0,
+        why: "M.J.B. Enterprises confirmed that the tendering process exists to replace negotiation with competition, with the terms of the tender documents defining the terms of Contract A."
+    },
+    {
+        topic: "Engineer's Prudent Course",
+        q: "When a consulting engineer is uncertain whether a bid is compliant or how to treat all bidders fairly, the most prudent course is to:",
+        opts: [
+            "Defer entirely to the owner's preference without further analysis.",
+            "Recommend that experienced legal advice be obtained before contract award.",
+            "Make a quick decision to avoid project delays.",
+            "Accept the bid and resolve any disputes after award."
+        ],
+        ans: 1,
+        why: "The chapter repeatedly stresses that, when in doubt, experienced legal advice should be sought before the contract is awarded. Tectonic Infrastructure and Stanco Projects illustrate the substantial liability that can attach if a recommendation is later found to have been negligent."
+    },
+    {
+        topic: "Reciprocal Obligations",
+        q: "Which of the following best characterizes the impact of Contract A on the owner-contractor relationship?",
+        opts: [
+            "It imposes reciprocal contractual obligations on both the owner and the bidders, including implied duties such as treating bidders fairly and equally.",
+            "It applies only to contracts above $1,000,000 in value.",
+            "It applies only when the owner is a government entity.",
+            "It eliminates the owner's discretion in awarding contracts."
+        ],
+        ans: 0,
+        why: "Contract A creates reciprocal obligations on both sides: the owner is bound by express and implied duties (such as fair and equal treatment), and bidders are bound by their tendered prices and conditions. There is no monetary or sector-based threshold."
+    },
+    {
+        topic: "Bidder Obligations",
+        q: "A bidder who has submitted a compliant bid is, under typical Contract A terms:",
+        opts: [
+            "Free to withdraw the bid at any time without consequence.",
+            "Required to provide additional documentation upon request.",
+            "Bound to the bid for a specified period and obligated to enter Contract B if the bid is accepted.",
+            "Allowed to revise the bid before contract award."
+        ],
+        ans: 2,
+        why: "Once a compliant bid is submitted, the bidder is generally bound by it for the bid validity period and must enter Contract B if the bid is accepted, subject to the express terms of the tender documents."
+    },
+    {
+        topic: "BIDCO Sample Case — Withdrawal",
+        q: "In the BIDCO sample case study, BIDCO submitted a fixed-price bid of $6,000,000 with a $100,000 tender deposit, then discovered a $1,000,000 clerical error within five minutes after the tender deadline. Was BIDCO entitled to withdraw its bid?",
+        opts: [
+            "No, because Contract A was formed upon submission of the compliant bid, and Ron Engineering establishes that clerical mistakes do not permit withdrawal.",
+            "Yes, because the $1,000,000 error was material.",
+            "Yes, because the error was discovered promptly.",
+            "Yes, because the engineering firm had not yet awarded the contract."
+        ],
+        ans: 0,
+        why: "Following Ron Engineering, Contract A was formed when the compliant bid was submitted, accepting the engineering firm's offer to receive bids. The clerical error did not permit BIDCO to withdraw, even though it was identified within five minutes."
+    },
+    {
+        topic: "BIDCO Sample Case — Deposit",
+        q: "In the BIDCO sample case, was the engineering firm entitled to retain the $100,000 tender deposit?",
+        opts: [
+            "No, because tender deposits are limited to actual damages.",
+            "Yes, because the express provisions of the tender documents (which define Contract A) entitled the firm to retain the deposit if the successful bidder did not execute Contract B.",
+            "Yes, but only up to the firm's actual losses.",
+            "No, because BIDCO did not act in bad faith."
+        ],
+        ans: 1,
+        why: "The tender documents (which define the terms of Contract A under Ron Engineering) expressly provided that the engineering firm could retain the deposit if the bidder failed to execute the contract. The firm was therefore entitled to keep the $100,000."
+    },
+    {
+        topic: "Privilege Clause — Limits",
+        q: "A privilege clause stating that \"the lowest or any tender will not necessarily be accepted\" provides:",
+        opts: [
+            "Discretion not to accept the lowest bid, but does not authorize undisclosed conditions or override the duty to treat bidders fairly",
+            "The right to negotiate freely with any bidder at any time",
+            "Immunity from claims by unsuccessful bidders",
+            "Absolute discretion to ignore any term of the tender documents"
+        ],
+        ans: 0,
+        why: "As confirmed in Chinook Aggregates and reinforced in Martel Building, a privilege clause provides only limited discretion. It does not allow undisclosed conditions or excuse breach of implied duties such as fairness and equality."
+    },
+    {
+        topic: "Tectonic — Damages Awarded",
+        q: "In Tectonic Infrastructure, the consulting engineer was held responsible for damages and costs totalling approximately:",
+        opts: [
+            "$554,000 in damages plus an additional $107,000 in costs",
+            "$50,000 in damages plus a public reprimand",
+            "$1,000,000 in damages",
+            "$107,000 in damages and $554,000 in costs"
+        ],
+        ans: 0,
+        why: "The court awarded $554,000 in damages (representing the lost profit Tectonic Infrastructure would have earned had it been awarded Contract B) and an additional $107,000 in costs. The consulting engineering firm was required to indemnify its client owner for both."
+    },
+    {
+        topic: "Implied Obligations",
+        q: "One of the implied obligations courts have found in Contract A is the duty to:",
+        opts: [
+            "Pay all tender preparation costs of unsuccessful bidders",
+            "Accept only a compliant bid",
+            "Disclose all internal cost estimates to bidders",
+            "Always award the contract to the lowest bidder regardless of compliance"
+        ],
+        ans: 1,
+        why: "Implied obligations under Contract A include the duty to accept only a compliant bid, and the duty to treat all bidders fairly and equally. These implied terms are confirmed in Tectonic Infrastructure and M.J.B. Enterprises."
+    },
+    {
+        topic: "Engineer's Duty of Care",
+        q: "A consulting engineer who drafts tender documents and recommends contract awards owes a duty of care to:",
+        opts: [
+            "The general public only",
+            "No one — the engineer is merely an advisor",
+            "The owner who engages the engineer; failure to meet the standard can lead to indemnification of the owner for losses to bidders",
+            "The bidders only"
+        ],
+        ans: 2,
+        why: "As shown in Tectonic Infrastructure and Stanco Projects, the engineer owes a duty of care to the owner who engages it. Negligent recommendations leading to breach of Contract A can result in the engineer being required to indemnify the owner for damages and costs."
+    },
+    {
+        topic: "Significance of Contract A",
+        q: "The Contract A / Contract B framework was characterized by the chapter as:",
+        opts: [
+            "A relatively obscure rule with limited application",
+            "A discretionary doctrine applicable only at the owner's choice",
+            "A federal statute codified after Ron Engineering",
+            "A landmark and historically controversial principle that has generated extensive subsequent litigation"
+        ],
+        ans: 3,
+        why: "The chapter emphasizes that the Contract A principle confirmed in Ron Engineering was very significant and at the time very controversial, and that it has resulted in extensive subsequent litigation in Canada."
+    },
+    {
+        topic: "Fair Treatment in Practice",
+        q: "Which of the following actions by an owner is most likely to breach Contract A's implied duty to treat bidders fairly and equally?",
+        opts: [
+            "Following the privilege clause to reject all bids when none meet budget",
+            "Disclosing in the tender call that local bidders will receive a 10 percent preference",
+            "Awarding the contract to the lowest compliant bidder",
+            "Granting one bidder additional opportunities to negotiate that were not available to others, where such negotiation was not expressly permitted in the tender documents"
+        ],
+        ans: 3,
+        why: "Granting selective opportunities to negotiate that are not expressly authorized in the tender documents undermines the implied duty of fairness. By contrast, in Double N Earthmovers, an express provision allowing such negotiation was held to remove the breach."
+    },
+    {
+        topic: "Stanco — Underlying Defect",
+        q: "In Stanco Projects, what underlying problem with the tender documents triggered the engineer's improper post-tender conduct?",
+        opts: [
+            "The engineer omitted the privilege clause.",
+            "The tender documents over-specified the scope of work.",
+            "The tender documents required excessive bid bonds.",
+            "The tender documents did not provide sufficient pricing information for two types of water reservoirs and were therefore defective."
+        ],
+        ans: 3,
+        why: "The Stanco Projects tender documents were defective because they did not call for the level of pricing information needed for two types of water reservoirs. The engineer's subsequent attempts to obtain new prices and re-bid the work amounted to bid manipulation in breach of Contract A."
+    },
+    {
+        topic: "Ethics of Bid Shopping",
+        q: "The chapter states that bid shopping has \"long been regarded by many as\":",
+        opts: [
+            "A standard industry practice",
+            "Permissible if disclosed in advance",
+            "An efficient negotiation technique",
+            "Unethical, even described in case law as a \"nefarious\" practice"
+        ],
+        ans: 3,
+        why: "The chapter notes bid shopping has long been regarded as unethical and has even been described in case law as a \"nefarious\" practice. It is incompatible with the Contract A tendering process and the implied duty of fair treatment."
+    },
+    {
+        topic: "Mawson Gage — Cause of Action",
+        q: "According to Mawson Gage, the legal basis for the subcontractor's recovery against the owner was:",
+        opts: [
+            "The tort of negligent misrepresentation",
+            "Unjust enrichment alone, without any tort",
+            "Strict liability for defective specifications",
+            "Breach of contract"
+        ],
+        ans: 0,
+        why: "The subcontractor sued the owner in tort for negligent misrepresentation, recovering losses caused by the missing specification pages. The court noted that otherwise the owner would have been unjustly enriched."
+    },
+    {
+        topic: "Clerical Mistakes — Effect",
+        q: "A bidder's clerical mistake in its tender:",
+        opts: [
+            "Permits withdrawal only if discovered before bid closing",
+            "Generally does not permit withdrawal once the bid has been submitted, because Contract A binds the bidder to the tender terms",
+            "Voids Contract A automatically",
+            "Always permits withdrawal under Contract A"
+        ],
+        ans: 1,
+        why: "As shown in Ron Engineering and the BIDCO sample case, a clerical mistake does not generally permit withdrawal once a compliant bid has been submitted. Contract A binds the bidder to the tender; bidders should therefore review submissions carefully before the deadline."
+    },
+    {
+        topic: "Engineer Reviewing Tenders",
+        q: "An engineer reviewing tenders for an owner discovers that the apparent lowest bid contains uncalled-for additions and ambiguous price language. Based on Tectonic Infrastructure, the engineer should:",
+        opts: [
+            "Identify the bid as non-compliant and recommend accordingly; if doubt remains, recommend obtaining experienced legal advice.",
+            "Recommend acceptance to avoid retendering costs.",
+            "Treat the bid as compliant if the additions appear minor.",
+            "Allow the bidder to revise the language after opening."
+        ],
+        ans: 0,
+        why: "Tectonic Infrastructure imposed liability on the engineer precisely because it failed to flag the bid as non-compliant. Where uncalled-for additions or ambiguity exist, the engineer should identify the bid as non-compliant and seek legal advice if any doubt remains."
+    },
+    {
+        topic: "Status of Tendering Litigation",
+        q: "Which statement best reflects the contemporary status of tendering litigation in Canada, as described in the chapter?",
+        opts: [
+            "It is rare and largely settled by Ron Engineering.",
+            "It is restricted to government contracts.",
+            "It has been largely replaced by arbitration.",
+            "It is very prevalent, with bid protests and Contract A claims continuing to develop."
+        ],
+        ans: 3,
+        why: "Bid protests have become very common in Canadian construction. The Contract A concept has provided opportunities for creative challenges, and tendering litigation continues to develop, underscoring the need for current legal advice."
+    },
+    {
+        topic: "Double N vs Stanco",
+        q: "Which of the following accurately distinguishes Double N Earthmovers from Stanco Projects regarding post-tender negotiations?",
+        opts: [
+            "Both cases held that no post-tender negotiation breaches Contract A.",
+            "In Double N Earthmovers, the tender documents expressly authorized post-tender negotiation with the lowest evaluated tenderer; in Stanco Projects, no such express authority existed and the post-tender conduct amounted to bid manipulation.",
+            "Double N Earthmovers permitted post-tender negotiation only because Stanco Projects was decided differently.",
+            "Both cases held that all post-tender negotiation breaches Contract A."
+        ],
+        ans: 1,
+        why: "The cases turn on the express terms of the tender documents. In Double N Earthmovers, post-tender negotiation was expressly contemplated. In Stanco Projects, no such express provision existed and the conduct breached the implied duty of fairness."
+    },
+    {
+        topic: "Westgate — Implication for Subs",
+        q: "Westgate Mechanical illustrates that a subcontractor whose price was used by a general contractor in its tender:",
+        opts: [
+            "Always has an enforceable claim against the owner",
+            "Is automatically protected against later contract changes between the owner and general contractor",
+            "May lose its remedy if the owner and general contractor renegotiate terms in a way that amounts to a counter-offer releasing the original commitment",
+            "Is bound to perform regardless of any subsequent changes"
+        ],
+        ans: 2,
+        why: "In Westgate, post-tender renegotiations between the owner and general contractor produced different price and completion terms. The court held this constituted a counter-offer, releasing the general contractor from its original commitment to the subcontractor."
+    },
+    {
+        topic: "Drafting — Best Practice",
+        q: "An owner's tender documents permit the deletion of items but require disclosure of any preferences applied. Based on the principles in Ben Bruinsma and Chinook Aggregates, this drafting approach:",
+        opts: [
+            "Is inappropriate because it undermines the Contract A concept",
+            "Is unenforceable because privilege clauses cannot include such powers",
+            "Is generally a sound approach: it gives the owner flexibility while preserving fair and equal treatment of bidders through disclosure",
+            "Will always result in inflated bid prices"
+        ],
+        ans: 2,
+        why: "Drafting express rights to delete items (avoiding the Ben Bruinsma problem) and disclosing any preferences (avoiding the Chinook Aggregates problem) gives the owner flexibility while honouring the implied duty of fairness. The provisions must remain reasonable in the circumstances."
+    },
+    {
+        topic: "Engineer's Tender Stage Duties",
+        q: "Which of the following best summarizes the consulting engineer's responsibilities at the tender evaluation stage in Ontario?",
+        opts: [
+            "Avoid involvement in bid analysis to minimize liability.",
+            "Recommend the lowest priced bid regardless of compliance.",
+            "Carefully analyze bids for compliance, treat all bidders fairly and equally, recommend obtaining legal advice when doubts arise, and avoid any conduct amounting to bid shopping or manipulation.",
+            "Defer all decisions to the owner without making any recommendation."
+        ],
+        ans: 2,
+        why: "The body of case law (Tectonic Infrastructure, Stanco Projects, M.J.B. Enterprises, Martel Building) confirms that engineers must analyze bids closely for compliance, treat bidders fairly and equally, recommend legal advice when doubts arise, and avoid bid shopping or manipulation. Failure to do so can result in significant indemnification liability."
+    }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_ch16_quiz_state_v1';
+const PASS_THRESHOLD = 65;
+
+let state = {
+    mode: 'practice',
+    currentIdx: 0,
+    answers: new Array(QUESTIONS.length).fill(null),
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    order: QUESTIONS.map((_, i) => i),
+    showResults: false
+};
+
+function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.answers) && parsed.answers.length === QUESTIONS.length) {
+                state = { ...state, ...parsed };
+            }
+        }
+    } catch (e) {}
+}
+
+/* ============================================================
+   FX CANVAS — fireworks, golden showers, stars, particles
+   ============================================================ */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function sizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+sizeCanvas();
+window.addEventListener('resize', sizeCanvas);
+
+class Particle {
+    constructor(x, y, opts = {}) {
+        this.x = x; this.y = y;
+        this.vx = opts.vx ?? (Math.random() - 0.5) * 8;
+        this.vy = opts.vy ?? (Math.random() - 0.5) * 8 - 2;
+        this.life = opts.life ?? 60;
+        this.maxLife = this.life;
+        this.color = opts.color ?? '#f4d160';
+        this.size = opts.size ?? Math.random() * 4 + 2;
+        this.gravity = opts.gravity ?? 0.15;
+        this.shape = opts.shape ?? 'circle';
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotSpeed = (Math.random() - 0.5) * 0.3;
+        this.fade = opts.fade ?? true;
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.gravity;
+        this.vx *= 0.99;
+        this.life--;
+        this.rotation += this.rotSpeed;
+    }
+    draw(ctx) {
+        const alpha = this.fade ? Math.max(0, this.life / this.maxLife) : 1;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = this.color;
+        if (this.shape === 'star') {
+            drawStar(ctx, 0, 0, 5, this.size, this.size / 2);
+        } else if (this.shape === 'square') {
+            ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
+        } else if (this.shape === 'sparkle') {
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+}
+
+function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+    let rot = Math.PI / 2 * 3;
+    let x = cx, y = cy;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y); rot += step;
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y); rot += step;
+    }
+    ctx.lineTo(cx, cy - outerRadius);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function fxLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.life > 0 && p.y < canvas.height + 100);
+    particles.forEach(p => { p.update(); p.draw(ctx); });
+    requestAnimationFrame(fxLoop);
+}
+fxLoop();
+
+const GOLDS = ['#d4af37', '#f4d160', '#e8c468', '#ffd700', '#ffed4e', '#fff8c5'];
+const FIREWORK_COLORS = ['#f4d160', '#ff6b9d', '#4ade80', '#60a5fa', '#a78bfa', '#fbbf24', '#f87171'];
+
+function fxGoldenShower() {
+    // Cascading shower of gold sparkles from top
+    for (let i = 0; i < 60; i++) {
+        setTimeout(() => {
+            particles.push(new Particle(
+                Math.random() * window.innerWidth,
+                -20,
+                {
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: Math.random() * 3 + 2,
+                    color: GOLDS[Math.floor(Math.random() * GOLDS.length)],
+                    size: Math.random() * 5 + 3,
+                    life: 120,
+                    gravity: 0.1,
+                    shape: Math.random() > 0.6 ? 'star' : 'sparkle'
+                }
+            ));
+        }, i * 25);
+    }
+}
+
+function fxFirework(x, y) {
+    const color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+    const count = 40;
+    for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count;
+        const speed = Math.random() * 6 + 4;
+        particles.push(new Particle(x, y, {
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            color: color,
+            size: Math.random() * 3 + 2,
+            life: 60,
+            gravity: 0.12,
+            shape: 'sparkle'
+        }));
+    }
+}
+
+function fxFireworkBurst() {
+    // Multiple fireworks across screen
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const x = Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1;
+            const y = Math.random() * window.innerHeight * 0.5 + 50;
+            fxFirework(x, y);
+        }, i * 200);
+    }
+}
+
+function fxStarBurst(x, y) {
+    for (let i = 0; i < 25; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 7 + 3;
+        particles.push(new Particle(x, y, {
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 3,
+            color: GOLDS[Math.floor(Math.random() * GOLDS.length)],
+            size: Math.random() * 6 + 4,
+            life: 80,
+            gravity: 0.18,
+            shape: 'star'
+        }));
+    }
+}
+
+function fxConfettiSide(side) {
+    // Confetti from sides shooting inward
+    const x = side === 'left' ? 0 : window.innerWidth;
+    const dirX = side === 'left' ? 1 : -1;
+    for (let i = 0; i < 50; i++) {
+        particles.push(new Particle(x, window.innerHeight * (0.5 + Math.random() * 0.3), {
+            vx: dirX * (Math.random() * 8 + 6),
+            vy: -(Math.random() * 10 + 4),
+            color: FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)],
+            size: Math.random() * 4 + 3,
+            life: 100,
+            gravity: 0.2,
+            shape: Math.random() > 0.5 ? 'square' : 'circle'
+        }));
+    }
+}
+
+function celebrate(streak) {
+    // Layered celebration based on streak
+    const card = document.getElementById('quizArea').querySelector('.card');
+    const rect = card ? card.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0, height: 0 };
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    // Always: small sparkle burst
+    fxStarBurst(cx, cy);
+
+    // Streak-based escalation
+    if (streak >= 3 && streak < 5) {
+        fxGoldenShower();
+    }
+    if (streak >= 5 && streak < 10) {
+        fxGoldenShower();
+        fxFireworkBurst();
+    }
+    if (streak >= 10) {
+        fxGoldenShower();
+        fxFireworkBurst();
+        fxConfettiSide('left');
+        fxConfettiSide('right');
+    }
+
+    // Streak banner at milestones
+    if (streak === 3) showStreakBanner('🔥 3 STREAK!');
+    else if (streak === 5) showStreakBanner('⚡ 5 IN A ROW!');
+    else if (streak === 7) showStreakBanner('🌟 ON FIRE!');
+    else if (streak === 10) showStreakBanner('💎 PERFECT 10!');
+    else if (streak === 15) showStreakBanner('🏆 UNSTOPPABLE!');
+    else if (streak === 20) showStreakBanner('👑 LEGENDARY!');
+    else if (streak >= 25 && streak % 5 === 0) showStreakBanner(`🚀 ${streak} STRAIGHT!`);
+}
+
+function showStreakBanner(text) {
+    const div = document.createElement('div');
+    div.className = 'streak-popup';
+    div.textContent = text;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 1700);
+}
+
+function showPointsPopup(points, x, y) {
+    const div = document.createElement('div');
+    div.className = 'popup';
+    div.textContent = `+${points}`;
+    div.style.left = x + 'px';
+    div.style.top = y + 'px';
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 1500);
+}
+
+/* ============================================================
+   QUIZ LOGIC
+   ============================================================ */
+function getCurrentQ() {
+    return QUESTIONS[state.order[state.currentIdx]];
+}
+function getCurrentAnswerIdx() {
+    return state.order[state.currentIdx];
+}
+
+function renderQuestion() {
+    if (state.showResults) { renderResults(); return; }
+    document.getElementById('quizArea').classList.remove('hidden');
+    document.getElementById('resultsArea').classList.add('hidden');
+
+    const q = getCurrentQ();
+    const realIdx = getCurrentAnswerIdx();
+    const userAnswer = state.answers[realIdx];
+
+    document.getElementById('qNum').textContent = `Question ${state.currentIdx + 1} of ${QUESTIONS.length}`;
+    document.getElementById('qTopic').textContent = q.topic;
+    document.getElementById('qText').textContent = q.q;
+
+    const optsContainer = document.getElementById('qOptions');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.innerHTML = `<span class="option-letter">${'ABCD'[i]}</span><span>${optText}</span>`;
+
+        if (userAnswer !== null) {
+            btn.disabled = true;
+            if (state.mode === 'practice') {
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === userAnswer) btn.classList.add('incorrect');
+                else btn.classList.add('dim');
+            } else {
+                // Exam mode — show only selection, not correctness
+                if (i === userAnswer) btn.classList.add('selected');
+            }
+        }
+        btn.onclick = () => handleAnswer(i, btn);
+        optsContainer.appendChild(btn);
+    });
+
+    // Rationale
+    const rationale = document.getElementById('rationale');
+    if (userAnswer !== null && state.mode === 'practice') {
+        rationale.classList.remove('hidden');
+        document.getElementById('rationaleText').textContent = q.why;
+    } else {
+        rationale.classList.add('hidden');
+    }
+
+    updateUI();
+}
+
+function handleAnswer(choice, btn) {
+    const realIdx = getCurrentAnswerIdx();
+    if (state.answers[realIdx] !== null) return;
+
+    state.answers[realIdx] = choice;
+    const q = getCurrentQ();
+    const correct = choice === q.ans;
+
+    if (correct) {
+        state.streak++;
+        if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+        // Points scale with streak
+        const basePoints = 100;
+        const streakBonus = Math.min(state.streak - 1, 10) * 25;
+        const points = basePoints + streakBonus;
+        state.score += points;
+
+        if (state.mode === 'practice') {
+            const rect = btn.getBoundingClientRect();
+            showPointsPopup(points, rect.left + rect.width / 2, rect.top);
+            celebrate(state.streak);
+        }
+    } else {
+        state.streak = 0;
+        if (state.mode === 'practice') {
+            // Subtle shake feedback handled by CSS class transitions
+        }
+    }
+
+    saveState();
+    renderQuestion();
+
+    // Auto-advance in exam mode after a beat
+    if (state.mode === 'exam') {
+        setTimeout(() => {
+            if (state.currentIdx < QUESTIONS.length - 1) {
+                state.currentIdx++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }, 250);
+    }
+}
+
+function updateUI() {
+    document.getElementById('statQ').textContent = `${state.currentIdx + 1} / ${QUESTIONS.length}`;
+    document.getElementById('statScore').textContent = state.score.toLocaleString();
+    const correctCount = state.answers.reduce((acc, a, i) => acc + (a === QUESTIONS[i].ans ? 1 : 0), 0);
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statStreak').textContent = state.streak;
+    document.getElementById('statBest').textContent = state.bestStreak;
+
+    const pct = ((state.currentIdx + 1) / QUESTIONS.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    document.getElementById('btnPrev').disabled = state.currentIdx === 0;
+
+    const allAnswered = state.answers.every(a => a !== null);
+    const nextBtn = document.getElementById('btnNext');
+    if (state.currentIdx === QUESTIONS.length - 1) {
+        nextBtn.textContent = allAnswered ? 'Finish Quiz' : 'Finish ▶';
+    } else {
+        nextBtn.textContent = 'Next ▶';
+    }
+
+    renderNavGrid();
+}
+
+function renderNavGrid() {
+    const grid = document.getElementById('navGrid');
+    grid.innerHTML = '';
+    state.order.forEach((realIdx, displayIdx) => {
+        const cell = document.createElement('button');
+        cell.className = 'nav-cell';
+        cell.textContent = displayIdx + 1;
+        if (displayIdx === state.currentIdx) cell.classList.add('current');
+        else if (state.answers[realIdx] !== null) {
+            if (state.mode === 'practice') {
+                if (state.answers[realIdx] === QUESTIONS[realIdx].ans) cell.classList.add('correct');
+                else cell.classList.add('incorrect');
+            } else {
+                cell.classList.add('answered');
+            }
+        }
+        cell.onclick = () => { state.currentIdx = displayIdx; renderQuestion(); saveState(); };
+        grid.appendChild(cell);
+    });
+}
+
+function next() {
+    if (state.currentIdx < QUESTIONS.length - 1) {
+        state.currentIdx++;
+        renderQuestion();
+        saveState();
+    } else {
+        finishQuiz();
+    }
+}
+function prev() {
+    if (state.currentIdx > 0) {
+        state.currentIdx--;
+        renderQuestion();
+        saveState();
+    }
+}
+
+function finishQuiz() {
+    state.showResults = true;
+    saveState();
+    renderResults();
+}
+
+function renderResults() {
+    document.getElementById('quizArea').classList.add('hidden');
+    document.getElementById('resultsArea').classList.remove('hidden');
+
+    const correctCount = state.answers.reduce((acc, a, i) => acc + (a === QUESTIONS[i].ans ? 1 : 0), 0);
+    const incorrectCount = state.answers.filter(a => a !== null).length - correctCount;
+    const pct = Math.round((correctCount / QUESTIONS.length) * 100);
+
+    document.getElementById('finalPct').textContent = pct + '%';
+    document.getElementById('finalFraction').textContent = `${correctCount} / ${QUESTIONS.length} correct`;
+
+    const verdict = document.getElementById('verdict');
+    if (pct >= PASS_THRESHOLD) {
+        verdict.textContent = `Pass · ${PASS_THRESHOLD}%+ Threshold`;
+        verdict.className = 'verdict pass';
+        // Big celebration on pass
+        setTimeout(() => {
+            fxGoldenShower();
+            fxFireworkBurst();
+            setTimeout(() => fxConfettiSide('left'), 400);
+            setTimeout(() => fxConfettiSide('right'), 600);
+        }, 200);
+    } else {
+        verdict.textContent = `Below ${PASS_THRESHOLD}% · Review & Retry`;
+        verdict.className = 'verdict fail';
+    }
+
+    document.getElementById('rsCorrect').textContent = correctCount;
+    document.getElementById('rsIncorrect').textContent = incorrectCount;
+    document.getElementById('rsBest').textContent = state.bestStreak;
+    document.getElementById('rsScore').textContent = state.score.toLocaleString();
+}
+
+function shuffleOrder() {
+    const arr = [...state.order];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    state.order = arr;
+    state.currentIdx = 0;
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    state.score = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    state.showResults = false;
+    saveState();
+    renderQuestion();
+    showStreakBanner('Shuffled!');
+}
+
+function resetQuiz() {
+    if (!confirm('Reset the entire quiz? Your answers, score, and streaks will all be cleared.')) return;
+    state = {
+        mode: state.mode,
+        currentIdx: 0,
+        answers: new Array(QUESTIONS.length).fill(null),
+        score: 0,
+        streak: 0,
+        bestStreak: 0,
+        order: QUESTIONS.map((_, i) => i),
+        showResults: false
+    };
+    saveState();
+    renderQuestion();
+    showStreakBanner('Quiz Reset');
+}
+
+function setMode(mode) {
+    state.mode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    saveState();
+    renderQuestion();
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+document.getElementById('btnNext').onclick = next;
+document.getElementById('btnPrev').onclick = prev;
+document.getElementById('btnReset').onclick = resetQuiz;
+document.getElementById('btnShuffle').onclick = shuffleOrder;
+document.getElementById('btnRetry').onclick = resetQuiz;
+document.getElementById('btnReview').onclick = () => {
+    state.showResults = false;
+    state.currentIdx = 0;
+    saveState();
+    renderQuestion();
+};
+document.querySelectorAll('.mode-btn').forEach(b => {
+    b.onclick = () => setMode(b.dataset.mode);
+});
+
+document.addEventListener('keydown', e => {
+    if (state.showResults) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key >= '1' && e.key <= '4') {
+        const idx = parseInt(e.key) - 1;
+        const realIdx = getCurrentAnswerIdx();
+        if (state.answers[realIdx] === null) {
+            const btns = document.querySelectorAll('.option');
+            if (btns[idx]) btns[idx].click();
+        }
+    } else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'r' || e.key === 'R') {
+        if (e.shiftKey) resetQuiz();
+    } else if (e.key === 's' || e.key === 'S') {
+        if (e.shiftKey) shuffleOrder();
+    }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadState();
+// Sync mode button
+document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === state.mode);
+});
+renderQuestion();
+</script>
+</body>
+</html>

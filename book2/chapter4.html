@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice — Tort Liability (BOOK1, Chapter 4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a1428;
+    --bg: #0f1d36;
+    --bg-soft: #152544;
+    --bg-card: #1a2c4f;
+    --bg-elev: #20355d;
+    --ink: #e8edf5;
+    --ink-soft: #b6c2d6;
+    --ink-dim: #8294b3;
+    --line: rgba(212, 175, 55, 0.18);
+    --line-strong: rgba(212, 175, 55, 0.45);
+    --gold: #d4af37;
+    --gold-bright: #f0c95a;
+    --gold-soft: #b8932d;
+    --green: #4ade80;
+    --green-deep: #16a34a;
+    --red: #f87171;
+    --red-deep: #b91c1c;
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg-deep);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(212, 175, 55, 0.08), transparent 55%),
+      radial-gradient(ellipse at 88% 100%, rgba(212, 175, 55, 0.05), transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 56px 32px 120px; position: relative; z-index: 1; }
+
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    text-align: center;
+    padding: 36px 28px 44px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .hero::before, .hero::after {
+    content: '◆';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+    top: -7px;
+    background: var(--bg-deep);
+    padding: 0 12px;
+  }
+  .hero::before { left: 50%; transform: translateX(-50%); }
+  .hero::after { display: none; }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(34px, 5vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+  .subtitle {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 17px;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .meta {
+    margin-top: 22px;
+    font-size: 12px;
+    color: var(--ink-dim);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .meta span { color: var(--gold); margin: 0 8px; }
+
+  /* ── Control bar ────────────────────────────────────── */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .btn {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    padding: 9px 18px;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+  }
+  .btn:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg-deep);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .btn-primary:hover {
+    background: var(--gold-bright);
+    color: var(--bg-deep);
+  }
+  .btn.is-active {
+    background: var(--gold);
+    color: var(--bg-deep);
+    border-color: var(--gold);
+  }
+  .btn-danger {
+    border-color: rgba(248, 113, 113, 0.4);
+    color: var(--red);
+  }
+  .btn-danger:hover {
+    background: rgba(248, 113, 113, 0.08);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* ── Score Bar ──────────────────────────────────────── */
+  .scorebar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: linear-gradient(to bottom, var(--bg-deep) 80%, rgba(10, 20, 40, 0));
+    padding: 14px 0 22px;
+    margin-bottom: 28px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 12px 8px;
+    text-align: center;
+    border-radius: 2px;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .stat-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat.gold .stat-value, .stat.points .stat-value { color: var(--gold); }
+  .stat.green .stat-value { color: var(--green); }
+  .stat.red .stat-value { color: var(--red); }
+  .stat.streak .stat-value { color: var(--gold-bright); }
+  .stat.streak.fire {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), 0 0 18px rgba(240, 201, 90, 0.35);
+    transform: translateY(-2px);
+  }
+  .stat.points.bump { animation: stat-bump 0.5s ease; }
+  @keyframes stat-bump {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.12); border-color: var(--gold); }
+    100% { transform: scale(1); }
+  }
+
+  .progress {
+    height: 4px;
+    background: var(--bg-soft);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    width: 0%;
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ── Navigator dots ─────────────────────────────────── */
+  .navigator {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 36px;
+    padding: 18px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .nav-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s ease;
+  }
+  .nav-dot:hover { transform: scale(1.15); border-color: var(--gold); color: var(--gold); }
+  .nav-dot.correct { background: var(--green-deep); border-color: var(--green); color: white; }
+  .nav-dot.wrong { background: var(--red-deep); border-color: var(--red); color: white; }
+  .nav-dot.current { box-shadow: 0 0 0 2px var(--gold); transform: scale(1.1); }
+
+  /* ── Question card ──────────────────────────────────── */
+  .qcard {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 36px 38px;
+    margin-bottom: 28px;
+    position: relative;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .qcard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+  }
+
+  .qhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dotted var(--line-strong);
+  }
+  .qnum {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .qnum em {
+    color: var(--ink-dim);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+  }
+  .qtopic {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--ink-dim);
+    font-family: 'Lora', serif;
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .qtext {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin-bottom: 26px;
+  }
+
+  .options { list-style: none; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    margin-bottom: 9px;
+    background: var(--bg-soft);
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+  .option:hover {
+    background: var(--bg-elev);
+    border-color: var(--line-strong);
+    transform: translateX(2px);
+  }
+  .option-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gold);
+    width: 22px;
+    flex-shrink: 0;
+    line-height: 1.5;
+  }
+  .option-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .option.correct {
+    background: rgba(74, 222, 128, 0.10);
+    border-color: var(--green);
+  }
+  .option.correct .option-letter { color: var(--green); }
+  .option.wrong {
+    background: rgba(248, 113, 113, 0.10);
+    border-color: var(--red);
+  }
+  .option.wrong .option-letter { color: var(--red); }
+  .option.disabled { cursor: default; pointer-events: none; }
+  .option.disabled:hover { transform: none; background: var(--bg-soft); }
+  .option.disabled.correct { background: rgba(74, 222, 128, 0.10); }
+  .option.disabled.wrong { background: rgba(248, 113, 113, 0.10); }
+
+  .explain {
+    margin-top: 22px;
+    padding: 22px 24px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(212, 175, 55, 0.02));
+    border-left: 2px solid var(--gold);
+    font-family: 'Lora', serif;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    display: none;
+    border-radius: 0 2px 2px 0;
+  }
+  .explain.show { display: block; animation: fadein 0.45s ease; }
+  .explain-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .explain-label.wrong-label { color: var(--red); }
+  .explain-label.correct-label { color: var(--green); }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Result Modal ───────────────────────────────────── */
+  .result-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 20, 40, 0.92);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  .result-overlay.show { display: flex; animation: fadein 0.4s ease; }
+  .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line-strong);
+    padding: 56px 48px;
+    max-width: 540px;
+    width: 100%;
+    text-align: center;
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  }
+  .result-card::before {
+    content: '◆ ◆ ◆';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+  }
+  .result-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    margin-top: 22px;
+  }
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+  .result-title em { font-style: italic; color: var(--gold); }
+  .result-percent {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 90px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--gold);
+    margin: 24px 0 14px;
+  }
+  .result-percent.fail { color: var(--red); }
+  .result-detail {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+  .result-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .result-stats .rs-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .result-stats .rs-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Celebrations ───────────────────────────────────── */
+  .celeb-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 150;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+  .confetti {
+    width: 8px;
+    height: 14px;
+    border-radius: 1px;
+    animation: confetti-fall 1.8s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx, 0), var(--dy, 600px)) rotate(var(--rot, 540deg)); opacity: 0; }
+  }
+  .gold-flake {
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, var(--gold-bright), var(--gold));
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--gold);
+    animation: flake-fall 2.2s ease-in forwards;
+  }
+  @keyframes flake-fall {
+    0%   { transform: translate(0,0); opacity: 1; }
+    100% { transform: translate(var(--dx, 0), var(--dy, 700px)); opacity: 0; }
+  }
+  .star-burst {
+    color: var(--gold-bright);
+    font-size: 22px;
+    text-shadow: 0 0 8px var(--gold);
+    animation: star-pop 0.9s ease forwards;
+  }
+  @keyframes star-pop {
+    0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+    50%  { transform: scale(1.2) rotate(180deg); opacity: 1; }
+    100% { transform: scale(0.5) translate(var(--dx, 0), var(--dy, -80px)) rotate(360deg); opacity: 0; }
+  }
+  .float-points {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 12px rgba(240, 201, 90, 0.6);
+    animation: float-up 1.4s ease-out forwards;
+  }
+  @keyframes float-up {
+    0%   { transform: translateY(0); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateY(-90px); opacity: 0; }
+  }
+  .face-pop {
+    font-size: 56px;
+    animation: face-bounce 1.2s ease forwards;
+  }
+  @keyframes face-bounce {
+    0%   { transform: scale(0); opacity: 0; }
+    30%  { transform: scale(1.3); opacity: 1; }
+    50%  { transform: scale(0.9); }
+    70%  { transform: scale(1.1); }
+    100% { transform: scale(1) translateY(-40px); opacity: 0; }
+  }
+  .firework {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: firework-burst 1.4s ease-out forwards;
+  }
+  @keyframes firework-burst {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; box-shadow: 0 0 8px currentColor; }
+    100% { transform: translate(var(--dx, 0), var(--dy, 0)) scale(0); opacity: 0; }
+  }
+
+  /* ── Footer ─────────────────────────────────────────── */
+  footer {
+    margin-top: 80px;
+    text-align: center;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.12em;
+    line-height: 2;
+  }
+  footer span { color: var(--gold); }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .wrap { padding: 32px 18px 80px; }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .qcard { padding: 24px 20px; }
+    .qhead { flex-direction: column; gap: 6px; }
+    .qtopic { text-align: left; max-width: 100%; }
+    .result-card { padding: 40px 24px; }
+    .result-percent { font-size: 70px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ─── Hero ─────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="eyebrow">National Professional Practice Examination</div>
+    <h1>Tort <em>Liability</em></h1>
+    <p class="subtitle">A practice exam on the duty of care, the standard of reasonableness, and the body of Canadian tort decisions every engineer is expected to know.</p>
+    <p class="meta"><span>BOOK 1</span> Chapter 4 <span>·</span> 50 Questions <span>·</span> Pass: 65%</p>
+  </header>
+
+  <!-- ─── Mode controls ────────────────────────────────── -->
+  <div class="controls">
+    <button id="btn-practice" class="btn is-active">Practice Mode</button>
+    <button id="btn-exam" class="btn">Exam Mode</button>
+    <button id="btn-shuffle" class="btn">Shuffle</button>
+    <button id="btn-reset" class="btn btn-danger">Reset</button>
+  </div>
+
+  <!-- ─── Score Bar ───────────────────────────────────── -->
+  <div class="scorebar">
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Answered</div><div class="stat-value" id="s-answered">0</div></div>
+      <div class="stat green"><div class="stat-label">Correct</div><div class="stat-value" id="s-correct">0</div></div>
+      <div class="stat red"><div class="stat-label">Wrong</div><div class="stat-value" id="s-wrong">0</div></div>
+      <div class="stat gold"><div class="stat-label">Score</div><div class="stat-value" id="s-score">—</div></div>
+      <div class="stat points" id="stat-points"><div class="stat-label">Points</div><div class="stat-value" id="s-points">0</div></div>
+      <div class="stat streak" id="stat-streak"><div class="stat-label">Streak</div><div class="stat-value" id="s-streak">0</div></div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="progressfill"></div></div>
+  </div>
+
+  <!-- ─── Navigator ───────────────────────────────────── -->
+  <div class="navigator" id="navigator"></div>
+
+  <!-- ─── Questions ───────────────────────────────────── -->
+  <div id="questions"></div>
+
+</div>
+
+<!-- ─── Result Modal ─────────────────────────────────── -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-card">
+    <div class="result-eyebrow" id="result-eyebrow">Quiz Complete</div>
+    <h2 class="result-title" id="result-title">Well <em>done</em></h2>
+    <div class="result-percent" id="result-percent">0%</div>
+    <p class="result-detail" id="result-detail">You answered the questions.</p>
+    <div class="result-stats">
+      <div><div class="rs-label">Correct</div><div class="rs-value" id="r-correct">0/50</div></div>
+      <div><div class="rs-label">Points</div><div class="rs-value" id="r-points">0</div></div>
+      <div><div class="rs-label">Best Streak</div><div class="rs-value" id="r-streak">0</div></div>
+    </div>
+    <div class="result-actions">
+      <button class="btn btn-primary" id="btn-restart">Restart Quiz</button>
+      <button class="btn" id="btn-review">Review Answers</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Celebration FX layer ─────────────────────────── -->
+<div class="celeb-layer" id="celeb"></div>
+
+<footer>
+  <div>NPPE Practice · <span>Chapter 4 — Tort Liability</span></div>
+  <div>Source: <em>Law for Professional Engineers — Canadian and Global Insights</em></div>
+  <div>For self-study purposes only · Not a substitute for the official NPPE</div>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   QUESTION BANK — 50 NPPE-style questions on Chapter 4
+   ════════════════════════════════════════════════════════ */
+const QUESTIONS = [
+  {
+    topic: "Definition of tort",
+    q: "Which of the following best characterizes a tort under Canadian law?",
+    options: [
+      "A breach of contract enforceable only by parties in privity.",
+      "A private or civil wrong or injury that may arise independently of any contract.",
+      "A criminal offence punishable under the Criminal Code of Canada.",
+      "A regulatory infraction under provincial professional engineers' legislation."
+    ],
+    correct: 1,
+    explain: "The chapter defines tort as a private or civil wrong or injury that involves negligence and may arise independently of contract. Privity of contract is not required, distinguishing tort from contract liability, and tort proceedings are civil rather than criminal."
+  },
+  {
+    topic: "Purpose of tort law",
+    q: "What is the fundamental purpose of tort law in Canada?",
+    options: [
+      "To compensate victims of torts.",
+      "To punish wrongdoers in proportion to the harm they have caused.",
+      "To deter future negligent conduct through monetary penalties.",
+      "To enforce the standards of conduct prescribed by the Criminal Code."
+    ],
+    correct: 0,
+    explain: "The chapter is explicit that the fundamental purpose of tort law is to compensate victims. Punishment is not a purpose of tort law — that role belongs to the Criminal Code, with criminal proceedings being independent of civil ones."
+  },
+  {
+    topic: "Three elements of tort",
+    q: "To succeed in a negligence action, the plaintiff must establish on a balance of probabilities that:",
+    options: [
+      "The defendant intended to cause harm and that the plaintiff was injured.",
+      "The defendant breached a contract and the plaintiff suffered economic loss.",
+      "The defendant violated a statute and the plaintiff is a member of the class the statute protects.",
+      "The defendant owed a duty of care, breached that duty, and the breach caused the plaintiff's injury."
+    ],
+    correct: 3,
+    explain: "The three essential elements of a tort action set out in the chapter are: (a) a duty of care owed by the defendant to the plaintiff, (b) a breach of that duty by the defendant's conduct, and (c) the defendant's conduct caused the injury. If any one element fails, the plaintiff loses."
+  },
+  {
+    topic: "Privity of contract",
+    q: "An engineer prepares design drawings under contract with an owner. A contractor relies on those drawings, suffers a loss, and sues the engineer in tort. The engineer argues there is no contract between them. What is the most accurate response?",
+    options: [
+      "The engineer is correct — without privity of contract, no liability of any kind arises.",
+      "The contractor must sue the owner first and recover any shortfall from the engineer.",
+      "Privity of contract is not required for tort liability; liability may arise if a duty of care was owed and breached.",
+      "Tort law applies only to physical injury, never to losses suffered by contractors."
+    ],
+    correct: 2,
+    explain: "Privity of contract is not required for tort liability. Cases such as Trident Construction v. Wardrop and Edgeworth Construction v. N.D. Lea make clear that engineers may owe a duty of care in tort to contractors with whom they have no contractual relationship."
+  },
+  {
+    topic: "Concurrent liability",
+    q: "The concept that a single act may give rise to liability in both tort and contract is known as:",
+    options: [
+      "Vicarious liability.",
+      "Strict liability.",
+      "Concurrent liability in tort and contract.",
+      "Joint and several liability."
+    ],
+    correct: 2,
+    explain: "The chapter notes that tort liability and contract liability can both arise from the same circumstances; this is concurrent liability in tort and contract, a concept endorsed by the Supreme Court of Canada."
+  },
+  {
+    topic: "Insurance — Ontario PEO requirement",
+    q: "In Ontario, an engineer who provides design services to the public and chooses not to carry professional liability insurance must:",
+    options: [
+      "Obtain a written exemption from the Professional Engineers Ontario.",
+      "Disclose the lack of insurance to the client and obtain the client's acknowledgement of that disclosure.",
+      "Provide services only through a corporation with self-insurance arrangements.",
+      "Refrain from sealing any drawings issued for construction."
+    ],
+    correct: 1,
+    explain: "The chapter states that in Ontario, engineers providing design services to the public must obtain appropriate professional liability insurance OR disclose the absence of such insurance to the client, and the client must acknowledge that disclosure."
+  },
+  {
+    topic: "Self-insurance",
+    q: "Why do some Crown agencies and large corporations choose to 'self-insure' rather than purchase professional liability insurance?",
+    options: [
+      "Because tort liability does not apply to government bodies.",
+      "Because insurance companies refuse to write policies for them.",
+      "Because they are exempt from the duty of care that applies to private firms.",
+      "Because they have sufficient internal funds available to compensate tort victims."
+    ],
+    correct: 3,
+    explain: "Self-insurance can suffice provided adequate funds are available to respond to and compensate tort victims. The chapter notes this approach is used by some companies, government departments and Crown agencies — but the underlying duty to compensate is unchanged."
+  },
+  {
+    topic: "Insurance gaps",
+    q: "Even where engineers carry comprehensive professional liability insurance, the chapter cautions that:",
+    options: [
+      "Coverage is rarely needed and is largely a regulatory formality.",
+      "Insurance covers all civil liability but not criminal liability.",
+      "Some risks — such as pollution and nuclear hazards — are commonly excluded and require careful risk planning.",
+      "Coverage automatically extends to all employee engineers regardless of the policy wording."
+    ],
+    correct: 2,
+    explain: "The chapter warns that exclusions in insurance policies, and the lack of available insurance for risks such as pollution and nuclear hazards, must be factored into the engineer's risk assessment and practice planning."
+  },
+  {
+    topic: "Reasonableness standard",
+    q: "How is the standard of 'reasonable care' measured for engineers in tort?",
+    options: [
+      "By the conduct expected of a reasonable engineer of ordinary competence at the time the services were performed.",
+      "By the highest standard achievable in the profession at the time.",
+      "By the conduct an exceptionally skilled engineer would have used.",
+      "By the conduct the engineer subjectively believed was reasonable."
+    ],
+    correct: 0,
+    explain: "Per the chapter and Halsbury's Laws of England, an engineer must use the reasonable care and skill of engineers of ordinary competence, measured against applicable professional standards at the time the services are performed — not against the highest possible standard."
+  },
+  {
+    topic: "Halsbury's Laws — extraordinary skill",
+    q: "According to Halsbury's Laws of England as cited in Dominion Chain v. Eastern Construction, an engineer:",
+    options: [
+      "Must exercise an extraordinary degree of skill at all times.",
+      "Is liable whenever others of greater experience would have used a different method.",
+      "Need not exercise an extraordinary degree of skill — the question is whether there has been such a want of competent care and skill, leading to a bad result, as to amount to negligence.",
+      "Is judged by the most rigorous standard prevailing in the profession internationally."
+    ],
+    correct: 2,
+    explain: "Halsbury's makes clear the architect or engineer 'need not necessarily exercise an extraordinary degree of skill.' The test is whether there was such a want of competent care and skill, leading to a bad result, as to amount to negligence."
+  },
+  {
+    topic: "Negligence vs mistake",
+    q: "In Ramsay and Penno v. The King, what important distinction did the court draw?",
+    options: [
+      "Engineers are strictly liable for any error in design regardless of state of knowledge.",
+      "Engineers are expected to be reasonably competent and prudent in light of scientific knowledge at the time, but are not infallible — not every mistake amounts to negligence.",
+      "An engineering mistake is always negligence if damage results.",
+      "Engineers are absolutely liable for flooding caused by dam failures."
+    ],
+    correct: 1,
+    explain: "Ramsay and Penno held that engineers are expected to be reasonably competent and to exercise reasonable care and prudence in light of the scientific knowledge of the time — but are not infallible, and perfection is not required. The terms 'negligence' and 'mistake' are not synonymous."
+  },
+  {
+    topic: "Section 72 Ontario regulation",
+    q: "Section 72 of the Regulations under the Ontario Professional Engineers Act defines negligence as:",
+    options: [
+      "Any failure to deliver a project on schedule and within budget.",
+      "The intentional disregard of a client's instructions.",
+      "An act or omission in the carrying out of the work of a practitioner that constitutes a failure to maintain the standards that a reasonable and prudent practitioner would maintain in the circumstances.",
+      "Any error in calculation, regardless of consequence."
+    ],
+    correct: 2,
+    explain: "Section 72 codifies negligence as an act or omission that fails to maintain the standards a reasonable and prudent practitioner would maintain in the circumstances. It is also listed among the forms of professional misconduct."
+  },
+  {
+    topic: "Donoghue v. Stevenson",
+    q: "Donoghue v. Stevenson (1932) is foundational because it established that:",
+    options: [
+      "A consumer must be in privity of contract with a manufacturer to recover damages.",
+      "A manufacturer owes a duty of care to the ultimate consumer to ensure the product is free from defects likely to cause injury, even without privity of contract.",
+      "Manufacturers are strictly liable for all defective products without regard to fault.",
+      "Tort liability for products only arises where a written warranty has been issued."
+    ],
+    correct: 1,
+    explain: "The House of Lords held that a manufacturer owes a duty to the ultimate consumer to take reasonable care that the product is free from defects likely to cause injury — extending tort duties beyond contractual privity. The case famously involved a decomposed snail in a bottle of ginger beer."
+  },
+  {
+    topic: "Hedley Byrne",
+    q: "The principal contribution of Hedley Byrne v. Heller (1963) to tort law was:",
+    options: [
+      "It abolished the requirement of privity for product claims.",
+      "It imposed strict liability on professionals.",
+      "It limited tort liability to damages for physical injury or property damage.",
+      "It expanded tort recovery to include pure economic loss arising from advice negligently given, where reliance was reasonable and the adviser knew of the reliance."
+    ],
+    correct: 3,
+    explain: "Hedley Byrne expanded tort recovery to include pure economic loss caused by negligent misrepresentation, where one party relied on another's special skill and judgment and the adviser knew (or ought to have known) of that reliance. Until then, recovery generally required physical damage."
+  },
+  {
+    topic: "Hedley Byrne — disclaimer",
+    q: "Why did the plaintiff in Hedley Byrne ultimately fail to recover even though negligent misrepresentation was established?",
+    options: [
+      "The defendant bank had expressly disclaimed responsibility for the credit advice it provided.",
+      "The court held that bankers owe no duty of care to anyone.",
+      "The plaintiff's losses were too remote.",
+      "The plaintiff did not actually rely on the credit information."
+    ],
+    correct: 0,
+    explain: "The defendant bank's express disclaimer that the advice on creditworthiness was given 'without responsibility' was held by the House of Lords to absolve it from liability. The case nonetheless established the principle that, absent such a disclaimer, liability for negligent misrepresentation could arise."
+  },
+  {
+    topic: "Wolverine Tube — disclaimer",
+    q: "In Wolverine Tube v. Noranda (1994 Ontario), Justice Jennings concluded that the environmental consultant's disclaimer of responsibility to third parties:",
+    options: [
+      "Was unenforceable because the consultant ought to have foreseen reliance by purchasers.",
+      "Was effective to preclude liability to third parties such as Wolverine, who had purchased the property and relied on the report.",
+      "Could be overcome where the third party had not been informed of it.",
+      "Applied only to claims for physical damage, not for economic loss."
+    ],
+    correct: 1,
+    explain: "Justice Jennings found the language of the consultant's disclaimer to be more comprehensive than the one in Hedley Byrne and held it effective to preclude liability to third parties. The Canadian courts continue to recognize a party's right to disclaim a duty of care via clear statements."
+  },
+  {
+    topic: "Trident Construction",
+    q: "In Trident Construction v. W.L. Wardrop, the engineer was held liable to the contractor in tort even though no contract existed between them. The court reasoned that:",
+    options: [
+      "The engineer's seal alone created an implied contract with the contractor.",
+      "Engineers are vicariously liable for any losses suffered by contractors.",
+      "Tort claims may be brought between any parties involved in a construction project regardless of relationship.",
+      "An engineer whose plans the builder is required to follow owes a duty of care to that builder to ensure the plans are workable."
+    ],
+    correct: 3,
+    explain: "The Manitoba Queen's Bench, applying Hedley Byrne, held that an engineer whose design a builder must follow owes a duty of care to that builder to ensure the plans are workable. Breach of that duty exposes the engineer to liability in tort."
+  },
+  {
+    topic: "Brown & Huston — apportionment",
+    q: "In Brown & Huston Ltd. v. City of York, the Ontario court found both the consulting engineers and the contractor at fault. How was responsibility apportioned?",
+    options: [
+      "Engineers 100%, contractor 0%.",
+      "Engineers 50%, contractor 50%.",
+      "Engineers 75%, contractor 25%.",
+      "Engineers 25%, contractor 75%."
+    ],
+    correct: 2,
+    explain: "The court apportioned responsibility 75% against the engineers (for omitting key soils-report information from the tender package) and 25% against the contractor (for not seeking out the soils report or clarifying the meaning of the engineers' information)."
+  },
+  {
+    topic: "Brown & Huston — reliance",
+    q: "What was the central negligent act of the consulting engineers in Brown & Huston Ltd. v. City of York?",
+    options: [
+      "They miscalculated the volume of soil to be excavated.",
+      "They failed to refer to soils reports and key sub-surface water information in the tender package on which contractors would rely.",
+      "They refused to share their proprietary calculations with the contractor.",
+      "They used outdated design tables."
+    ],
+    correct: 1,
+    explain: "The court held that the engineers must have known tenderers would rely on the tender package, particularly when the contract did not require contractors to investigate sub-surface conditions themselves. Omitting reference to the soils reports — and changing relevant sketches — was a negligent omission of necessary information."
+  },
+  {
+    topic: "Canama Contracting — reliance",
+    q: "In Unit Farm/Canama Contracting v. Huffman, the court found the government engineer liable in tort even though the engineer claimed not to have known he was being consulted. The court's response was that:",
+    options: [
+      "When held to account for negligence, what matters is not what we subjectively feel or think, but what our conduct objectively makes the other person believe we feel or think.",
+      "Crown employees enjoy absolute immunity from tort claims.",
+      "Engineers are only liable to those who pay a fee for their services.",
+      "An engineer cannot be liable for advice given without first reviewing the plans in detail."
+    ],
+    correct: 0,
+    explain: "The court emphasized that liability for negligence is determined objectively. The engineer's written remark — 'Good set of plans. I like the detail.' — was treated as advice on which the contractor was entitled to rely, regardless of the engineer's subjective awareness."
+  },
+  {
+    topic: "Canama Contracting — disclaimer",
+    q: "In its Canama judgment, the court noted that the defendant engineer could have avoided liability if he had:",
+    options: [
+      "Refused to read the plans at all.",
+      "Sealed the plans before commenting on them.",
+      "Charged a fee for his advice.",
+      "Clearly disclaimed responsibility for his comments, as occurred in Hedley Byrne."
+    ],
+    correct: 3,
+    explain: "The court explicitly observed that, had the engineer clearly disclaimed responsibility for his words (as the bank did in Hedley Byrne), he could have avoided liability. The absence of any disclaimer left him exposed."
+  },
+  {
+    topic: "Canama Contracting — appeal",
+    q: "On appeal in Canama, how did the Ontario Court of Appeal alter the apportionment of liability between the engineer and the contractor?",
+    options: [
+      "It absolved the engineer entirely.",
+      "It reapportioned to 75% engineer, 25% contractor — increasing the engineer's share from 50%.",
+      "It reapportioned to 25% engineer, 75% contractor.",
+      "It ordered a new trial without apportioning fault."
+    ],
+    correct: 1,
+    explain: "The trial court had split fault 50/50, but the Ontario Court of Appeal increased the engineer's responsibility, reapportioning at 75% engineer and 25% contractor."
+  },
+  {
+    topic: "SEDCO / Hospital Laundry",
+    q: "In SEDCO and Hospital Laundry Services v. Kelly Holdings, the mechanical engineers were held liable to the tenant (Hospital Laundry) for purely economic losses. Why did the court allow recovery of pure economic loss?",
+    options: [
+      "Because the engineers had a contract with the tenant.",
+      "Because pure economic loss is always recoverable in Canadian tort law.",
+      "Because the engineers knew the building was custom-designed for one tenant, knew worker comfort was a major consideration, and the breach posed a foreseeable danger to worker health and safety.",
+      "Because the architect had assigned its rights to the tenant."
+    ],
+    correct: 2,
+    explain: "The court emphasized that the engineers knew the building's purpose and tenant from the outset and that worker comfort was central. They knew (or ought to have known) that a faulty cooling system would cause foreseeable health/safety effects and productivity loss — supporting recovery of pure economic loss."
+  },
+  {
+    topic: "Edgeworth Construction",
+    q: "In Edgeworth Construction v. N.D. Lea (1993, SCC), the Supreme Court of Canada held that the engineering firm:",
+    options: [
+      "Could not be liable to a contractor in the absence of a contract.",
+      "Could be liable in tort to a contractor with whom it had no contractual relationship, on Hedley Byrne principles.",
+      "Was protected by the contractor's own due diligence obligations.",
+      "Could be liable only if the contractor had paid a separate fee for the design."
+    ],
+    correct: 1,
+    explain: "The SCC reversed the BC Court of Appeal and confirmed that an engineering firm preparing tender drawings can be liable in tort to a contractor — even with no contract — where the firm knew the contractor would rely on the documents and that reliance was reasonable."
+  },
+  {
+    topic: "Edgeworth Construction — individuals",
+    q: "Regarding the individual employee engineers who had affixed their seals to the drawings in Edgeworth, the Supreme Court of Canada held that:",
+    options: [
+      "The mere affixation of a seal was insufficient to establish a duty of care to the contractor — the seal attests that a qualified engineer prepared the drawing, not that the drawing is guaranteed.",
+      "They were jointly liable with the firm because they had sealed the documents.",
+      "Employee engineers can never be personally liable in tort.",
+      "They were liable only for 25% of the contractor's losses."
+    ],
+    correct: 0,
+    explain: "The SCC held that affixing a seal alone is insufficient to ground liability. The seal attests only that a qualified engineer prepared the drawing; it is not a guarantee of accuracy. Six judges held the individuals owed no duty to the contractor on these facts."
+  },
+  {
+    topic: "Edgeworth — exemption clause",
+    q: "In Edgeworth, the tender contract contained a clause stating representations were furnished merely for general information and were not warranted 'by or on behalf of the Minister.' Why did this clause not protect the engineering firm?",
+    options: [
+      "Because exemption clauses are unenforceable in Canada.",
+      "Because the contractor had not read the clause.",
+      "Because the clause's exemption extended only to warranties by or on behalf of the Minister and did not purport to protect the engineers.",
+      "Because the clause violated the Sale of Goods Act."
+    ],
+    correct: 2,
+    explain: "The Supreme Court held that the clause's express words extended only to warranties 'by or on behalf of the Minister.' Because it did not purport to insulate the engineers, it could not protect them — a reminder that disclaimers must be clearly worded to capture the parties they are intended to protect."
+  },
+  {
+    topic: "Winnipeg Condominium",
+    q: "Winnipeg Condominium Corp. No. 36 v. Bird Construction (1995, SCC) confirmed that a contractor or engineer:",
+    options: [
+      "Owes no duty to subsequent purchasers of a building absent a contract with them.",
+      "Is liable to subsequent purchasers only for cosmetic defects.",
+      "Is shielded from liability by the original purchaser's acceptance of the building.",
+      "Owes a duty in tort to subsequent purchasers if it was foreseeable that failure to take reasonable care would create defects posing a substantial danger to occupants' health or safety."
+    ],
+    correct: 3,
+    explain: "The SCC, reversing the Manitoba Court of Appeal, held that contractors, subcontractors, architects and engineers owe a duty in tort to subsequent purchasers where it was foreseeable that lack of reasonable care would create defects posing substantial danger to health and safety. Recovery includes the cost of putting the building back into a non-dangerous state."
+  },
+  {
+    topic: "Winnipeg Condominium — facts",
+    q: "What event triggered the Winnipeg Condominium litigation?",
+    options: [
+      "The collapse of an underground parking ramp.",
+      "A fire in a mechanical penthouse.",
+      "A storey-high section of cladding falling from the ninth-storey level to the ground.",
+      "Foundation settlement causing tilting of the structure."
+    ],
+    correct: 2,
+    explain: "In 1989, a roughly 20-foot-long, storey-high section of exterior cladding fell from the ninth-storey level. Removal and replacement of the cladding cost in excess of $1.5 million — costs the SCC ultimately held could be recoverable in tort despite no contractual tie."
+  },
+  {
+    topic: "Strict liability",
+    q: "Compared to U.S. products-liability law, Canadian law on products liability:",
+    options: [
+      "Is identical and applies a strict liability standard.",
+      "Generally still requires proof of fault (negligence), though it appears to be developing toward strict liability.",
+      "Imposes only contractual remedies.",
+      "Imposes no liability on manufacturers for design defects."
+    ],
+    correct: 1,
+    explain: "The chapter notes that, unlike some U.S. jurisdictions, Canadian products-liability law has not yet adopted strict liability. Recovery generally requires proof of negligence, although the law appears to be moving in that direction."
+  },
+  {
+    topic: "Vicarious liability",
+    q: "Vicarious liability of an employer for the negligence of an employee is justified primarily on the basis that:",
+    options: [
+      "It is consistent with the basic premise of tort law — to compensate the injured party — and the employer is presumed to be in a better financial position than the employee.",
+      "Employers always direct the negligent acts of their employees.",
+      "Employees are immune from personal tort liability.",
+      "The Criminal Code requires employer accountability."
+    ],
+    correct: 0,
+    explain: "The chapter emphasizes that vicarious liability supports the central purpose of tort law: compensation. The employer is presumed to have the financial means to pay — the so-called 'deep pockets theory.'"
+  },
+  {
+    topic: "Dutton v. Bognor Regis",
+    q: "In Dutton v. Bognor Regis, Lord Denning distinguished between professionals giving financial advice and those whose work could harm safety. He concluded that an architect or engineer:",
+    options: [
+      "Owes a duty only to those who actually rely on him or her.",
+      "Owes no duty when the design is reviewed by another professional.",
+      "Owes a duty only to the original client who paid for the work.",
+      "Owes a duty to all those who may suffer injury if his or her work is done badly — even if those persons did not personally rely on the engineer."
+    ],
+    correct: 3,
+    explain: "Lord Denning held that, unlike financial advisers, architects and engineers whose work affects physical safety owe a duty to anyone who may be injured by bad work — because they knew, or ought to have known, that such people might be hurt if the work was done badly."
+  },
+  {
+    topic: "Northwestern Mutual",
+    q: "In Northwestern Mutual Insurance v. J.T. O'Bryan, the British Columbia Court of Appeal held that the agency's employee was personally liable for negligence. The lesson for engineering practice is that:",
+    options: [
+      "Employee engineers can never be personally sued for tort.",
+      "Employee engineers may be personally liable in tort, in addition to vicarious liability of the employer — making it important that professional liability insurance extend to both.",
+      "Personal liability is limited to senior managers.",
+      "Insurance policies need only cover the corporation, not its employees."
+    ],
+    correct: 1,
+    explain: "The case confirms that employees may be personally liable in tort while their employer is vicariously liable. To protect employees, a corporation's professional liability insurance should extend to both the corporation and its employee engineers."
+  },
+  {
+    topic: "Concurrent tortfeasors",
+    q: "In Surrey v. Carrol-Hatch, the architect (60%) and the structural engineers (40%) were both held liable to the owner because they:",
+    options: [
+      "Had each separately contracted to perform the soils investigation.",
+      "Had pooled their liability insurance.",
+      "Were concurrent tortfeasors — they breached their duty to warn the owner that additional soil tests should be taken.",
+      "Had jointly designed the building."
+    ],
+    correct: 2,
+    explain: "The British Columbia Court of Appeal upheld the trial judge's apportionment, holding the architect and engineers concurrent tortfeasors who had each breached their duty to warn the owner that additional soils testing was needed."
+  },
+  {
+    topic: "Lambert v. Lastoplex — labelling",
+    q: "In Lambert v. Lastoplex Chemicals, the Supreme Court of Canada held that a general warning that a product was 'inflammable' was inadequate because:",
+    options: [
+      "Where the likelihood of fire may be increased by the surroundings in which the product is reasonably expected to be used (e.g., near pilot lights), the manufacturer must specify the attendant dangers in detail.",
+      "The product was not actually flammable.",
+      "The plaintiff was an engineer and so should have known the dangers.",
+      "The labelling was in only one official language."
+    ],
+    correct: 0,
+    explain: "The SCC held that a general inflammability warning is insufficient where surrounding conditions could increase the likelihood of fire. The required explicitness must vary with the danger reasonably expected — for example, warning about pilot lights and other ignition sources."
+  },
+  {
+    topic: "Lambert — engineer-consumer",
+    q: "The defendant in Lambert v. Lastoplex argued that the injured plaintiff's training as a professional engineer reduced the manufacturer's duty. The Supreme Court of Canada:",
+    options: [
+      "Agreed and dismissed the claim.",
+      "Held that engineer-consumers are owed a higher duty.",
+      "Held that the plaintiff's professional engineering background did not relieve the manufacturer of its duty to warn adequately on the labels.",
+      "Sent the matter back to trial on the issue of contributory negligence."
+    ],
+    correct: 2,
+    explain: "The Court rejected the argument that the plaintiff's status as a qualified engineer absolved the manufacturer. Special knowledge of the plaintiff did not discharge the manufacturer's duty to label the product with adequate warnings."
+  },
+  {
+    topic: "George Ho Lem",
+    q: "In George Ho Lem v. Barotto Sports, why did the plaintiff's claim against the manufacturer of a shot-shell reloader fail?",
+    options: [
+      "The court held that there is no duty to warn of risks inherent in firearms products.",
+      "Adequate instructions and warnings had in fact been given, and the plaintiff's damages were caused by his own failure to follow clear instructions.",
+      "The plaintiff was barred by an exclusion clause on the box.",
+      "The product had not been sold by the defendant."
+    ],
+    correct: 1,
+    explain: "The Alberta Court (Appellate Division) found that the manufacturer had met its high standard of care — clear instructions and warnings had been provided. The plaintiff's injuries flowed from his own failure to follow them, not from any failure in the duty owed."
+  },
+  {
+    topic: "Rivtow Marine",
+    q: "Rivtow Marine v. Washington Iron Works (1973, SCC) is significant because it:",
+    options: [
+      "Eliminated the requirement of fault for products liability in Canada.",
+      "Restricted economic loss recovery to cases of physical injury.",
+      "Refused to recognize any duty of care toward charterers of equipment.",
+      "Established that a manufacturer who knows of a serious defect in its product owes a duty to warn users, and that economic losses (e.g., lost profits during repair) may be recovered for breach of that duty."
+    ],
+    correct: 3,
+    explain: "Rivtow established that, where a manufacturer becomes aware of a structural defect that creates serious danger, it has a duty to warn users. Failure to do so supports liability in negligence, including for economic losses such as lost profits while equipment is being repaired."
+  },
+  {
+    topic: "MacMillan Bloedel",
+    q: "In MacMillan Bloedel v. Foundation, the BC Supreme Court denied the plaintiff's claim for employee salaries paid while operations were stopped, but indicated that:",
+    options: [
+      "Economic loss flowing from a defendant's negligent act may be recoverable provided it is not too remote and is properly accounted for.",
+      "Pure economic loss can never be recovered absent physical damage to the plaintiff's property.",
+      "Recovery is available only against employers who breach contracts.",
+      "Damage to a third party's electrical cable cannot ground a claim by the affected business."
+    ],
+    correct: 0,
+    explain: "The court held that economic loss caused by the defendant's negligence was, in principle, recoverable if not too remote. The salaries claim was rejected because the wages were payable in any event — but the door to recovery for properly substantiated economic loss was clearly left open."
+  },
+  {
+    topic: "Bethlehem Steel",
+    q: "In Bethlehem Steel Corp. v. St. Lawrence Seaway Authority, the Federal Court rejected pure economic loss claims by shipowners delayed by a damaged lift bridge. The court suggested that the Rivtow Marine decision:",
+    options: [
+      "Permitted recovery of all foreseeable economic losses without exception.",
+      "Replaced negligence with strict liability for navigational accidents.",
+      "At best extended liability to economic loss only where there had been physical harm or threat of physical harm to property of the claimant.",
+      "Was limited to cases involving cranes and lifting equipment."
+    ],
+    correct: 2,
+    explain: "The court held that, absent damage or threat of damage to the claimant's own property, recovery for purely economic loss remains very limited. Rivtow, on this view, only extended recovery where physical harm — or the threat of it — affected the plaintiff's property."
+  },
+  {
+    topic: "Junior Books",
+    q: "Junior Books v. Veitchi (UK House of Lords, 1982) extended liability to a negligent subcontractor for purely economic loss because:",
+    options: [
+      "The subcontractor was in direct contract with the building owner.",
+      "The defective floor created an immediate risk to life or limb.",
+      "Strict liability applied to all subcontractor work.",
+      "The subcontractor was a specialist whose skill was relied upon, the owner-subcontractor relationship fell only just short of a direct contract, and the damage was a direct, foreseeable consequence of negligent work."
+    ],
+    correct: 3,
+    explain: "Junior Books extended consequential economic loss recovery to a negligent specialist subcontractor where reliance and proximity were close to contractual. Recoverable damages included floor replacement, storage, removal of machinery, lost profits, lost wages and overhead."
+  },
+  {
+    topic: "CNR v. Norsk",
+    q: "Canadian National Railway v. Norsk Pacific Steamship (1990, SCC) recognized recovery of economic loss for a railway whose use of a damaged bridge was disrupted because:",
+    options: [
+      "The railway owned the bridge.",
+      "There was sufficient 'proximity' between CNR and the bridge owner — CNR's tracks led to and from the bridge — bringing CNR within the reasonable ambit of risk.",
+      "Strict liability was applied to all marine collisions.",
+      "The captain admitted criminal negligence."
+    ],
+    correct: 1,
+    explain: "The SCC found sufficient proximity between CNR and Public Works Canada (the bridge owner) — CNR owned the connecting tracks and was so closely linked operationally that it was within the reasonable ambit of foreseeable risk. Economic loss from rerouting was recoverable."
+  },
+  {
+    topic: "Defamation",
+    q: "Which of the following correctly describes the difference between libel and slander?",
+    options: [
+      "Libel is defamation in writing; slander is defamation made verbally.",
+      "Libel is true; slander is false.",
+      "Libel concerns only public figures; slander concerns only private individuals.",
+      "Libel requires proof of damage; slander does not."
+    ],
+    correct: 0,
+    explain: "The chapter notes that defamation is divided into libel (written defamatory statements) and slander (verbal defamatory statements). In either case, if the statements are true, no liability arises."
+  },
+  {
+    topic: "Occupiers' liability — common law",
+    q: "Under common-law occupiers' liability, which of the following groups is owed the LOWEST duty of care?",
+    options: [
+      "Business visitors invited onto the property.",
+      "Social guests invited by the occupier.",
+      "Trespassers.",
+      "Children under the age of 12."
+    ],
+    correct: 2,
+    explain: "Common law accorded the lowest duty to trespassers — though the occupier could not deliberately set traps. Higher duties were owed to social guests (against known dangers) and the highest to business visitors (against dangers the occupier knew or ought to have known of)."
+  },
+  {
+    topic: "Occupiers' Liability Act (Ontario)",
+    q: "What change did Ontario's Occupiers' Liability Act make to the common-law approach?",
+    options: [
+      "It abolished any duty of care to anyone entering property.",
+      "It superseded the common law and specifies duties of care, but does not retain the common-law distinction between business and social guests.",
+      "It increased the duty owed to trespassers above that owed to invitees.",
+      "It made all property owners strictly liable for injuries on their land."
+    ],
+    correct: 1,
+    explain: "The Act now governs occupiers' liability in Ontario. While its duties are generally consistent with common-law principles, it does not preserve the previous general distinction between business and social guests."
+  },
+  {
+    topic: "Nuisance — Newman v. Conair",
+    q: "Newman v. Conair Aviation (1972, BC) involved insecticide spray drifting onto land for which it was not intended. The court characterized the conduct as the tort of:",
+    options: [
+      "Trespass to chattels.",
+      "Negligent misrepresentation.",
+      "Strict liability for ultrahazardous activities.",
+      "Nuisance."
+    ],
+    correct: 3,
+    explain: "Drifting insecticide that interferes with the comfortable and convenient enjoyment of land is the classic context for the tort of nuisance. The court awarded nominal damages, recognizing the tort even where harm was modest."
+  },
+  {
+    topic: "Jackson v. Drury Construction",
+    q: "Jackson v. Drury Construction (1974, Ontario CA) involved blasting that opened fissures and allowed barnyard contaminants to reach the plaintiff's well. The Court of Appeal held that:",
+    options: [
+      "Blasting cannot be viewed as a natural use of land — it is inherently dangerous, and the plaintiff is entitled not to be deprived of beneficial properties of percolating water by such activities.",
+      "Blasting is a natural use of land, and therefore the contractor was not liable.",
+      "The plaintiff's only remedy was against the upstream property owner.",
+      "Liability requires proof of malice on the part of the contractor."
+    ],
+    correct: 0,
+    explain: "The Ontario Court of Appeal held blasting is inherently dangerous and not a natural use of land. The plaintiff was entitled to its percolating water's beneficial properties; pollution caused even indirectly by blasting could ground a claim in nuisance."
+  },
+  {
+    topic: "Concurrent tort/contract — engineer's duty of care",
+    q: "Why is it important for engineers to understand that the same set of facts can give rise to liability in BOTH tort AND contract?",
+    options: [
+      "Because plaintiffs are required to choose one cause of action and abandon the other.",
+      "Because the limitation periods, available defences, and recoverable damages may differ between the two — and a plaintiff may pursue whichever is more favourable, with the SCC having endorsed concurrent liability.",
+      "Because a contract automatically displaces all tort duties between the parties.",
+      "Because tort claims can only be brought after contract claims have been settled."
+    ],
+    correct: 1,
+    explain: "The SCC has endorsed concurrent liability in tort and contract. The two regimes can yield different outcomes on limitation periods, defences and damages, so engineers must consider both — particularly when negotiating contractual scope and disclaimers."
+  },
+  {
+    topic: "Case Study 1 — analysis",
+    q: "An employee engineer designs a second-floor manufacturing slab using outdated steel-deck design tables; the floor cracks, halting production. Applying tort principles, who is the most likely plaintiff and who are the likely defendants?",
+    options: [
+      "The architect is the plaintiff; the manufacturer of the steel deck is the only defendant.",
+      "There is no plaintiff because no contract exists between the client and the engineering firm.",
+      "Only the manufacturer of the steel deck can be sued.",
+      "The manufacturing client is the plaintiff; the employee engineer and (vicariously) the engineering firm are the likely defendants."
+    ],
+    correct: 3,
+    explain: "On the facts of Case Study 1, the manufacturing client suffers the loss and is the logical plaintiff. The employee engineer breached the duty of care by using outdated tables and ignoring the intended forklift loading; the engineering firm is vicariously liable as employer, consistent with the 'deep pockets' rationale of tort law."
+  },
+  {
+    topic: "Software design — Case Study 4",
+    q: "An employee engineer at an information technology firm produces bridge-design software with inadequate warnings about the scope of design parameters; a structural firm uses the software, and a bridge collapses. The most likely tort outcome is:",
+    options: [
+      "The structural engineering firm bears full liability because it used the software.",
+      "Software cannot give rise to tort liability in Canada.",
+      "Liability falls on the employee software-design engineer and, vicariously, on the engineer's employer for failing in the duty to warn of the limitations.",
+      "Liability falls solely on the municipal client that retained the structural firm."
+    ],
+    correct: 2,
+    explain: "Following the same approach as Case Study 1, and given the investigators' findings about inadequate warnings, the duty to warn of design-parameter limitations falls on the software designer — and vicariously on the employer. The structural firm cannot reasonably be expected to have foreseen the software's limits given its inadequate warnings."
+  },
+  {
+    topic: "Case Study 2 — gratuitous services",
+    q: "An engineer agrees, without charge, to review the structural plans of a community organization's renovation project. The engineer's review is negligent and a worker is injured during construction. Which statement best describes the engineer's potential tort liability?",
+    options: [
+      "The engineer cannot be liable because no fee was charged and so no contract exists.",
+      "The engineer is liable only if a written waiver of liability was not signed.",
+      "The engineer is automatically liable on a strict liability basis.",
+      "The engineer may still be liable in tort — privity of contract is not required, and even gratuitous services may give rise to liability if performed negligently."
+    ],
+    correct: 3,
+    explain: "The chapter is explicit that services performed gratuitously, without a contract, can give rise to liability in tort if performed negligently. Tort liability does not depend on the existence of a contract or the payment of a fee — only on the three essential elements: duty of care, breach, and resulting damage."
+  }
+];
+
+/* ════════════════════════════════════════════════════════
+   STATE & STORAGE
+   ════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'nppe_book1_ch4_state_v1';
+
+const state = {
+  mode: 'practice',     // 'practice' | 'exam'
+  order: [],            // current question order (indexes into QUESTIONS)
+  answers: {},          // qIdx -> picked option index (in original)
+  picked: {},           // qIdx -> picked option index visible (after shuffle); same here since options aren't shuffled
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  shuffled: false
+};
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    Object.assign(state, obj);
+    return true;
+  } catch (e) { return false; }
+}
+
+function defaultOrder() {
+  return Array.from({length: QUESTIONS.length}, (_, i) => i);
+}
+
+/* ════════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════════ */
+const $questions = document.getElementById('questions');
+const $navigator = document.getElementById('navigator');
+
+function renderAll() {
+  if (!state.order || !state.order.length) state.order = defaultOrder();
+  renderNavigator();
+  renderQuestions();
+  updateScore();
+}
+
+function renderNavigator() {
+  $navigator.innerHTML = '';
+  state.order.forEach((qIdx, displayIdx) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    dot.textContent = displayIdx + 1;
+    if (qIdx in state.answers) {
+      const correct = state.answers[qIdx] === QUESTIONS[qIdx].correct;
+      dot.classList.add(correct ? 'correct' : 'wrong');
+    }
+    dot.addEventListener('click', () => {
+      const el = document.getElementById('q-' + qIdx);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $navigator.appendChild(dot);
+  });
+}
+
+function renderQuestions() {
+  $questions.innerHTML = '';
+  state.order.forEach((qIdx, displayIdx) => {
+    const q = QUESTIONS[qIdx];
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = 'q-' + qIdx;
+
+    const head = document.createElement('div');
+    head.className = 'qhead';
+    head.innerHTML = `
+      <div class="qnum">Question ${String(displayIdx + 1).padStart(2, '0')} <em>/ ${QUESTIONS.length}</em></div>
+      <div class="qtopic">${q.topic}</div>
+    `;
+    card.appendChild(head);
+
+    const qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = q.q;
+    card.appendChild(qtext);
+
+    const ul = document.createElement('ul');
+    ul.className = 'options';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, i) => {
+      const li = document.createElement('li');
+      li.className = 'option';
+      li.dataset.idx = i;
+      li.innerHTML = `
+        <span class="option-letter">${letters[i]}</span>
+        <span class="option-text">${opt}</span>
+      `;
+      li.addEventListener('click', (ev) => handlePick(qIdx, i, ev));
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+
+    const explain = document.createElement('div');
+    explain.className = 'explain';
+    explain.id = 'explain-' + qIdx;
+    card.appendChild(explain);
+
+    $questions.appendChild(card);
+
+    if (qIdx in state.answers) applyAnswer(qIdx, state.answers[qIdx], false);
+  });
+}
+
+function handlePick(qIdx, optIdx, ev) {
+  if (qIdx in state.answers) return; // already answered
+  state.answers[qIdx] = optIdx;
+  const q = QUESTIONS[qIdx];
+  const correct = optIdx === q.correct;
+
+  if (correct) {
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    let pts = 10;
+    if (state.streak >= 3 && state.streak < 5) pts = 15;
+    else if (state.streak >= 5 && state.streak < 8) pts = 20;
+    else if (state.streak >= 8) pts = 25;
+    state.points += pts;
+    fireCorrectFX(ev, pts);
+    if (state.streak === 3 || state.streak === 5 || state.streak === 8 || state.streak === 10) {
+      faceBurst('🎉');
+    }
+  } else {
+    state.streak = 0;
+  }
+
+  applyAnswer(qIdx, optIdx, state.mode === 'practice');
+  saveState();
+  updateScore();
+  renderNavigator();
+
+  // Check completion
+  if (Object.keys(state.answers).length === QUESTIONS.length) {
+    setTimeout(showResult, 700);
+  }
+}
+
+function applyAnswer(qIdx, optIdx, showExplain) {
+  const card = document.getElementById('q-' + qIdx);
+  if (!card) return;
+  const q = QUESTIONS[qIdx];
+  const opts = card.querySelectorAll('.option');
+  opts.forEach((el, i) => {
+    el.classList.add('disabled');
+    if (i === q.correct) el.classList.add('correct');
+    if (i === optIdx && i !== q.correct) el.classList.add('wrong');
+  });
+  if (showExplain || state.mode === 'practice') {
+    const ex = document.getElementById('explain-' + qIdx);
+    const correct = optIdx === q.correct;
+    ex.innerHTML = `<span class="explain-label ${correct ? 'correct-label' : 'wrong-label'}">${correct ? '✓ Correct' : '✗ Not quite'}</span>${q.explain}`;
+    ex.classList.add('show');
+  }
+}
+
+function updateScore() {
+  const answered = Object.keys(state.answers).length;
+  let correct = 0, wrong = 0;
+  for (const k in state.answers) {
+    if (state.answers[k] === QUESTIONS[k].correct) correct++; else wrong++;
+  }
+  document.getElementById('s-answered').textContent = answered;
+  document.getElementById('s-correct').textContent = correct;
+  document.getElementById('s-wrong').textContent = wrong;
+  document.getElementById('s-score').textContent = answered > 0 ? Math.round((correct / answered) * 100) + '%' : '—';
+  document.getElementById('s-points').textContent = state.points;
+  document.getElementById('s-streak').textContent = state.streak;
+
+  // Streak fire glow
+  const streakEl = document.getElementById('stat-streak');
+  if (state.streak >= 3) streakEl.classList.add('fire'); else streakEl.classList.remove('fire');
+
+  // Points bump
+  const pointsEl = document.getElementById('stat-points');
+  pointsEl.classList.remove('bump');
+  void pointsEl.offsetWidth;
+  if (answered > 0) pointsEl.classList.add('bump');
+
+  // Progress
+  document.getElementById('progressfill').style.width = (answered / QUESTIONS.length * 100) + '%';
+}
+
+/* ════════════════════════════════════════════════════════
+   CELEBRATION FX
+   ════════════════════════════════════════════════════════ */
+const $celeb = document.getElementById('celeb');
+const COLORS = ['#d4af37', '#f0c95a', '#ffffff', '#4ade80', '#b8932d', '#fff7c2'];
+
+function fireCorrectFX(ev, pts) {
+  const rect = ev && ev.currentTarget && ev.currentTarget.getBoundingClientRect
+    ? ev.currentTarget.getBoundingClientRect()
+    : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0, height: 0 };
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // Confetti (rectangles)
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle confetti';
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+    p.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+    p.style.setProperty('--dx', (Math.random() * 360 - 180) + 'px');
+    p.style.setProperty('--dy', (Math.random() * 280 + 120) + 'px');
+    p.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    $celeb.appendChild(p);
+    setTimeout(() => p.remove(), 1900);
+  }
+
+  // Gold flake shower from top
+  for (let i = 0; i < 18; i++) {
+    const f = document.createElement('div');
+    f.className = 'particle gold-flake';
+    f.style.left = (cx + (Math.random() * 200 - 100)) + 'px';
+    f.style.top = (cy - 40) + 'px';
+    f.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px');
+    f.style.setProperty('--dy', (Math.random() * 320 + 220) + 'px');
+    f.style.animationDelay = (Math.random() * 0.3) + 's';
+    $celeb.appendChild(f);
+    setTimeout(() => f.remove(), 2400);
+  }
+
+  // Star burst
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement('div');
+    s.className = 'particle star-burst';
+    s.textContent = ['★', '✦', '✧', '⋆'][Math.floor(Math.random() * 4)];
+    s.style.left = cx + 'px';
+    s.style.top = cy + 'px';
+    s.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px');
+    s.style.setProperty('--dy', -(Math.random() * 100 + 40) + 'px');
+    $celeb.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+
+  // Floating points
+  const fp = document.createElement('div');
+  fp.className = 'particle float-points';
+  fp.textContent = '+' + pts;
+  fp.style.left = (cx - 20) + 'px';
+  fp.style.top = (cy - 30) + 'px';
+  $celeb.appendChild(fp);
+  setTimeout(() => fp.remove(), 1500);
+}
+
+function faceBurst(emoji) {
+  const f = document.createElement('div');
+  f.className = 'particle face-pop';
+  f.textContent = emoji;
+  f.style.left = '50%';
+  f.style.top = '40%';
+  f.style.transform = 'translateX(-50%)';
+  $celeb.appendChild(f);
+  setTimeout(() => f.remove(), 1300);
+}
+
+function fireworksFinale() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const bursts = 6;
+  for (let b = 0; b < bursts; b++) {
+    setTimeout(() => {
+      const cx = Math.random() * W * 0.8 + W * 0.1;
+      const cy = Math.random() * H * 0.5 + H * 0.15;
+      const colorBase = COLORS[Math.floor(Math.random() * COLORS.length)];
+      for (let i = 0; i < 32; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle firework';
+        p.style.left = cx + 'px';
+        p.style.top = cy + 'px';
+        p.style.background = colorBase;
+        p.style.color = colorBase;
+        const angle = (Math.PI * 2 * i) / 32;
+        const dist = 90 + Math.random() * 90;
+        p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        $celeb.appendChild(p);
+        setTimeout(() => p.remove(), 1500);
+      }
+    }, b * 320);
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESULT MODAL
+   ════════════════════════════════════════════════════════ */
+function showResult() {
+  let correct = 0;
+  for (const k in state.answers) {
+    if (state.answers[k] === QUESTIONS[k].correct) correct++;
+  }
+  const pct = Math.round((correct / QUESTIONS.length) * 100);
+  document.getElementById('result-percent').textContent = pct + '%';
+  document.getElementById('result-percent').classList.toggle('fail', pct < 65);
+  document.getElementById('r-correct').textContent = correct + '/' + QUESTIONS.length;
+  document.getElementById('r-points').textContent = state.points;
+  document.getElementById('r-streak').textContent = state.bestStreak;
+
+  let title, eyebrow, detail;
+  if (pct >= 85) {
+    title = 'Exemplary <em>command</em>';
+    eyebrow = 'Quiz Complete';
+    detail = 'You have mastered the case law and principles of tort liability.';
+  } else if (pct >= 65) {
+    title = 'You <em>passed</em>';
+    eyebrow = 'NPPE Threshold Achieved';
+    detail = 'Above the 65% NPPE pass threshold — solid working knowledge.';
+  } else {
+    title = 'Keep <em>at it</em>';
+    eyebrow = 'Below NPPE Threshold';
+    detail = 'Review the chapter and the cases flagged in your wrong answers, then try again.';
+  }
+  document.getElementById('result-title').innerHTML = title;
+  document.getElementById('result-eyebrow').textContent = eyebrow;
+  document.getElementById('result-detail').textContent = detail;
+  document.getElementById('result-overlay').classList.add('show');
+
+  if (pct >= 65) {
+    fireworksFinale();
+    setTimeout(fireworksFinale, 1500);
+  }
+}
+
+document.getElementById('btn-restart').addEventListener('click', () => {
+  if (confirm('Restart the quiz? All your answers, points, and streaks will be cleared.')) {
+    hardReset();
+  }
+});
+document.getElementById('btn-review').addEventListener('click', () => {
+  document.getElementById('result-overlay').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ════════════════════════════════════════════════════════
+   CONTROLS
+   ════════════════════════════════════════════════════════ */
+document.getElementById('btn-practice').addEventListener('click', () => {
+  state.mode = 'practice';
+  document.getElementById('btn-practice').classList.add('is-active');
+  document.getElementById('btn-exam').classList.remove('is-active');
+  // Reveal explanations for all answered questions
+  for (const k in state.answers) {
+    const ex = document.getElementById('explain-' + k);
+    if (ex) ex.classList.add('show');
+    // Make sure the explanation is filled in
+    const q = QUESTIONS[k];
+    const correct = state.answers[k] === q.correct;
+    ex.innerHTML = `<span class="explain-label ${correct ? 'correct-label' : 'wrong-label'}">${correct ? '✓ Correct' : '✗ Not quite'}</span>${q.explain}`;
+  }
+  saveState();
+});
+
+document.getElementById('btn-exam').addEventListener('click', () => {
+  state.mode = 'exam';
+  document.getElementById('btn-exam').classList.add('is-active');
+  document.getElementById('btn-practice').classList.remove('is-active');
+  // Hide all explanations
+  document.querySelectorAll('.explain').forEach(e => e.classList.remove('show'));
+  saveState();
+});
+
+document.getElementById('btn-shuffle').addEventListener('click', () => {
+  if (Object.keys(state.answers).length > 0) {
+    if (!confirm('Shuffling will reset all of your current answers, points, and streak. Continue?')) return;
+  }
+  state.answers = {};
+  state.points = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.shuffled = true;
+  // Fisher-Yates
+  const arr = defaultOrder();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  state.order = arr;
+  saveState();
+  renderAll();
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (!confirm('Reset everything — answers, points, streaks, and question order? This cannot be undone.')) return;
+  hardReset();
+});
+
+function hardReset() {
+  state.answers = {};
+  state.points = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.order = defaultOrder();
+  state.shuffled = false;
+  state.mode = 'practice';
+  document.getElementById('btn-practice').classList.add('is-active');
+  document.getElementById('btn-exam').classList.remove('is-active');
+  document.getElementById('result-overlay').classList.remove('show');
+  saveState();
+  renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════ */
+loadState();
+if (!state.order || !state.order.length) state.order = defaultOrder();
+renderAll();
+
+// Reflect mode in buttons
+if (state.mode === 'exam') {
+  document.getElementById('btn-exam').classList.add('is-active');
+  document.getElementById('btn-practice').classList.remove('is-active');
+}
+</script>
+
+</body>
+</html>

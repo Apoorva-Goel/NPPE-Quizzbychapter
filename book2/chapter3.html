@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Quiz — Chapter 3: Global Considerations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0a1628;
+    --navy: #11243f;
+    --navy-light: #1a3055;
+    --gold: #d4af37;
+    --gold-bright: #f4cf5c;
+    --gold-soft: #b8941f;
+    --cream: #f5e8c7;
+    --text-light: #e8e0c8;
+    --text-muted: #a8a394;
+    --green: #4caf50;
+    --red: #d04848;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 50%, #0d1c30 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(17, 36, 63, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 30px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2em;
+  }
+
+  .mode-selector {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .mode-btn {
+    padding: 12px 28px;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .mode-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .mode-btn.active {
+    background: var(--gold);
+    color: var(--navy-deep);
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(10, 22, 40, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .progress-container {
+    margin-bottom: 24px;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: rgba(10, 22, 40, 0.8);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85em;
+    margin-top: 6px;
+  }
+
+  .question-card {
+    background: rgba(10, 22, 40, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .question-number {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .question-text {
+    font-size: 1.1em;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    background: rgba(17, 36, 63, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 14px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--text-light);
+    font-size: 0.98em;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option:hover:not(.disabled) {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+
+  .option.selected {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold);
+  }
+
+  .option.correct {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: var(--green);
+    color: #b6e8b8;
+  }
+
+  .option.incorrect {
+    background: rgba(208, 72, 72, 0.2);
+    border-color: var(--red);
+    color: #f0b8b8;
+  }
+
+  .option.disabled {
+    cursor: not-allowed;
+  }
+
+  .option-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2em;
+    color: var(--gold);
+    font-weight: 600;
+    min-width: 24px;
+  }
+
+  .feedback {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+
+  .feedback.correct {
+    background: rgba(76, 175, 80, 0.15);
+    border-left: 4px solid var(--green);
+    color: #c8e6c9;
+  }
+
+  .feedback.incorrect {
+    background: rgba(208, 72, 72, 0.15);
+    border-left: 4px solid var(--red);
+    color: #f0c8c8;
+  }
+
+  .feedback strong {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1em;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .nav-btn {
+    padding: 12px 28px;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--gold);
+    color: var(--navy-deep);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.primary {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  .nav-btn.primary:hover {
+    background: var(--gold-bright);
+  }
+
+  .question-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(10, 22, 40, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+
+  .grid-cell {
+    aspect-ratio: 1;
+    background: rgba(17, 36, 63, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.75em;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+
+  .grid-cell:hover {
+    transform: scale(1.1);
+    border-color: var(--gold);
+  }
+
+  .grid-cell.current {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+
+  .grid-cell.answered-correct { background: rgba(76, 175, 80, 0.4); border-color: var(--green); color: white; }
+  .grid-cell.answered-incorrect { background: rgba(208, 72, 72, 0.4); border-color: var(--red); color: white; }
+  .grid-cell.answered { background: rgba(212, 175, 55, 0.3); border-color: var(--gold); color: var(--gold-bright); }
+
+  .results-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .results-screen h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .final-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4em;
+    color: var(--gold);
+    margin: 20px 0;
+    font-weight: 600;
+  }
+
+  .pass-fail {
+    font-size: 1.5em;
+    font-family: 'Cormorant Garamond', serif;
+    margin: 16px 0;
+  }
+
+  .pass-fail.pass { color: var(--green); }
+  .pass-fail.fail { color: var(--red); }
+
+  .results-details {
+    background: rgba(10, 22, 40, 0.6);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: left;
+  }
+
+  .score-popup {
+    position: fixed;
+    color: var(--gold-bright);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2em;
+    font-weight: 700;
+    pointer-events: none;
+    z-index: 10000;
+    text-shadow: 0 0 12px rgba(244, 207, 92, 0.8);
+    animation: scoreFloat 1.4s ease-out forwards;
+  }
+
+  @keyframes scoreFloat {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    20% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1); }
+  }
+
+  .streak-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold-soft), var(--gold-bright));
+    color: var(--navy-deep);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85em;
+    margin-left: 8px;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--navy);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-size: 1.6em;
+    margin-bottom: 12px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 20px; }
+    h1 { font-size: 1.8em; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<div class="container">
+  <h1>NPPE Practice Quiz</h1>
+  <p class="subtitle">Chapter 3 — Global Considerations</p>
+
+  <div class="mode-selector">
+    <button class="mode-btn active" id="modeBtnPractice">Practice Mode</button>
+    <button class="mode-btn" id="modeBtnExam">Exam Mode</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-label">Score</div>
+      <div class="stat-value" id="scoreDisplay">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Correct</div>
+      <div class="stat-value" id="correctDisplay">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value" id="streakDisplay">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Best Streak</div>
+      <div class="stat-value" id="bestStreakDisplay">0</div>
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">Question 1 of 50</div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn">← Previous</button>
+    <button class="nav-btn" id="resetBtn">Reset Quiz</button>
+    <button class="nav-btn primary" id="nextBtn">Next →</button>
+  </div>
+
+  <div class="question-grid" id="questionGrid"></div>
+</div>
+
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h3>Reset Quiz?</h3>
+    <p>Your progress and score will be cleared. Are you sure?</p>
+    <div class="modal-buttons">
+      <button class="nav-btn" id="cancelReset">Cancel</button>
+      <button class="nav-btn primary" id="confirmReset">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "When entering a foreign jurisdiction, what is most important for a Canadian engineer to obtain at the outset?",
+    options: [
+      "Approval from a Canadian engineering association",
+      "Advice from an appropriately experienced lawyer in the foreign jurisdiction or a consultant familiar with the country",
+      "Authorization from the Canadian federal government",
+      "An import licence from the Canada Revenue Agency"
+    ],
+    answer: 1,
+    explanation: "The textbook stresses that venturing into a foreign jurisdiction is a significant step that should not be undertaken without appropriate advice from experienced foreign legal counsel or a knowledgeable consultant."
+  },
+  {
+    q: "According to the chapter, what is critical to success when developing a project in Southeast Asia?",
+    options: [
+      "Hiring junior staff to keep costs low",
+      "Limiting the duration of the engagement to under one year",
+      "Understanding the foreign culture and building personal relationships with local business contacts",
+      "Avoiding any local partners and operating independently"
+    ],
+    answer: 2,
+    explanation: "The text emphasizes that understanding foreign culture and developing personal relationships with business contacts is critical, and that the time commitment is typically a relatively lengthy one."
+  },
+  {
+    q: "Which of the following is identified as a typical political risk in foreign jurisdictions?",
+    options: [
+      "Increases in Canadian corporate tax rates",
+      "Changes in government leading to policy shifts, changes in officials, and changes in local labour rates",
+      "Fluctuations in Canadian provincial regulations",
+      "Mergers among Canadian engineering firms"
+    ],
+    answer: 1,
+    explanation: "Political risk includes changes in government, senior officials and bureaucrats with whom investors deal, and local labour rates—all of which can profoundly affect profitability."
+  },
+  {
+    q: "Through what type of agency may political risk insurance coverage sometimes be available?",
+    options: [
+      "Provincial professional engineering associations",
+      "The Canadian Construction Association",
+      "Funding agencies such as the World Bank",
+      "Local Chambers of Commerce in the foreign country"
+    ],
+    answer: 2,
+    explanation: "The chapter notes that political risk insurance may be available through funding agencies such as the World Bank."
+  },
+  {
+    q: "Which country is given as an example of a jurisdiction whose legal system has colonial ties to the British system and therefore offers more similarities to the Canadian legal system?",
+    options: [
+      "Vietnam",
+      "China",
+      "India",
+      "Russia"
+    ],
+    answer: 2,
+    explanation: "India is cited as a country with colonial ties to the British legal system, making it more similar to Canada's legal system than many civil-law jurisdictions."
+  },
+  {
+    q: "Which of the following are listed as countries where the legal system is undergoing significant development?",
+    options: [
+      "Australia, New Zealand, and Singapore",
+      "Eastern European and other former communist countries, the People's Republic of China, and Vietnam",
+      "United States, United Kingdom, and Ireland",
+      "France, Germany, and Italy"
+    ],
+    answer: 1,
+    explanation: "The text identifies Eastern European and former communist countries, China, and Vietnam as examples of jurisdictions where the legal system is undergoing significant development."
+  },
+  {
+    q: "Why may the typical North American mortgage security approach not be available in some foreign legal systems?",
+    options: [
+      "Mortgage interest rates are too high in those countries",
+      "Private property ownership rights have not been part of socialist communist systems",
+      "Foreign banks refuse to lend to Canadians",
+      "Mortgages are illegal under Islamic law in all jurisdictions"
+    ],
+    answer: 1,
+    explanation: "The chapter explains that private property ownership rights have not historically been part of socialist communist systems, so the typical mortgage security approach may not be available."
+  },
+  {
+    q: "Which Canadian province operates under a civil-law system?",
+    options: [
+      "Ontario",
+      "British Columbia",
+      "Quebec",
+      "Alberta"
+    ],
+    answer: 2,
+    explanation: "Quebec follows the civil-law system in Canada. The chapter specifically notes that civil-law principles also apply in Canada in the province of Quebec."
+  },
+  {
+    q: "Which U.S. state is identified in the chapter as having a civil-law system?",
+    options: [
+      "California",
+      "Texas",
+      "Louisiana",
+      "Florida"
+    ],
+    answer: 2,
+    explanation: "Louisiana is the U.S. state jurisdiction with a civil-law system, while the rest of the U.S. follows common law."
+  },
+  {
+    q: "Canadian law on foreign bribery is governed primarily by which statute?",
+    options: [
+      "The Foreign Investment Protection Act",
+      "The Corruption of Foreign Public Officials Act",
+      "The Canada Business Corporations Act",
+      "The International Engineering Practice Act"
+    ],
+    answer: 1,
+    explanation: "Canada has enacted the Corruption of Foreign Public Officials Act, which prohibits bribes by Canadian individuals or companies, or their agents, to foreign public officials."
+  },
+  {
+    q: "What is a common but mistaken assumption about paying bribes in foreign countries?",
+    options: [
+      "That bribery is always illegal under Canadian law only",
+      "That bribery in another country is not contrary to that country's laws",
+      "That the Canadian government will reimburse bribes paid abroad",
+      "That bribes paid via local agents are legally acceptable"
+    ],
+    answer: 1,
+    explanation: "The chapter cautions that it is a mistake to assume the payment of bribes in another country is not contrary to that country's laws—even where it may be regarded as commonplace, it is typically illegal with severe penalties on conviction."
+  },
+  {
+    q: "What is identified as one of the most significant financial risks when investing in foreign engineering projects?",
+    options: [
+      "Excessive Canadian regulation of foreign investment",
+      "Currency exchange controls, restrictions on transfer of funds, and inflation in the foreign currency",
+      "Mandatory profit-sharing with the United Nations",
+      "High shipping costs from Canada"
+    ],
+    answer: 1,
+    explanation: "Many countries impose currency exchange controls or restrictions on transfer of funds; inflation is also a major risk—particularly when revenue streams are in a foreign currency."
+  },
+  {
+    q: "What strategies are advisable to mitigate foreign currency inflation risk on long-term projects?",
+    options: [
+      "Demanding payment only in cryptocurrency",
+      "Contracting for future payments in a more stable specified currency, or obtaining governmental or other guarantees if available",
+      "Refusing to undertake any foreign projects",
+      "Insisting on payment in Canadian dollars at the project's start only"
+    ],
+    answer: 1,
+    explanation: "The chapter recommends contracting for future payments in a more stable specified currency, or obtaining governmental or other guarantees, to reduce inflation impact."
+  },
+  {
+    q: "Which contract forms are favoured for use on many projects financed by the World Bank?",
+    options: [
+      "CCDC contract forms",
+      "FIDIC contract forms of the International Federation of Consulting Engineers, Geneva, Switzerland",
+      "AIA contract forms",
+      "ASCE contract forms"
+    ],
+    answer: 1,
+    explanation: "FIDIC (Fédération Internationale des Ingénieurs-Conseils) forms, headquartered in Geneva, Switzerland, are favoured on many World Bank-financed projects."
+  },
+  {
+    q: "Under FIDIC contract forms, what advisable independent body is featured to assist parties in resolving disputes?",
+    options: [
+      "An international arbitration tribunal",
+      "A dispute resolution board or dispute adjudication board",
+      "A panel of national engineering regulators",
+      "The World Bank Compliance Office"
+    ],
+    answer: 1,
+    explanation: "FIDIC forms feature an advisable independent dispute resolution board or dispute adjudication board to help resolve disputes as they arise on the project."
+  },
+  {
+    q: "What is the formal name of the 1958 international treaty supporting enforcement of foreign arbitration awards?",
+    options: [
+      "The Hague Convention on Foreign Awards",
+      "The Geneva Protocol on Arbitration",
+      "The United Nations Convention on the Recognition and Enforcement of Foreign Arbitral Awards (the New York Convention)",
+      "The UNCITRAL Treaty on Arbitration"
+    ],
+    answer: 2,
+    explanation: "The 1958 New York Convention—formally the United Nations Convention on the Recognition and Enforcement of Foreign Arbitral Awards—is the best-known instrument supporting international enforcement of arbitration decisions."
+  },
+  {
+    q: "Approximately how many countries and states are signatories to the New York Convention?",
+    options: [
+      "Fewer than 50",
+      "Approximately 80",
+      "More than 150",
+      "Exactly 25"
+    ],
+    answer: 2,
+    explanation: "The chapter states that Canada is a signatory to the New York Convention, as are more than 150 countries and states."
+  },
+  {
+    q: "Why is arbitration often advocated as the preferred dispute resolution method on international engineering contracts?",
+    options: [
+      "It is always free of charge",
+      "It avoids the uncertainties and risks of foreign courts and is generally speedier, more efficient, and less costly than litigation",
+      "It is required by Canadian federal law",
+      "Arbitration awards cannot be appealed under any circumstances"
+    ],
+    answer: 1,
+    explanation: "Arbitration is preferred because it avoids the risk of foreign court exposure for at least one party, and is generally speedier, more efficient, and less costly than litigation."
+  },
+  {
+    q: "What is the strongest factor cited as influencing the international preference for arbitration?",
+    options: [
+      "Arbitration is always cheaper than mediation",
+      "Arbitration decisions are internationally enforceable under the New York Convention",
+      "Arbitration is required by all foreign jurisdictions",
+      "Arbitration permits public hearings as a default"
+    ],
+    answer: 1,
+    explanation: "The strongest factor is that arbitration decisions are internationally enforceable under the 1958 New York Convention."
+  },
+  {
+    q: "Which statement best describes mediation?",
+    options: [
+      "A binding court process to settle disputes",
+      "A means of attempting to resolve a dispute through negotiation, requiring common interest in settling and willingness to compromise",
+      "A unilateral decision by an appointed expert",
+      "A method that always produces a final, enforceable judgment"
+    ],
+    answer: 1,
+    explanation: "Mediation is a means of attempting to resolve disputes through negotiation; it typically requires a common interest in settling and a willingness to compromise."
+  },
+  {
+    q: "How many neutral third parties typically comprise a Dispute Resolution Board (DRB)?",
+    options: [
+      "One",
+      "Two",
+      "Three",
+      "Five"
+    ],
+    answer: 2,
+    explanation: "A DRB typically comprises a panel of three neutral third parties selected by the owner and contractor prior to the start of the project."
+  },
+  {
+    q: "Under FIDIC forms used on World Bank projects, when a board is authorized to make decisions rather than recommendations, it is called what?",
+    options: [
+      "A dispute settlement panel",
+      "A dispute adjudication board",
+      "A dispute mediation council",
+      "A dispute appellate body"
+    ],
+    answer: 1,
+    explanation: "When the board is authorized to decide rather than recommend, FIDIC refers to it as a 'dispute adjudication board'."
+  },
+  {
+    q: "What qualities are essential in DRB members?",
+    options: [
+      "Being citizens of the contractor's country",
+      "Neutrality, integrity, expertise, and operating on an unbiased, objective, independent basis",
+      "Holding government office",
+      "Being approved by the World Bank only"
+    ],
+    answer: 1,
+    explanation: "DRB members must be selected for their neutrality, integrity, and expertise, and must function on an unbiased, objective, and independent basis."
+  },
+  {
+    q: "Why is the DRB approach described as 'project-based'?",
+    options: [
+      "Because it is funded by the project's contingency budget",
+      "Because recommendations come from independent third parties familiar with the project, who make periodic site visits and stay updated on documentation",
+      "Because each project must use a different ADR method",
+      "Because DRBs only work on small-scale projects"
+    ],
+    answer: 1,
+    explanation: "The DRB approach is project-based because the third-party recommenders gain familiarity with the project through periodic site visits and updates on correspondence and contract documentation."
+  },
+  {
+    q: "How is the DRB hearing procedure typically structured compared to arbitration?",
+    options: [
+      "Identical—with full direct and cross-examination",
+      "More formal than arbitration, requiring a full court reporter",
+      "Less formal—often a meeting setting, usually without legal counsel, motions, objections, or cross-examination by counsel",
+      "DRBs do not hold any hearings"
+    ],
+    answer: 2,
+    explanation: "DRB hearings are typically less formal than arbitration—often held in a meeting setting, often without legal counsel, and without direct/cross-examination, motions, objections, or arguments."
+  },
+  {
+    q: "Where is the international Dispute Resolution Board Foundation headquartered?",
+    options: [
+      "Geneva, Switzerland",
+      "London, England",
+      "Seattle, Washington",
+      "Toronto, Ontario"
+    ],
+    answer: 2,
+    explanation: "The international Dispute Resolution Board Foundation is headquartered in Seattle, Washington."
+  },
+  {
+    q: "Historically, what type of disputes gave rise to the use of 'experts' to make recommendations or final decisions?",
+    options: [
+      "Construction defect disputes",
+      "Appraisal matters such as disputes relating to valuing diamonds or other items of jewellery",
+      "Maritime collisions",
+      "Software licensing disputes"
+    ],
+    answer: 1,
+    explanation: "The use of experts arose historically on appraisal matters, such as disputes about valuing diamonds or other jewellery items."
+  },
+  {
+    q: "Under England's Housing Grants, Construction and Regeneration Act 1996, within how many days must the adjudicator typically render a decision after referral?",
+    options: [
+      "7 days",
+      "14 days",
+      "28 days",
+      "90 days"
+    ],
+    answer: 2,
+    explanation: "The English statutory adjudication process generally requires the adjudicator to render a decision within 28 days of referral."
+  },
+  {
+    q: "Which countries are identified as having implemented adjudication systems inspired by the English statutory adjudication model?",
+    options: [
+      "France, Germany, and Italy",
+      "Some parts of New Zealand and Australia, as well as Singapore",
+      "China, Vietnam, and Russia",
+      "Brazil, Argentina, and Chile"
+    ],
+    answer: 1,
+    explanation: "Adjudication inspired by the English statute exists in parts of New Zealand and Australia, and in Singapore."
+  },
+  {
+    q: "Are adjudicators in the English statutory adjudication system required to have legal training?",
+    options: [
+      "Yes, they must be qualified barristers",
+      "Yes, they must be retired judges",
+      "No, adjudicators are not required to have legal training",
+      "Only when disputes exceed £1 million"
+    ],
+    answer: 2,
+    explanation: "Interestingly, adjudicators under the English statutory adjudication system are not required to have legal training."
+  },
+  {
+    q: "Which Canadian province is referenced in the chapter as proposing statutory adjudication as a major change in lien legislation?",
+    options: [
+      "British Columbia",
+      "Ontario",
+      "Quebec",
+      "Alberta"
+    ],
+    answer: 1,
+    explanation: "The chapter notes that statutory adjudication is being proposed as a major change in lien legislation in Ontario and elsewhere in Canada."
+  },
+  {
+    q: "Under the New York Convention, what category of decisions are enforceable in member countries?",
+    options: [
+      "Mediation settlements",
+      "DRB recommendations",
+      "Arbitration decisions on international disputes",
+      "Foreign court judgments of all kinds"
+    ],
+    answer: 2,
+    explanation: "Only arbitration decisions on international disputes are enforceable in other member countries under the New York Convention."
+  },
+  {
+    q: "What is the primary distinguishing feature between common-law and civil-law systems?",
+    options: [
+      "Civil-law systems do not allow contracts in writing",
+      "The application of civil code provisions, rather than the common-law case precedent system, is the primary distinction",
+      "Common-law systems use no statutes",
+      "Civil-law systems have no judges"
+    ],
+    answer: 1,
+    explanation: "Both systems can enact statutes, but the primary distinction is the application of civil code provisions in civil law versus case precedent in common law."
+  },
+  {
+    q: "How does emphasis on contract formation differ between common-law and civil-law systems?",
+    options: [
+      "Civil law emphasizes consideration; common law emphasizes intention",
+      "Common law emphasizes consideration; civil law emphasizes the intention of the parties to contract",
+      "Both systems treat consideration identically",
+      "Neither system requires either consideration or intention"
+    ],
+    answer: 1,
+    explanation: "Common law places great emphasis on consideration; civil law places far more emphasis on the intention of the parties to contract."
+  },
+  {
+    q: "How does the remedy of specific performance for breach of contract differ between the two systems?",
+    options: [
+      "It is unavailable in both systems",
+      "Civil law treats it as exceptional; common law makes it the default remedy",
+      "Common law treats it as exceptional; civil law may grant it as a primary remedy at the court's discretion",
+      "Both systems require monetary compensation only"
+    ],
+    answer: 2,
+    explanation: "In common-law systems, specific performance is exceptional and monetary compensation is normal; in civil law, specific performance may be granted as a primary remedy at the court's discretion."
+  },
+  {
+    q: "Who typically takes the lead in the investigative process during traditional civil-law litigation or arbitration?",
+    options: [
+      "The plaintiff's lawyer",
+      "The defendant's lawyer",
+      "The judge or arbitrator",
+      "An independent expert witness"
+    ],
+    answer: 2,
+    explanation: "In traditional civil-law jurisdictions, the judge or arbitrator takes the lead in the investigative process, in contrast to common-law lawyers conducting discovery."
+  },
+  {
+    q: "What body has developed Rules of Evidence for International Arbitration to bridge common-law and civil-law procedural differences?",
+    options: [
+      "The United Nations General Assembly",
+      "The International Bar Association, headquartered in London, England",
+      "The American Bar Association",
+      "The World Trade Organization"
+    ],
+    answer: 1,
+    explanation: "The International Bar Association, headquartered in London, England, has developed the Rules of Evidence for International Arbitration as a compromise between the two traditions."
+  },
+  {
+    q: "Which of the following is identified as a 'post-socialist law country' that is also a civil-law country in transition?",
+    options: [
+      "Japan",
+      "South Africa",
+      "China",
+      "Singapore"
+    ],
+    answer: 2,
+    explanation: "China is described as a post-socialist law country and a civil-law country in transition, developing new codes and laws to respond to economic growth and global participation."
+  },
+  {
+    q: "Which two countries are explicitly listed as examples of socialist law countries?",
+    options: [
+      "Russia and China",
+      "Cuba and North Korea",
+      "Vietnam and Laos",
+      "Belarus and Kazakhstan"
+    ],
+    answer: 1,
+    explanation: "The chapter cites Cuba and North Korea as examples of socialist law countries."
+  },
+  {
+    q: "Japan's civil-law legal system is historically based on which other country's civil law?",
+    options: [
+      "France",
+      "Germany",
+      "Italy",
+      "Spain"
+    ],
+    answer: 1,
+    explanation: "Japan is a civil-law country with historic legal system development based on German civil law."
+  },
+  {
+    q: "South American legal systems are primarily civil law and are most influenced by which country's system?",
+    options: [
+      "Portugal",
+      "France",
+      "Spain",
+      "Italy"
+    ],
+    answer: 2,
+    explanation: "South American legal systems are primarily civil-law systems influenced by Spain's civil-law system."
+  },
+  {
+    q: "Which two jurisdictions are given as examples of mixed legal systems featuring both civil-law and common-law aspects?",
+    options: [
+      "South Africa and Scotland",
+      "India and Pakistan",
+      "Australia and New Zealand",
+      "Mexico and Brazil"
+    ],
+    answer: 0,
+    explanation: "South Africa and Scotland are cited as examples of mixed legal systems featuring both civil-law and common-law aspects."
+  },
+  {
+    q: "Which type of law is identified as having prominent influence in Middle-Eastern countries, with some legal systems based on it together with civil law?",
+    options: [
+      "Customary law",
+      "Roman law",
+      "Islamic (Sharia) law",
+      "Soviet law"
+    ],
+    answer: 2,
+    explanation: "Islamic (Sharia) law is of prominent influence in Middle-Eastern countries, often combined with civil-law systems."
+  },
+  {
+    q: "Most European countries' civil-law systems have historic ties to which ancient code?",
+    options: [
+      "The Code of Hammurabi",
+      "The Roman civil code",
+      "Greek law",
+      "The Napoleonic Code only"
+    ],
+    answer: 1,
+    explanation: "Most European countries have civil-law systems with historic ties to the Roman civil code."
+  },
+  {
+    q: "Which of the following is NOT listed as an example of an international arbitration administration organization?",
+    options: [
+      "The International Centre for Dispute Resolution (ICDR)",
+      "The International Chamber of Commerce (ICC), Paris",
+      "The London Court of International Arbitration (LCIA)",
+      "The Toronto International Engineering Tribunal (TIET)"
+    ],
+    answer: 3,
+    explanation: "ICDR, ICC Paris, LCIA, HKIAC, the Singapore Arbitration Centre, and the British Columbia International Arbitration Centre are listed; there is no 'Toronto International Engineering Tribunal' in the chapter."
+  },
+  {
+    q: "What is meant by 'ad hoc' arbitration?",
+    options: [
+      "Arbitration administered solely by the World Bank",
+      "Arbitration by agreement without involving an administrative authority, common in Canadian domestic disputes",
+      "Arbitration that occurs only in emergencies",
+      "Arbitration handled exclusively by retired engineers"
+    ],
+    answer: 1,
+    explanation: "Ad hoc arbitration refers to parties arbitrating by agreement without involving an administrative authority. It is common in Canadian domestic disputes and often follows the applicable provincial arbitration statute."
+  },
+  {
+    q: "Which body issued the 1985 Model Law on International Commercial Arbitration that is widely adopted, including in Canada?",
+    options: [
+      "The International Chamber of Commerce",
+      "The International Bar Association",
+      "The United Nations Commission on International Trade Law (UNCITRAL)",
+      "The Organisation for Economic Co-operation and Development (OECD)"
+    ],
+    answer: 2,
+    explanation: "The UNCITRAL Model Law on International Commercial Arbitration was published by the United Nations Commission on International Trade Law in 1985 and has been adopted in many jurisdictions including Canada."
+  },
+  {
+    q: "Since when has the UNCITRAL Convention on the International Sale of Goods (CISG) been in force in Canada?",
+    options: [
+      "Since 1958",
+      "Since 1980",
+      "Since 1985",
+      "Since 1992"
+    ],
+    answer: 3,
+    explanation: "The CISG, dating from 1980, has been in force in Canada since 1992. Canada is one of more than 80 contracting state signatories."
+  },
+  {
+    q: "Approximately how many Contracting State signatories does the CISG have?",
+    options: [
+      "More than 20",
+      "More than 40",
+      "More than 80",
+      "More than 200"
+    ],
+    answer: 2,
+    explanation: "Canada is one of more than 80 Contracting State signatories to the CISG."
+  },
+  {
+    q: "Can parties contractually exclude the application of the CISG to their international sales contract?",
+    options: [
+      "No, the CISG applies mandatorily without exception",
+      "Yes, parties can expressly contractually agree in their sales contracts to exclude some or all of the provisions of the CISG",
+      "Only buyers can opt out, never sellers",
+      "Only with court approval in both jurisdictions"
+    ],
+    answer: 1,
+    explanation: "Parties can expressly contractually agree in their sales contracts to exclude some or all of the provisions of the CISG. There are also some exceptions to the goods covered."
+  }
+];
+
+// === STATE ===
+let state = {
+  mode: 'practice',
+  currentIdx: 0,
+  answers: {},      // idx -> selected option
+  correctMap: {},   // idx -> bool
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  shuffledOrder: []
+};
+
+// === FISHER-YATES SHUFFLE ===
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initOrder() {
+  state.shuffledOrder = QUESTIONS.map((_, i) => i); // keep original order; could shuffle
+}
+
+// === PERSISTENCE ===
+const STORAGE_KEY = 'nppe_ch3_quiz_state';
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) {
+      const parsed = JSON.parse(s);
+      Object.assign(state, parsed);
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+// === RENDER ===
+function render() {
+  const idx = state.currentIdx;
+  const total = QUESTIONS.length;
+
+  // Stats
+  document.getElementById('scoreDisplay').textContent = state.score;
+  const correctCount = Object.values(state.correctMap).filter(v => v).length;
+  document.getElementById('correctDisplay').textContent = correctCount;
+  document.getElementById('streakDisplay').textContent = state.streak;
+  document.getElementById('bestStreakDisplay').textContent = state.bestStreak;
+
+  // Progress
+  const answered = Object.keys(state.answers).length;
+  document.getElementById('progressFill').style.width = (answered / total * 100) + '%';
+  document.getElementById('progressText').textContent = `Question ${idx + 1} of ${total} • ${answered} answered`;
+
+  // Final results screen
+  if (idx >= total) {
+    renderResults();
+    return;
+  }
+
+  const q = QUESTIONS[idx];
+  const userAns = state.answers[idx];
+  const isAnswered = userAns !== undefined;
+  const showFeedback = state.mode === 'practice' && isAnswered;
+
+  let html = `
+    <div class="question-card">
+      <div class="question-number">Question ${idx + 1}${state.streak >= 3 ? `<span class="streak-badge">🔥 ${state.streak} streak</span>` : ''}</div>
+      <div class="question-text">${q.q}</div>
+      <div class="options">
+  `;
+
+  q.options.forEach((opt, i) => {
+    const letter = String.fromCharCode(65 + i);
+    let cls = 'option';
+    if (isAnswered) {
+      cls += ' disabled';
+      if (state.mode === 'practice') {
+        if (i === q.answer) cls += ' correct';
+        else if (i === userAns) cls += ' incorrect';
+      } else {
+        if (i === userAns) cls += ' selected';
+      }
+    }
+    html += `
+      <div class="${cls}" data-opt="${i}">
+        <span class="option-letter">${letter}.</span>
+        <span>${opt}</span>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  if (showFeedback) {
+    const correct = userAns === q.answer;
+    html += `
+      <div class="feedback ${correct ? 'correct' : 'incorrect'}" style="display:block;">
+        <strong>${correct ? '✓ Correct!' : '✗ Incorrect'}</strong><br>
+        ${correct ? '' : `The correct answer is <strong>${String.fromCharCode(65 + q.answer)}</strong>. `}
+        ${q.explanation}
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+  document.getElementById('quizArea').innerHTML = html;
+
+  // Wire up option clicks
+  if (!isAnswered) {
+    document.querySelectorAll('.option').forEach(el => {
+      el.addEventListener('click', () => {
+        const choice = parseInt(el.dataset.opt);
+        handleAnswer(choice, el);
+      });
+    });
+  }
+
+  // Nav buttons
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').textContent = (idx === total - 1) ? 'Finish →' : 'Next →';
+
+  renderGrid();
+  saveState();
+}
+
+function renderGrid() {
+  let html = '';
+  QUESTIONS.forEach((_, i) => {
+    let cls = 'grid-cell';
+    if (i === state.currentIdx) cls += ' current';
+    else if (state.answers[i] !== undefined) {
+      if (state.mode === 'practice') {
+        cls += state.correctMap[i] ? ' answered-correct' : ' answered-incorrect';
+      } else {
+        cls += ' answered';
+      }
+    }
+    html += `<div class="${cls}" data-idx="${i}">${i + 1}</div>`;
+  });
+  document.getElementById('questionGrid').innerHTML = html;
+  document.querySelectorAll('.grid-cell').forEach(el => {
+    el.addEventListener('click', () => {
+      state.currentIdx = parseInt(el.dataset.idx);
+      render();
+    });
+  });
+}
+
+function handleAnswer(choice, optEl) {
+  const idx = state.currentIdx;
+  const q = QUESTIONS[idx];
+  const isCorrect = choice === q.answer;
+
+  state.answers[idx] = choice;
+  state.correctMap[idx] = isCorrect;
+
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    let pts = 10;
+    if (state.streak >= 5) pts = 25;
+    else if (state.streak >= 3) pts = 15;
+    state.score += pts;
+
+    const rect = optEl.getBoundingClientRect();
+    showScorePopup(rect.left + rect.width / 2, rect.top, '+' + pts);
+    triggerCelebration(state.streak);
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+  render();
+}
+
+function showScorePopup(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'score-popup';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+// === RESULTS ===
+function renderResults() {
+  const correctCount = Object.values(state.correctMap).filter(v => v).length;
+  const total = QUESTIONS.length;
+  const pct = Math.round((correctCount / total) * 100);
+  const passed = pct >= 65;
+
+  let html = `
+    <div class="results-screen">
+      <h2>Quiz Complete!</h2>
+      <div class="final-score">${pct}%</div>
+      <div class="pass-fail ${passed ? 'pass' : 'fail'}">
+        ${passed ? '✓ PASS — Above NPPE 65% threshold' : '✗ Below NPPE 65% pass threshold'}
+      </div>
+      <div class="results-details">
+        <p><strong style="color:var(--gold);">Correct Answers:</strong> ${correctCount} / ${total}</p>
+        <p><strong style="color:var(--gold);">Total Score:</strong> ${state.score} points</p>
+        <p><strong style="color:var(--gold);">Best Streak:</strong> ${state.bestStreak}</p>
+        <p style="margin-top:12px; color:var(--text-muted); font-style:italic;">
+          ${passed ? 'Strong work — you are NPPE-ready on Chapter 3 material!' : 'Review the chapter and try again. Focus on incorrect answers in the question grid below.'}
+        </p>
+      </div>
+    </div>
+  `;
+  document.getElementById('quizArea').innerHTML = html;
+
+  if (passed) {
+    triggerFireworks(20);
+  }
+}
+
+// === PARTICLE / CELEBRATION SYSTEM ===
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+let particles = [];
+
+class Particle {
+  constructor(x, y, opts = {}) {
+    this.x = x; this.y = y;
+    this.vx = opts.vx ?? (Math.random() - 0.5) * 8;
+    this.vy = opts.vy ?? (Math.random() - 1.5) * 8;
+    this.gravity = opts.gravity ?? 0.18;
+    this.color = opts.color ?? `hsl(${Math.random() * 60 + 30}, 90%, 60%)`;
+    this.size = opts.size ?? Math.random() * 4 + 2;
+    this.life = opts.life ?? 80;
+    this.maxLife = this.life;
+    this.shape = opts.shape ?? 'circle';
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.2;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.vx *= 0.99;
+    this.life--;
+    this.rotation += this.rotSpeed;
+  }
+  draw() {
+    const alpha = Math.max(0, this.life / this.maxLife);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = this.color;
+
+    if (this.shape === 'star') {
+      this.drawStar(0, 0, 5, this.size * 1.6, this.size * 0.7);
+    } else if (this.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.shape === 'square') {
+      ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
+    } else if (this.shape === 'sparkle') {
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+  drawStar(cx, cy, spikes, outer, inner) {
+    let rot = Math.PI / 2 * 3;
+    let x = cx, y = cy;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outer);
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outer;
+      y = cy + Math.sin(rot) * outer;
+      ctx.lineTo(x, y);
+      rot += step;
+      x = cx + Math.cos(rot) * inner;
+      y = cy + Math.sin(rot) * inner;
+      ctx.lineTo(x, y);
+      rot += step;
+    }
+    ctx.lineTo(cx, cy - outer);
+    ctx.closePath();
+    ctx.fill();
+  }
+  isDead() { return this.life <= 0; }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => !p.isDead());
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+function triggerCelebration(streak) {
+  if (streak >= 5) {
+    triggerFireworks(3);
+    triggerStarBurst();
+  } else if (streak >= 3) {
+    triggerStarBurst();
+    triggerConfetti();
+  } else {
+    triggerConfetti();
+  }
+}
+
+function triggerConfetti() {
+  const cx = canvas.width / 2;
+  const goldShades = ['#d4af37', '#f4cf5c', '#b8941f', '#ffe27a', '#fff4c2'];
+  for (let i = 0; i < 60; i++) {
+    particles.push(new Particle(
+      cx + (Math.random() - 0.5) * 200,
+      canvas.height * 0.4,
+      {
+        vx: (Math.random() - 0.5) * 12,
+        vy: (Math.random() - 1.2) * 14,
+        color: goldShades[Math.floor(Math.random() * goldShades.length)],
+        size: Math.random() * 5 + 3,
+        life: 100,
+        shape: Math.random() > 0.5 ? 'square' : 'circle'
+      }
+    ));
+  }
+}
+
+function triggerStarBurst() {
+  const cx = canvas.width / 2;
+  const cy = canvas.height * 0.4;
+  for (let i = 0; i < 30; i++) {
+    const angle = (Math.PI * 2 * i) / 30;
+    const speed = Math.random() * 6 + 4;
+    particles.push(new Particle(cx, cy, {
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color: i % 2 === 0 ? '#f4cf5c' : '#fff4c2',
+      size: Math.random() * 5 + 4,
+      life: 90,
+      gravity: 0.05,
+      shape: 'star'
+    }));
+  }
+}
+
+function triggerFireworks(count = 1) {
+  for (let n = 0; n < count; n++) {
+    setTimeout(() => {
+      const fx = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+      const fy = Math.random() * canvas.height * 0.4 + canvas.height * 0.15;
+      const hue = Math.random() * 60 + 30;
+      for (let i = 0; i < 50; i++) {
+        const angle = (Math.PI * 2 * i) / 50;
+        const speed = Math.random() * 7 + 3;
+        particles.push(new Particle(fx, fy, {
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          color: `hsl(${hue + Math.random() * 30}, 95%, 65%)`,
+          size: Math.random() * 3 + 2,
+          life: 80,
+          gravity: 0.08,
+          shape: 'sparkle'
+        }));
+      }
+    }, n * 350);
+  }
+}
+
+// === CONTROLS ===
+document.getElementById('modeBtnPractice').addEventListener('click', () => switchMode('practice'));
+document.getElementById('modeBtnExam').addEventListener('click', () => switchMode('exam'));
+
+function switchMode(m) {
+  if (m === state.mode) return;
+  if (Object.keys(state.answers).length > 0) {
+    if (!confirm('Switching modes will reset your current quiz. Continue?')) return;
+    doReset(false);
+  }
+  state.mode = m;
+  document.getElementById('modeBtnPractice').classList.toggle('active', m === 'practice');
+  document.getElementById('modeBtnExam').classList.toggle('active', m === 'exam');
+  saveState();
+  render();
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (state.currentIdx > 0) {
+    state.currentIdx--;
+    render();
+  }
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  state.currentIdx++;
+  render();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('resetModal').classList.add('active');
+});
+document.getElementById('cancelReset').addEventListener('click', () => {
+  document.getElementById('resetModal').classList.remove('active');
+});
+document.getElementById('confirmReset').addEventListener('click', () => {
+  doReset(true);
+  document.getElementById('resetModal').classList.remove('active');
+});
+
+function doReset(rerender) {
+  state.currentIdx = 0;
+  state.answers = {};
+  state.correctMap = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  particles = [];
+  saveState();
+  if (rerender) render();
+}
+
+// === INIT ===
+loadState();
+initOrder();
+render();
+</script>
+</body>
+</html>

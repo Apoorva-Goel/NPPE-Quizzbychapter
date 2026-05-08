@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NPPE Practice — Chapter 2: Business Organizations</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1d3a;
+    --navy-2:#102a52;
+    --navy-3:#0a1830;
+    --gold:#d4a72c;
+    --gold-bright:#f5d061;
+    --cream:#f6efdc;
+    --text:#eaeaea;
+    --muted:#bdbdbd;
+    --good:#2ecc71;
+    --bad:#e74c3c;
+    --border:rgba(212,167,44,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--navy-3),var(--navy));color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+  canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:9999}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 22px 80px}
+  header{text-align:center;border-bottom:1px solid var(--border);padding-bottom:18px;margin-bottom:22px}
+  header h1{font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--gold);font-size:34px;margin:0 0 6px;letter-spacing:.5px}
+  header .sub{color:var(--cream);font-style:italic;font-size:15px}
+  .pill{display:inline-block;background:var(--navy-2);border:1px solid var(--border);padding:4px 12px;border-radius:999px;font-size:12px;color:var(--cream);margin-top:8px;letter-spacing:.5px;text-transform:uppercase}
+
+  /* Mode select */
+  .mode-card{background:var(--navy-2);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:22px;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+  .mode-card h2{font-family:'Cormorant Garamond',serif;color:var(--gold);margin:0 0 12px;font-size:26px}
+  .mode-card p{color:var(--muted);margin:0 0 18px;line-height:1.55}
+  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.mode-grid{grid-template-columns:1fr}}
+  .mode-btn{background:var(--navy-3);border:1px solid var(--border);color:var(--text);padding:18px;border-radius:10px;cursor:pointer;text-align:left;transition:all .2s}
+  .mode-btn:hover{border-color:var(--gold);background:var(--navy);transform:translateY(-2px)}
+  .mode-btn .name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-bright);margin-bottom:6px;font-weight:600}
+  .mode-btn .desc{font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* HUD */
+  .hud{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+  @media(max-width:640px){.hud{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center}
+  .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .stat .val{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);font-weight:700;margin-top:2px}
+  .stat.streak .val{color:var(--gold-bright)}
+
+  .progress-shell{height:8px;background:var(--navy-3);border-radius:6px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));width:0%;transition:width .35s ease}
+
+  /* Question card */
+  .q-card{background:var(--navy-2);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+  .q-num{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+  .q-text{font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.5;color:var(--cream);margin-bottom:18px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{background:var(--navy-3);border:1px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;color:var(--text);font-size:15px;transition:all .15s;display:flex;align-items:flex-start;gap:10px;text-align:left}
+  .opt:hover:not(.disabled){background:var(--navy);border-color:var(--gold)}
+  .opt.disabled{cursor:default}
+  .opt .letter{font-family:'Cormorant Garamond',serif;color:var(--gold);font-weight:700;min-width:22px}
+  .opt.correct{background:rgba(46,204,113,.15);border-color:var(--good)}
+  .opt.wrong{background:rgba(231,76,60,.15);border-color:var(--bad)}
+  .opt.correct .letter{color:var(--good)}
+  .opt.wrong .letter{color:var(--bad)}
+
+  .feedback{margin-top:16px;padding:14px;border-radius:10px;display:none;animation:slidein .3s ease}
+  .feedback.show{display:block}
+  .feedback.right{background:rgba(46,204,113,.12);border-left:3px solid var(--good)}
+  .feedback.wrong{background:rgba(231,76,60,.12);border-left:3px solid var(--bad)}
+  .feedback .verdict{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;margin-bottom:4px}
+  .feedback.right .verdict{color:var(--good)}
+  .feedback.wrong .verdict{color:var(--bad)}
+  .feedback .explain{color:var(--cream);font-size:14px;line-height:1.55}
+
+  @keyframes slidein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+  .controls{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+  .btn{background:var(--gold);color:var(--navy);border:none;padding:11px 22px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.4px;transition:all .15s}
+  .btn:hover{background:var(--gold-bright);transform:translateY(-1px)}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--border)}
+  .btn.ghost:hover{background:var(--navy-3);color:var(--gold-bright)}
+
+  /* Navigator grid */
+  .nav-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-top:18px}
+  @media(max-width:640px){.nav-grid{grid-template-columns:repeat(8,1fr)}}
+  .nav-cell{aspect-ratio:1;background:var(--navy-3);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .nav-cell:hover{border-color:var(--gold)}
+  .nav-cell.current{background:var(--gold);color:var(--navy);border-color:var(--gold-bright)}
+  .nav-cell.right{background:rgba(46,204,113,.3);border-color:var(--good);color:var(--cream)}
+  .nav-cell.wrong{background:rgba(231,76,60,.3);border-color:var(--bad);color:var(--cream)}
+  .nav-cell.answered{background:var(--navy);color:var(--cream)}
+
+  /* Floating popup */
+  .popup{position:fixed;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;color:var(--gold-bright);pointer-events:none;z-index:10000;text-shadow:0 2px 8px rgba(0,0,0,.6);animation:floatup 1.4s ease-out forwards}
+  @keyframes floatup{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:1;transform:translate(-50%,-30px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-140px) scale(1)}}
+
+  /* Result screen */
+  .result{background:var(--navy-2);border:1px solid var(--border);border-radius:14px;padding:36px 28px;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+  .result h2{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:34px;margin:0 0 8px}
+  .result .verdict-big{font-size:18px;color:var(--cream);margin-bottom:24px;font-style:italic}
+  .result .score-circle{width:160px;height:160px;border-radius:50%;border:4px solid var(--gold);margin:0 auto 22px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .result .score-circle .pct{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold-bright);font-weight:700}
+  .result .score-circle .of{font-size:13px;color:var(--muted)}
+  .result .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
+  @media(max-width:640px){.result .stats-row{grid-template-columns:1fr}}
+  .result .stats-row .stat{padding:14px}
+
+  /* Confirm modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:10001}
+  .modal.show{display:flex}
+  .modal-card{background:var(--navy-2);border:1px solid var(--border);border-radius:14px;padding:26px;max-width:420px;text-align:center}
+  .modal-card h3{font-family:'Cormorant Garamond',serif;color:var(--gold);margin:0 0 10px;font-size:24px}
+  .modal-card p{color:var(--cream);margin:0 0 20px;line-height:1.5}
+  .modal-buttons{display:flex;gap:10px;justify-content:center}
+
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .mode-tag{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);background:var(--navy-3);border:1px solid var(--border);padding:4px 10px;border-radius:6px}
+
+  footer{text-align:center;color:var(--muted);font-size:11px;margin-top:34px;padding-top:18px;border-top:1px solid rgba(212,167,44,.15)}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<div class="wrap">
+  <header>
+    <h1>Chapter 2 — Business Organizations</h1>
+    <div class="sub">NPPE Practice Exam · 50 questions · Pass mark 65%</div>
+    <span class="pill">Canadian Professional Engineering &amp; Geoscience · 6th ed.</span>
+  </header>
+
+  <!-- MODE SELECT -->
+  <div id="modeScreen">
+    <div class="mode-card">
+      <h2>Choose Your Mode</h2>
+      <p>Practice mode shows the correct answer and explanation immediately after each question. Exam mode hides feedback until the very end — replicating real NPPE conditions.</p>
+      <div class="mode-grid">
+        <button class="mode-btn" onclick="startQuiz('practice')">
+          <div class="name">Practice Mode</div>
+          <div class="desc">Instant feedback after every answer. Best for learning the material.</div>
+        </button>
+        <button class="mode-btn" onclick="startQuiz('exam')">
+          <div class="name">Exam Mode</div>
+          <div class="desc">No feedback until completion. Simulates real exam conditions.</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizScreen" style="display:none">
+    <div class="top-bar">
+      <span class="mode-tag" id="modeTag">Practice</span>
+      <button class="btn ghost" onclick="confirmReset()">Reset Quiz</button>
+    </div>
+    <div class="hud">
+      <div class="stat"><div class="label">Question</div><div class="val" id="qPos">1 / 50</div></div>
+      <div class="stat"><div class="label">Score</div><div class="val" id="score">0</div></div>
+      <div class="stat streak"><div class="label">Streak</div><div class="val" id="streak">0 🔥</div></div>
+      <div class="stat"><div class="label">Correct</div><div class="val" id="correct">0</div></div>
+    </div>
+    <div class="progress-shell"><div class="progress-bar" id="progress"></div></div>
+
+    <div class="q-card">
+      <div class="q-num" id="qNum">Question 1</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="opts"></div>
+      <div class="feedback" id="feedback"><div class="verdict" id="verdict"></div><div class="explain" id="explain"></div></div>
+      <div class="controls">
+        <button class="btn ghost" id="prevBtn" onclick="prev()">← Previous</button>
+        <button class="btn" id="nextBtn" onclick="next()">Next →</button>
+      </div>
+    </div>
+
+    <div class="nav-grid" id="navGrid"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultScreen" style="display:none">
+    <div class="result">
+      <h2 id="resultTitle">Exam Complete</h2>
+      <div class="verdict-big" id="resultVerdict"></div>
+      <div class="score-circle"><div class="pct" id="finalPct">0%</div><div class="of" id="finalOf">0 / 50</div></div>
+      <div class="stats-row">
+        <div class="stat"><div class="label">Total Score</div><div class="val" id="finalScore">0</div></div>
+        <div class="stat"><div class="label">Best Streak</div><div class="val" id="bestStreak">0</div></div>
+        <div class="stat"><div class="label">Time</div><div class="val" id="elapsed">0:00</div></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn" onclick="reviewAnswers()">Review Answers</button>
+        <button class="btn ghost" onclick="confirmReset()">Restart Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>NPPE Ontario · Chapter 2 · Standalone practice resource</footer>
+</div>
+
+<!-- Confirm modal -->
+<div class="modal" id="confirmModal">
+  <div class="modal-card">
+    <h3>Reset Quiz?</h3>
+    <p>This will clear your progress and start over. Are you sure?</p>
+    <div class="modal-buttons">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="doReset()">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====================== QUESTION BANK (50) ====================== */
+const QUESTIONS = [
+  {q:"Which of the following is NOT one of the three basic forms of business organization discussed in Chapter 2?",
+   o:["Sole proprietorship","Partnership","Corporation","Cooperative"],a:3,
+   e:"Chapter 2 identifies sole proprietorship, partnership, and corporation as the three basic forms. A cooperative is a separate, distinct form not addressed as a 'basic' form here."},
+
+  {q:"In a sole proprietorship, who personally bears any business losses?",
+   o:["The proprietor's bank","The government","The proprietor","The proprietor's customers"],a:2,
+   e:"In a sole proprietorship, the individual personally enjoys the profits and personally incurs any business losses."},
+
+  {q:"What is the essential risk of operating in a partnership?",
+   o:["Loss of trade secrets to other partners","Personal seizure of partner assets to satisfy partnership debts","Mandatory dissolution every five years","Inability to share profits"],a:1,
+   e:"The essential risk is that partnership creditors may obtain judgments against partners personally, satisfied by seizure and sale of personal assets."},
+
+  {q:"A corporation is best described in the chapter as:",
+   o:["An extension of its directors","A fictitious person — an entity unto itself","A type of partnership","A government-controlled enterprise"],a:1,
+   e:"The corporation is described as a 'fictitious person,' distinct from its shareholder owners; it owns its own assets and incurs its own liabilities."},
+
+  {q:"The 1897 House of Lords decision establishing the corporation's separate legal identity is:",
+   o:["Donoghue v Stevenson","Salomon v Salomon &amp; Co Ltd","Fern Brand Waxes Ltd v Pearl","Nedco Ltd v Clark"],a:1,
+   e:"Salomon v Salomon &amp; Co Ltd (1897) confirmed that a corporation is a separate and distinct entity from its shareholders."},
+
+  {q:"In Salomon v Salomon, the House of Lords ultimately held that:",
+   o:["Salomon was personally liable to creditors","The corporation was a sham","Salomon's corporation was a separate and distinct entity","The corporate form should be abolished"],a:2,
+   e:"The House of Lords recognized Salomon's corporation as separate and distinct from himself, emphasizing there was no evidence of intent to deceive or defraud."},
+
+  {q:"In what circumstances will courts refuse to recognize the separate identity of a corporation?",
+   o:["When the corporation is small","When the limited-liability characteristic is being used to perpetrate a fraud","Whenever creditors are unpaid","When the corporation has only one shareholder"],a:1,
+   e:"Where it is established that the corporation is being used to perpetrate a fraud, courts will refuse to recognize the separate identities of the individual and the corporation."},
+
+  {q:"In Fern Brand Waxes Ltd v Pearl (1972), the defendant misused his corporate position to:",
+   o:["Avoid paying personal income tax","Transfer unauthorized funds as loans to companies he controlled","Sell shares without disclosure","Forge corporate by-laws"],a:1,
+   e:"Pearl, a director, officer, and accountant, transferred unauthorized funds as loans to two companies he controlled, partly to purchase shares in Fern Brand Waxes."},
+
+  {q:"In Nedco Ltd v Clark (1973), the Saskatchewan Court of Appeal addressed:",
+   o:["Whether a strike could be enjoined against a wholly owned subsidiary","Whether a director was personally liable for fraud","Whether a partnership had been dissolved","Whether a guarantee was enforceable"],a:0,
+   e:"The court considered whether picketing of Nedco Ltd. (a wholly owned subsidiary of Northern Electric) could be restrained during a lawful strike against the parent company."},
+
+  {q:"The Nedco decision concluded that the corporate veil:",
+   o:["Should never be lifted","Should always be lifted in labour disputes","Can be lifted in particular circumstances without destroying the corporation's separate identity for other purposes","Was abolished in Canadian law"],a:2,
+   e:"The court concluded that lifting the veil for a specific purpose does not destroy the corporation's recognition as an independent and autonomous entity for all other purposes."},
+
+  {q:"Under the Partnership Act of Ontario, a partnership is dissolved by all of the following EXCEPT:",
+   o:["Death of a partner","Bankruptcy of a partner","Insolvency of a partner","A change in the partnership's office address"],a:3,
+   e:"Unless the partnership agreement provides otherwise, the Partnership Act dissolves a partnership upon death, bankruptcy, or insolvency of a partner — not upon address changes."},
+
+  {q:"How does the death of a shareholder affect a corporation?",
+   o:["It dissolves the corporation","It triggers automatic asset distribution","It does not dissolve the corporation","It transfers all shares to the spouse"],a:2,
+   e:"A corporation has perpetual existence; the death of a shareholder does not dissolve it."},
+
+  {q:"When an incorporator signs a personal guarantee for the corporation's debts:",
+   o:["The corporation is dissolved","The incorporator becomes personally liable to that creditor to the extent of the guarantee","The guarantee is automatically void","The corporation loses its tax status"],a:1,
+   e:"The guarantor becomes personally obligated to the lending institution to the extent of the guarantee — losing the limited-liability advantage as to that creditor."},
+
+  {q:"The 'small business deduction' under the Income Tax Act (Canada) is generally available to:",
+   o:["Any partnership","A Canadian-controlled private corporation (CCPC) on active business income","Any sole proprietorship","Public corporations only"],a:1,
+   e:"A CCPC is generally eligible to receive a credit (commonly called the small business deduction) on income from an active business carried on in Canada."},
+
+  {q:"When a corporation distributes its after-tax income to shareholders by way of dividends, the shareholder:",
+   o:["Pays no further tax","Pays tax on the dividend income but is entitled to a dividend tax credit","Receives the dividend tax-free always","Must reinvest the dividend"],a:1,
+   e:"Each individual shareholder pays tax on dividend income and is entitled to a dividend tax credit."},
+
+  {q:"What 'timing advantage' does the corporate form offer regarding shareholder taxes?",
+   o:["Shareholders pay tax annually regardless of dividends","Tax on dividends is payable only when dividends are actually paid","Shareholders never pay tax on dividends","Dividends are taxed in the year the corporation earns the income"],a:1,
+   e:"Tax on a dividend is payable only when the dividend is actually paid; deferring the dividend defers the tax."},
+
+  {q:"Which of the following is identified in the chapter as a departure from the strict Salomon principle?",
+   o:["Mandatory annual share buybacks","Courts 'piercing the corporate veil' in exceptional circumstances","Public registration of all directors","Reduced corporate tax rates"],a:1,
+   e:"The chapter lists piercing the corporate veil in exceptional circumstances, disregard where fraud is involved, and 'association' for tax purposes as departures from Salomon."},
+
+  {q:"The Professional Engineers Act of Ontario:",
+   o:["Prohibits engineers from incorporating","Recognizes that engineers may incorporate and carry on the business of engineering as a corporation","Requires every engineer to be a sole proprietor","Treats all engineering firms as partnerships"],a:1,
+   e:"The Act and similar provincial statutes recognize that engineers may incorporate and carry on the business of engineering as a corporation."},
+
+  {q:"Why is it advisable for partners to retain legal counsel when forming a partnership?",
+   o:["To register the partnership with the federal government","Because of the very personal nature of the obligations partnership creates","To obtain a federal business number","To exempt partners from tax"],a:1,
+   e:"Because of the personal nature of partnership obligations, legal counsel should prepare the agreement and ideally each partner should obtain independent legal advice."},
+
+  {q:"Which of the following is NOT identified in the chapter as an important aspect of a partnership agreement?",
+   o:["Description of management responsibilities","Basis for calculating each partner's share of profits or losses","Basis for the withdrawal or expulsion of partners","The personal income tax returns of each partner"],a:3,
+   e:"The chapter lists management responsibilities, profit/loss share, contributions to working capital, dissolution provisions, and withdrawal/expulsion as important — not personal tax returns."},
+
+  {q:"Under the Limited Partnerships Act of Ontario, a limited partnership consists of:",
+   o:["Only limited partners","Only general partners","One or more general partners and one or more limited partners","Two general partners only"],a:2,
+   e:"A limited partnership comprises one or more general partners and one or more limited partners."},
+
+  {q:"In a limited partnership, the limited partner's liability is normally limited to:",
+   o:["The amount the limited partner contributed or agreed to contribute","Half of the partnership's debts","All partnership debts","The general partner's investment"],a:0,
+   e:"The limited partner's liability is normally limited to the amount contributed or agreed to be contributed."},
+
+  {q:"Under Section 6(2) of the Limited Partnerships Act of Ontario, if a limited partner's name is used in the partnership name:",
+   o:["The partnership is dissolved","That person may be liable as a general partner to creditors who lacked actual knowledge","The limited partner gets a tax break","Nothing happens"],a:1,
+   e:"If a limited partner's name is used, that person may be liable as a general partner to any creditor who extended credit without actual knowledge that the person is not a general partner."},
+
+  {q:"Under Section 13(1) of the Limited Partnerships Act of Ontario, a limited partner who takes part in the control of the business:",
+   o:["Receives a higher share of profits","Can become liable as a general partner","Must be removed by court order","Loses voting rights"],a:1,
+   e:"A limited partner who takes part in the control of the business can become liable as a general partner under s. 13(1)."},
+
+  {q:"A Limited Liability Partnership (LLP) for professionals:",
+   o:["Eliminates all liability for all partners","Limits each partner's liabilities to their own conduct and protects from co-partners' liabilities","Requires no professional liability insurance","Is identical to a corporation"],a:1,
+   e:"LLPs limit each partner's liability to their own conduct and protect them from the liabilities of other partners; governing legislation requires professional liability insurance."},
+
+  {q:"Where would a business proposing to operate in every province of Canada most likely incorporate?",
+   o:["Provincially in Ontario only","Federally under the Canada Business Corporations Act","Provincially in British Columbia only","As a partnership"],a:1,
+   e:"If incorporators propose to carry on business in all provinces, federal incorporation may be appropriate."},
+
+  {q:"Which two provinces have a special reciprocal arrangement allowing each other's incorporated businesses to operate without an extra-provincial licence?",
+   o:["Ontario and Manitoba","Ontario and Quebec","Alberta and British Columbia","Quebec and New Brunswick"],a:1,
+   e:"A special reciprocal arrangement exists between Ontario and Quebec for cross-border business without extra-provincial licensing."},
+
+  {q:"Under the Canada Business Corporations Act and the Business Corporations Act of Ontario, defining a corporation's business 'objects' is:",
+   o:["Mandatory","Permitted but not required — a corporation has the powers of a natural person","Prohibited","Required only for engineering corporations"],a:1,
+   e:"Neither Act requires a corporation to define its objects; each permits a limitation, and a corporation otherwise has the rights and powers of a natural person."},
+
+  {q:"Which is NOT one of the typical defining features of a 'private' (closely held) corporation listed in the chapter?",
+   o:["Restrictions on the right to transfer shares","Not more than 50 shareholders (excluding present and former employees)","Prohibition on inviting the public to subscribe for securities","Mandatory dividend declaration"],a:3,
+   e:"The three features listed are share-transfer restrictions, the 50-shareholder cap (excluding employees), and prohibition on public subscription invitations — not mandatory dividends."},
+
+  {q:"A decision by a closely held corporation to 'go public' will require:",
+   o:["No new compliance steps","Continuing compliance with extensive disclosure and reporting requirements of provincial securities legislation","Conversion into a partnership","Cancellation of the share register"],a:1,
+   e:"Going public necessitates continuing compliance with extensive disclosure and reporting requirements under provincial securities legislation."},
+
+  {q:"In a typical corporate structure, who elects the directors of a corporation?",
+   o:["The officers","The shareholders","The auditors","The provincial government"],a:1,
+   e:"Shareholders, as owners of the corporation, elect its directors."},
+
+  {q:"The day-to-day business management of a corporation is provided by:",
+   o:["The shareholders","The directors","The officers, who are elected or appointed by the directors","The auditors"],a:2,
+   e:"Officers are elected or appointed by directors and provide day-to-day management; their duties are normally set out in the corporation's by-laws."},
+
+  {q:"Why are shareholders' agreements particularly important in closely held corporations?",
+   o:["They are required by federal law for tax purposes","They protect minority shareholders who could otherwise be ousted, denied dividends, and unable to sell shares","They eliminate the need for directors","They replace the corporate by-laws"],a:1,
+   e:"Without an agreement, a minority shareholder may lose board representation, employment, and dividends — and may be unable to dispose of shares."},
+
+  {q:"Which is NOT typically covered in a shareholders' agreement?",
+   o:["Who may nominate members of the board","The basis upon which issued shares may be sold","Trade-secret non-disclosure obligations","The corporation's federal tax remittance schedule"],a:3,
+   e:"Typical content includes director nomination rights, guarantee obligations, share-sale terms, trade-secret protection, and anti-dilution provisions — not the corporation's tax remittance schedule."},
+
+  {q:"Under Section 134(1) of the Business Corporations Act of Ontario, every director and officer must:",
+   o:["Act honestly and in good faith with a view to the best interests of the corporation, and exercise the care, diligence, and skill of a reasonably prudent person","Maximize their own personal returns","Be a Canadian citizen","Hold at least 10% of the issued shares"],a:0,
+   e:"Section 134(1) imposes the duty of honesty and good faith plus the standard of care, diligence, and skill of a reasonably prudent person in comparable circumstances."},
+
+  {q:"The duty of a director to act honestly, in good faith, and in the best interests of the corporation is referred to as the:",
+   o:["Equitable duty","Statutory duty only","Fiduciary duty","Tort duty"],a:2,
+   e:"This obligation is the director's 'fiduciary duty' to the corporation — acting as a trustee with scrupulous good faith for another's benefit."},
+
+  {q:"Under Section 131 of the Business Corporations Act of Ontario, a director may be personally liable for:",
+   o:["Up to 12 months of unpaid corporate taxes","Up to six months of unpaid wages of employees of the corporation","All of the corporation's debts","Customer warranty claims"],a:1,
+   e:"Directors are jointly and severally liable for up to six months of employees' unpaid wages plus accrued vacation pay during their tenure, subject to s. 131 procedural requirements."},
+
+  {q:"Section 242 of the Income Tax Act (Canada) imposes personal liability on:",
+   o:["All shareholders, regardless of conduct","Officers, directors, or agents who direct, authorize, assent to, acquiesce in, or participate in an offence","Only the corporate auditor","Only officers, never directors"],a:1,
+   e:"Officers, directors, or agents who direct, authorize, assent to, acquiesce in, or participate in an offence are personally guilty as a party to it."},
+
+  {q:"Under Subsection 65(4) of the Competition Act (Canada), the maximum penalty against a director or officer who assents to or acquiesces in the offence is:",
+   o:["A fine of $1,000","A fine of $5,000, or imprisonment of up to two years, or both","Mandatory disqualification only","A fine of $50,000"],a:1,
+   e:"The penalty is a fine of not more than $5,000, or imprisonment for not more than two years, or both."},
+
+  {q:"Under Section 250(1) of the Canada Business Corporations Act, a director or officer who knowingly authorized, permitted, or acquiesced in filing a document containing an untrue statement is liable to:",
+   o:["A fine of up to $5,000, or imprisonment of up to six months, or both","Disqualification only","Civil damages only","Lifetime disqualification"],a:0,
+   e:"The penalty is a fine of up to $5,000, or imprisonment for up to six months, or both."},
+
+  {q:"What must a director do when he or she has a personal interest in a material contract with the corporation?",
+   o:["Vote in favour of it","Disclose the interest and refrain from voting in approval of it","Resign immediately","Buy out the other directors"],a:1,
+   e:"Each director must disclose any personal interest in any material contract or transaction and must not vote in approval of it."},
+
+  {q:"What is the consequence of a director failing to disclose a personal interest in a contract with the corporation?",
+   o:["Nothing — disclosure is voluntary","The director may be accountable to the corporation or shareholders for any profit or gain realized","The contract is automatically void","The director loses voting privileges only"],a:1,
+   e:"Failure to disclose can render the director accountable to the corporation or its shareholders for any profit or gain from the contract."},
+
+  {q:"A joint venture is best described in the chapter as:",
+   o:["A type of public corporation","Often essentially a partnership limited to one particular project","A government-mandated entity","A form of trust"],a:1,
+   e:"A joint venture is often essentially a partnership limited to one particular project; scoping it narrowly protects venturers' assets."},
+
+  {q:"To protect themselves in a joint venture, joint venturers are advised to:",
+   o:["Avoid written agreements","Indemnify each other for liabilities arising from negligently performed services and contract obligations","Combine all of their assets permanently","Always incorporate the venture as a federal corporation"],a:1,
+   e:"It is advisable for each joint venturer to indemnify the others for liabilities arising from negligently performed services and contract obligations."},
+
+  {q:"In the Skylift Inc. / Johnson's Skyhooks case study, what was Smith's percentage shareholding in Skylift Inc.?",
+   o:["10%","25%","50%","75%"],a:1,
+   e:"Smith was a 25 percent shareholder and director of Skylift Inc."},
+
+  {q:"In the same case study, what was Smith's shareholding in Johnson's Skyhooks Limited?",
+   o:["10%","25%","50%","100%"],a:2,
+   e:"Smith acquired a 50 percent shareholder interest in Johnson's Skyhooks Limited."},
+
+  {q:"What was Smith's principal breach of duty at the Skylift board meeting?",
+   o:["Failing to attend the meeting","Failing to disclose his interest in Johnson's Skyhooks Limited and casting the deciding vote","Refusing to sign a resolution","Disclosing the interest too early"],a:1,
+   e:"Smith failed to disclose his interest in Johnson's Skyhooks Limited and cast the deciding vote authorizing the asset purchase — a breach of fiduciary duty and statutory disclosure obligations."},
+
+  {q:"The Salomon principle of corporate separateness:",
+   o:["Has been abolished in Canadian law","Continues to be a fundamental feature of Canadian law, with limited exceptions","Applies only to public corporations","Applies only when there is fraud"],a:1,
+   e:"As reaffirmed in Nedco, the Salomon principle continues to be a fundamental feature of Canadian law; departures are exceptions, not the rule."},
+
+  {q:"Which of the following statements about a corporation is TRUE?",
+   o:["A shareholder can never sue the corporation","A corporation cannot sue or be sued in its own name","A shareholder of a corporation can contract with or sue that corporation","A corporation must always have at least 50 shareholders"],a:2,
+   e:"Because a corporation is a separate entity, a shareholder can contract with — or sue — the corporation."},
+
+  {q:"Which statement best summarizes the chapter's overall view of departures from the Salomon principle?",
+   o:["Departures are now the rule, not the exception","Departures (e.g., piercing the veil, fraud-based disregard, tax 'association') are exceptions, not the rule","The Salomon principle has been replaced by partnership law","Only federal courts may depart from Salomon"],a:1,
+   e:"The chapter explicitly cautions that such departures are the exceptions, not the rule."}
+];
+
+/* ====================== STATE ====================== */
+let state = {
+  mode:'practice',
+  order:[],
+  idx:0,
+  answers:{},          // {origIndex: chosenLetterIndex}
+  correct:0,
+  score:0,
+  streak:0,
+  bestStreak:0,
+  start:null,
+  finished:false,
+  reviewing:false
+};
+
+/* ====================== UTIL ====================== */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function save(){try{localStorage.setItem('ch2_quiz_state',JSON.stringify(state))}catch(e){}}
+function load(){try{const s=localStorage.getItem('ch2_quiz_state');return s?JSON.parse(s):null}catch(e){return null}}
+function clearSave(){try{localStorage.removeItem('ch2_quiz_state')}catch(e){}}
+
+/* ====================== CANVAS FX ====================== */
+const fx = document.getElementById('fx');
+const ctx = fx.getContext('2d');
+function resize(){fx.width=window.innerWidth;fx.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+
+let particles = [];
+function spawnConfetti(){
+  const colors=['#d4a72c','#f5d061','#f6efdc','#2ecc71','#fff'];
+  for(let i=0;i<80;i++){
+    particles.push({
+      x:Math.random()*fx.width,y:-20,
+      vx:(Math.random()-.5)*4,vy:Math.random()*3+2,
+      size:Math.random()*6+3,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      rot:Math.random()*Math.PI*2,vr:(Math.random()-.5)*.2,
+      life:1,kind:'confetti'
+    });
+  }
+}
+function spawnFireworks(){
+  const cx=Math.random()*fx.width, cy=fx.height*0.3+Math.random()*fx.height*0.3;
+  const colors=['#d4a72c','#f5d061','#fff','#2ecc71','#ff6b6b'];
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  for(let i=0;i<60;i++){
+    const ang=(i/60)*Math.PI*2;
+    const sp=Math.random()*4+3;
+    particles.push({
+      x:cx,y:cy,
+      vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,
+      size:3,color:c,life:1,kind:'spark'
+    });
+  }
+}
+function spawnStars(){
+  for(let i=0;i<25;i++){
+    particles.push({
+      x:Math.random()*fx.width,y:Math.random()*fx.height,
+      vx:0,vy:0,size:Math.random()*8+4,
+      color:'#f5d061',life:1,kind:'star',
+      rot:Math.random()*Math.PI*2,vr:0.05
+    });
+  }
+}
+function spawnGoldShower(){
+  for(let i=0;i<60;i++){
+    particles.push({
+      x:Math.random()*fx.width,y:-20,
+      vx:(Math.random()-.5)*1.5,vy:Math.random()*2+3,
+      size:Math.random()*4+2,
+      color:Math.random()<.5?'#d4a72c':'#f5d061',
+      life:1,kind:'gold'
+    });
+  }
+}
+
+function drawStar(x,y,r,rot){
+  ctx.save();
+  ctx.translate(x,y);ctx.rotate(rot);
+  ctx.beginPath();
+  for(let i=0;i<5;i++){
+    ctx.lineTo(Math.cos((18+i*72)*Math.PI/180)*r, -Math.sin((18+i*72)*Math.PI/180)*r);
+    ctx.lineTo(Math.cos((54+i*72)*Math.PI/180)*r/2.5, -Math.sin((54+i*72)*Math.PI/180)*r/2.5);
+  }
+  ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+function tick(){
+  ctx.clearRect(0,0,fx.width,fx.height);
+  particles = particles.filter(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.kind==='confetti'){p.vy+=0.12;p.rot+=p.vr;p.life-=.01}
+    else if(p.kind==='spark'){p.vy+=0.06;p.vx*=.99;p.vy*=.99;p.life-=.018}
+    else if(p.kind==='star'){p.life-=.02;p.rot+=p.vr}
+    else if(p.kind==='gold'){p.vy+=0.05;p.life-=.008}
+    if(p.life<=0||p.y>fx.height+40)return false;
+    ctx.globalAlpha=Math.max(0,p.life);
+    ctx.fillStyle=p.color;
+    if(p.kind==='confetti'){
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.5);
+      ctx.restore();
+    } else if(p.kind==='star'){
+      drawStar(p.x,p.y,p.size,p.rot);
+    } else {
+      ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+    }
+    return true;
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+function celebrate(streak){
+  if(streak>=10){spawnFireworks();spawnGoldShower();}
+  else if(streak>=5){spawnFireworks();spawnConfetti();}
+  else if(streak>=3){spawnConfetti();spawnStars();}
+  else {spawnConfetti();}
+}
+
+function popupAt(x,y,text){
+  const el=document.createElement('div');
+  el.className='popup';
+  el.style.left=x+'px';el.style.top=y+'px';
+  el.textContent=text;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+/* ====================== QUIZ FLOW ====================== */
+function startQuiz(mode){
+  const saved = load();
+  if(saved && saved.mode===mode && !saved.finished){
+    if(confirm('Resume your previous '+mode+' attempt?')){
+      state = saved;
+      showQuiz();
+      return;
+    }
+  }
+  state = {
+    mode,
+    order: shuffle(QUESTIONS.map((_,i)=>i)),
+    idx:0,answers:{},correct:0,score:0,streak:0,bestStreak:0,
+    start:Date.now(),finished:false,reviewing:false
+  };
+  save();
+  showQuiz();
+}
+function showQuiz(){
+  document.getElementById('modeScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('modeTag').textContent = state.mode==='exam' ? 'Exam Mode' : 'Practice Mode';
+  render();
+}
+
+function render(){
+  const total = state.order.length;
+  const origIdx = state.order[state.idx];
+  const q = QUESTIONS[origIdx];
+
+  document.getElementById('qPos').textContent = (state.idx+1)+' / '+total;
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('streak').textContent = state.streak+' 🔥';
+  document.getElementById('correct').textContent = state.correct;
+  document.getElementById('progress').style.width = ((state.idx)/total*100)+'%';
+
+  document.getElementById('qNum').textContent = 'Question '+(state.idx+1);
+  document.getElementById('qText').innerHTML = q.q;
+
+  const optsEl = document.getElementById('opts');
+  optsEl.innerHTML='';
+  const letters=['A','B','C','D','E','F'];
+  q.o.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.innerHTML='<span class="letter">'+letters[i]+'</span><span>'+opt+'</span>';
+    btn.onclick=()=>choose(i,btn);
+    optsEl.appendChild(btn);
+  });
+
+  // Restore prior answer
+  const fb = document.getElementById('feedback');
+  fb.classList.remove('show','right','wrong');
+  document.getElementById('nextBtn').textContent = (state.idx===total-1)?'Finish ✓':'Next →';
+  document.getElementById('prevBtn').disabled = state.idx===0;
+
+  if(origIdx in state.answers){
+    const chosen = state.answers[origIdx];
+    Array.from(optsEl.children).forEach((el,i)=>{
+      el.classList.add('disabled');
+      if(state.mode==='practice' || state.reviewing){
+        if(i===q.a) el.classList.add('correct');
+        if(i===chosen && chosen!==q.a) el.classList.add('wrong');
+      } else {
+        if(i===chosen) el.style.background='var(--navy)';
+      }
+    });
+    if(state.mode==='practice' || state.reviewing){
+      showFeedback(chosen===q.a, q);
+    }
+  }
+
+  renderNav();
+}
+
+function renderNav(){
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML='';
+  state.order.forEach((origIdx,i)=>{
+    const cell=document.createElement('div');
+    cell.className='nav-cell';
+    cell.textContent=i+1;
+    if(i===state.idx) cell.classList.add('current');
+    else if(origIdx in state.answers){
+      if(state.mode==='practice' || state.reviewing){
+        cell.classList.add(state.answers[origIdx]===QUESTIONS[origIdx].a?'right':'wrong');
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    cell.onclick=()=>{state.idx=i;render();save()};
+    grid.appendChild(cell);
+  });
+}
+
+function choose(i, btn){
+  if(state.reviewing) return;
+  const origIdx = state.order[state.idx];
+  if(origIdx in state.answers) return;
+  const q = QUESTIONS[origIdx];
+  state.answers[origIdx] = i;
+
+  const right = i===q.a;
+  if(right){
+    state.correct++;
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak,state.streak);
+    const base = 10;
+    const bonus = Math.min(state.streak-1,10)*2; // up to +20
+    const gained = base+bonus;
+    state.score += gained;
+
+    // Visual feedback
+    const r = btn.getBoundingClientRect();
+    popupAt(r.left+r.width/2, r.top, '+'+gained+(bonus>0?' 🔥':''));
+    celebrate(state.streak);
+  } else {
+    state.streak=0;
+  }
+
+  // Lock options
+  Array.from(document.getElementById('opts').children).forEach(el=>el.classList.add('disabled'));
+
+  if(state.mode==='practice'){
+    Array.from(document.getElementById('opts').children).forEach((el,j)=>{
+      if(j===q.a) el.classList.add('correct');
+      if(j===i && !right) el.classList.add('wrong');
+    });
+    showFeedback(right,q);
+  } else {
+    btn.style.background='var(--navy)';
+  }
+
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('streak').textContent = state.streak+' 🔥';
+  document.getElementById('correct').textContent = state.correct;
+  renderNav();
+  save();
+}
+
+function showFeedback(right,q){
+  const fb = document.getElementById('feedback');
+  fb.classList.add('show');
+  fb.classList.remove('right','wrong');
+  fb.classList.add(right?'right':'wrong');
+  document.getElementById('verdict').textContent = right?'Correct ✓':'Incorrect ✗';
+  document.getElementById('explain').innerHTML = q.e;
+}
+
+function next(){
+  if(state.idx===state.order.length-1){
+    finish();
+  } else {
+    state.idx++;render();save();
+  }
+}
+function prev(){
+  if(state.idx>0){state.idx--;render();save()}
+}
+
+function finish(){
+  state.finished=true;save();
+  const total=state.order.length;
+  const pct=Math.round(state.correct/total*100);
+  const elapsedMs = Date.now()-state.start;
+  const mins = Math.floor(elapsedMs/60000);
+  const secs = Math.floor((elapsedMs%60000)/1000);
+
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='block';
+  document.getElementById('finalPct').textContent = pct+'%';
+  document.getElementById('finalOf').textContent = state.correct+' / '+total;
+  document.getElementById('finalScore').textContent = state.score;
+  document.getElementById('bestStreak').textContent = state.bestStreak+' 🔥';
+  document.getElementById('elapsed').textContent = mins+':'+String(secs).padStart(2,'0');
+
+  const passed = pct>=65;
+  document.getElementById('resultTitle').textContent = passed?'🎉 You Passed!':'Keep Studying';
+  document.getElementById('resultVerdict').textContent = passed
+    ? 'Above the 65% NPPE pass mark — well done.'
+    : 'Below the 65% NPPE pass mark. Review and try again.';
+
+  if(passed){
+    spawnFireworks();spawnGoldShower();spawnConfetti();
+    setTimeout(spawnFireworks,400);
+    setTimeout(spawnFireworks,900);
+  }
+}
+
+function reviewAnswers(){
+  state.reviewing=true;
+  state.idx=0;
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  render();
+}
+
+/* ====================== RESET ====================== */
+function confirmReset(){document.getElementById('confirmModal').classList.add('show')}
+function closeModal(){document.getElementById('confirmModal').classList.remove('show')}
+function doReset(){
+  closeModal();
+  clearSave();
+  state = {mode:'practice',order:[],idx:0,answers:{},correct:0,score:0,streak:0,bestStreak:0,start:null,finished:false,reviewing:false};
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('modeScreen').style.display='block';
+  particles=[];
+}
+
+/* ====================== AUTOLOAD ====================== */
+(function init(){
+  const saved = load();
+  if(saved && saved.order && saved.order.length){
+    state = saved;
+    if(saved.finished){
+      finish();
+    } else {
+      showQuiz();
+    }
+  }
+})();
+</script>
+</body>
+</html>
