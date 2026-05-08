@@ -83,9 +83,9 @@ window.QUIZZES_DATA = {
         { num: 3,  title: "Global Considerations",                   file: "book1/chapter3.html",  questions: 50 },
         { num: 4,  title: "Tort Liability",                          file: "book1/chapter4.html",  questions: 50 },
         { num: 5,  title: "Limitation Periods",                      file: "book1/chapter5.html",  questions: 50 },
-        { num: 6,  title: "Proof & Contracts",                       file: "book1/chapter6to7.html",  questions: 25 },
-        { num: 8,  title: "Offer, Intent, Consideration & Capacity", file: "book1/chapter8to11.html",  questions: 52 },
-        { num: 12,  title: "Contract Law for the Engineer",          file: "book1/chapter12to15.html",  questions: 50 },
+        { num: 6,  title: "Proof & Contracts",                       file: "book1/chapter6.html",  questions: 25 },
+        { num: 8,  title: "Offer, Intent, Consideration & Capacity", file: "book1/chapter8.html",  questions: 52 },
+        { num: 12,  title: "Contract Law for the Engineer",          file: "book1/chapter12.html",  questions: 50 },
         { num: 16,  title: "Tendering Issues — Contract A",          file: "book1/chapter16.html",  questions: 50 }
         // EXAMPLE — when ready, add chapters like this:
         // { num: 1, title: "Introduction to Engineering Law", file: "book2/chapter1.html", questions: 50 }
