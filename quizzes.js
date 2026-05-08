@@ -71,13 +71,22 @@ window.QUIZZES_DATA = {
     {
       id: "book2",
       shortLabel: "Book 2",
-      title: "Law for Professional Engineers",
-      edition: "Canadian and Global Insights",
-      authors: "",
-      publisher: "",
+      title: "Law for Professional Engineers:Canadian and Global Insights",
+      edition: "Fofth Edition",
+      authors: "Donal L. Marston",
+      publisher: "McGraw Hill",
       year: null,
-      totalChapters: null,         // <-- set this once you know the total chapter count
+      totalChapters: 35,         // <-- set this once you know the total chapter count
       chapters: [
+        { num: 1,  title: "The Canadian Legal System",               file: "book1/chapter1.html",  questions: 50 },
+        { num: 2,  title: "Business Organizations",                  file: "book1/chapter2.html",  questions: 50 },
+        { num: 3,  title: "Global Considerations",                   file: "book1/chapter3.html",  questions: 50 },
+        { num: 4,  title: "Tort Liability",                          file: "book1/chapter4.html",  questions: 50 },
+        { num: 5,  title: "Limitation Periods",                      file: "book1/chapter5.html",  questions: 50 },
+        { num: 6,  title: "Proof & Contracts",                       file: "book1/chapter6to7.html",  questions: 25 },
+        { num: 8,  title: "Offer, Intent, Consideration & Capacity", file: "book1/chapter8to11.html",  questions: 52 },
+        { num: 12,  title: "Contract Law for the Engineer",          file: "book1/chapter12to15.html",  questions: 50 },
+        { num: 16,  title: "Tendering Issues — Contract A",          file: "book1/chapter16.html",  questions: 50 }
         // EXAMPLE — when ready, add chapters like this:
         // { num: 1, title: "Introduction to Engineering Law", file: "book2/chapter1.html", questions: 50 }
       ]
