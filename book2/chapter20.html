@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice — Chapters 20–23 (BOOK1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-deep: #0a1428;
+    --navy: #122144;
+    --navy-mid: #1a2c52;
+    --navy-soft: #243766;
+    --gold: #d4a949;
+    --gold-bright: #f3c75a;
+    --gold-soft: #b8923a;
+    --gold-dim: #8c6c2c;
+    --cream: #f4ecd5;
+    --cream-dim: #d9cfb7;
+    --ink: #e8dfc6;
+    --rose: #c97c5d;
+    --green: #6fa86b;
+    --red: #c75450;
+    --shadow: rgba(0, 0, 0, 0.45);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: radial-gradient(ellipse at top, #1a2c52 0%, #0a1428 55%, #050a18 100%);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.55;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(212, 169, 73, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(212, 169, 73, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  #fxCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  /* ============ HEADER ============ */
+  header.hero {
+    text-align: center;
+    padding: 24px 16px 36px;
+    border-bottom: 1px solid rgba(212, 169, 73, 0.18);
+    margin-bottom: 32px;
+    position: relative;
+  }
+  header.hero::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 18px auto 0;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  h1.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--cream);
+    margin: 0 0 8px;
+    letter-spacing: 0.01em;
+  }
+  h1.title em {
+    font-style: italic;
+    color: var(--gold-bright);
+    font-weight: 400;
+  }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--cream-dim);
+    max-width: 620px;
+    margin: 6px auto 0;
+  }
+  /* ============ DASHBOARD BAR ============ */
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(26, 44, 82, 0.7), rgba(18, 33, 68, 0.7));
+    border: 1px solid rgba(212, 169, 73, 0.22);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin-bottom: 26px;
+    backdrop-filter: blur(8px);
+  }
+  .stat {
+    text-align: center;
+    border-right: 1px solid rgba(212, 169, 73, 0.12);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.62rem;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.85rem;
+    color: var(--cream);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-value.streak.hot { color: var(--gold-bright); text-shadow: 0 0 14px rgba(243, 199, 90, 0.6); }
+  /* ============ MODE TOGGLE ============ */
+  .controls-row {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    align-items: center; justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .mode-toggle {
+    display: inline-flex;
+    background: rgba(10, 20, 40, 0.6);
+    border: 1px solid rgba(212, 169, 73, 0.25);
+    border-radius: 2px;
+    padding: 3px;
+  }
+  .mode-btn {
+    background: transparent; border: none;
+    color: var(--cream-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .mode-btn.active {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    background: transparent;
+    border: 1px solid var(--gold-soft);
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+  }
+  .btn:hover {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+  .btn.danger { border-color: var(--rose); color: var(--rose); }
+  .btn.danger:hover { background: var(--rose); color: var(--cream); }
+  .btn.primary {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 700;
+  }
+  .btn.primary:hover { background: var(--gold-bright); }
+  /* ============ QUESTION NAV GRID ============ */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 6px;
+    margin-bottom: 26px;
+    padding: 16px;
+    background: rgba(10, 20, 40, 0.5);
+    border: 1px solid rgba(212, 169, 73, 0.12);
+    border-radius: 4px;
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    background: rgba(36, 55, 102, 0.5);
+    border: 1px solid rgba(212, 169, 73, 0.18);
+    color: var(--cream-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-cell:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  .nav-cell.current {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 700;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 10px rgba(212, 169, 73, 0.5);
+  }
+  .nav-cell.answered { background: rgba(111, 168, 107, 0.32); border-color: rgba(111, 168, 107, 0.6); color: var(--cream); }
+  .nav-cell.correct { background: rgba(111, 168, 107, 0.55); border-color: var(--green); }
+  .nav-cell.wrong { background: rgba(199, 84, 80, 0.5); border-color: var(--red); }
+  /* ============ QUESTION CARD ============ */
+  .question-card {
+    background: linear-gradient(180deg, rgba(26, 44, 82, 0.85), rgba(18, 33, 68, 0.85));
+    border: 1px solid rgba(212, 169, 73, 0.25);
+    border-radius: 4px;
+    padding: 32px 36px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 40px var(--shadow);
+    position: relative;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold-soft));
+  }
+  .qmeta {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .qmeta .chap-tag {
+    background: rgba(212, 169, 73, 0.12);
+    padding: 4px 10px;
+    border: 1px solid rgba(212, 169, 73, 0.3);
+    border-radius: 2px;
+    font-size: 0.65rem;
+  }
+  .qtext {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    line-height: 1.5;
+    color: var(--cream);
+    margin: 0 0 24px;
+    font-weight: 500;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(10, 20, 40, 0.5);
+    border: 1px solid rgba(212, 169, 73, 0.18);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.22s;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+  }
+  .option:hover:not(.locked) {
+    background: rgba(36, 55, 102, 0.7);
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+  .option .letter {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.95rem;
+  }
+  .option .label { flex: 1; padding-top: 3px; }
+  .option.selected {
+    background: rgba(212, 169, 73, 0.12);
+    border-color: var(--gold);
+  }
+  .option.selected .letter {
+    background: var(--gold);
+    color: var(--navy-deep);
+    border-color: var(--gold);
+  }
+  .option.correct {
+    background: rgba(111, 168, 107, 0.18) !important;
+    border-color: var(--green) !important;
+  }
+  .option.correct .letter {
+    background: var(--green);
+    color: var(--cream);
+    border-color: var(--green);
+  }
+  .option.wrong {
+    background: rgba(199, 84, 80, 0.18) !important;
+    border-color: var(--red) !important;
+  }
+  .option.wrong .letter {
+    background: var(--red);
+    color: var(--cream);
+    border-color: var(--red);
+  }
+  .option.locked { cursor: default; }
+  /* ============ RATIONALE ============ */
+  .rationale {
+    margin-top: 22px;
+    padding: 18px 22px;
+    background: rgba(10, 20, 40, 0.6);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.6;
+    display: none;
+  }
+  .rationale.show { display: block; animation: fadeSlide 0.4s ease; }
+  .rationale .verdict {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .rationale.right .verdict { color: var(--green); }
+  .rationale.wrong-verdict .verdict { color: var(--red); }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* ============ FOOTER NAV ============ */
+  .nav-bar {
+    display: flex; justify-content: space-between; gap: 12px;
+    margin-top: 12px;
+  }
+  /* ============ FLOATING SCORE POPUP ============ */
+  .score-pop {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 18px rgba(243, 199, 90, 0.8), 0 2px 4px rgba(0, 0, 0, 0.5);
+    animation: floatUp 1.4s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(0) scale(0.6); }
+    20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1); }
+  }
+  /* ============ STREAK BADGE ============ */
+  .streak-badge {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-align: center;
+    text-shadow: 0 0 30px rgba(243, 199, 90, 0.9), 0 0 60px rgba(243, 199, 90, 0.6);
+    animation: badgePop 1.8s ease-out forwards;
+  }
+  .streak-badge .small {
+    display: block;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--cream);
+    margin-top: 4px;
+  }
+  @keyframes badgePop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(0); }
+    60% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(0); }
+  }
+  /* ============ RESULTS PANEL ============ */
+  .results {
+    text-align: center;
+    padding: 50px 30px;
+    background: linear-gradient(180deg, rgba(26, 44, 82, 0.9), rgba(18, 33, 68, 0.9));
+    border: 1px solid rgba(212, 169, 73, 0.3);
+    border-radius: 4px;
+  }
+  .results h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin: 0 0 8px;
+    font-style: italic;
+  }
+  .results .ribbon {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.78rem;
+    color: var(--gold);
+    margin-bottom: 30px;
+  }
+  .score-circle {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    margin: 24px auto;
+    background: radial-gradient(circle, var(--navy-mid) 60%, transparent 61%),
+                conic-gradient(var(--gold-bright) 0deg, var(--gold-soft) var(--pct-deg, 0deg), rgba(212, 169, 73, 0.15) var(--pct-deg, 0deg));
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 40px rgba(212, 169, 73, 0.25), inset 0 0 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+  }
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 169, 73, 0.3);
+  }
+  .score-circle .percent {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.4rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .score-circle .of {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-top: 8px;
+  }
+  .tier-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--gold-bright);
+    margin: 18px 0 8px;
+  }
+  .tier-blurb {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream-dim);
+    max-width: 540px;
+    margin: 0 auto 30px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .results-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    max-width: 720px;
+    margin: 0 auto 30px;
+  }
+  .result-stat {
+    padding: 16px;
+    background: rgba(10, 20, 40, 0.5);
+    border: 1px solid rgba(212, 169, 73, 0.18);
+    border-radius: 2px;
+  }
+  .result-stat .label {
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .result-stat .value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    font-weight: 600;
+  }
+  /* ============ MODAL ============ */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 10002;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: linear-gradient(180deg, var(--navy-mid), var(--navy));
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    max-width: 460px;
+    padding: 36px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  }
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    margin: 0 0 12px;
+    font-style: italic;
+  }
+  .modal p {
+    color: var(--cream-dim);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.08rem;
+    margin: 0 0 24px;
+  }
+  .modal-actions { display: flex; gap: 12px; justify-content: center; }
+  /* ============ START SCREEN ============ */
+  .start-screen {
+    text-align: center;
+    padding: 50px 30px;
+  }
+  .start-screen h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2.4rem;
+    color: var(--cream);
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+  .start-screen p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.18rem;
+    color: var(--cream-dim);
+    max-width: 600px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+  .chapters-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    max-width: 700px;
+    margin: 0 auto 40px;
+  }
+  .chap-card {
+    padding: 18px;
+    background: rgba(10, 20, 40, 0.5);
+    border: 1px solid rgba(212, 169, 73, 0.22);
+    border-radius: 2px;
+  }
+  .chap-card .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    color: var(--gold);
+    line-height: 1;
+    font-weight: 600;
+  }
+  .chap-card .ttl {
+    font-size: 0.82rem;
+    color: var(--cream);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  /* Responsive */
+  @media (max-width: 640px) {
+    .wrap { padding: 18px 14px 60px; }
+    .question-card { padding: 22px 20px; }
+    .qtext { font-size: 1.15rem; }
+    .stat { border-right: none; }
+    .dashboard { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">National Professional Practice Examination</div>
+    <h1 class="title">Practice <em>Examination</em></h1>
+    <div class="subtitle">Chapters 20 – 23 · Limiting Liability · Client Agreements · Concurrent Liability · Duty of Honesty</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <section id="startScreen" class="start-screen">
+    <h2>Begin your session</h2>
+    <p>Fifty scenario-based questions covering exclusion clauses, the client–engineer relationship, concurrent liability in tort and contract, and the duty of honesty. Calibrated to the 65 percent NPPE pass threshold.</p>
+    <div class="chapters-list">
+      <div class="chap-card"><div class="num">20</div><div class="ttl">Limiting Liability by Contract</div></div>
+      <div class="chap-card"><div class="num">21</div><div class="ttl">Agreement Between Client and Engineer</div></div>
+      <div class="chap-card"><div class="num">22</div><div class="ttl">Concurrent Liability in Tort and Contract</div></div>
+      <div class="chap-card"><div class="num">23</div><div class="ttl">The Duty of Honesty</div></div>
+    </div>
+    <button class="btn primary" id="startBtn" style="font-size: 0.88rem; padding: 14px 28px;">Begin Examination</button>
+  </section>
+
+  <!-- QUIZ INTERFACE -->
+  <section id="quizScreen" style="display:none;">
+
+    <div class="dashboard">
+      <div class="stat"><div class="stat-label">Question</div><div class="stat-value" id="qNum">1 / 50</div></div>
+      <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+      <div class="stat"><div class="stat-label">Streak</div><div class="stat-value streak" id="streakVal">0</div></div>
+      <div class="stat"><div class="stat-label">Answered</div><div class="stat-value" id="answeredVal">0</div></div>
+      <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value" id="accuracyVal">—</div></div>
+    </div>
+
+    <div class="controls-row">
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="practice" id="modePractice">Practice</button>
+        <button class="mode-btn" data-mode="exam" id="modeExam">Exam</button>
+      </div>
+      <div class="actions">
+        <button class="btn" id="shuffleBtn">Shuffle</button>
+        <button class="btn danger" id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <div class="nav-grid" id="navGrid"></div>
+
+    <div class="question-card" id="qCard">
+      <div class="qmeta">
+        <span id="qLabel">Question 1</span>
+        <span class="chap-tag" id="qChap">Chapter 20</span>
+      </div>
+      <div class="qtext" id="qText">—</div>
+      <div class="options" id="optsBox"></div>
+      <div class="rationale" id="rat"></div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn" id="prevBtn">← Previous</button>
+      <button class="btn primary" id="nextBtn">Next →</button>
+    </div>
+  </section>
+
+  <!-- RESULTS SCREEN -->
+  <section id="resultsScreen" style="display:none;"></section>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modalTitle">Confirm</h3>
+    <p id="modalText">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn danger" id="modalConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+//                  QUESTION BANK (50)
+// =====================================================
+const QUESTIONS = [
+  // ============ CHAPTER 20 (1-13) ============
+  {
+    ch: 20,
+    q: "An engineering firm negotiating a major design contract wants to include a provision capping its total liability at its professional liability insurance limit. This type of contractual provision is generally referred to as:",
+    opts: [
+      "A waiver of subrogation",
+      "An exclusion clause or exculpatory provision",
+      "A hold-harmless agreement",
+      "A force majeure clause"
+    ],
+    ans: 1,
+    rat: "Provisions that limit or preclude a party's liability under a contract are called exclusion clauses or exculpatory provisions. They can take many forms, including dollar caps, time-period limits, or outright preclusion of claims."
+  },
+  {
+    ch: 20,
+    q: "The Supreme Court of Canada's 2010 decision in Tercon Contractors v. British Columbia is most significant for which reason?",
+    opts: [
+      "It established the doctrine of fundamental breach as a binding rule.",
+      "It confirmed the retirement of the fundamental breach doctrine and clarified the analytical framework for exclusion clauses.",
+      "It eliminated freedom of contract in commercial transactions.",
+      "It held that exclusion clauses are never enforceable in public-sector tenders."
+    ],
+    ans: 1,
+    rat: "Tercon confirmed that the fundamental breach doctrine is retired in Canada. Exclusion clauses are now analyzed via the true-construction approach, subject to unconscionability and public-policy challenges."
+  },
+  {
+    ch: 20,
+    q: "In Tercon, the Court ultimately declined to enforce the exclusion clause primarily because:",
+    opts: [
+      "The clause was grammatically ambiguous.",
+      "The Province had egregiously awarded the contract to an ineligible joint-venture bidder.",
+      "Tercon had withdrawn its bid before evaluation.",
+      "Exclusion clauses cannot be used in public procurement."
+    ],
+    ans: 1,
+    rat: "The Province's award to an unqualified bidder constituted an egregious and fundamental breach. Combined with the strong public interest in tendering integrity, this provided grounds for refusing enforcement of the clause."
+  },
+  {
+    ch: 20,
+    q: "Under the current Canadian approach, when a court is asked to enforce an exclusion clause in a commercial contract following a serious breach, the court will primarily:",
+    opts: [
+      "Automatically disregard the clause if the breach was fundamental.",
+      "Apply the historical doctrine of fundamental breach as a matter of course.",
+      "Apply the true-construction approach, examining the clause in the context of the entire contract and the parties' intent.",
+      "Refuse enforcement whenever actual damages exceed the cap."
+    ],
+    ans: 2,
+    rat: "Canadian courts now apply the true-construction approach—reading the wording of the clause in the full context of the contract—rather than reflexively voiding it because the breach was severe."
+  },
+  {
+    ch: 20,
+    q: "A small subcontractor entered into a contract drafted entirely by a large general contractor. The contract excludes the general contractor's liability even for its deliberate misconduct. If the subcontractor challenges the clause, the most likely judicial inquiry will be whether:",
+    opts: [
+      "The clause is unconscionable, often arising from inequality of bargaining power.",
+      "The subcontractor read every clause carefully.",
+      "The general contractor profited from the breach.",
+      "The clause exceeded a certain word count."
+    ],
+    ans: 0,
+    rat: "Tercon identifies unconscionability—frequently arising from inequality of bargaining power—as a key ground for refusing to enforce an otherwise clear exclusion clause. Public policy is the other recognized ground."
+  },
+  {
+    ch: 20,
+    q: "The now-retired doctrine of fundamental breach, as illustrated by Harbutt's Plasticine, held that:",
+    opts: [
+      "Any minor breach invalidates the entire contract.",
+      "An exemption clause is ineffective where the breach goes to the very root of the contract.",
+      "Contracts can only be breached fundamentally if written.",
+      "Damages are always limited to the contract price."
+    ],
+    ans: 1,
+    rat: "The doctrine held that an exemption clause would not protect a party who committed a breach so serious that it went to the root of the contract. This rule has now been retired in Canada by the Supreme Court."
+  },
+  {
+    ch: 20,
+    q: "The 1980 English House of Lords decision in Photo Production v. Securicor is best described as:",
+    opts: [
+      "Reinforcing the doctrine of fundamental breach as the leading English rule.",
+      "Overruling the fundamental breach doctrine in England and reaffirming freedom of contract.",
+      "Creating a new tort of corporate negligence.",
+      "Voiding all security-services contracts."
+    ],
+    ans: 1,
+    rat: "Photo Production overruled the doctrine of fundamental breach in England, holding that the Harbutt's Plasticine foundation was unsound and reaffirming that parties are free to determine their own primary obligations and exclusions."
+  },
+  {
+    ch: 20,
+    q: "In Hunter Engineering v. Syncrude, the approach favoured by Chief Justice Dickson can best be summarized as:",
+    opts: [
+      "Exclusion clauses must always yield to subsequent fairness considerations.",
+      "Where the contract language is clear, the parties' agreement should be respected unless the clause is unconscionable.",
+      "Exclusion clauses should be voided in all commercial contracts.",
+      "Courts should evaluate reasonableness only after the breach has occurred."
+    ],
+    ans: 1,
+    rat: "Chief Justice Dickson favoured respecting freedom of contract: clear exclusion clauses should stand unless the contract is unconscionable, typically arising from inequality of bargaining power at the time of formation."
+  },
+  {
+    ch: 20,
+    q: "The rule of contra proferentem, as applied in Hunter Engineering and other cases, means that:",
+    opts: [
+      "Exclusion clauses are automatically enforced.",
+      "Where an exclusion clause is ambiguous, it is construed strictly against the party relying on it.",
+      "The party who drafted the contract always prevails.",
+      "Ambiguity voids the entire agreement."
+    ],
+    ans: 1,
+    rat: "Contra proferentem means that ambiguous language is interpreted against the party seeking to rely on it. A clause must be sufficiently clear to leave no doubt as to its meaning to be given full effect."
+  },
+  {
+    ch: 20,
+    q: "A consulting firm proposes to limit its total liability to the value of its fees under a contract with a sophisticated multinational client. Under current Canadian law, this clause is likely:",
+    opts: [
+      "Unenforceable as contrary to public policy.",
+      "Enforceable, subject to clarity and absence of unconscionability.",
+      "Automatically void if a fundamental breach occurs.",
+      "Only enforceable if approved by the engineering association."
+    ],
+    ans: 1,
+    rat: "Clauses limiting liability to the fee or insurance limit are common in engineering contracts and are generally enforceable between sophisticated commercial parties under the true-construction approach."
+  },
+  {
+    ch: 20,
+    q: "In Beaufort Realties v. Chomedey Aluminum, the Supreme Court of Canada held that:",
+    opts: [
+      "The waiver-of-lien clause applied despite the contractor's failure to pay.",
+      "On its true construction, the waiver clause did not apply in the circumstances of the contractor's fundamental breach.",
+      "Subcontractors can never waive lien rights.",
+      "Construction lien rights are constitutionally protected."
+    ],
+    ans: 1,
+    rat: "Even using the true-construction approach, the Court concluded the waiver clause did not apply to the circumstances of the contractor's fundamental breach, preserving the subcontractor's lien."
+  },
+  {
+    ch: 20,
+    q: "According to Tercon, the two recognized grounds for declining to enforce an otherwise clear exclusion clause are:",
+    opts: [
+      "Mistake and frustration",
+      "Unconscionability and public policy",
+      "Misrepresentation and duress",
+      "Impossibility and illegality"
+    ],
+    ans: 1,
+    rat: "Tercon identified unconscionability at formation and public policy as the two recognized grounds for refusing to enforce an exclusion clause that, on its true construction, would otherwise apply."
+  },
+  {
+    ch: 20,
+    q: "Where an engineering firm limits its liability to the value of its professional liability insurance coverage, best practice is to:",
+    opts: [
+      "Keep the insurance details confidential.",
+      "Share the details of the coverage with the client so the client can assess its adequacy.",
+      "Insist on a confidentiality clause.",
+      "Refuse to discuss insurance with the client."
+    ],
+    ans: 1,
+    rat: "When liability is capped at insurance coverage, transparently disclosing the coverage details enables the client to evaluate the adequacy of that protection. This is the reasonable approach noted in the chapter."
+  },
+
+  // ============ CHAPTER 21 (14-25) ============
+  {
+    ch: 21,
+    q: "Where a contract between a client and an engineer is silent as to the standard of care, the law:",
+    opts: [
+      "Imposes no standard of care.",
+      "Implies a standard equivalent to that of an ordinary and reasonable engineer.",
+      "Requires absolute perfection from the engineer.",
+      "Presumes negligence by the engineer."
+    ],
+    ans: 1,
+    rat: "An implied term in the contract is that the engineer will perform with an ordinary and reasonable degree of care and skill. This implied standard mirrors the standard of care in tort law."
+  },
+  {
+    ch: 21,
+    q: "An engineer is engaged as the client's agent to negotiate a construction contract. Without first obtaining the client's approval of the negotiated terms, the engineer signs the contract on the client's behalf. The engineer's principal exposure here arises because:",
+    opts: [
+      "Engineers are forbidden from acting as agents.",
+      "The engineer may have exceeded the scope of authority granted by the principal.",
+      "Construction contracts require an architect's signature.",
+      "Only lawyers can negotiate construction contracts."
+    ],
+    ans: 1,
+    rat: "As an agent, the engineer must act within the scope of the authority granted by the principal. Exceeding that authority can expose the engineer to liability to the client for resulting damages."
+  },
+  {
+    ch: 21,
+    q: "An engineer performs significant services for a client without ever agreeing on a fee. The client refuses to pay anything, citing the absence of an agreed price. The engineer's most likely entitlement is:",
+    opts: [
+      "Nothing, because no fee was agreed.",
+      "A reasonable amount on a quantum meruit basis.",
+      "Three times the usual fee as a penalty.",
+      "Only the cost of materials, with no margin."
+    ],
+    ans: 1,
+    rat: "Where there is no agreed fee, the law implies an obligation to pay a reasonable amount on a quantum meruit basis. A provincial association's suggested fee schedule may be useful evidence."
+  },
+  {
+    ch: 21,
+    q: "A consulting engineer estimates the cost of support staff at $5,000 for a study. The actual cost reaches nearly $15,000—almost three times the estimate. Based on the reasoning in Kidd v. Mississauga Hydro, the engineer is likely to be:",
+    opts: [
+      "Entitled to recover the full actual cost.",
+      "Held to the original estimate or close to it, given how wildly inadequate it was.",
+      "Entitled to twice the estimated figure.",
+      "Awarded an additional bonus for completing the study."
+    ],
+    ans: 1,
+    rat: "Where an engineer's estimate is wildly inadequate and the client relies upon it, the engineer may be held to the original estimate. The court drew analogy to the negligent misrepresentation principle from Hedley Byrne v. Heller."
+  },
+  {
+    ch: 21,
+    q: "When providing a fee estimate to a client, an engineer should:",
+    opts: [
+      "Treat the estimate as a binding price.",
+      "Make the estimate as low as possible to win the engagement.",
+      "Cautiously estimate the figure and clearly emphasize that it is only an estimate.",
+      "Refuse to provide any estimate."
+    ],
+    ans: 2,
+    rat: "Engineers should estimate carefully and communicate clearly that the figure is an estimate, not a fixed price. This both manages client expectations and reduces the risk of being bound to an inaccurate number."
+  },
+  {
+    ch: 21,
+    q: "Standard-form engineering agreements published by associations such as the Association of Professional Engineers of Ontario:",
+    opts: [
+      "Are mandatory for every engineering contract.",
+      "Provide a sound basic framework but may require tailoring to the specific transaction.",
+      "Must never be modified.",
+      "Apply only to government projects."
+    ],
+    ans: 1,
+    rat: "Standard-form agreements provide a useful base. Each contract should still be tailored to record the particular agreement between the parties, ideally with legal advice."
+  },
+  {
+    ch: 21,
+    q: "A reasonable approach for an engineer to limit liability under a client-engineer agreement is to:",
+    opts: [
+      "Disclaim all liability, including for negligence.",
+      "Limit liability to the engineer's professional liability insurance coverage or to the amount of the fee.",
+      "Set liability at zero dollars.",
+      "Require the client to waive all rights without consideration."
+    ],
+    ans: 1,
+    rat: "Limiting liability to the professional liability insurance coverage or to the engineer's fee are common and reasonable approaches, subject to negotiation and clear disclosure."
+  },
+  {
+    ch: 21,
+    q: "A developer in Ontario whose application to amend a zoning bylaw has been refused by the municipality may generally appeal to:",
+    opts: [
+      "The Supreme Court of Canada directly.",
+      "The Local Planning Appeal Tribunal (LPAT).",
+      "The local municipal council that refused the application.",
+      "The federal Cabinet."
+    ],
+    ans: 1,
+    rat: "Appeals from municipal planning decisions in Ontario are heard by the Local Planning Appeal Tribunal, which continued the former Ontario Municipal Board. Recent legislation has restricted certain appeal rights."
+  },
+  {
+    ch: 21,
+    q: "A developer holding a large parcel wishes to create numerous building lots for independent sale. The developer must typically apply for:",
+    opts: [
+      "Site plan control approval only.",
+      "Approval of a plan of subdivision, followed by draft plan approval, fulfillment of conditions, and registration.",
+      "A consent to severance from the federal government.",
+      "A density transfer from another property."
+    ],
+    ans: 1,
+    rat: "Dividing land into multiple parcels for independent sale generally requires approval of a plan of subdivision. Draft approval is given subject to conditions like installation of roads and utilities and dedication of parks."
+  },
+  {
+    ch: 21,
+    q: "An engineer designing an industrial facility must be familiar with a range of statutes, codes, and bylaws. The engineer's duty is to:",
+    opts: [
+      "Comply only with provincial statutes.",
+      "Maintain a reasonable knowledge of applicable federal, provincial, and municipal laws and comply with them.",
+      "Rely entirely on the client's instructions on legal compliance.",
+      "Follow only those codes the client identifies."
+    ],
+    ans: 1,
+    rat: "Engineers must comply with common-law principles plus all applicable statutes, regulations, codes, and bylaws. They are expected to have reasonable knowledge of laws relevant to the services performed and seek legal advice as needed."
+  },
+  {
+    ch: 21,
+    q: "A property has been used as a small machine shop for many years. A municipality then enacts a new zoning bylaw that designates the area for residential use only. The existing machine shop is generally treated as:",
+    opts: [
+      "An immediate violation requiring cessation.",
+      "A lawful nonconforming use.",
+      "Automatically rezoned to permitted use.",
+      "Subject to immediate expropriation."
+    ],
+    ans: 1,
+    rat: "A pre-existing land use inconsistent with a new zoning bylaw is recognized as a lawful nonconforming use, allowing the existing use to continue subject to applicable restrictions."
+  },
+  {
+    ch: 21,
+    q: "When draft plan approval of a subdivision is given to a developer, common conditions imposed include:",
+    opts: [
+      "Payment of additional municipal taxes for ten years.",
+      "Installation of roads and utilities to municipal standards and dedication of roads and parks upon registration.",
+      "Transfer of all units to the municipality at no cost.",
+      "An eternal maintenance obligation by the developer."
+    ],
+    ans: 1,
+    rat: "Typical draft-plan-approval conditions include construction of roads and utilities to municipal standards and dedication of roads and parks to the municipality upon registration of the plan."
+  },
+
+  // ============ CHAPTER 22 (26-37) ============
+  {
+    ch: 22,
+    q: "Unless modified by contract, the standard of care expected of an engineer in tort and in contract is:",
+    opts: [
+      "Substantially different in each.",
+      "Essentially the same.",
+      "Always higher in contract than in tort.",
+      "Determined entirely by the contract."
+    ],
+    ans: 1,
+    rat: "The standard of care in tort and contract for engineering services is essentially the same, unless the contract specifically modifies the standard. This overlap is what makes concurrent liability possible."
+  },
+  {
+    ch: 22,
+    q: "A practical consequence of concurrent liability in tort and contract is that:",
+    opts: [
+      "Damages are automatically doubled.",
+      "The applicable limitation periods may differ, with the tort period typically running from when damage is or ought to have been discovered.",
+      "The engineer can only be sued in contract.",
+      "Both actions must be filed simultaneously."
+    ],
+    ans: 1,
+    rat: "Limitation periods may differ: in contract, the period generally runs from the breach itself, while in tort it runs from discoverability—when the damage is or ought to have been discovered."
+  },
+  {
+    ch: 22,
+    q: "In Schwebel v. Telekes, the Ontario Court of Appeal concluded the plaintiff's action was in contract rather than tort because:",
+    opts: [
+      "The plaintiff had a written agreement only.",
+      "The duty of care arose by virtue of the contractual relationship and had no existence apart from that relationship.",
+      "Notaries cannot be sued in tort.",
+      "The plaintiff explicitly disclaimed any tort claim."
+    ],
+    ans: 1,
+    rat: "Because the duty of care arose only by virtue of the contract, the action was characterized as one in contract, and the limitation period ran from the breach of contractual duty rather than from discoverability."
+  },
+  {
+    ch: 22,
+    q: "In Dominion Chain Co. v. Eastern Construction, the factory roof leaked five years after construction. The contractor was not contractually liable to the owner because:",
+    opts: [
+      "The contractor had already been paid in full.",
+      "A clause in the contract limited the contractor's liability after the guarantee period had expired.",
+      "Only the engineer was responsible for the roof.",
+      "The leaks were too minor to constitute breach."
+    ],
+    ans: 1,
+    rat: "The contract included a waiver of claims after the expiry of the guarantee period. The owner had effectively waived its contractual rights against the contractor for damages discovered after that period."
+  },
+  {
+    ch: 22,
+    q: "In Dominion Chain, the Ontario Court of Appeal held that the contractor was not required to contribute to the engineer's damages because:",
+    opts: [
+      "The contractor carried insurance.",
+      "Section 2 of the Negligence Act applies only where both tortfeasors are liable to the plaintiff, and the contractor had escaped liability through its contract.",
+      "Engineers cannot make contribution claims.",
+      "The Negligence Act does not apply to roofs."
+    ],
+    ans: 1,
+    rat: "The contractor had escaped liability to the owner through its contractual limitation. Because Section 2 of the Negligence Act requires that both parties be liable to the plaintiff, no contribution obligation arose."
+  },
+  {
+    ch: 22,
+    q: "The Supreme Court of Canada definitively settled the principle of concurrent liability in tort and contract in its 1986 decision in:",
+    opts: [
+      "Schwebel v. Telekes",
+      "Dominion Chain v. Eastern Construction",
+      "Central Trust Co. v. Rafuse",
+      "Donoghue v. Stevenson"
+    ],
+    ans: 2,
+    rat: "Central Trust v. Rafuse confirmed that a professional (in that case, a solicitor) could be concurrently liable in tort as well as in contract, establishing the principle authoritatively in Canadian law."
+  },
+  {
+    ch: 22,
+    q: "In B.C. Rail Ltd. v. Canadian Pacific Consulting Services, the subcontractor designing the overhead contact system in a tunnel was held to have breached its duty of care because:",
+    opts: [
+      "It performed extensive on-site testing.",
+      "It failed to gather data, perform testing inside the tunnel, or request underlying reports about water seepage and chemical contamination.",
+      "It was excused entirely from a duty of care.",
+      "It used standard designs without modification."
+    ],
+    ans: 1,
+    rat: "The subcontractor failed to gather data, perform testing, or request reports on tunnel conditions including water percolation and sulphur compounds. These contributed to stress corrosion failures—a clear breach of the duty of care under the contract."
+  },
+  {
+    ch: 22,
+    q: "B.G. Checo International Ltd. v. British Columbia Hydro and Power Authority confirmed which principle?",
+    opts: [
+      "Public utilities are immune from negligence liability.",
+      "Concurrent liability in tort and contract is firmly established in Canadian law, even where contract terms are expressly spelled out.",
+      "Tender documents have no legal significance.",
+      "Contractors must perform additional work for free."
+    ],
+    ans: 1,
+    rat: "BG Checo confirmed concurrent liability in Canada. BC Hydro was found liable in both contract and tort for negligent misrepresentation regarding the state of the right of way, ending residual uncertainty about the doctrine."
+  },
+  {
+    ch: 22,
+    q: "Under Section 2 of the Negligence Act of Ontario, where two persons are found at fault for damages suffered by a plaintiff, they are:",
+    opts: [
+      "Severally liable only.",
+      "Jointly and severally liable to the plaintiff, with contribution between themselves based on relative fault.",
+      "Equally liable regardless of degree of fault.",
+      "Each liable only for their own fault directly to the plaintiff, with no joint exposure."
+    ],
+    ans: 1,
+    rat: "Section 2 provides that joint tortfeasors are jointly and severally liable to the injured party. Between themselves, in the absence of contract, each is required to contribute and indemnify in proportion to fault."
+  },
+  {
+    ch: 22,
+    q: "An engineer's design defect causes damage that emerges seven years after the design was completed. To determine whether the client's claim is time-barred, the analysis must consider:",
+    opts: [
+      "Whether the engineer carries professional liability insurance.",
+      "Whether the claim is framed in contract (period typically running from breach) or tort (typically running from discoverability), and the applicable statutory limitation periods.",
+      "The engineer's age and years in practice.",
+      "The size of the engineering firm."
+    ],
+    ans: 1,
+    rat: "Because concurrent liability applies, limitation analysis depends on how the claim is framed. The tort limitation typically runs from discoverability, while contract often runs from breach. Both must be assessed."
+  },
+  {
+    ch: 22,
+    q: "A plaintiff may have a strategic reason to plead both tort and contract claims against the same engineer because:",
+    opts: [
+      "Doing so triggers automatic punitive damages.",
+      "Measures of damages and limitation periods may differ, and one framework may yield a more favourable recovery or extend time to sue.",
+      "Tort actions are exempt from procedural rules.",
+      "Engineers are presumed automatically liable."
+    ],
+    ans: 1,
+    rat: "Damages measures and limitation periods can differ between tort and contract. Pleading both lets the plaintiff invoke whichever framework provides the most favourable outcome."
+  },
+  {
+    ch: 22,
+    q: "An owner suffers damage on a project where both the contractor and the engineer were at fault. The contractor's contract effectively shields it from any further liability to the owner. Drawing on the Dominion Chain principle, the engineer's likely exposure is:",
+    opts: [
+      "Limited automatically to 25 percent of damages.",
+      "Likely to absorb the full damages, with no contribution available from the contractor because the contractor is not liable to the plaintiff under Section 2.",
+      "Limited to nothing because contractors always pay first.",
+      "Limited to the cost of materials only."
+    ],
+    ans: 1,
+    rat: "Where the contractor's contractual protection shields it from liability to the plaintiff, the Negligence Act does not require it to contribute. The engineer—if not similarly protected—may bear the full damages."
+  },
+
+  // ============ CHAPTER 23 (38-50) ============
+  {
+    ch: 23,
+    q: "Implicit in the duty of care that an engineer assumes in performing contractual services is the duty to:",
+    opts: [
+      "Maximize project profitability for the engineer.",
+      "Act with absolute honesty.",
+      "Favour the contractor over the owner.",
+      "Disregard the client's instructions when convenient."
+    ],
+    ans: 1,
+    rat: "Implicit in the duty of care is a duty of absolute honesty. The consequences of dishonesty can be severe, including repudiation of the contract, damages for the tort of deceit, and criminal sanctions."
+  },
+  {
+    ch: 23,
+    q: "Under Section 380 of the Criminal Code (Canada), fraud committed by deceit, falsehood, or other fraudulent means is punishable on indictment by imprisonment for up to:",
+    opts: [
+      "One year",
+      "Five years",
+      "Ten years",
+      "Twenty-five years"
+    ],
+    ans: 2,
+    rat: "Section 380 makes defrauding the public or any person of property, money, or valuable security an indictable offence carrying a maximum penalty of ten years imprisonment."
+  },
+  {
+    ch: 23,
+    q: "A supplier privately offers an engineer a sizeable 'consulting fee' to specify the supplier's equipment on the engineer's client project, without disclosing the arrangement to the client. This conduct most likely constitutes:",
+    opts: [
+      "An ethical lapse only, with no legal consequence.",
+      "An offence under Section 426 of the Criminal Code (secret commissions) and violation of the agent's duty to the principal.",
+      "A securities law violation.",
+      "A regulatory matter falling outside the criminal law."
+    ],
+    ans: 1,
+    rat: "Section 426 of the Criminal Code targets corruption of the principal-agent relationship through secret commissions, bribes, and kickbacks. Such conduct carries criminal sanctions including imprisonment, and also exposes the engineer to civil liability."
+  },
+  {
+    ch: 23,
+    q: "The legal relationship between an engineer and the client that gives rise to a strong duty of good faith is best described as:",
+    opts: [
+      "Adversarial",
+      "Principal and agent",
+      "Master and servant (employer-employee)",
+      "Joint venture"
+    ],
+    ans: 1,
+    rat: "The engineer is typically retained as the agent of the client. The principal-agent relationship is one of trust, and the duty of good faith arising from it is a very important one."
+  },
+  {
+    ch: 23,
+    q: "An engineer employed by a federal government department is offered tickets to a high-value sporting event by a vendor that has ongoing dealings with the department. Under Section 121 of the Criminal Code, accepting the gift is generally an offence unless:",
+    opts: [
+      "The retail value of the tickets is under $100.",
+      "The head of the employee's branch of government consents to the gift in writing.",
+      "The engineer believes the gift is innocent.",
+      "The engineer reports the gift to the vendor's compliance team."
+    ],
+    ans: 1,
+    rat: "Section 121 makes it an offence for a government employee to accept any gift from a person having dealings with that government unless the head of the employee's branch consents in writing. The offence is punishable by up to five years imprisonment."
+  },
+  {
+    ch: 23,
+    q: "A Canadian engineering firm is pursuing a major infrastructure tender abroad. A local agent suggests a payment to a foreign minister to secure the contract. This conduct is:",
+    opts: [
+      "Acceptable provided it is customary practice in that country.",
+      "Prohibited under the Corruption of Foreign Public Officials Act, with severe sanctions for individuals, companies, and their agents.",
+      "Prohibited only if the foreign country's laws also prohibit it.",
+      "Permissible if the payment is small."
+    ],
+    ans: 1,
+    rat: "The Corruption of Foreign Public Officials Act prohibits bribery of foreign public officials by Canadian individuals, companies, and their agents. The laws of foreign jurisdictions also typically prohibit such conduct, and sanctions are severe."
+  },
+  {
+    ch: 23,
+    q: "A contract that has been induced by the fraud of one party is generally:",
+    opts: [
+      "Converted automatically into an oral agreement.",
+      "Voidable at the option of the wronged party, who may also recover damages in the tort of deceit.",
+      "Strengthened by a presumption of validity.",
+      "Treated as if executed under seal."
+    ],
+    ans: 1,
+    rat: "Where fraud is involved, the contract may be repudiated by the innocent party, and damages may also be awarded for the tort of deceit. Fraud is, in addition, a criminal offence."
+  },
+  {
+    ch: 23,
+    q: "An engineer-agent knowingly submits inflated invoices to her principal, intending to deceive the principal as to the real costs. This conduct is captured by which Criminal Code provision in particular?",
+    opts: [
+      "Section 380 only.",
+      "Section 426, which addresses agents giving or using receipts or accounts that are false or misleading with intent to deceive the principal.",
+      "Section 121 only, applicable only to government employees.",
+      "Only the Income Tax Act."
+    ],
+    ans: 1,
+    rat: "Section 426 specifically addresses an agent giving to the principal, or using, a receipt, account, or other writing that is false, erroneous, or defective in a material particular and that is intended to mislead the principal."
+  },
+  {
+    ch: 23,
+    q: "Beyond the Criminal Code, additional Canadian statutes that impose sanctions for dishonesty in business dealings include:",
+    opts: [
+      "The Income Tax Act and the Competition Act.",
+      "The Canadian Charter of Rights and Freedoms.",
+      "The Indian Act only.",
+      "The Bank Act only."
+    ],
+    ans: 0,
+    rat: "Various federal statutes—including the Income Tax Act and the Competition Act—provide substantial fines and imprisonment for dishonesty, complementing the Criminal Code provisions."
+  },
+  {
+    ch: 23,
+    q: "A municipal engineer responsible for awarding contracts is offered an unsecured personal loan on extremely favourable terms by a frequent bidder. Accepting the loan is most concerning because:",
+    opts: [
+      "Personal loans must always be reported on tax returns.",
+      "It may constitute a corrupt benefit accepted in the course of the principal-agent relationship and may engage Section 121 or 426 of the Criminal Code.",
+      "It implies the engineer cannot manage personal finances.",
+      "Loans are inherently illegal."
+    ],
+    ans: 1,
+    rat: "A reward, advantage, or benefit—including a favourable personal loan—accepted corruptly in relation to the principal's business may engage the secret-commission provisions of Section 426 and, for government employees, Section 121."
+  },
+  {
+    ch: 23,
+    q: "An engineer learns that a colleague accepted an unreported kickback from a project supplier. The most accurate description of the colleague's legal exposure is:",
+    opts: [
+      "An ethical issue with no criminal consequence.",
+      "Possible criminal exposure including imprisonment and fines, plus regulatory and civil consequences.",
+      "Restitution of the kickback amount only.",
+      "A confidential private warning."
+    ],
+    ans: 1,
+    rat: "Secret commissions can lead to criminal conviction with imprisonment and fines, plus civil claims by the principal and disciplinary action by the engineer's regulator. Canadian law treats dishonesty in business dealings seriously."
+  },
+  {
+    ch: 23,
+    q: "An engineer acting as the agent of a client owes the client:",
+    opts: [
+      "Only the duties expressly stated in the contract.",
+      "A duty of good faith arising from the trust relationship inherent in agency.",
+      "A duty only to maximize the engineer's own fees.",
+      "No specific duties beyond delivery of the services."
+    ],
+    ans: 1,
+    rat: "The agent-principal relationship is fundamentally one of trust. The duty of good faith arising from that trust is paramount and is reinforced by Criminal Code provisions targeting violations of that relationship."
+  },
+  {
+    ch: 23,
+    q: "Which statement best summarizes Canadian law concerning honesty in professional engineering practice?",
+    opts: [
+      "Honesty is a recommended best practice but rarely enforced.",
+      "Honesty is reinforced by multiple Criminal Code provisions and several federal statutes, with serious penalties including fines and imprisonment for breach.",
+      "Engineers are exempt from criminal anti-corruption laws.",
+      "Civil remedies for dishonest conduct are unavailable in Canada."
+    ],
+    ans: 1,
+    rat: "Sections 121, 380, and 426 of the Criminal Code, together with the Income Tax Act, the Competition Act, and the Corruption of Foreign Public Officials Act, provide substantial sanctions for dishonesty. These laws emphasize the importance of honesty and integrity in Canadian business dealings."
+  }
+];
+
+// =====================================================
+//              STATE & PERSISTENCE
+// =====================================================
+const STORAGE_KEY = 'nppe_quiz_ch20_23_v1';
+let state = {
+  order: [],
+  current: 0,
+  answers: {},  // index in QUESTIONS => selected option
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  mode: 'practice',
+  started: false,
+  finished: false
+};
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) { const parsed = JSON.parse(raw); if (parsed && parsed.order && parsed.order.length === QUESTIONS.length) state = parsed; }
+  } catch (e) {}
+}
+
+function fisherYates(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function freshOrder() {
+  return fisherYates(QUESTIONS.map((_, i) => i));
+}
+
+// =====================================================
+//              RENDERING
+// =====================================================
+const $ = id => document.getElementById(id);
+
+function showScreen(name) {
+  $('startScreen').style.display = name === 'start' ? 'block' : 'none';
+  $('quizScreen').style.display = name === 'quiz' ? 'block' : 'none';
+  $('resultsScreen').style.display = name === 'results' ? 'block' : 'none';
+}
+
+function renderDashboard() {
+  $('qNum').textContent = `${state.current + 1} / ${state.order.length}`;
+  $('scoreVal').textContent = state.score;
+  $('streakVal').textContent = state.streak;
+  const sEl = $('streakVal');
+  if (state.streak >= 3) sEl.classList.add('hot'); else sEl.classList.remove('hot');
+  const answered = Object.keys(state.answers).length;
+  $('answeredVal').textContent = answered;
+  if (answered === 0) {
+    $('accuracyVal').textContent = '—';
+  } else {
+    let correct = 0;
+    Object.entries(state.answers).forEach(([idx, ans]) => { if (QUESTIONS[idx].ans === ans) correct++; });
+    $('accuracyVal').textContent = Math.round(correct / answered * 100) + '%';
+  }
+}
+
+function renderNav() {
+  const grid = $('navGrid');
+  grid.innerHTML = '';
+  state.order.forEach((qIdx, i) => {
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    if (i === state.current) cell.classList.add('current');
+    if (state.answers[qIdx] !== undefined) {
+      if (state.mode === 'practice') {
+        cell.classList.add(QUESTIONS[qIdx].ans === state.answers[qIdx] ? 'correct' : 'wrong');
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    cell.addEventListener('click', () => { state.current = i; renderQuestion(); renderNav(); renderDashboard(); saveState(); });
+    grid.appendChild(cell);
+  });
+}
+
+function renderQuestion() {
+  const qIdx = state.order[state.current];
+  const q = QUESTIONS[qIdx];
+  $('qLabel').textContent = `Question ${state.current + 1}`;
+  $('qChap').textContent = `Chapter ${q.ch}`;
+  $('qText').textContent = q.q;
+  const optsBox = $('optsBox');
+  optsBox.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  const userAns = state.answers[qIdx];
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('button');
+    div.className = 'option';
+    div.dataset.idx = i;
+    div.innerHTML = `<span class="letter">${letters[i]}</span><span class="label">${opt}</span>`;
+    if (userAns === i) div.classList.add('selected');
+    if (state.mode === 'practice' && userAns !== undefined) {
+      div.classList.add('locked');
+      if (i === q.ans) div.classList.add('correct');
+      else if (i === userAns) div.classList.add('wrong');
+    }
+    div.addEventListener('click', () => handleAnswer(i));
+    optsBox.appendChild(div);
+  });
+  // Rationale
+  const ratBox = $('rat');
+  if (state.mode === 'practice' && userAns !== undefined) {
+    const right = userAns === q.ans;
+    ratBox.className = 'rationale show ' + (right ? 'right' : 'wrong-verdict');
+    ratBox.innerHTML = `<span class="verdict">${right ? '✓ Correct' : '✗ Incorrect'}</span>${q.rat}`;
+  } else {
+    ratBox.className = 'rationale';
+    ratBox.innerHTML = '';
+  }
+}
+
+function handleAnswer(selectedIdx) {
+  const qIdx = state.order[state.current];
+  const q = QUESTIONS[qIdx];
+  const alreadyAnswered = state.answers[qIdx] !== undefined;
+
+  if (state.mode === 'practice') {
+    if (alreadyAnswered) return; // lock answer
+    state.answers[qIdx] = selectedIdx;
+    const right = selectedIdx === q.ans;
+    if (right) {
+      let pts = 10;
+      state.streak++;
+      if (state.streak >= 3) pts += 5;
+      if (state.streak >= 5) pts += 5;
+      if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+      state.score += pts;
+      floatScore(pts);
+      triggerCelebration();
+      if (state.streak === 3) showStreakBadge('Triple!', '3 in a row');
+      else if (state.streak === 5) showStreakBadge('On Fire!', '5 in a row');
+      else if (state.streak === 10) showStreakBadge('Brilliant!', '10 in a row');
+      else if (state.streak === 15) showStreakBadge('Unstoppable', '15 in a row');
+      else if (state.streak === 20) showStreakBadge('Legendary', '20 in a row');
+    } else {
+      state.streak = 0;
+    }
+  } else {
+    // Exam mode: toggle selection, allow change
+    state.answers[qIdx] = selectedIdx;
+  }
+  saveState();
+  renderQuestion();
+  renderNav();
+  renderDashboard();
+}
+
+function next() {
+  if (state.current < state.order.length - 1) {
+    state.current++;
+    renderQuestion();
+    renderNav();
+    renderDashboard();
+    saveState();
+  } else {
+    finish();
+  }
+}
+function prev() {
+  if (state.current > 0) {
+    state.current--;
+    renderQuestion();
+    renderNav();
+    renderDashboard();
+    saveState();
+  }
+}
+
+function finish() {
+  state.finished = true;
+  // In exam mode, compute score on finish
+  if (state.mode === 'exam') {
+    state.score = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    let runStreak = 0;
+    state.order.forEach(qIdx => {
+      const ans = state.answers[qIdx];
+      if (ans === QUESTIONS[qIdx].ans) {
+        state.score += 10;
+        runStreak++;
+        if (runStreak > state.bestStreak) state.bestStreak = runStreak;
+      } else {
+        runStreak = 0;
+      }
+    });
+  }
+  saveState();
+  renderResults();
+}
+
+function renderResults() {
+  const total = state.order.length;
+  let correct = 0;
+  state.order.forEach(qIdx => { if (state.answers[qIdx] === QUESTIONS[qIdx].ans) correct++; });
+  const pct = Math.round(correct / total * 100);
+  const passed = pct >= 65;
+
+  // Per-chapter breakdown
+  const byChap = {};
+  state.order.forEach(qIdx => {
+    const ch = QUESTIONS[qIdx].ch;
+    if (!byChap[ch]) byChap[ch] = { correct: 0, total: 0 };
+    byChap[ch].total++;
+    if (state.answers[qIdx] === QUESTIONS[qIdx].ans) byChap[ch].correct++;
+  });
+
+  let tier, blurb;
+  if (pct >= 90) { tier = 'Distinguished'; blurb = 'A masterful performance. Your command of these chapters is exceptional.'; }
+  else if (pct >= 80) { tier = 'Strong Pass'; blurb = 'Excellent work. Comfortably above the threshold with depth across all chapters.'; }
+  else if (pct >= 65) { tier = 'Pass'; blurb = 'You have met the NPPE threshold. Continue reviewing the weaker areas to consolidate.'; }
+  else if (pct >= 50) { tier = 'Below Threshold'; blurb = 'You are close. Targeted review of the lower-scoring chapters should put you over the line.'; }
+  else { tier = 'Substantial Review Needed'; blurb = 'Return to the source material and re-attempt. Practice mode is your friend.'; }
+
+  let chapHtml = '';
+  Object.keys(byChap).sort().forEach(ch => {
+    const c = byChap[ch];
+    const cpct = Math.round(c.correct / c.total * 100);
+    chapHtml += `<div class="result-stat"><div class="label">Chapter ${ch}</div><div class="value">${c.correct}/${c.total}</div><div style="color:var(--cream-dim);font-size:0.78rem;margin-top:4px;">${cpct}%</div></div>`;
+  });
+
+  $('resultsScreen').innerHTML = `
+    <div class="results">
+      <div class="ribbon">Examination Complete</div>
+      <h2>${passed ? 'You Passed' : 'Review and Retry'}</h2>
+      <div class="score-circle" style="--pct-deg:${pct * 3.6}deg;">
+        <div class="percent">${pct}%</div>
+        <div class="of">${correct} of ${total}</div>
+      </div>
+      <div class="tier-text">${tier}</div>
+      <div class="tier-blurb">${blurb}</div>
+      <div class="results-stats">
+        <div class="result-stat"><div class="label">Points</div><div class="value">${state.score}</div></div>
+        <div class="result-stat"><div class="label">Best Streak</div><div class="value">${state.bestStreak}</div></div>
+        <div class="result-stat"><div class="label">Threshold</div><div class="value">65%</div></div>
+        ${chapHtml}
+      </div>
+      <div class="actions" style="justify-content:center;">
+        <button class="btn" id="reviewBtn">Review Answers</button>
+        <button class="btn primary" id="againBtn">New Attempt</button>
+      </div>
+    </div>
+  `;
+  showScreen('results');
+  $('reviewBtn').addEventListener('click', () => {
+    state.finished = false;
+    state.mode = 'practice';
+    state.current = 0;
+    // Make all answers reviewable in practice mode
+    saveState();
+    setModeUI('practice');
+    showScreen('quiz');
+    renderQuestion(); renderNav(); renderDashboard();
+  });
+  $('againBtn').addEventListener('click', () => { resetQuiz(); });
+
+  if (passed) bigCelebration();
+}
+
+function setModeUI(mode) {
+  $('modePractice').classList.toggle('active', mode === 'practice');
+  $('modeExam').classList.toggle('active', mode === 'exam');
+  state.mode = mode;
+}
+
+// =====================================================
+//              CELEBRATION FX
+// =====================================================
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function sizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+sizeCanvas();
+window.addEventListener('resize', sizeCanvas);
+
+function spawnFireworks(x, y, count = 60, palette) {
+  palette = palette || ['#f3c75a', '#d4a949', '#fff3c4', '#b8923a', '#ffe599'];
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+    const speed = 2 + Math.random() * 5;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: 0.012 + Math.random() * 0.012,
+      size: 2 + Math.random() * 2.5,
+      color: palette[Math.floor(Math.random() * palette.length)],
+      gravity: 0.06,
+      type: 'firework'
+    });
+  }
+}
+
+function spawnGoldShower(count = 80) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -10 - Math.random() * 100,
+      vx: (Math.random() - 0.5) * 1,
+      vy: 2 + Math.random() * 4,
+      life: 1,
+      decay: 0.004,
+      size: 3 + Math.random() * 4,
+      color: ['#f3c75a', '#d4a949', '#fff3c4', '#ffe599'][Math.floor(Math.random() * 4)],
+      gravity: 0.04,
+      type: 'coin',
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.2
+    });
+  }
+}
+
+function spawnStars(x, y, count = 12) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1 + Math.random() * 3;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      life: 1,
+      decay: 0.015,
+      size: 6 + Math.random() * 6,
+      color: '#f3c75a',
+      gravity: 0.05,
+      type: 'star',
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.3
+    });
+  }
+}
+
+function drawStar(ctx, x, y, r, color, rot) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const a = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+    ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    const a2 = a + Math.PI / 5;
+    ctx.lineTo(Math.cos(a2) * r * 0.45, Math.sin(a2) * r * 0.45);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function animateFX() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.life -= p.decay;
+    if (p.rotSpeed) p.rot += p.rotSpeed;
+    if (p.life <= 0 || p.y > canvas.height + 50) { particles.splice(i, 1); continue; }
+    ctx.globalAlpha = Math.max(0, p.life);
+    if (p.type === 'star') {
+      drawStar(ctx, p.x, p.y, p.size, p.color, p.rot);
+    } else if (p.type === 'coin') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size, p.size * Math.abs(Math.cos(p.rot * 1.5)) || 1, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animateFX);
+}
+animateFX();
+
+function triggerCelebration() {
+  // Random celebration each correct answer
+  const card = document.getElementById('qCard');
+  const rect = card.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + 80;
+  const roll = Math.random();
+  if (roll < 0.4) {
+    spawnFireworks(cx, cy, 50);
+  } else if (roll < 0.7) {
+    spawnStars(cx, cy, 16);
+  } else {
+    spawnGoldShower(40);
+  }
+}
+
+function bigCelebration() {
+  // Pass screen: full celebration
+  spawnGoldShower(120);
+  setTimeout(() => spawnFireworks(canvas.width / 2, canvas.height / 2, 80), 200);
+  setTimeout(() => spawnFireworks(canvas.width * 0.3, canvas.height * 0.4, 60), 500);
+  setTimeout(() => spawnFireworks(canvas.width * 0.7, canvas.height * 0.4, 60), 800);
+  setTimeout(() => spawnGoldShower(100), 1200);
+}
+
+function floatScore(pts) {
+  const card = document.getElementById('qCard');
+  const rect = card.getBoundingClientRect();
+  const el = document.createElement('div');
+  el.className = 'score-pop';
+  el.textContent = `+${pts}`;
+  el.style.left = (rect.left + rect.width / 2 - 30 + (Math.random() * 60 - 30)) + 'px';
+  el.style.top = (rect.top + 60) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function showStreakBadge(big, small) {
+  const el = document.createElement('div');
+  el.className = 'streak-badge';
+  el.innerHTML = `${big}<span class="small">${small}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1900);
+  // Extra fanfare
+  spawnFireworks(canvas.width / 2, canvas.height / 2, 70);
+}
+
+// =====================================================
+//              MODAL
+// =====================================================
+let modalResolve = null;
+function openModal(title, text) {
+  $('modalTitle').textContent = title;
+  $('modalText').textContent = text;
+  $('modal').classList.add('show');
+  return new Promise(res => { modalResolve = res; });
+}
+$('modalCancel').addEventListener('click', () => { $('modal').classList.remove('show'); modalResolve && modalResolve(false); });
+$('modalConfirm').addEventListener('click', () => { $('modal').classList.remove('show'); modalResolve && modalResolve(true); });
+
+// =====================================================
+//              CONTROLS
+// =====================================================
+$('startBtn').addEventListener('click', () => {
+  if (!state.started || !state.order.length) {
+    state.order = freshOrder();
+    state.current = 0;
+    state.answers = {};
+    state.score = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    state.started = true;
+    state.finished = false;
+    saveState();
+  }
+  showScreen('quiz');
+  renderQuestion(); renderNav(); renderDashboard();
+});
+
+$('nextBtn').addEventListener('click', next);
+$('prevBtn').addEventListener('click', prev);
+
+$('modePractice').addEventListener('click', () => { setModeUI('practice'); saveState(); renderQuestion(); renderNav(); });
+$('modeExam').addEventListener('click', () => { setModeUI('exam'); saveState(); renderQuestion(); renderNav(); });
+
+$('shuffleBtn').addEventListener('click', async () => {
+  const ok = await openModal('Shuffle Questions?', 'This will randomize the order and clear your current answers. Are you sure?');
+  if (ok) {
+    state.order = freshOrder();
+    state.current = 0;
+    state.answers = {};
+    state.score = 0;
+    state.streak = 0;
+    saveState();
+    renderQuestion(); renderNav(); renderDashboard();
+  }
+});
+
+$('resetBtn').addEventListener('click', async () => {
+  const ok = await openModal('Reset Quiz?', 'This will clear all answers, score, and streak. You will start fresh. Are you sure?');
+  if (ok) { resetQuiz(); }
+});
+
+function resetQuiz() {
+  state = {
+    order: freshOrder(),
+    current: 0,
+    answers: {},
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    mode: state.mode,
+    started: false,
+    finished: false
+  };
+  saveState();
+  setModeUI(state.mode);
+  showScreen('start');
+}
+
+// =====================================================
+//              INIT
+// =====================================================
+loadState();
+if (state.started && state.order.length === QUESTIONS.length && !state.finished) {
+  setModeUI(state.mode);
+  showScreen('quiz');
+  renderQuestion(); renderNav(); renderDashboard();
+} else if (state.finished) {
+  setModeUI(state.mode);
+  renderResults();
+} else {
+  state.order = freshOrder();
+  showScreen('start');
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if ($('quizScreen').style.display === 'none') return;
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (['1','2','3','4','a','b','c','d','A','B','C','D'].includes(e.key)) {
+    const map = { '1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3,'A':0,'B':1,'C':2,'D':3 };
+    handleAnswer(map[e.key]);
+  }
+});
+</script>
+
+</body>
+</html>

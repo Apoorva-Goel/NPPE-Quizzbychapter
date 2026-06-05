@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter 34 — The Law of Quebec | NPPE Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#0a1428;
+    --navy-800:#0f1d3a;
+    --navy-700:#162a4f;
+    --navy-600:#1e3a66;
+    --navy-500:#2a4a7a;
+    --gold-100:#fdf6d8;
+    --gold-200:#f4e4a1;
+    --gold-300:#e6cc6f;
+    --gold-400:#d4af37;
+    --gold-500:#b8941f;
+    --gold-600:#8a6f17;
+    --cream:#f7f1e3;
+    --ivory:#fbf9f3;
+    --success:#3aa66f;
+    --success-soft:#d4ecd9;
+    --danger:#c0392b;
+    --danger-soft:#f5d9d4;
+    --shadow:0 10px 40px rgba(10,20,40,.35);
+    --shadow-soft:0 4px 20px rgba(10,20,40,.18);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html,body{height:100%;}
+
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+      radial-gradient(ellipse at top, var(--navy-700) 0%, var(--navy-900) 55%, #060c1a 100%);
+    color:var(--cream);
+    min-height:100vh;
+    overflow-x:hidden;
+    line-height:1.55;
+  }
+
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(212,175,55,.07) 0%, transparent 35%),
+      radial-gradient(circle at 88% 82%, rgba(212,175,55,.05) 0%, transparent 40%);
+    pointer-events:none;z-index:0;
+  }
+
+  /* ───────── fireworks canvas ───────── */
+  #fxCanvas{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:9999;
+  }
+
+  /* ───────── shared container ───────── */
+  .stage{
+    position:relative;z-index:1;
+    max-width:980px;
+    margin:0 auto;
+    padding:32px 24px 80px;
+  }
+
+  /* ───────── header ───────── */
+  .hdr{
+    text-align:center;
+    padding:24px 0 12px;
+    border-bottom:1px solid rgba(212,175,55,.18);
+    margin-bottom:32px;
+  }
+  .hdr .eyebrow{
+    font-size:.78rem;letter-spacing:.32em;
+    color:var(--gold-300);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    font-weight:500;
+  }
+  .hdr h1{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:clamp(2rem,4.5vw,3.4rem);
+    color:var(--gold-200);
+    line-height:1.08;
+    letter-spacing:.01em;
+  }
+  .hdr h1 em{
+    font-style:italic;
+    color:var(--gold-300);
+    font-weight:500;
+  }
+  .hdr .sub{
+    margin-top:10px;
+    color:rgba(247,241,227,.65);
+    font-size:.95rem;
+    letter-spacing:.04em;
+  }
+
+  /* ───────── start screen ───────── */
+  .start-card{
+    background:linear-gradient(160deg, rgba(22,42,79,.85), rgba(15,29,58,.95));
+    border:1px solid rgba(212,175,55,.25);
+    border-radius:18px;
+    padding:42px 38px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(8px);
+  }
+  .start-card h2{
+    font-family:'Cormorant Garamond',serif;
+    color:var(--gold-200);
+    font-size:1.7rem;
+    font-weight:500;
+    margin-bottom:14px;
+  }
+  .start-card p{
+    color:rgba(247,241,227,.78);
+    margin-bottom:24px;
+    font-size:.98rem;
+  }
+  .stats-row{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    margin:24px 0 32px;
+  }
+  .stat{
+    background:rgba(10,20,40,.5);
+    border:1px solid rgba(212,175,55,.15);
+    border-radius:12px;
+    padding:18px 14px;
+    text-align:center;
+  }
+  .stat .v{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.9rem;color:var(--gold-300);font-weight:600;
+    line-height:1;
+  }
+  .stat .l{
+    font-size:.74rem;letter-spacing:.18em;
+    color:rgba(247,241,227,.55);
+    text-transform:uppercase;margin-top:6px;
+  }
+
+  .mode-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;
+    margin:8px 0 28px;
+  }
+  .mode-card{
+    cursor:pointer;
+    background:rgba(10,20,40,.4);
+    border:1.5px solid rgba(212,175,55,.2);
+    border-radius:14px;
+    padding:22px 20px;
+    transition:all .22s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .mode-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(212,175,55,.08), transparent 60%);
+    opacity:0;transition:opacity .25s;
+  }
+  .mode-card:hover{
+    border-color:var(--gold-400);
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+  }
+  .mode-card:hover::before{opacity:1;}
+  .mode-card.selected{
+    border-color:var(--gold-400);
+    background:rgba(212,175,55,.08);
+    box-shadow:0 0 0 1px var(--gold-400) inset, 0 6px 24px rgba(212,175,55,.15);
+  }
+  .mode-card h3{
+    font-family:'Cormorant Garamond',serif;
+    color:var(--gold-200);font-size:1.35rem;font-weight:600;
+    margin-bottom:6px;
+  }
+  .mode-card p{
+    font-size:.86rem;color:rgba(247,241,227,.7);margin:0;
+  }
+
+  /* ───────── buttons ───────── */
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-weight:500;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:.84rem;
+    padding:14px 28px;
+    border-radius:9px;
+    cursor:pointer;
+    border:none;
+    transition:all .2s ease;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--gold-400),var(--gold-500));
+    color:var(--navy-900);
+    box-shadow:0 4px 16px rgba(212,175,55,.3);
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(212,175,55,.45);
+  }
+  .btn-primary:disabled{
+    opacity:.4;cursor:not-allowed;transform:none;
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--gold-200);
+    border:1px solid rgba(212,175,55,.4);
+  }
+  .btn-ghost:hover{
+    background:rgba(212,175,55,.1);
+    border-color:var(--gold-300);
+  }
+  .btn-danger{
+    background:transparent;
+    color:#f0a89e;
+    border:1px solid rgba(192,57,43,.5);
+  }
+  .btn-danger:hover{
+    background:rgba(192,57,43,.15);
+  }
+
+  /* ───────── quiz screen ───────── */
+  .quiz-hdr{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:16px;
+    padding:18px 22px;
+    background:linear-gradient(135deg,rgba(15,29,58,.85),rgba(22,42,79,.7));
+    border:1px solid rgba(212,175,55,.2);
+    border-radius:14px;
+    margin-bottom:22px;
+    backdrop-filter:blur(6px);
+  }
+  .quiz-hdr-left{display:flex;align-items:center;gap:18px;}
+  .qcount{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.3rem;
+    color:var(--gold-200);
+  }
+  .qcount strong{color:var(--gold-400);font-weight:700;}
+  .mode-pill{
+    font-size:.7rem;letter-spacing:.2em;
+    padding:5px 12px;
+    background:rgba(212,175,55,.12);
+    border:1px solid rgba(212,175,55,.4);
+    color:var(--gold-200);
+    text-transform:uppercase;
+    border-radius:20px;
+  }
+  .quiz-hdr-right{display:flex;align-items:center;gap:14px;}
+  .score-block, .streak-block{
+    display:flex;align-items:center;gap:8px;
+    padding:8px 14px;
+    background:rgba(10,20,40,.6);
+    border:1px solid rgba(212,175,55,.18);
+    border-radius:10px;
+  }
+  .score-block .icon{color:var(--gold-300);font-size:1.1rem;}
+  .score-block .val,.streak-block .val{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;font-size:1.15rem;color:var(--gold-200);
+  }
+  .streak-block.fire .val{color:#ffb454;}
+  .streak-block .icon{font-size:1rem;}
+
+  /* progress bar */
+  .progress-bar{
+    height:6px;background:rgba(10,20,40,.7);border-radius:3px;
+    overflow:hidden;margin-bottom:22px;
+    border:1px solid rgba(212,175,55,.12);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--gold-500),var(--gold-300));
+    transition:width .35s ease;
+    box-shadow:0 0 12px rgba(212,175,55,.4);
+  }
+
+  /* question card */
+  .qcard{
+    background:linear-gradient(160deg,rgba(22,42,79,.65),rgba(15,29,58,.85));
+    border:1px solid rgba(212,175,55,.22);
+    border-radius:16px;
+    padding:32px 30px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow-soft);
+    animation:slideIn .35s ease;
+  }
+  @keyframes slideIn{
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .qtext{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.32rem;
+    color:var(--ivory);
+    line-height:1.45;
+    margin-bottom:24px;
+    font-weight:500;
+  }
+  .qtext .qnum-inline{
+    color:var(--gold-400);
+    font-weight:600;
+    margin-right:8px;
+  }
+
+  .options{display:flex;flex-direction:column;gap:11px;}
+  .opt{
+    cursor:pointer;
+    padding:15px 18px;
+    background:rgba(10,20,40,.55);
+    border:1.5px solid rgba(212,175,55,.18);
+    border-radius:10px;
+    transition:all .18s ease;
+    display:flex;align-items:flex-start;gap:14px;
+    color:var(--cream);
+    font-size:.97rem;
+    line-height:1.45;
+  }
+  .opt:hover:not(.disabled){
+    background:rgba(212,175,55,.08);
+    border-color:var(--gold-300);
+    transform:translateX(3px);
+  }
+  .opt .letter{
+    width:30px;height:30px;
+    flex-shrink:0;
+    border:1.5px solid rgba(212,175,55,.4);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:600;font-size:.9rem;
+    color:var(--gold-300);
+    background:rgba(10,20,40,.5);
+    transition:all .2s;
+  }
+  .opt.selected{
+    background:rgba(212,175,55,.12);
+    border-color:var(--gold-400);
+  }
+  .opt.selected .letter{
+    background:var(--gold-400);
+    color:var(--navy-900);
+    border-color:var(--gold-400);
+  }
+  .opt.correct{
+    background:rgba(58,166,111,.15);
+    border-color:var(--success);
+    animation:correctPulse .6s ease;
+  }
+  @keyframes correctPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(58,166,111,.5);}
+    50%{box-shadow:0 0 0 12px rgba(58,166,111,0);}
+  }
+  .opt.correct .letter{
+    background:var(--success);
+    color:#fff;border-color:var(--success);
+  }
+  .opt.wrong{
+    background:rgba(192,57,43,.12);
+    border-color:var(--danger);
+  }
+  .opt.wrong .letter{
+    background:var(--danger);
+    color:#fff;border-color:var(--danger);
+  }
+  .opt.disabled{cursor:default;}
+
+  /* rationale */
+  .rationale{
+    margin-top:18px;
+    padding:18px 20px;
+    background:rgba(212,175,55,.06);
+    border-left:3px solid var(--gold-400);
+    border-radius:6px;
+    color:var(--ivory);
+    font-size:.94rem;
+    line-height:1.6;
+    animation:fadeIn .4s ease;
+  }
+  .rationale strong{
+    color:var(--gold-300);
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.05rem;
+    font-weight:600;
+    display:block;margin-bottom:6px;
+    letter-spacing:.04em;
+  }
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+  /* nav grid */
+  .nav-controls{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:20px;gap:14px;flex-wrap:wrap;
+  }
+  .grid-toggle{
+    background:transparent;border:1px solid rgba(212,175,55,.3);
+    color:var(--gold-200);
+    padding:8px 14px;border-radius:8px;cursor:pointer;
+    font-size:.78rem;letter-spacing:.1em;
+    transition:all .2s;
+  }
+  .grid-toggle:hover{background:rgba(212,175,55,.08);}
+
+  .nav-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(42px,1fr));
+    gap:8px;
+    margin-bottom:22px;
+    padding:18px;
+    background:rgba(10,20,40,.45);
+    border:1px solid rgba(212,175,55,.15);
+    border-radius:12px;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .4s ease,padding .4s ease,margin .4s ease;
+    padding-top:0;padding-bottom:0;margin-bottom:0;
+  }
+  .nav-grid.open{
+    max-height:600px;
+    padding:18px;
+    margin-bottom:22px;
+  }
+  .nav-cell{
+    aspect-ratio:1;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(10,20,40,.6);
+    border:1px solid rgba(212,175,55,.18);
+    border-radius:7px;
+    color:rgba(247,241,227,.6);
+    font-size:.82rem;font-weight:500;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .nav-cell:hover{transform:scale(1.08);border-color:var(--gold-300);}
+  .nav-cell.current{
+    border:2px solid var(--gold-400);
+    color:var(--gold-200);
+    box-shadow:0 0 0 2px rgba(212,175,55,.2);
+  }
+  .nav-cell.answered{
+    background:rgba(212,175,55,.15);
+    color:var(--gold-200);
+    border-color:var(--gold-500);
+  }
+  .nav-cell.correct{
+    background:rgba(58,166,111,.25);
+    color:#a8e0bb;
+    border-color:var(--success);
+  }
+  .nav-cell.wrong{
+    background:rgba(192,57,43,.2);
+    color:#f5b5ab;
+    border-color:var(--danger);
+  }
+
+  /* actions */
+  .actions{
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:14px;
+    margin-top:8px;
+  }
+  .actions-left{display:flex;gap:10px;flex-wrap:wrap;}
+  .actions-right{display:flex;gap:10px;}
+
+  /* ───────── results screen ───────── */
+  .results-card{
+    background:linear-gradient(160deg,rgba(22,42,79,.9),rgba(15,29,58,.95));
+    border:1px solid rgba(212,175,55,.3);
+    border-radius:20px;
+    padding:48px 38px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    position:relative;overflow:hidden;
+  }
+  .results-card::before{
+    content:'';position:absolute;
+    top:-100px;left:50%;transform:translateX(-50%);
+    width:400px;height:400px;
+    background:radial-gradient(circle,rgba(212,175,55,.18),transparent 65%);
+    pointer-events:none;
+  }
+  .results-card h2{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.4rem;
+    color:var(--gold-200);
+    margin-bottom:8px;
+    position:relative;
+  }
+  .results-card .sub{
+    color:rgba(247,241,227,.7);
+    margin-bottom:36px;
+    font-size:.95rem;letter-spacing:.06em;
+    position:relative;
+  }
+  .score-circle{
+    width:180px;height:180px;
+    margin:0 auto 32px;
+    border-radius:50%;
+    background:conic-gradient(var(--gold-400) calc(var(--p)*1%), rgba(10,20,40,.6) 0);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    box-shadow:0 0 40px rgba(212,175,55,.25), inset 0 0 20px rgba(10,20,40,.4);
+  }
+  .score-circle::before{
+    content:'';position:absolute;
+    inset:14px;border-radius:50%;
+    background:linear-gradient(160deg,var(--navy-800),var(--navy-900));
+  }
+  .score-circle .inner{
+    position:relative;text-align:center;
+  }
+  .score-circle .pct{
+    font-family:'Cormorant Garamond',serif;
+    font-size:3.1rem;font-weight:600;
+    color:var(--gold-200);line-height:1;
+  }
+  .score-circle .lbl{
+    font-size:.7rem;letter-spacing:.25em;
+    color:rgba(247,241,227,.55);
+    text-transform:uppercase;margin-top:6px;
+  }
+
+  .results-stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    margin:28px 0 32px;
+    position:relative;
+  }
+  @media(max-width:640px){
+    .results-stats{grid-template-columns:repeat(2,1fr);}
+  }
+  .rstat{
+    background:rgba(10,20,40,.55);
+    border:1px solid rgba(212,175,55,.18);
+    border-radius:10px;
+    padding:18px 12px;
+  }
+  .rstat .v{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.9rem;color:var(--gold-300);font-weight:600;line-height:1;
+  }
+  .rstat .l{
+    font-size:.7rem;letter-spacing:.16em;
+    text-transform:uppercase;
+    color:rgba(247,241,227,.6);
+    margin-top:8px;
+  }
+
+  .verdict{
+    padding:22px 26px;
+    border-radius:12px;
+    margin-bottom:30px;
+    text-align:left;
+    position:relative;
+  }
+  .verdict.pass{
+    background:rgba(58,166,111,.12);
+    border:1px solid rgba(58,166,111,.4);
+  }
+  .verdict.fail{
+    background:rgba(192,57,43,.1);
+    border:1px solid rgba(192,57,43,.35);
+  }
+  .verdict h3{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.45rem;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .verdict.pass h3{color:#7ad8a6;}
+  .verdict.fail h3{color:#f0a89e;}
+  .verdict p{
+    color:rgba(247,241,227,.85);
+    font-size:.96rem;line-height:1.6;
+  }
+
+  .results-actions{
+    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+    position:relative;
+  }
+
+  /* score popup floater */
+  .popup{
+    position:fixed;
+    pointer-events:none;
+    z-index:9998;
+    font-family:'Cormorant Garamond',serif;
+    font-weight:700;
+    font-size:1.8rem;
+    color:var(--gold-300);
+    text-shadow:0 2px 12px rgba(212,175,55,.5);
+    animation:floatUp 1.4s ease-out forwards;
+  }
+  @keyframes floatUp{
+    0%{opacity:0;transform:translateY(0) scale(.7);}
+    18%{opacity:1;transform:translateY(-20px) scale(1.15);}
+    100%{opacity:0;transform:translateY(-100px) scale(1);}
+  }
+
+  /* streak badge */
+  .streak-badge{
+    position:fixed;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(.5);
+    z-index:9997;
+    pointer-events:none;
+    background:linear-gradient(135deg,#ff7e3a,#ffb454);
+    color:#fff;
+    padding:20px 36px;
+    border-radius:60px;
+    font-family:'Cormorant Garamond',serif;
+    font-weight:700;font-size:1.6rem;
+    box-shadow:0 10px 40px rgba(255,126,58,.5);
+    opacity:0;
+    animation:streakPop 1.6s ease-out forwards;
+    text-align:center;
+  }
+  .streak-badge .big{display:block;font-size:2.5rem;line-height:1;}
+  @keyframes streakPop{
+    0%{transform:translate(-50%,-50%) scale(.3) rotate(-12deg);opacity:0;}
+    25%{transform:translate(-50%,-50%) scale(1.1) rotate(0);opacity:1;}
+    75%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1;}
+    100%{transform:translate(-50%,-50%) scale(.9) rotate(0);opacity:0;}
+  }
+
+  /* confirm dialog */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(6,12,26,.78);
+    backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;
+    z-index:10000;
+    opacity:0;pointer-events:none;
+    transition:opacity .25s;
+  }
+  .modal-overlay.show{opacity:1;pointer-events:auto;}
+  .modal{
+    background:linear-gradient(160deg,var(--navy-700),var(--navy-800));
+    border:1px solid rgba(212,175,55,.35);
+    border-radius:16px;
+    padding:32px 32px 26px;
+    max-width:440px;width:90%;
+    box-shadow:var(--shadow);
+    transform:scale(.85);
+    transition:transform .25s;
+  }
+  .modal-overlay.show .modal{transform:scale(1);}
+  .modal h3{
+    font-family:'Cormorant Garamond',serif;
+    color:var(--gold-200);font-size:1.5rem;font-weight:600;
+    margin-bottom:12px;
+  }
+  .modal p{
+    color:rgba(247,241,227,.78);
+    margin-bottom:24px;font-size:.95rem;
+  }
+  .modal-actions{display:flex;gap:12px;justify-content:flex-end;}
+
+  /* ───────── responsive ───────── */
+  @media(max-width:640px){
+    .stage{padding:20px 14px 60px;}
+    .start-card,.qcard{padding:24px 20px;}
+    .results-card{padding:32px 22px;}
+    .stats-row{grid-template-columns:repeat(3,1fr);gap:8px;}
+    .stat{padding:14px 8px;}
+    .stat .v{font-size:1.45rem;}
+    .stat .l{font-size:.65rem;letter-spacing:.12em;}
+    .mode-grid{grid-template-columns:1fr;}
+    .qtext{font-size:1.15rem;}
+    .quiz-hdr{padding:14px;flex-direction:column;align-items:stretch;}
+    .quiz-hdr-left,.quiz-hdr-right{justify-content:space-between;}
+    .score-circle{width:150px;height:150px;}
+    .score-circle .pct{font-size:2.5rem;}
+    .opt{padding:13px 14px;font-size:.93rem;}
+    .actions{flex-direction:column-reverse;}
+    .actions-left,.actions-right{width:100%;justify-content:center;}
+    .btn{flex:1;justify-content:center;}
+  }
+
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="stage">
+
+  <!-- ============ START SCREEN ============ -->
+  <div id="startScreen">
+    <header class="hdr">
+      <div class="eyebrow">N P P E · Practice Examination</div>
+      <h1>Chapter 34<br><em>The Law of Quebec</em></h1>
+      <div class="sub">Civil Code · Engineers Act · Articles 2118 – 2120 · Legal Hypothecs</div>
+    </header>
+
+    <div class="start-card">
+      <h2>Welcome, candidate.</h2>
+      <p>This examination covers the unique civil-law framework that governs engineering practice in the Province of Quebec — including contractual and extracontractual liability, the presumption of liability under Articles 2118 to 2120, manufacturer warranties, contracts of enterprise, and legal hypothecs. Fifty scenario-based questions, calibrated to the N P P E pass threshold of sixty-five percent.</p>
+
+      <div class="stats-row">
+        <div class="stat"><div class="v">50</div><div class="l">Questions</div></div>
+        <div class="stat"><div class="v">65%</div><div class="l">Pass Mark</div></div>
+        <div class="stat"><div class="v">4</div><div class="l">Options Each</div></div>
+      </div>
+
+      <h2 style="font-size:1.3rem;margin-bottom:16px;">Choose your mode</h2>
+      <div class="mode-grid">
+        <div class="mode-card selected" data-mode="practice" onclick="selectMode('practice')">
+          <h3>Practice Mode</h3>
+          <p>Instant feedback after each answer with full rationales. Build understanding question by question.</p>
+        </div>
+        <div class="mode-card" data-mode="exam" onclick="selectMode('exam')">
+          <h3>Exam Mode</h3>
+          <p>All feedback withheld until the end. Simulates true examination conditions.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-primary" onclick="startQuiz()">Begin Examination →</button>
+        <button class="btn btn-ghost" onclick="shuffleQuestions()">⟲ Shuffle Order</button>
+        <button id="resumeBtn" class="btn btn-ghost hidden" onclick="resumeQuiz()">↻ Resume Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ QUIZ SCREEN ============ -->
+  <div id="quizScreen" class="hidden">
+    <div class="quiz-hdr">
+      <div class="quiz-hdr-left">
+        <div class="qcount">Question <strong id="qNow">1</strong> of <strong>50</strong></div>
+        <div class="mode-pill" id="modePill">Practice</div>
+      </div>
+      <div class="quiz-hdr-right">
+        <div class="score-block"><span class="icon">◆</span><span class="val" id="scoreVal">0</span></div>
+        <div class="streak-block" id="streakBlock"><span class="icon">🔥</span><span class="val" id="streakVal">0</span></div>
+      </div>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:2%;"></div></div>
+
+    <div class="nav-controls">
+      <button class="grid-toggle" onclick="toggleGrid()">▦ Question Navigator</button>
+      <div style="font-size:.82rem;color:rgba(247,241,227,.5);letter-spacing:.06em;">
+        Answered: <span id="answeredCount">0</span> / 50
+      </div>
+    </div>
+    <div class="nav-grid" id="navGrid"></div>
+
+    <div class="qcard" id="qcard">
+      <div class="qtext" id="qtext"></div>
+      <div class="options" id="options"></div>
+      <div id="rationale"></div>
+    </div>
+
+    <div class="actions">
+      <div class="actions-left">
+        <button class="btn btn-danger" onclick="confirmReset()">⟲ Reset Quiz</button>
+      </div>
+      <div class="actions-right">
+        <button class="btn btn-ghost" id="prevBtn" onclick="prev()">← Previous</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="next()">Next →</button>
+        <button class="btn btn-primary hidden" id="finishBtn" onclick="finish()">Finish ▣</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS SCREEN ============ -->
+  <div id="resultsScreen" class="hidden">
+    <div class="results-card">
+      <h2 id="resultsTitle">Examination Complete</h2>
+      <div class="sub">Chapter 34 — The Law of Quebec</div>
+
+      <div class="score-circle" id="scoreCircle" style="--p:0;">
+        <div class="inner">
+          <div class="pct" id="finalPct">0%</div>
+          <div class="lbl">Score</div>
+        </div>
+      </div>
+
+      <div class="results-stats">
+        <div class="rstat"><div class="v" id="rCorrect">0</div><div class="l">Correct</div></div>
+        <div class="rstat"><div class="v" id="rWrong">0</div><div class="l">Incorrect</div></div>
+        <div class="rstat"><div class="v" id="rPoints">0</div><div class="l">Points</div></div>
+        <div class="rstat"><div class="v" id="rStreak">0</div><div class="l">Best Streak</div></div>
+      </div>
+
+      <div class="verdict" id="verdict">
+        <h3 id="verdictHead"></h3>
+        <p id="verdictBody"></p>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="reviewAnswers()">⊕ Review Answers</button>
+        <button class="btn btn-ghost" onclick="restartFromResults()">⟲ Retry Examination</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ CONFIRM MODAL ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Reset the quiz?</h3>
+    <p id="modalBody">This will clear all answers and your current score. This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="modalConfirm">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   QUESTION BANK — Chapter 34, The Law of Quebec
+   50 NPPE-style scenario questions, paraphrased from concepts.
+   ════════════════════════════════════════════════════════ */
+const QUESTIONS = [
+  {
+    q: "An Ontario engineering firm is preparing a tender for a construction project in Montreal. What is the fundamental legal distinction the firm must account for when contracting in Quebec compared with the common-law provinces?",
+    options: [
+      "Quebec construction contracts are governed primarily by a codified civil-law system anchored by the Civil Code of Quebec.",
+      "Quebec applies the same common-law principles found in Ontario.",
+      "Federal statutes alone govern Quebec construction contracting.",
+      "Quebec engineers are exempt from professional liability rules."
+    ],
+    correct: 0,
+    rationale: "Quebec operates under a civil-law tradition rather than common law. The Civil Code of Quebec serves as the cornerstone of the system and lays down the general law (jus commune) for matters within its scope."
+  },
+  {
+    q: "Which body holds statutory authority over the practice of engineering in the Province of Quebec?",
+    options: [
+      "Professional Engineers Ontario.",
+      "The Ordre des ingénieurs du Québec.",
+      "Engineers Canada.",
+      "The National Assembly of Engineers."
+    ],
+    correct: 1,
+    rationale: "The Engineers Act of Quebec designates the Ordre des ingénieurs du Québec as the professional order regulating engineering practice in the province, operating under the Professional Code."
+  },
+  {
+    q: "Under the Professional Code, what is the principal function of a professional order such as the Ordre des ingénieurs du Québec?",
+    options: [
+      "To maximize member income.",
+      "To lobby for legislative reform.",
+      "To ensure the protection of the public.",
+      "To administer retirement benefits."
+    ],
+    correct: 2,
+    rationale: "The Professional Code expressly states that the principal function of each professional order is to ensure the protection of the public — a duty that governs all of the Ordre's regulatory activity."
+  },
+  {
+    q: "A British Columbia P.Eng. is invited to provide engineering services on a single bridge project in Quebec. Which mechanism is most directly suited to authorizing practice for that discrete engagement?",
+    options: [
+      "Automatic full membership in the Ordre with no formalities.",
+      "A federal interprovincial waiver.",
+      "An honorary fellowship.",
+      "A temporary licence available for a specific project."
+    ],
+    correct: 3,
+    rationale: "A member of a Canadian association of engineers, or someone holding a diploma recognized by the board, may apply for a temporary licence permitting practice on a specific project."
+  },
+  {
+    q: "Which two requirements, among others, must a holder of a full engineering permit in Quebec satisfy?",
+    options: [
+      "Carriage of professional liability insurance and appropriate knowledge of the French language.",
+      "Federal trade-union membership and a doctorate.",
+      "Ten years of Quebec residency and a real-estate licence.",
+      "Dual citizenship and a commercial pilot certificate."
+    ],
+    correct: 0,
+    rationale: "Members of the Ordre must, among other things, be covered by a professional liability insurance policy and possess an appropriate knowledge of French."
+  },
+  {
+    q: "An out-of-province engineer with a recognized degree wishes to obtain a full Quebec permit. Beyond credential review, what additional gateway is typically required?",
+    options: [
+      "Completion of a second engineering degree.",
+      "Passing an examination dealing with the deontological, ethical, and legal aspects of the profession.",
+      "Provision of military service certification.",
+      "A five-year non-practice waiting period."
+    ],
+    correct: 1,
+    rationale: "Depending on qualifications, applicants for a permit to practice engineering in Quebec must pass an examination on the deontological, ethical, and legal aspects of the profession."
+  },
+  {
+    q: "What is the status of the Civil Code of Quebec within the province's legal architecture?",
+    options: [
+      "A purely advisory document with no binding effect.",
+      "Subordinate to every municipal bylaw.",
+      "The cornerstone of the civil-law system, laying down the jus commune for matters within its scope.",
+      "Replaced in full by the federal Interpretation Act."
+    ],
+    correct: 2,
+    rationale: "The preliminary provision confirms that the Civil Code is the cornerstone of Quebec's civil law and lays down the jus commune (general law) for all matters within the letter, spirit, or object of its provisions."
+  },
+  {
+    q: "Which three subject areas does the Civil Code of Quebec govern, in harmony with the Charter of human rights and freedoms?",
+    options: [
+      "Only commercial leases.",
+      "Federal taxation and immigration.",
+      "Solely criminal matters.",
+      "Persons, relations between persons, and property."
+    ],
+    correct: 3,
+    rationale: "The Civil Code governs persons, relations between persons, and property, working in harmony with the Charter of human rights and freedoms and the general principles of law."
+  },
+  {
+    q: "A more recent Quebec statute appears to address the same subject as a Civil Code provision. How is their relationship best described?",
+    options: [
+      "Other laws may complement the Code or make exceptions to it, but the Code remains foundational in its subject matter.",
+      "The Civil Code is always automatically overridden by any later statute.",
+      "The Civil Code applies only to engineering disputes.",
+      "No statute may ever touch a subject covered by the Code."
+    ],
+    correct: 0,
+    rationale: "Other laws may complement the Civil Code or make exceptions to it, but within its scope the Code is the foundation of all other laws."
+  },
+  {
+    q: "From which source does a contractual obligation arise under Quebec law?",
+    options: [
+      "Statutory enactment alone.",
+      "A contract entered into between the parties.",
+      "Unforeseen accidents.",
+      "Custom of an unrelated trade."
+    ],
+    correct: 1,
+    rationale: "Liability exists when an obligation is breached. An obligation arising from a contract is contractual; one arising from any other act or fault to which the law attaches an obligation is extracontractual."
+  },
+  {
+    q: "A pedestrian walking past a job site is injured when tools fall from an engineer's improperly secured truck. No contract exists between them. What kind of obligation is at issue?",
+    options: [
+      "Contractual.",
+      "Commercial.",
+      "Extracontractual.",
+      "Hypothecary."
+    ],
+    correct: 2,
+    rationale: "An obligation arising from a fault or act to which the effects of an obligation are attached by law — rather than by agreement — is referred to as extracontractual."
+  },
+  {
+    q: "How will a Quebec court evaluate whether an engineer breached a professional obligation in a liability case?",
+    options: [
+      "By the standard of any reasonable layperson.",
+      "By whatever the client claims to have expected.",
+      "By reference to the most senior engineer in the defendant's firm.",
+      "By how a normally prudent and competent member of the same profession would have acted in the same circumstances."
+    ],
+    correct: 3,
+    rationale: "In professional liability cases, the court compares the defendant's conduct to that of a normally prudent and competent member of the same profession acting under the same circumstances."
+  },
+  {
+    q: "An on-duty employee of an engineering firm installs equipment incorrectly, injuring a third party. Under the Civil Code, who may also be held liable for the resulting harm?",
+    options: [
+      "The employer can be held responsible for injuries caused by its employee.",
+      "Only the injured party themselves.",
+      "Only the regulator.",
+      "The municipality automatically."
+    ],
+    correct: 0,
+    rationale: "The Civil Code provides that a person may, in certain circumstances, be liable for injuries caused by another — including an employer for the acts of its employees."
+  },
+  {
+    q: "A storage tank owned and kept by a contractor leaks and damages a neighbouring property. Which Civil Code concept is most directly engaged against the contractor?",
+    options: [
+      "A penal clause.",
+      "The presumption of liability against a person for damages caused by property in their custody.",
+      "Force majeure.",
+      "Subrogation."
+    ],
+    correct: 1,
+    rationale: "There is a presumption of liability against a person for damages caused by property in their custody, which can apply to owners of equipment, tanks, and similar assets."
+  },
+  {
+    q: "Which best defines a contract of adhesion under Quebec law?",
+    options: [
+      "A contract negotiated jointly by equally informed parties.",
+      "A contract limited to government tenders.",
+      "A contract whose essential terms are imposed or drafted by one party without the other being able to negotiate them.",
+      "A contract that adheres to an international treaty."
+    ],
+    correct: 2,
+    rationale: "A contract of adhesion is one whose terms are imposed or drafted by one party, leaving the other no opportunity to negotiate or change them."
+  },
+  {
+    q: "A standard-form consumer contract references an external technical specification document that was never shown to the consumer. What is the likely fate of that external clause?",
+    options: [
+      "It applies automatically as if read in full.",
+      "The consumer must pay a penalty for not reading it.",
+      "The entire contract is voided.",
+      "It is deemed null unless it was expressly brought to the consumer's attention at contract formation, or unless the other party proves the consumer otherwise knew of it."
+    ],
+    correct: 3,
+    rationale: "In consumer and adhesion contracts, an external clause referred to in the contract is deemed null unless it was expressly brought to the party's attention at conclusion (or shown to be otherwise known to them)."
+  },
+  {
+    q: "An adhering party suffers a financial loss because a critical clause is written so densely that a reasonable person cannot follow it. What remedy may the court grant?",
+    options: [
+      "Declare the clause null on the basis that it is illegible or incomprehensible and prejudicial to the adhering party.",
+      "Enforcement as written, regardless of legibility.",
+      "Order the adhering party to hire a translator.",
+      "Award additional fees to the drafter."
+    ],
+    correct: 0,
+    rationale: "A clause that is illegible or incomprehensible to a reasonable person is null if the adhering party suffers prejudice, unless the drafter proves that an adequate explanation of its scope was provided."
+  },
+  {
+    q: "A clause in an adhesion contract is found to be excessive and unreasonably detrimental to the adhering party. How may a Quebec court characterize and treat it?",
+    options: [
+      "Suspended pending arbitration only.",
+      "Abusive — and the court may declare it null or reduce the obligation arising from it.",
+      "Hypothecary.",
+      "Solidary."
+    ],
+    correct: 1,
+    rationale: "Such a clause may be considered abusive, in which case the court may declare it null or reduce the resulting obligation."
+  },
+  {
+    q: "A contractor causes material damage to a client's property through gross negligence. What is the effect of a clause in the contract attempting to cap the contractor's liability for such damage?",
+    options: [
+      "It fully shields the contractor in every case.",
+      "It automatically doubles the liability cap.",
+      "It cannot operate, because a person may not exclude or limit liability for material damages caused by intentional fault or gross negligence.",
+      "It transfers liability to the insurer."
+    ],
+    correct: 2,
+    rationale: "A person may not exclude or limit liability for material damages caused to another through intentional fault or gross negligence."
+  },
+  {
+    q: "Under the Civil Code, what is the permissible ceiling on a clause excluding or limiting liability for bodily or moral injury?",
+    options: [
+      "Capped at fifty percent of damages.",
+      "Limited to one million dollars.",
+      "Limited to the contract value.",
+      "No exclusion or limitation of liability for bodily or moral injury is permitted."
+    ],
+    correct: 3,
+    rationale: "The Civil Code prohibits any exclusion or limitation of liability for bodily or moral injury."
+  },
+  {
+    q: "A service provider posts a sign in its office stating that liability for non-performance is excluded. When does such a notice operate against a counterparty?",
+    options: [
+      "Only if the party invoking the notice can prove the other party was aware of its existence at the time the contract was formed.",
+      "Always, regardless of whether the counterparty saw it.",
+      "Only after registration with a public authority.",
+      "Only after litigation begins."
+    ],
+    correct: 0,
+    rationale: "A notice stipulating exclusion or limitation of liability for non-performance is only valid if the party invoking it proves the other party was aware of the notice when the contract was formed."
+  },
+  {
+    q: "What two characteristics define a force majeure event under Quebec law?",
+    options: [
+      "Foreseeable but inconvenient.",
+      "Unforeseeable and irresistible.",
+      "Caused by the debtor's negligence.",
+      "Affecting only intangible property."
+    ],
+    correct: 1,
+    rationale: "A person may exculpate themselves from liability by proving the injury arose from an unforeseeable and irresistible event — the classic civilian test for force majeure."
+  },
+  {
+    q: "An engineer reveals a closely guarded trade secret because the secret concealed a public-safety hazard. Under the Civil Code, what defence may be available?",
+    options: [
+      "Automatic liability for the disclosure.",
+      "Trade secrets enjoy no protection in Quebec.",
+      "The engineer may exculpate themselves by proving that general-interest considerations — particularly public health or safety — justify the disclosure.",
+      "Only the regulator can invoke this defence."
+    ],
+    correct: 2,
+    rationale: "The Civil Code allows a person to escape liability for disclosing a trade secret if they prove that general-interest considerations, particularly public health or safety, justified the disclosure."
+  },
+  {
+    q: "Two engineers from different firms jointly take part in a wrongful act that produces a single indivisible injury. What is the nature of their liability?",
+    options: [
+      "Each pays a fixed administrative fee only.",
+      "Neither is liable absent a contract.",
+      "Only the more senior engineer is liable.",
+      "Solidary — they are jointly and severally liable for reparation."
+    ],
+    correct: 3,
+    rationale: "Where several persons jointly take part in a wrongful act resulting in injury, or commit separate faults that may have caused the injury where the cause cannot be determined, they are solidarily liable for reparation."
+  },
+  {
+    q: "What does it mean, in practical terms, for two debtors to owe a solidary obligation?",
+    options: [
+      "Either debtor may be compelled to perform the entire obligation, and performance by one releases the others toward the creditor.",
+      "Each owes only half regardless of any demand.",
+      "The creditor must always sue both at the same time.",
+      "Each pays in alphabetical order."
+    ],
+    correct: 0,
+    rationale: "With solidary obligations, each debtor may be compelled separately to perform the full obligation, and performance by any one of them releases the others toward the creditor."
+  },
+  {
+    q: "Under what circumstance is solidarity between debtors presumed by the Civil Code?",
+    options: [
+      "For purely gratuitous obligations.",
+      "Where the obligation is contracted for the performance of a service or an organized economic activity.",
+      "Only when ordered by a court.",
+      "Never — solidarity must always be expressly stipulated."
+    ],
+    correct: 1,
+    rationale: "Solidarity exists when expressly stipulated or imposed by law. It is also presumed where an obligation is contracted for the performance of a service or an organized economic activity."
+  },
+  {
+    q: "An engineering firm joins a joint venture to deliver a major Quebec construction project. What risk should the firm specifically assess before signing?",
+    options: [
+      "That it cannot bill clients directly.",
+      "That it cannot share profits.",
+      "The extent to which it may be held solidarily liable for the faults of the other joint-venture members.",
+      "That its insurer must approve every drawing."
+    ],
+    correct: 2,
+    rationale: "Engineers participating in joint ventures should consider the extent to which they may be solidarily liable for the faults of fellow venture members — because solidarity is presumed for organized economic activity."
+  },
+  {
+    q: "A contractor fails to perform a contractual obligation without justification. Which set of remedies is available to the creditor?",
+    options: [
+      "Only damages — never specific performance.",
+      "Demanding criminal sanctions.",
+      "Confiscation of the debtor's personal property.",
+      "Forcing specific performance, obtaining resolution or resiliation of the contract, or seeking reduction of the creditor's own obligations."
+    ],
+    correct: 3,
+    rationale: "When the debtor fails to perform without justification, the creditor may force specific performance, obtain resolution or resiliation of the contract, or seek reduction of their own correlative obligations."
+  },
+  {
+    q: "An owner wishes to hire a replacement contractor to finish work abandoned by the original contractor and charge the cost back. What is generally required first?",
+    options: [
+      "Putting the defaulting contractor in default — unless the default already operates by law or by the terms of the contract.",
+      "Filing a criminal complaint.",
+      "Applying for a bankruptcy order.",
+      "Negotiating a new contract with the bank."
+    ],
+    correct: 0,
+    rationale: "A creditor wishing to have the obligation performed at the debtor's expense must first put the debtor in default, except where default operates by law or contract."
+  },
+  {
+    q: "For which categories of injury may a creditor recover damages under the Civil Code, provided causation is established?",
+    options: [
+      "Only material injury.",
+      "Bodily, moral, or material injuries that are an immediate and direct consequence of the debtor's default.",
+      "Only injuries excluded by insurance.",
+      "Only future, contingent injuries."
+    ],
+    correct: 1,
+    rationale: "A creditor is entitled to damages for bodily, moral, or material injuries that are an immediate and direct consequence of the debtor's default."
+  },
+  {
+    q: "A creditor receives an insurance payout for the same loss, and the insurer is subrogated in the creditor's rights. What is the effect on the debtor's obligation to pay damages?",
+    options: [
+      "The debtor's obligation is reduced by the insurance amount.",
+      "The debtor is wholly released.",
+      "The debtor's obligation is not reduced or altered, except where the third party is subrogated in the creditor's rights — in which case the subrogated party may claim.",
+      "The insurer becomes the debtor."
+    ],
+    correct: 2,
+    rationale: "Compensation from a third party does not reduce or alter the debtor's obligation to pay damages, except where that third party is subrogated in the creditor's rights."
+  },
+  {
+    q: "An apartment building is completed late due to contractor negligence, causing the owner to lose rental revenue. Can lost rentals form part of the damages claim?",
+    options: [
+      "No — lost rentals are inherently too speculative.",
+      "Only if the building is sold.",
+      "Only by claim against the municipality.",
+      "Yes — future loss that is certain and can be assessed is taken into account in awarding damages."
+    ],
+    correct: 3,
+    rationale: "Future loss that is certain and can be assessed is recoverable. Where an owner can establish that the units would have been rented immediately on completion, lost rental revenue qualifies."
+  },
+  {
+    q: "In contractual matters, and absent intentional fault or gross negligence, what damages may a non-defaulting party recover?",
+    options: [
+      "Damages that were foreseen or foreseeable at the time the obligation was contracted.",
+      "All speculative consequential losses.",
+      "Punitive damages by default.",
+      "Only nominal damages."
+    ],
+    correct: 0,
+    rationale: "In contractual matters, the debtor is only liable for damages foreseen or foreseeable when the obligation was contracted, unless non-performance results from intentional fault or gross negligence."
+  },
+  {
+    q: "What is the function of a penal clause inserted into a construction contract?",
+    options: [
+      "To impose criminal sanctions for breach.",
+      "To allow the parties to pre-assess anticipated damages by stipulating a penalty if the debtor fails to perform.",
+      "To create an automatic hypothec.",
+      "To exclude all liability."
+    ],
+    correct: 1,
+    rationale: "A penal clause is one by which the parties assess anticipated damages in advance by stipulating that the debtor will pay a penalty for failing to perform the obligation."
+  },
+  {
+    q: "A construction contract contains a penalty specifically for late delivery only. The contractor finishes late. May the owner claim both the work itself and the late-delivery penalty?",
+    options: [
+      "Never — the creditor must always choose between the two.",
+      "Only if the contract is renegotiated.",
+      "Yes — where the penalty is stipulated only for delay, the creditor may demand both performance and the penalty.",
+      "Only with prior court approval."
+    ],
+    correct: 2,
+    rationale: "Ordinarily a creditor cannot claim both performance and the penalty, but the exception applies where the penalty is stipulated for a mere delay — in which case both may be claimed."
+  },
+  {
+    q: "A bystander is injured by a consumer product because of a manufacturing flaw. Under the Civil Code, who may be held liable for the safety defect?",
+    options: [
+      "Only the retailer that physically sold the unit.",
+      "Only the customs broker.",
+      "Only the end consumer who bought it.",
+      "The manufacturer, any person who distributes the product under their own name, and any supplier of the product."
+    ],
+    correct: 3,
+    rationale: "The manufacturer, distributors selling under their own name, and any supplier of the product are all potentially liable for injuries caused by safety defects."
+  },
+  {
+    q: "Which of the following counts as a basis for finding that a product has a 'safety defect'?",
+    options: [
+      "A defect in design or manufacture, in preservation or presentation, or a lack of sufficient indications as to risks, dangers, or safety precautions.",
+      "A change in currency exchange rates.",
+      "The buyer's failure to register the product.",
+      "Expiry of the manufacturer's marketing budget."
+    ],
+    correct: 0,
+    rationale: "A product is deemed to have a safety defect if it does not afford the safety reasonably expected, owing to flaws in design, manufacture, preservation, presentation, or insufficient indications about risks and safety precautions."
+  },
+  {
+    q: "Two months after a sale, a buyer discovers a hidden defect that makes an industrial pump unfit for its intended use. What warranty operates?",
+    options: [
+      "None — the sale is complete and the buyer assumes the risk.",
+      "The seller's warranty against latent defects that render the product unfit for its intended use, or so diminish its usefulness that the buyer would not have bought it (or paid as much) had they known.",
+      "Only a manufacturer warranty, if explicitly named in the bill of sale.",
+      "Only a moral obligation."
+    ],
+    correct: 1,
+    rationale: "The seller warrants that the product is free of latent defects that make it unfit for its intended use or so diminish its usefulness that the buyer would not have bought it, or paid the same price, had they known."
+  },
+  {
+    q: "A defect was visible at the time of sale, or was already known to the buyer. What is the seller's warranty position?",
+    options: [
+      "The seller is fully liable in any case.",
+      "The price is automatically reduced.",
+      "The seller is not bound to warrant against apparent defects or against latent defects already known to the buyer.",
+      "A criminal investigation is triggered."
+    ],
+    correct: 2,
+    rationale: "The seller is not bound to warrant against apparent defects or against latent defects that were already known to the buyer at the time of the sale."
+  },
+  {
+    q: "A product sold by a professional seller deteriorates much more quickly than other products of the same type. What presumption applies under the Civil Code?",
+    options: [
+      "That the buyer is at fault by default.",
+      "No presumption applies.",
+      "That the product is a counterfeit.",
+      "That a defect existed at the time of sale, unless the deterioration is shown to result from improper use by the buyer."
+    ],
+    correct: 3,
+    rationale: "A defect is presumed to have existed at the time of sale by a professional seller where the product malfunctions or deteriorates prematurely compared to like products, unless attributable to improper use by the buyer."
+  },
+  {
+    q: "What is the key feature distinguishing a contract of enterprise (or for services) from a contract of employment under the Civil Code?",
+    options: [
+      "The contractor or service provider freely chooses the method of performance, and is not in a relationship of subordination toward the client.",
+      "Only the contract of employment requires payment.",
+      "Only employees may receive bonuses.",
+      "Contracts of enterprise must be oral."
+    ],
+    correct: 0,
+    rationale: "A defining characteristic of the contract of enterprise or for services is that the contractor/provider chooses the method of performance and there is no relationship of subordination with the client."
+  },
+  {
+    q: "Before signing, an engineer (as service provider) has what pre-contract obligation toward the client?",
+    options: [
+      "To withhold price estimates until after signature.",
+      "To provide, so far as circumstances permit, any useful information about the nature of the work and the property and time required — even if the client does not ask.",
+      "To draft the contract exclusively in English.",
+      "To pre-pay all subcontractors."
+    ],
+    correct: 1,
+    rationale: "The contractor and provider of services must, so far as circumstances permit, give the client any useful information about the nature of the work and the property and time required for it — proactively, not only on request."
+  },
+  {
+    q: "A contractor signs a fixed-price contract. During construction, actual costs exceed expectations significantly. May the contractor unilaterally raise the price?",
+    options: [
+      "Yes — every cost overrun justifies an adjustment.",
+      "Only if the regulator approves.",
+      "No — under a fixed-price contract the contractor cannot claim an increase even if the work costs more than anticipated.",
+      "Only if the client is in default."
+    ],
+    correct: 2,
+    rationale: "In a fixed-price contract, the contractor or provider may not claim an increase even if costs exceed estimates; the client likewise cannot demand a reduction if the work costs less."
+  },
+  {
+    q: "Under Article 2118 of the Civil Code, within what period are the contractor, the supervising architect or engineer, and the relevant subcontractor solidarily liable for the loss of the work?",
+    options: [
+      "One year after completion.",
+      "Three years after acceptance.",
+      "Ten years after occupancy.",
+      "Five years after the work was completed."
+    ],
+    correct: 3,
+    rationale: "Article 2118 establishes solidary liability of the contractor, the architect or engineer who directed or supervised the work, and the subcontractor (for work the subcontractor performed) for loss of the work occurring within five years after completion."
+  },
+  {
+    q: "What is the legal status of the Article 2118 to 2120 presumptions of liability — can sophisticated parties contract out of them?",
+    options: [
+      "No — they are considered public order provisions and may not be derogated from, even by private agreement.",
+      "Yes — they are default rules the parties can override by private agreement.",
+      "They apply only to public infrastructure.",
+      "They are optional unless invoked by the regulator."
+    ],
+    correct: 0,
+    rationale: "These provisions are of public order. They cannot be set aside by private agreement, even where the parties are sophisticated."
+  },
+  {
+    q: "A supervising engineer is named as a defendant under the Article 2118 presumption. On what basis can the engineer be relieved of liability?",
+    options: [
+      "By showing the client paid late.",
+      "By proving that the defects do not result from any error or shortcoming in the engineer's expert opinions or plans, nor from any failure in directing or supervising the work.",
+      "By proving the project was completed late.",
+      "By transferring the file to the insurer."
+    ],
+    correct: 1,
+    rationale: "Article 2119 allows the architect or engineer to be relieved by proving the defects do not result from an error in their expert opinions or plans, nor from any failure in directing or supervising the work."
+  },
+  {
+    q: "Defects in a completed building, attributable to poor workmanship, are discovered ten months after acceptance. Under Article 2120 of the Civil Code, what is the nature of the liability of the participants?",
+    options: [
+      "Solidary among all participants.",
+      "Solely the owner's responsibility.",
+      "Joint — each is liable for their proportionate share of the cost of the repairs.",
+      "Strictly criminal."
+    ],
+    correct: 2,
+    rationale: "Under Article 2120, the contractor, the supervising architect or engineer, and the relevant subcontractor are jointly (not solidarily) liable for defects from poor workmanship existing at acceptance or discovered within one year, each responsible for their proportionate share."
+  },
+  {
+    q: "Several creditors have rights to register a legal hypothec on an immovable that is being renovated. Which of the following correctly identifies who may register such a hypothec?",
+    options: [
+      "Only the project's general contractor.",
+      "Only the lender financing the project.",
+      "Only employees of the municipality.",
+      "The architect, engineer, supplier of materials, workmen, contractor, and subcontractors involved in the construction or renovation, for work or services requested by the owner."
+    ],
+    correct: 3,
+    rationale: "A legal hypothec in favour of persons who take part in the construction or renovation of an immovable exists in favour of the architect, engineer, supplier of materials, workmen, contractor, and subcontractors — for work requested by the owner."
+  },
+  {
+    q: "How long does a legal hypothec in favour of construction participants subsist after the work is completed if no further steps are taken, and what is the outside deadline?",
+    options: [
+      "Subsists for thirty days after completion, and is extinguished six months after completion unless the creditor publishes an action or registers a prior notice of exercise of the hypothecary right.",
+      "Subsists indefinitely without registration.",
+      "Subsists for five years automatically.",
+      "Subsists only during construction."
+    ],
+    correct: 0,
+    rationale: "The legal hypothec subsists for thirty days after completion. To survive, a notice must be registered within that period. It is extinguished six months after completion unless the creditor publishes an action or registers a prior notice exercising the hypothecary right."
+  },
+  {
+    q: "A subcontractor and a workman are both about to begin work on a Quebec renovation. Which one must give written notice of their contract to the owner before starting in order to preserve their right to register a legal hypothec?",
+    options: [
+      "Both must give written notice.",
+      "The subcontractor must give written notice; the workman is not required to.",
+      "Neither needs to give notice.",
+      "The workman must give written notice; the subcontractor is exempt."
+    ],
+    correct: 1,
+    rationale: "Where the person did not contract directly with the owner, the hypothec is limited to work, materials, or services supplied after written notification of the contract to the owner. Subcontractors and material suppliers must give this notice; workmen are not required to."
+  }
+];
+
+/* ════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'nppe_ch34_quebec_v1';
+let state = {
+  mode: 'practice',
+  order: [],          // shuffled indices into QUESTIONS
+  idx: 0,             // pointer into order
+  answers: {},        // { questionIndex: selectedOptionIndex }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  started: false
+};
+
+/* ════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const saved = loadState();
+  if (saved && saved.started && Object.keys(saved.answers || {}).length > 0) {
+    document.getElementById('resumeBtn').classList.remove('hidden');
+  }
+  buildNavGrid();
+});
+
+/* ────────── mode selection ────────── */
+function selectMode(m) {
+  state.mode = m;
+  document.querySelectorAll('.mode-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.mode === m);
+  });
+}
+
+/* ────────── start / resume / shuffle ────────── */
+function shuffleQuestions() {
+  state.order = fisherYates(Array.from({length: QUESTIONS.length}, (_, i) => i));
+  flashHint('Order shuffled');
+}
+function fisherYates(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  if (!state.order.length) state.order = Array.from({length: QUESTIONS.length}, (_, i) => i);
+  state.idx = 0;
+  state.answers = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.started = true;
+  saveState();
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('modePill').textContent = state.mode === 'exam' ? 'Exam Mode' : 'Practice';
+  buildNavGrid();
+  renderQuestion();
+}
+
+function resumeQuiz() {
+  const saved = loadState();
+  if (!saved) return;
+  state = saved;
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('modePill').textContent = state.mode === 'exam' ? 'Exam Mode' : 'Practice';
+  buildNavGrid();
+  renderQuestion();
+}
+
+/* ════════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════════ */
+function renderQuestion() {
+  const qIdx = state.order[state.idx];
+  const Q = QUESTIONS[qIdx];
+
+  document.getElementById('qNow').textContent = state.idx + 1;
+  document.getElementById('scoreVal').textContent = state.score;
+  document.getElementById('streakVal').textContent = state.streak;
+  document.getElementById('streakBlock').classList.toggle('fire', state.streak >= 3);
+  document.getElementById('progressFill').style.width = (((state.idx + 1) / QUESTIONS.length) * 100) + '%';
+  document.getElementById('answeredCount').textContent = Object.keys(state.answers).length;
+
+  // question text
+  document.getElementById('qtext').innerHTML =
+    `<span class="qnum-inline">Q${state.idx + 1}.</span>${escapeHtml(Q.q)}`;
+
+  // options
+  const optsEl = document.getElementById('options');
+  optsEl.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  Q.options.forEach((text, i) => {
+    const o = document.createElement('div');
+    o.className = 'opt';
+    o.innerHTML = `<div class="letter">${letters[i]}</div><div>${escapeHtml(text)}</div>`;
+    o.onclick = () => chooseAnswer(qIdx, i, o);
+    optsEl.appendChild(o);
+  });
+
+  // re-paint previously answered
+  document.getElementById('rationale').innerHTML = '';
+  if (state.answers.hasOwnProperty(qIdx)) {
+    paintAnswered(qIdx, Q);
+  }
+
+  // nav buttons
+  document.getElementById('prevBtn').disabled = state.idx === 0;
+  const isLast = state.idx === QUESTIONS.length - 1;
+  document.getElementById('nextBtn').classList.toggle('hidden', isLast);
+  document.getElementById('finishBtn').classList.toggle('hidden', !isLast);
+
+  buildNavGrid();
+}
+
+function paintAnswered(qIdx, Q) {
+  const chosen = state.answers[qIdx];
+  const opts = document.querySelectorAll('#options .opt');
+
+  if (state.mode === 'practice') {
+    opts.forEach((el, i) => {
+      el.classList.add('disabled');
+      if (i === Q.correct) el.classList.add('correct');
+      if (i === chosen && chosen !== Q.correct) el.classList.add('wrong');
+    });
+    document.getElementById('rationale').innerHTML =
+      `<div class="rationale"><strong>Rationale</strong>${escapeHtml(Q.rationale)}</div>`;
+  } else {
+    // exam mode: just mark the choice, no reveal
+    opts.forEach((el, i) => {
+      if (i === chosen) el.classList.add('selected');
+    });
+  }
+}
+
+/* ────────── nav grid ────────── */
+function buildNavGrid() {
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const qIdx = state.order[i] !== undefined ? state.order[i] : i;
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    if (state.answers.hasOwnProperty(qIdx)) {
+      if (state.mode === 'practice') {
+        cell.classList.add(state.answers[qIdx] === QUESTIONS[qIdx].correct ? 'correct' : 'wrong');
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    if (i === state.idx) cell.classList.add('current');
+    cell.onclick = () => { state.idx = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function toggleGrid() {
+  document.getElementById('navGrid').classList.toggle('open');
+}
+
+/* ════════════════════════════════════════════════════════
+   ANSWER HANDLING + GAMIFICATION
+   ════════════════════════════════════════════════════════ */
+function chooseAnswer(qIdx, choice, optEl) {
+  if (state.answers.hasOwnProperty(qIdx)) return;
+  state.answers[qIdx] = choice;
+
+  const Q = QUESTIONS[qIdx];
+  const correct = choice === Q.correct;
+
+  if (correct) {
+    state.streak += 1;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+
+    // points: base 10 + streak bonus (capped)
+    const bonus = Math.min(state.streak - 1, 10) * 2;
+    const earned = 10 + bonus;
+    state.score += earned;
+
+    if (state.mode === 'practice') {
+      // visual celebration in practice mode (immediate feedback)
+      const rect = optEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      launchFireworks(cx, cy);
+      sprinkleStars(cx, cy);
+      showPointPopup(cx, cy, `+${earned}`);
+
+      if (state.streak > 0 && state.streak % 5 === 0) {
+        showStreakBadge(state.streak);
+      }
+    }
+  } else {
+    state.streak = 0;
+  }
+
+  if (state.mode === 'practice') {
+    paintAnswered(qIdx, Q);
+  } else {
+    // exam: just mark selection
+    document.querySelectorAll('#options .opt').forEach((el, i) => {
+      if (i === choice) el.classList.add('selected');
+    });
+  }
+
+  document.getElementById('scoreVal').textContent = state.score;
+  document.getElementById('streakVal').textContent = state.streak;
+  document.getElementById('streakBlock').classList.toggle('fire', state.streak >= 3);
+  document.getElementById('answeredCount').textContent = Object.keys(state.answers).length;
+  buildNavGrid();
+  saveState();
+}
+
+/* ────────── nav ────────── */
+function next() {
+  if (state.idx < QUESTIONS.length - 1) {
+    state.idx += 1;
+    saveState();
+    renderQuestion();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+function prev() {
+  if (state.idx > 0) {
+    state.idx -= 1;
+    saveState();
+    renderQuestion();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   FINISH + RESULTS
+   ════════════════════════════════════════════════════════ */
+function finish() {
+  // Count correct
+  let correctCount = 0;
+  state.order.forEach(qIdx => {
+    if (state.answers[qIdx] === QUESTIONS[qIdx].correct) correctCount++;
+  });
+  const pct = Math.round((correctCount / QUESTIONS.length) * 100);
+
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+
+  document.getElementById('rCorrect').textContent = correctCount;
+  document.getElementById('rWrong').textContent = QUESTIONS.length - correctCount;
+  document.getElementById('rPoints').textContent = state.score;
+  document.getElementById('rStreak').textContent = state.bestStreak;
+
+  // animate score circle
+  const circle = document.getElementById('scoreCircle');
+  let p = 0;
+  const target = pct;
+  const step = () => {
+    p += 2;
+    if (p > target) p = target;
+    circle.style.setProperty('--p', p);
+    document.getElementById('finalPct').textContent = p + '%';
+    if (p < target) requestAnimationFrame(step);
+  };
+  step();
+
+  // verdict
+  const verdict = document.getElementById('verdict');
+  const vH = document.getElementById('verdictHead');
+  const vB = document.getElementById('verdictBody');
+
+  if (pct >= 85) {
+    verdict.className = 'verdict pass';
+    vH.textContent = 'Excellent — Distinction Level';
+    vB.textContent = 'Your command of Quebec civil-law principles, the Articles 2118 to 2120 framework, and the operation of legal hypothecs is at distinction level. You are well prepared for the N P P E on this material.';
+    massiveCelebration();
+  } else if (pct >= 65) {
+    verdict.className = 'verdict pass';
+    vH.textContent = 'Pass — Above the N P P E Threshold';
+    vB.textContent = 'You have cleared the sixty-five percent N P P E benchmark for Chapter 34. Review the questions you missed, paying particular attention to the public-order articles and hypothec notice deadlines before exam day.';
+    smallCelebration();
+  } else {
+    verdict.className = 'verdict fail';
+    vH.textContent = 'Below Pass — Further Study Required';
+    vB.textContent = 'You are not yet at the sixty-five percent N P P E threshold for this chapter. Revisit the distinctions between contractual and extracontractual liability, solidary versus joint liability under Articles 2118 and 2120, and the time limits for legal hypothecs, then attempt the examination again.';
+  }
+  saveState();
+}
+
+function reviewAnswers() {
+  // restart at q1 in practice-style review (force feedback visible)
+  state.mode = 'practice';
+  state.idx = 0;
+  document.getElementById('modePill').textContent = 'Review';
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  renderQuestion();
+}
+
+function restartFromResults() {
+  state.order = fisherYates(state.order);
+  state.idx = 0;
+  state.answers = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  saveState();
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  renderQuestion();
+}
+
+/* ════════════════════════════════════════════════════════
+   RESET (with confirmation)
+   ════════════════════════════════════════════════════════ */
+function confirmReset() {
+  openModal({
+    title:'Reset the quiz?',
+    body:'This will clear all your answers, your score, and your streak. This action cannot be undone.',
+    confirmText:'Yes, reset',
+    onConfirm: () => {
+      resetAll();
+      closeModal();
+    }
+  });
+}
+function resetAll() {
+  state = {
+    mode:'practice', order:[], idx:0, answers:{}, score:0, streak:0, bestStreak:0, started:false
+  };
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  document.getElementById('resumeBtn').classList.add('hidden');
+}
+
+function openModal({title, body, confirmText='Confirm', onConfirm}) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').textContent = body;
+  const btn = document.getElementById('modalConfirm');
+  btn.textContent = confirmText;
+  btn.onclick = onConfirm;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+/* ════════════════════════════════════════════════════════
+   PERSISTENCE
+   ════════════════════════════════════════════════════════ */
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+/* ════════════════════════════════════════════════════════
+   CANVAS-BASED CELEBRATIONS
+   ════════════════════════════════════════════════════════ */
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function launchFireworks(x, y) {
+  // a burst of gold-toned firework particles from (x,y)
+  const colors = ['#d4af37','#e6cc6f','#f4e4a1','#ffb454','#ff9d3a','#ffd86b'];
+  const count = 38;
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.2 - 0.1);
+    const speed = 3 + Math.random() * 5;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 60 + Math.random() * 20,
+      maxLife: 80,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: 2 + Math.random() * 2.5,
+      gravity: 0.08,
+      type:'spark'
+    });
+  }
+  if (!animating) animateParticles();
+}
+
+function sprinkleStars(x, y) {
+  // floating golden stars upward from (x, y)
+  for (let i = 0; i < 14; i++) {
+    particles.push({
+      x: x + (Math.random() * 60 - 30),
+      y: y + (Math.random() * 20 - 10),
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: -2 - Math.random() * 2.5,
+      life: 70 + Math.random() * 30,
+      maxLife: 100,
+      color: '#fdf6d8',
+      size: 6 + Math.random() * 6,
+      gravity: -0.02,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.15,
+      type:'star'
+    });
+  }
+  if (!animating) animateParticles();
+}
+
+function massiveCelebration() {
+  // big finale: launch from multiple points
+  const w = window.innerWidth, h = window.innerHeight;
+  const launch = (delay, x, y) => setTimeout(() => {
+    launchFireworks(x, y);
+    sprinkleStars(x, y);
+  }, delay);
+  launch(0,   w*0.25, h*0.45);
+  launch(220, w*0.75, h*0.4);
+  launch(450, w*0.5,  h*0.55);
+  launch(700, w*0.18, h*0.35);
+  launch(950, w*0.82, h*0.5);
+  launch(1200,w*0.5,  h*0.3);
+}
+function smallCelebration() {
+  const w = window.innerWidth, h = window.innerHeight;
+  launchFireworks(w*0.5, h*0.5);
+  setTimeout(() => sprinkleStars(w*0.5, h*0.45), 200);
+}
+
+let animating = false;
+function animateParticles() {
+  animating = true;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.life -= 1;
+    if (p.rotation !== undefined) p.rotation += p.rotSpeed;
+
+    const alpha = Math.max(0, p.life / p.maxLife);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    if (p.type === 'star') {
+      drawStar(ctx, p.x, p.y, p.size, p.color, p.rotation || 0);
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  });
+  particles = particles.filter(p => p.life > 0);
+  if (particles.length > 0) {
+    requestAnimationFrame(animateParticles);
+  } else {
+    animating = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function drawStar(ctx, cx, cy, size, color, rot) {
+  const spikes = 5;
+  const outer = size;
+  const inner = size * 0.45;
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.beginPath();
+  for (let i = 0; i < spikes * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (Math.PI / spikes) * i - Math.PI / 2;
+    const px = Math.cos(a) * r;
+    const py = Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowBlur = 14;
+  ctx.shadowColor = '#d4af37';
+  ctx.fill();
+}
+
+function showPointPopup(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'popup';
+  el.textContent = text;
+  el.style.left = (x - 30) + 'px';
+  el.style.top  = (y - 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function showStreakBadge(streak) {
+  const el = document.createElement('div');
+  el.className = 'streak-badge';
+  el.innerHTML = `<span class="big">${streak}× streak!</span>On fire 🔥`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1700);
+}
+
+function flashHint(text) {
+  const el = document.createElement('div');
+  el.className = 'popup';
+  el.textContent = '✓ ' + text;
+  el.style.left = '50%';
+  el.style.top = '90px';
+  el.style.transform = 'translateX(-50%)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+/* ════════════════════════════════════════════════════════
+   UTIL
+   ════════════════════════════════════════════════════════ */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+// Click outside modal to close
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+</script>
+</body>
+</html>

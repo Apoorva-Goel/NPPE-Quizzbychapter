@@ -1,0 +1,2389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Practice Quiz — Chapters 26 to 29 (Bonds, Subsurface, Arbitration, ADR)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep:      #060f1f;
+    --navy:           #0a1628;
+    --navy-card:      #122236;
+    --navy-card-hi:   #1a2e48;
+    --navy-line:      #233a57;
+    --gold:           #d4af37;
+    --gold-bright:    #f4d03f;
+    --gold-soft:      #e8c87a;
+    --gold-glow:      rgba(212, 175, 55, 0.35);
+    --ink:            #f4f1e8;
+    --ink-muted:      #a8b3c4;
+    --ink-faint:      #6b7791;
+    --success:        #4ade80;
+    --success-deep:   #166534;
+    --danger:         #f87171;
+    --danger-deep:    #7f1d1d;
+    --warn:           #fbbf24;
+
+    --font-serif: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+    --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --shadow-card:  0 18px 50px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
+    --shadow-gold:  0 8px 30px rgba(212,175,55,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font-sans);
+    background: radial-gradient(ellipse at top, #0d1c33 0%, var(--navy-deep) 60%, #04080f 100%);
+    color: var(--ink);
+    line-height: 1.55;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Decorative star/grid backdrop */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, rgba(212,175,55,0.25), transparent),
+      radial-gradient(1px 1px at 78% 32%, rgba(212,175,55,0.18), transparent),
+      radial-gradient(1px 1px at 45% 72%, rgba(212,175,55,0.20), transparent),
+      radial-gradient(1px 1px at 88% 86%, rgba(212,175,55,0.15), transparent),
+      radial-gradient(1px 1px at 22% 55%, rgba(212,175,55,0.18), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Canvas for fireworks/particles */
+  #fx-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ========== HEADER ========== */
+  .masthead {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--navy-line);
+    position: relative;
+  }
+  .masthead::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .eyebrow {
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .title .accent { color: var(--gold); font-style: italic; font-weight: 500;}
+  .subtitle {
+    margin-top: 10px;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+  }
+
+  /* ========== SCREENS ========== */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: none; } }
+
+  /* ========== START SCREEN ========== */
+  .start-card {
+    background: linear-gradient(180deg, var(--navy-card) 0%, var(--navy) 100%);
+    border: 1px solid var(--navy-line);
+    border-radius: 14px;
+    padding: 38px 36px;
+    box-shadow: var(--shadow-card);
+    margin-top: 14px;
+  }
+  .start-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .start-card p { color: var(--ink-muted); margin-bottom: 16px; font-size: 0.95rem; }
+  .start-card ul { list-style: none; margin: 10px 0 22px; }
+  .start-card li {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    padding: 4px 0;
+    padding-left: 22px;
+    position: relative;
+  }
+  .start-card li::before {
+    content: '✦';
+    color: var(--gold);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    font-size: 0.85rem;
+  }
+  .start-card .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 24px 0;
+    padding: 18px;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px dashed rgba(212, 175, 55, 0.35);
+    border-radius: 10px;
+  }
+  .meta-stat {
+    flex: 1; min-width: 130px;
+    text-align: center;
+  }
+  .meta-stat .num {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    color: var(--gold);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .meta-stat .lbl {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+
+  .mode-toggle {
+    display: flex;
+    gap: 0;
+    margin-bottom: 22px;
+    background: var(--navy-deep);
+    border: 1px solid var(--navy-line);
+    border-radius: 10px;
+    padding: 4px;
+    overflow: hidden;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 12px 14px;
+    background: transparent;
+    color: var(--ink-muted);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border-radius: 7px;
+    transition: all 0.25s ease;
+  }
+  .mode-btn.selected {
+    background: linear-gradient(180deg, var(--gold), #b8902a);
+    color: var(--navy-deep);
+    box-shadow: 0 2px 12px rgba(212,175,55,0.35);
+  }
+  .mode-btn .mb-title {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+  .mode-btn .mb-sub {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.85;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* ========== BUTTONS ========== */
+  .btn {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, #a8851f 100%);
+    color: var(--navy-deep);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--navy-line);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(248,113,113,0.4);
+  }
+  .btn-danger:hover { background: rgba(248,113,113,0.1); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+  .start-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ========== QUIZ HUD ========== */
+  .hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-card);
+  }
+  .hud-group { display: flex; gap: 18px; align-items: center; }
+  .hud-stat { display: flex; flex-direction: column; }
+  .hud-stat .lbl {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .hud-stat .val {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--gold);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .hud-stat.streak .val.lit {
+    color: #ff8a3d;
+    text-shadow: 0 0 12px rgba(255, 138, 61, 0.5);
+  }
+  .hud-mode {
+    background: rgba(212,175,55,0.12);
+    color: var(--gold);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    border: 1px solid rgba(212,175,55,0.35);
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-shell {
+    height: 6px;
+    background: var(--navy-deep);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 22px;
+    border: 1px solid var(--navy-line);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 0 12px var(--gold-glow);
+    transition: width 0.4s cubic-bezier(.5,.1,.5,1.5);
+    width: 0%;
+  }
+
+  /* ========== QUESTION CARD ========== */
+  .q-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-radius: 14px;
+    padding: 30px 32px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .q-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed rgba(212,175,55,0.2);
+  }
+  .q-num {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--gold-soft);
+    font-size: 1.05rem;
+  }
+  .q-chapter {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-weight: 600;
+    background: rgba(212,175,55,0.05);
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(212,175,55,0.15);
+  }
+  .q-text {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+
+  /* ========== OPTIONS ========== */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--navy-deep);
+    border: 1.5px solid var(--navy-line);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-size: 0.96rem;
+    line-height: 1.5;
+    color: var(--ink);
+    text-align: left;
+    width: 100%;
+    font-family: var(--font-sans);
+  }
+  .option:hover:not(.disabled) {
+    border-color: var(--gold);
+    background: var(--navy-card-hi);
+    transform: translateX(2px);
+  }
+  .option.selected {
+    border-color: var(--gold);
+    background: rgba(212,175,55,0.08);
+    box-shadow: inset 0 0 0 1px var(--gold);
+  }
+  .option.correct {
+    border-color: var(--success);
+    background: rgba(74,222,128,0.10);
+    box-shadow: inset 0 0 0 1px var(--success), 0 0 16px rgba(74,222,128,0.2);
+  }
+  .option.incorrect {
+    border-color: var(--danger);
+    background: rgba(248,113,113,0.10);
+    box-shadow: inset 0 0 0 1px var(--danger);
+  }
+  .option.disabled { cursor: default; }
+  .option .lt {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    min-width: 22px;
+    flex-shrink: 0;
+  }
+  .option.correct .lt { color: var(--success); }
+  .option.incorrect .lt { color: var(--danger); }
+
+  /* ========== RATIONALE ========== */
+  .rationale {
+    margin-top: 18px;
+    padding: 16px 20px;
+    background: rgba(212,175,55,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    display: none;
+    animation: slideDown 0.35s ease;
+  }
+  .rationale.show { display: block; }
+  .rationale .r-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .rationale .r-body { color: var(--ink-muted); }
+  .rationale .r-body strong { color: var(--ink); font-weight: 600; }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-6px);} to { opacity: 1; transform: none; } }
+
+  /* ========== CONTROLS ========== */
+  .controls {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .controls .left, .controls .right { display: flex; gap: 10px; }
+
+  /* ========== NAV GRID ========== */
+  .nav-grid-wrap {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .nav-grid-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+    gap: 6px;
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    border: 1px solid var(--navy-line);
+    background: var(--navy-deep);
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    font-family: var(--font-sans);
+  }
+  .nav-cell:hover { border-color: var(--gold); color: var(--gold); }
+  .nav-cell.answered {
+    background: rgba(212,175,55,0.15);
+    color: var(--gold);
+    border-color: rgba(212,175,55,0.4);
+  }
+  .nav-cell.answered.correct {
+    background: rgba(74,222,128,0.15);
+    color: var(--success);
+    border-color: rgba(74,222,128,0.4);
+  }
+  .nav-cell.answered.incorrect {
+    background: rgba(248,113,113,0.12);
+    color: var(--danger);
+    border-color: rgba(248,113,113,0.4);
+  }
+  .nav-cell.current {
+    box-shadow: 0 0 0 2px var(--gold), 0 0 12px rgba(212,175,55,0.5);
+    transform: scale(1.06);
+  }
+  .nav-legend {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+  .nav-legend span { display: flex; align-items: center; gap: 6px; }
+  .nav-legend .dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .nav-legend .dot.unanswered { background: var(--navy-deep); border-color: var(--navy-line); }
+  .nav-legend .dot.current { background: var(--gold); border-color: var(--gold); }
+  .nav-legend .dot.correct { background: rgba(74,222,128,0.3); border-color: var(--success); }
+  .nav-legend .dot.incorrect { background: rgba(248,113,113,0.3); border-color: var(--danger); }
+  .nav-legend .dot.answered { background: rgba(212,175,55,0.2); border-color: var(--gold); }
+
+  /* ========== FLOATING POPUPS ========== */
+  .float-popup {
+    position: fixed;
+    pointer-events: none;
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    z-index: 1001;
+    text-shadow: 0 4px 22px rgba(0,0,0,0.6);
+    animation: floatUp 1.3s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  .float-popup.gold { color: var(--gold-bright); text-shadow: 0 0 20px var(--gold-glow), 0 4px 22px rgba(0,0,0,0.6); }
+  .float-popup.green { color: var(--success); }
+  .float-popup.red { color: var(--danger); }
+  .float-popup.streak {
+    font-size: 1.6rem;
+    color: #ff8a3d;
+    text-shadow: 0 0 20px rgba(255,138,61,0.6);
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+    20% { opacity: 1; transform: translate(-50%, -20px) scale(1.15); }
+    100% { opacity: 0; transform: translate(-50%, -120px) scale(1); }
+  }
+
+  /* ========== STREAK BADGE BANNER ========== */
+  .streak-banner {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: linear-gradient(135deg, #ff8a3d, #ff5722);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 100px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    box-shadow: 0 12px 30px rgba(255,87,34,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    z-index: 1002;
+    transition: transform 0.4s cubic-bezier(.5,.1,.5,1.5);
+    pointer-events: none;
+    border: 2px solid rgba(255,255,255,0.25);
+  }
+  .streak-banner.show { transform: translateX(-50%) translateY(0); }
+
+  /* ========== RESULTS ========== */
+  .results-card {
+    background: linear-gradient(180deg, var(--navy-card) 0%, var(--navy) 100%);
+    border: 1px solid var(--navy-line);
+    border-radius: 16px;
+    padding: 44px 36px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .results-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .results-card h2 {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .results-tier {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 1.2rem;
+    margin-bottom: 28px;
+  }
+  .score-ring {
+    width: 200px; height: 200px;
+    margin: 20px auto 26px;
+    position: relative;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring .ring-bg { fill: none; stroke: var(--navy-line); stroke-width: 14; }
+  .score-ring .ring-fg { fill: none; stroke: url(#goldGrad); stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset 1.6s cubic-bezier(.4,.0,.2,1); }
+  .score-ring .pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-ring .pct .big {
+    font-family: var(--font-serif);
+    font-size: 3.6rem;
+    color: var(--gold);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .score-ring .pct .sm {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-top: 4px;
+  }
+
+  .pass-fail-badge {
+    display: inline-block;
+    padding: 8px 22px;
+    border-radius: 100px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+  .pass-fail-badge.pass {
+    background: rgba(74,222,128,0.15);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+  .pass-fail-badge.fail {
+    background: rgba(248,113,113,0.15);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+  .results-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 26px 0 32px;
+  }
+  .rs-cell {
+    padding: 16px 12px;
+    background: rgba(212,175,55,0.04);
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 10px;
+  }
+  .rs-cell .v {
+    font-family: var(--font-serif);
+    font-size: 1.9rem;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .rs-cell .l {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+  .results-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* Review section */
+  .review-section {
+    margin-top: 36px;
+    text-align: left;
+  }
+  .review-section h3 {
+    font-family: var(--font-serif);
+    color: var(--gold);
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--navy-line);
+  }
+  .review-item {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    border-left: 3px solid var(--ink-faint);
+  }
+  .review-item.correct { border-left-color: var(--success); }
+  .review-item.incorrect { border-left-color: var(--danger); }
+  .review-item .ri-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .review-item .ri-q {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .review-item .ri-ans { font-size: 0.86rem; margin: 4px 0; color: var(--ink-muted); }
+  .review-item .ri-ans strong { color: var(--ink); }
+  .review-item .ri-ans.correct { color: var(--success); }
+  .review-item .ri-ans.incorrect { color: var(--danger); }
+  .review-item .ri-rationale {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(212,175,55,0.05);
+    border-left: 2px solid var(--gold);
+    border-radius: 4px;
+    font-size: 0.86rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  /* ========== MODAL ========== */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 15, 0.78);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  }
+  .modal-backdrop.show { display: flex; animation: fadeIn 0.2s; }
+  .modal {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 30px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+  }
+  .modal h3 {
+    font-family: var(--font-serif);
+    color: var(--gold);
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .modal p {
+    color: var(--ink-muted);
+    margin-bottom: 22px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+  /* ========== UTILITIES ========== */
+  .footer-note {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    margin-top: 30px;
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+  .hidden { display: none !important; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .container { padding: 24px 14px 60px; }
+    .start-card, .q-card, .results-card { padding: 24px 20px; }
+    .q-text { font-size: 1.2rem; }
+    .mode-toggle { flex-direction: column; }
+    .hud { padding: 12px; }
+    .hud-group { gap: 14px; }
+    .hud-stat .val { font-size: 1.2rem; }
+    .btn { padding: 12px 18px; font-size: 0.85rem; }
+    .results-card h2 { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fx-canvas"></canvas>
+
+<div class="container">
+
+  <!-- ========== HEADER ========== -->
+  <header class="masthead">
+    <div class="eyebrow">NPPE Exam Practice · Ontario</div>
+    <h1 class="title">Bonds, Subsurface Risk,<br><span class="accent">Arbitration &amp; A D R</span></h1>
+    <p class="subtitle">Chapters 26 to 29 — fifty scenario-based multiple-choice questions</p>
+  </header>
+
+  <!-- ========== START SCREEN ========== -->
+  <section id="screen-start" class="screen active">
+    <div class="start-card">
+      <h2>Ready to begin?</h2>
+      <p>This quiz covers four interconnected chapters dealing with how engineering and construction obligations are secured and how disputes are resolved.</p>
+      <ul>
+        <li>Chapter 26 — Bonds, letters of credit, and international performance guarantees</li>
+        <li>Chapter 27 — Subsurface conditions and the leading Canadian cases</li>
+        <li>Chapter 28 — Arbitration, the Ontario Arbitration Act 1991, and ADR mechanisms</li>
+        <li>Chapter 29 — ADR on international and infrastructure projects</li>
+      </ul>
+
+      <div class="meta-row">
+        <div class="meta-stat"><div class="num">50</div><div class="lbl">Questions</div></div>
+        <div class="meta-stat"><div class="num">4</div><div class="lbl">Chapters</div></div>
+        <div class="meta-stat"><div class="num">65%</div><div class="lbl">Pass Threshold</div></div>
+        <div class="meta-stat"><div class="num">~45m</div><div class="lbl">Est. Time</div></div>
+      </div>
+
+      <p style="margin-bottom:10px;color:var(--gold-soft);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.14em;">Select a mode</p>
+      <div class="mode-toggle" id="mode-toggle">
+        <button class="mode-btn selected" data-mode="practice">
+          <span class="mb-title">Practice Mode</span>
+          <span class="mb-sub">Instant feedback after each answer</span>
+        </button>
+        <button class="mode-btn" data-mode="exam">
+          <span class="mb-title">Exam Mode</span>
+          <span class="mb-sub">Score revealed at the end only</span>
+        </button>
+      </div>
+
+      <div class="start-actions">
+        <button class="btn btn-primary" id="btn-start">▶ Start Quiz</button>
+        <button class="btn btn-ghost" id="btn-shuffle-toggle">Shuffle: On</button>
+        <button class="btn btn-ghost hidden" id="btn-resume">Resume Saved Session</button>
+      </div>
+    </div>
+    <p class="footer-note">Tip — correct answers trigger fireworks, golden bursts, stars, and streak bonuses. Get on a roll!</p>
+  </section>
+
+  <!-- ========== QUIZ SCREEN ========== -->
+  <section id="screen-quiz" class="screen">
+    <div class="hud">
+      <div class="hud-group">
+        <div class="hud-stat">
+          <div class="lbl">Score</div>
+          <div class="val" id="hud-score">0</div>
+        </div>
+        <div class="hud-stat streak">
+          <div class="lbl">Streak</div>
+          <div class="val" id="hud-streak">0</div>
+        </div>
+        <div class="hud-stat">
+          <div class="lbl">Answered</div>
+          <div class="val" id="hud-answered">0 / 50</div>
+        </div>
+      </div>
+      <div class="hud-mode" id="hud-mode">Practice</div>
+    </div>
+
+    <div class="progress-shell"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="q-card">
+      <div class="q-meta">
+        <div class="q-num" id="q-num">Question 1 of 50</div>
+        <div class="q-chapter" id="q-chapter">Chapter 26</div>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="rationale" id="rationale">
+        <div class="r-header" id="r-header">✓ Explanation</div>
+        <div class="r-body" id="r-body"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="left">
+        <button class="btn btn-ghost" id="btn-prev">← Previous</button>
+      </div>
+      <div class="right">
+        <button class="btn btn-ghost" id="btn-reset-mid">↻ Reset</button>
+        <button class="btn btn-primary" id="btn-next">Next →</button>
+        <button class="btn btn-primary hidden" id="btn-submit">Submit Quiz</button>
+      </div>
+    </div>
+
+    <div class="nav-grid-wrap">
+      <div class="nav-grid-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="nav-legend">
+        <span><span class="dot unanswered"></span> Unanswered</span>
+        <span><span class="dot current"></span> Current</span>
+        <span><span class="dot answered"></span> Answered (exam mode)</span>
+        <span><span class="dot correct"></span> Correct</span>
+        <span><span class="dot incorrect"></span> Incorrect</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESULTS SCREEN ========== -->
+  <section id="screen-results" class="screen">
+    <div class="results-card">
+      <h2 id="result-greet">Quiz Complete</h2>
+      <p class="results-tier" id="result-tier">Reviewing your performance…</p>
+
+      <div class="score-ring">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f4d03f"/>
+              <stop offset="100%" stop-color="#a8851f"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="100" cy="100" r="86"/>
+          <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="86" stroke-dasharray="540" stroke-dashoffset="540"/>
+        </svg>
+        <div class="pct">
+          <div class="big" id="result-pct">0%</div>
+          <div class="sm" id="result-fraction">0 / 50</div>
+        </div>
+      </div>
+
+      <div class="pass-fail-badge" id="pass-fail-badge">—</div>
+
+      <div class="results-stats">
+        <div class="rs-cell"><div class="v" id="rs-correct">0</div><div class="l">Correct</div></div>
+        <div class="rs-cell"><div class="v" id="rs-incorrect">0</div><div class="l">Incorrect</div></div>
+        <div class="rs-cell"><div class="v" id="rs-points">0</div><div class="l">Total Points</div></div>
+        <div class="rs-cell"><div class="v" id="rs-best-streak">0</div><div class="l">Best Streak</div></div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" id="btn-retry">↻ Try Again</button>
+        <button class="btn btn-ghost" id="btn-back-start">← Back to Start</button>
+      </div>
+
+      <div class="review-section">
+        <h3>Question-by-Question Review</h3>
+        <div id="review-list"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Reset Quiz?</h3>
+    <p id="modal-body">This will erase your current progress and saved session. Are you sure?</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn btn-danger" id="modal-confirm">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTION BANK — Chapters 26 to 29
+   ============================================================ */
+const QUESTIONS = [
+  /* ---------- CHAPTER 26 — BONDS & INTERNATIONAL GUARANTEES ---------- */
+  {
+    ch: 26,
+    q: "An engineer is reviewing a proposed bond for a construction project. The contractor will be guaranteeing its performance to the project owner. Using standard bonding terminology, which party is the obligee?",
+    options: [
+      "The contractor whose performance is guaranteed",
+      "The bonding company providing the guarantee",
+      "The project owner for whose benefit the bond is provided",
+      "The subcontractor who supplies labour and materials"
+    ],
+    answer: 2,
+    rationale: "The obligee is the party for whose benefit the bond is provided — typically the project owner. The principal is the party whose performance is guaranteed (usually the contractor), and the surety is the bonding company. A bond is therefore a contract among three parties."
+  },
+  {
+    ch: 26,
+    q: "A municipality is considering whether a performance bond functions like insurance to cover defaults by its general contractor. Which statement most accurately reflects the nature of bonds?",
+    options: [
+      "Bonds operate as insurance with premiums absorbing the surety's losses",
+      "A bond is not insurance — the surety can pursue the principal to recover any payments it makes",
+      "Bonds replace the contractor's indemnification obligations entirely",
+      "The surety retains all costs incurred when honouring a bond claim"
+    ],
+    answer: 1,
+    rationale: "It is extremely important to appreciate that a bond is not insurance. If the surety incurs expense in fulfilling its bond obligations, it will seek to recover those expenses from the principal — and from any indemnifying shareholders or officers."
+  },
+  {
+    ch: 26,
+    q: "When a small construction company is named as principal on a performance bond, the surety frequently requires the company's principal officers or shareholders to sign personal indemnity agreements. The primary purpose of this requirement is to:",
+    options: [
+      "Reduce the surety's licensing requirements with provincial regulators",
+      "Convert the bond into an insurance policy under provincial law",
+      "Allow the surety to recover from individuals if the corporation cannot reimburse losses",
+      "Eliminate the need for a written agreement with the obligee"
+    ],
+    answer: 2,
+    rationale: "Sureties often require shareholders or officers of a corporate principal to indemnify the surety personally. This allows the surety to recover from those individuals if the corporate principal lacks sufficient assets after the surety pays under the bond."
+  },
+  {
+    ch: 26,
+    q: "A bidder's tender for a public works project is accepted, but the bidder refuses to enter into the formal contract. The owner re-tenders the work and accepts a higher bid. Under a properly drafted bid bond, the surety's primary obligation will be to:",
+    options: [
+      "Complete the work at the original bid price",
+      "Pay the difference between the original bid and the new accepted amount, up to the face value of the bond",
+      "Reimburse the owner for the entire cost of the new contract",
+      "Pay liquidated damages set out in the tender documents"
+    ],
+    answer: 1,
+    rationale: "A bid bond protects the obligee against the principal's failure to enter into the formal contract. The surety's obligation is to pay the difference between the original bid and the amount the obligee must pay another party to perform the work, capped at the face amount of the bid bond."
+  },
+  {
+    ch: 26,
+    q: "A performance bond is issued for fifty percent of the contract price. The contractor becomes insolvent partway through the project, and a receiver acknowledges that the contractor cannot continue. The owner must arrange for another contractor to complete the work. The performance bond will respond to:",
+    options: [
+      "The full cost of completion incurred by the replacement contractor",
+      "Only direct labour costs of the replacement contractor",
+      "The extra cost of completion above the balance of the original contract price, limited to the face amount of the bond",
+      "Consequential damages including lost revenue to the owner"
+    ],
+    answer: 2,
+    rationale: "A performance bond responds to the extra cost above the balance of the original contract price required to complete the work, up to the face amount specified in the bond. The owner remains obligated to pay the balance of the original contract price out of its own funds."
+  },
+  {
+    ch: 26,
+    q: "An owner alleges that a contractor is defaulting in performance and the contractor disputes the allegation. The surety on the performance bond is most likely to:",
+    options: [
+      "Immediately step in and complete the contract to mitigate damages",
+      "Pay the face amount of the bond directly to the owner",
+      "Wait for the issue of default to be resolved by a court or arbitration before stepping in",
+      "Cancel the bond and refund the premium to the principal"
+    ],
+    answer: 2,
+    rationale: "Short of clear default such as bankruptcy or receivership, the surety needs to be satisfied that default has occurred before stepping in. The surety may reasonably take the position that the performance issue be resolved by a court or arbitration first — especially since the contractor's principals are typically obligated to indemnify the surety."
+  },
+  {
+    ch: 26,
+    q: "In a typical labour and material payment bond, the owner is most appropriately named as:",
+    options: [
+      "The principal under the bond",
+      "The surety acting on behalf of the contractor",
+      "The obligee acting as trustee for the benefit of subcontractors and material suppliers",
+      "A third-party beneficiary with no contractual standing"
+    ],
+    answer: 2,
+    rationale: "Because there is usually no contract between the bonding company and subcontractors or material suppliers, the owner is described in the bond as the obligee acting as trustee for the benefit of such claimants. This permits the claimants to pursue claims through the trustee structure."
+  },
+  {
+    ch: 26,
+    q: "A Canadian contractor is asked to provide an unconditional demand letter of credit on an international engineering project in the Middle East. The contractor should be most concerned that:",
+    options: [
+      "The letter of credit is unenforceable in foreign jurisdictions",
+      "The owner may call on the letter of credit even when default has not occurred",
+      "The letter cannot exceed the value of any performance bond",
+      "The chartered bank will refuse to issue the instrument"
+    ],
+    answer: 1,
+    rationale: "Demand letters of credit can amount to blank cheques for the holder. The alleged and potential abuse of demand letters of credit — sometimes called bad calls — required by owners on international construction projects is a recognized risk, which is why caution is urged and conditional alternatives have been considered."
+  },
+  {
+    ch: 26,
+    q: "A contractor's bank issues a letter of credit in favour of an owner. The contractor is concerned about the impact on its ability to obtain financing for other projects. This concern is well-founded because:",
+    options: [
+      "Letters of credit must be reported as long-term debt on financial statements",
+      "The letter of credit typically impacts directly on the contractor's line of credit with the issuing bank",
+      "Provincial regulations restrict contractors who hold letters of credit",
+      "The contractor must post additional collateral with the bonding industry"
+    ],
+    answer: 1,
+    rationale: "Being required to provide a letter of credit normally impacts directly on the contractor's line of credit with the bank or trust company that issued it, which can significantly complicate the contractor's ability to obtain financing for other projects."
+  },
+  {
+    ch: 26,
+    q: "The face amount of a performance bond on a major construction contract is typically calibrated to cover:",
+    options: [
+      "The full estimated cost of replacement performance",
+      "The extra cost above the original contract price needed to complete the contract if the surety must arrange completion",
+      "The contractor's anticipated profit margin",
+      "The total amount of progress payments expected to be made by the owner"
+    ],
+    answer: 1,
+    rationale: "The amount of the performance bond relates to the extra cost above the original contract price that may be required to complete the contract if the bonding company must do so. The owner remains obligated to pay the balance of the original contract price."
+  },
+  {
+    ch: 26,
+    q: "At the time of tendering on a public works project, bidders are typically required to provide which of the following bonding-related documents?",
+    options: [
+      "Final executed performance bonds",
+      "Cash deposits equal to the bid amount",
+      "Agreements to bond or consent letters from the proposed surety",
+      "Original audited financial statements of the surety"
+    ],
+    answer: 2,
+    rationale: "At the time of tendering, it is common practice to require bidders to provide agreements to bond or consent letters confirming that the surety will provide performance or other bonds in accordance with the tender instructions. The performance bond itself is normally provided when the formal contract is executed."
+  },
+  {
+    ch: 26,
+    q: "An engineering firm is reviewing the wording of a proposed performance bond for a complex industrial project. The engineer should appreciate that:",
+    options: [
+      "Performance bond wording is standardized and need not be reviewed",
+      "The surety's obligations are limited to that wording and the contractual obligations to which it applies",
+      "Bond wording can be modified after issuance without surety consent",
+      "Performance bonds always cover all consequential damages"
+    ],
+    answer: 1,
+    rationale: "It is very important to review and understand and be satisfied with the performance bond wording. The surety's obligations are limited to that wording and the contractual obligations to which the performance bond applies."
+  },
+  {
+    ch: 26,
+    q: "On a major international infrastructure project, the contractor proposes that any letter of credit be payable only on the decision of an independent arbitrator or referee. From the owner's perspective, this proposal is:",
+    options: [
+      "Preferred because it speeds up payment",
+      "Less attractive than an unconditional letter of credit",
+      "Equivalent to providing no security at all",
+      "Required by international banking conventions"
+    ],
+    answer: 1,
+    rationale: "Owners far prefer unconditional letters of credit, which can be called upon without dispute. Conditional letters of credit payable subject to an arbitrator's or referee's decision address the contractor's concern about bad calls but provide less certainty for owners."
+  },
+
+  /* ---------- CHAPTER 27 — SUBSURFACE ISSUES ---------- */
+  {
+    ch: 27,
+    q: "A contract clause states that the contractor will not, under any circumstances, make a claim for reimbursement on account of changes in subsurface conditions encountered during performance. From the contractor's perspective, the most significant risk created by this clause is:",
+    options: [
+      "The contractor may be unable to obtain a performance bond",
+      "The contractor must build a large contingency into its price to cover unknown conditions, risking an uncompetitive bid",
+      "The owner may terminate the contract if the contingency is not disclosed",
+      "The clause is automatically unenforceable in Canadian courts"
+    ],
+    answer: 1,
+    rationale: "Where owners contractually shift subsurface risk substantially to the contractor, contractors face the difficulty of building in a contingency amount to attempt to cover the risk. In doing so, they risk pricing themselves out of the competition."
+  },
+  {
+    ch: 27,
+    q: "In the Federal Court of Canada decision in Dexter Construction versus Her Majesty the Queen, the contractor's claim for additional compensation relating to changed soil conditions failed primarily because:",
+    options: [
+      "The contract did not contain a changed conditions clause",
+      "The owner had effectively discharged its duty to warn, and the contractor had not relied on the erroneous soil report or mass haul diagram",
+      "The contractor failed to provide written notice of the changes",
+      "The Federal Court lacked jurisdiction over the dispute"
+    ],
+    answer: 1,
+    rationale: "The Court held that despite the errors in the referenced documents, the owner had effectively discharged its duty to warn that substantial quantities of additional borrow might be required. The contractor had not in fact relied on the erroneous documents, having made its own observations instead."
+  },
+  {
+    ch: 27,
+    q: "In Carman Construction versus Canadian Pacific Railway, the Supreme Court of Canada dismissed the contractor's appeal even though a railway employee had given the contractor an erroneous rock volume estimate. The most important reason was that:",
+    options: [
+      "The estimate was given before the contract was signed",
+      "The contract contained an express clause stating the contractor did not rely on information given by the company, and a disclaimer precluded a duty of care",
+      "The contractor was sophisticated and should have known the estimate was wrong",
+      "The Supreme Court had no jurisdiction to hear contract appeals"
+    ],
+    answer: 1,
+    rationale: "The Supreme Court emphasized that the written agreement governed. The employee's misrepresentation of measurements did not amount to a collateral agreement given the express contract language, and the disclaimer clause precluded a duty of care — so the company was not liable for negligent misrepresentation."
+  },
+  {
+    ch: 27,
+    q: "A contractor bids on the construction of three earth-filled dams without familiarizing itself with site topography, local weather conditions, or soil information. Difficulties arise during performance and the contractor seeks additional compensation. Based on the Diamond Willow Ranch decision, the likely outcome is that the contractor will:",
+    options: [
+      "Recover full additional compensation regardless of its lack of investigation",
+      "Recover only its direct out-of-pocket costs",
+      "Be denied compensation where the contract required the contractor to study and examine the site, and conditions were not materially different from those specified",
+      "Recover on a quantum meruit basis"
+    ],
+    answer: 2,
+    rationale: "In Diamond Willow Ranch, the contract required the contractor to examine the site and conditions. The contractor's failure to investigate, combined with the Court's conclusion that conditions were not materially different from those specified, led the Court to refuse the claim."
+  },
+  {
+    ch: 27,
+    q: "In Pugliese versus National Capital Commission, residential property owners suffered settlement damage from dewatering operations during sewer construction. The Ontario Court of Appeal held that:",
+    options: [
+      "The defendants owed no duty of care because the work was authorized by statute",
+      "The defendants had a duty to use reasonable care, but a landowner may also have a claim in nuisance for damage beyond what could reasonably be tolerated",
+      "Liability was limited to property owners within a defined radius",
+      "The defendants were not liable because the harm was not foreseeable"
+    ],
+    answer: 1,
+    rationale: "The Court held that the defendants had a duty to use reasonable care in extracting groundwater. However, taking all reasonable care would not necessarily be enough as regards nuisance: a landowner has a claim in nuisance if the damage was beyond what could reasonably be expected to be tolerated."
+  },
+  {
+    ch: 27,
+    q: "The Gallant versus F W Woolworth decision concerned damage to an adjoining building caused by an improperly compacted excavation in a laneway. With respect to loss of lateral support, the Saskatchewan Court of Appeal held:",
+    options: [
+      "Negligence must be proven before liability attaches",
+      "Liability arises only where the contractor acted with actual malice",
+      "When lateral support to land is removed, it is immaterial whether the act causing damage was negligent",
+      "Liability is limited to direct physical damage and excludes consequential loss"
+    ],
+    answer: 2,
+    rationale: "The Court of Appeal stated that when lateral support to land is removed, it is immaterial whether the act causing damage was negligent. Both the owner and the contractor were held liable for damage to the adjoining building."
+  },
+  {
+    ch: 27,
+    q: "In B G Checo International versus British Columbia Hydro and Power Authority, the British Columbia Supreme Court characterized the owner's omission of information from the tender documents as:",
+    options: [
+      "An honest mistake not amounting to misrepresentation",
+      "A fraudulent misrepresentation, sometimes described as a form of tender by ambush",
+      "A permissible exercise of the owner's contractual discretion",
+      "A breach of statutory duty without civil consequences"
+    ],
+    answer: 1,
+    rationale: "B C Hydro's internal specifications clearly stated that logs and old logging slash would be on the right-of-way, but this information was omitted in the tender package distributed to bidders. The Court was satisfied that the omission constituted a fraudulent misrepresentation — sometimes described as a tender by ambush."
+  },
+  {
+    ch: 27,
+    q: "In Warden Construction versus the Town of Grimsby, the contractor was required to install a water main by the specific method of boring and jacking. When that method proved impossible, the contractor used tunnelling and hand mining at greater expense. The contractor's claim succeeded because:",
+    options: [
+      "The contract's risk-shifting clause was unconscionable",
+      "The performance of the contract in the manner specified in the plans and specifications was impossible, so the contract risk-shifting provision did not apply",
+      "The owner expressly authorized the alternative method",
+      "The contractor had given prompt written notice"
+    ],
+    answer: 1,
+    rationale: "The Court accepted that performance in the manner specified was impossible, and therefore the contract's risk-shifting provision did not apply. The case illustrates the dangers to owners and engineers of specifying actual construction methods rather than leaving method selection to the contractor."
+  },
+  {
+    ch: 27,
+    q: "In Cardinal Construction versus the City of Brockville, drawings supplied with the tender package described certain underground Bell cables as two-inch flexible plastic-covered cables. The contractor actually encountered a concrete-encased duct structure. The Ontario Supreme Court held that:",
+    options: [
+      "The contractor's site investigation obligation excluded any owner liability",
+      "The owner had breached its duty to present accurate information or to warn bidders to verify, and the owner's negligent misstatements constituted torts",
+      "The contractor was the proximate cause of its own loss",
+      "Damages were limited to the difference in cable installation cost"
+    ],
+    answer: 1,
+    rationale: "The Court held the contractor was justified in relying on the information originally supplied by the owner's engineer, even though the contract required the contractor to investigate underground utilities. The owner had breached its duty to present accurate information or warn bidders to verify, and the negligent misstatements were torts."
+  },
+  {
+    ch: 27,
+    q: "In Hartnett versus Wailea Construction, a house was being constructed on a former landfill site. The municipality had soils information in its possession but did not disclose it to the lot purchaser. The British Columbia Supreme Court found:",
+    options: [
+      "The municipality was protected by statutory immunity",
+      "The municipality was liable for breach of its duty to disclose soils information in its possession, and the vendor was liable for fraudulent misrepresentation",
+      "Only the vendor was liable — the municipality had no disclosure duty",
+      "The purchaser assumed the risk by accepting the lot in its existing condition"
+    ],
+    answer: 1,
+    rationale: "The Court imposed liability on the vendor for fraudulent misrepresentation and held the municipality liable for breach of its duty to disclose soils information in its possession. The lot purchaser did not become aware of the soil report until after the foundation was already in place."
+  },
+  {
+    ch: 27,
+    q: "A more reasonable subsurface-risk clause from the contractor's perspective would typically allow the contractor extra compensation if:",
+    options: [
+      "Any unexpected condition arises, regardless of cause",
+      "There is a substantial difference between soil information disclosed in the tender documents (or a reasonable assumption based on it) and actual conditions, and timely written notice is given",
+      "The contractor encounters any condition not specifically described in the plans",
+      "The contractor's bid contingency proves inadequate"
+    ],
+    answer: 1,
+    rationale: "A reasonable clause allows extra compensation where there is a substantial difference between the soil information in the contract documents (or a reasonable assumption based thereon) and actual conditions, provided the contractor gives written notice of the event within a specified period — typically ten days."
+  },
+  {
+    ch: 27,
+    q: "A general principle emerging from Canadian cases on subsurface conditions is that contractors may recover additional compensation where:",
+    options: [
+      "The contract requires the contractor to assume all subsurface risks",
+      "The project owner or engineer failed to disclose important information available to it, subject to the agreed contract terms",
+      "The contractor's bid was lower than competing bids",
+      "The owner is a public authority rather than a private party"
+    ],
+    answer: 1,
+    rationale: "Where Canadian courts have decided in favour of contractors claiming additional compensation for variations in subsurface conditions, a key ingredient has been substantiating that the project owner or engineer failed to disclose important information to bidders — subject of course to agreed contract terms."
+  },
+
+  /* ---------- CHAPTER 28 — ARBITRATION AND ADR ---------- */
+  {
+    ch: 28,
+    q: "A construction contract contains a provision stating that any dispute arising under the contract may be submitted to arbitration if both parties so agree upon the request of one of the parties. This provision is best described as:",
+    options: [
+      "A mandatory arbitration clause",
+      "Notice that arbitration is available as a means of resolving disputes",
+      "An unenforceable agreement to agree",
+      "A waiver of the right to litigate"
+    ],
+    answer: 1,
+    rationale: "Not all arbitration provisions are mandatory. A clause providing for arbitration only upon agreement of both parties is simply notice that arbitration is available — the parties remain free to litigate unless they jointly choose to arbitrate."
+  },
+  {
+    ch: 28,
+    q: "An arbitration clause provides that each party will appoint a representative arbitrator and that the two representative arbitrators will then appoint a chair. If the two representative arbitrators cannot agree on the chair, the most common contractual mechanism is for:",
+    options: [
+      "The dispute to be referred automatically to litigation",
+      "A court to appoint the chair",
+      "The provincial professional engineering association to appoint the chair",
+      "The arbitration to proceed with only the two representative arbitrators"
+    ],
+    answer: 1,
+    rationale: "A typical arbitration clause may provide that if the two representative arbitrators cannot agree on the selection of a chair, the chair will be appointed by a court. This avoids deadlock in constituting the three-person arbitration board."
+  },
+  {
+    ch: 28,
+    q: "An engineer is asked to act as an arbitrator in a dispute under a contract where the engineer's firm previously did unrelated work for one of the parties. To act consistently with the principles of arbitration, the engineer must:",
+    options: [
+      "Decline only if the previous work involved the same project",
+      "Act entirely impartially and independently of the parties",
+      "Act primarily in the interest of the party that appointed them",
+      "Disclose the relationship only if directly asked"
+    ],
+    answer: 1,
+    rationale: "An engineer who acts as an arbitrator is expected to act entirely impartially and independently of the parties to the dispute. The Arbitration Act codifies the common-law rule that an arbitrator shall be independent of the parties and shall act impartially — arbitrators are not advocates for the party that appointed them."
+  },
+  {
+    ch: 28,
+    q: "Under the Ontario Arbitration Act 1991, in the absence of a contrary provision in the arbitration agreement, a party who wishes to appeal an arbitration award on a question of law may do so:",
+    options: [
+      "As of right, without leave of the court",
+      "Only with leave of the court",
+      "Only on questions of mixed fact and law",
+      "Only if the award exceeds a specified monetary threshold"
+    ],
+    answer: 1,
+    rationale: "The Act provides that in the absence of a contrary provision in the arbitration agreement, a party may appeal on a question of law only with leave of the court. The parties are free to expand, narrow, or exclude that limited right of appeal by contract."
+  },
+  {
+    ch: 28,
+    q: "An unsuccessful party to an Ontario arbitration applies to the court to set aside the award on the ground that it disagrees with the arbitrator's interpretation of the evidence. Under section 46 subsection 1 of the Arbitration Act 1991, this application is likely to:",
+    options: [
+      "Succeed because the merits of an award are reviewable on application",
+      "Fail because the grounds for setting aside are limited to matters related to the conduct of the arbitration rather than the merits",
+      "Succeed only if the arbitrator was an engineer rather than a lawyer",
+      "Be referred back to the arbitrator for reconsideration"
+    ],
+    answer: 1,
+    rationale: "The Act limits the grounds on which an award may be set aside on application to matters clearly related to the conduct of the arbitration rather than the merits. Disagreement with the arbitrator's interpretation of evidence is not among the enumerated grounds."
+  },
+  {
+    ch: 28,
+    q: "Which of the following is NOT among the grounds in section 46 subsection 1 of the Ontario Arbitration Act 1991 for setting aside an arbitration award?",
+    options: [
+      "The applicant was not treated equally and fairly",
+      "The arbitrator made an error of law within the arbitrator's jurisdiction",
+      "The composition of the tribunal was not in accordance with the arbitration agreement",
+      "The award was obtained by fraud"
+    ],
+    answer: 1,
+    rationale: "Section 46 subsection 1 lists specific grounds tied to the conduct of the arbitration — incapacity, invalid agreement, scope of dispute, tribunal composition, arbitrability, fairness, procedure, bias or corruption, and fraud. A mere error of law within jurisdiction is not a ground for setting aside; it can only be addressed (if at all) through an appeal with leave."
+  },
+  {
+    ch: 28,
+    q: "Under the Ontario Arbitration Act 1991, arbitrators have the same jurisdiction to award pre-judgment and post-judgment interest as:",
+    options: [
+      "The Federal Court of Canada",
+      "The courts under the Courts of Justice Act",
+      "The Provincial Court (Civil Division)",
+      "The bonding industry's interest tables"
+    ],
+    answer: 1,
+    rationale: "The Act provides that arbitrators now have the same jurisdiction to award pre-judgment and post-judgment interest as courts have under the Courts of Justice Act. This resolves earlier uncertainty about arbitrators' authority to award interest."
+  },
+  {
+    ch: 28,
+    q: "The Ontario Arbitration Act 1991 expressly confers on arbitrators the power to grant equitable remedies. This includes:",
+    options: [
+      "Only monetary damages",
+      "Injunctions and specific performance",
+      "Criminal sanctions",
+      "Disciplinary action against professional members"
+    ],
+    answer: 1,
+    rationale: "The Act expands the scope of remedies available to arbitrators. In particular, it expressly confers on arbitrators the power to grant equitable remedies such as injunctions and specific performance — significant tools for resolving construction disputes."
+  },
+  {
+    ch: 28,
+    q: "Partnering as used on construction projects is best described as:",
+    options: [
+      "A formal legal partnership between contractor and owner that supersedes the construction contract",
+      "A concept promoting cooperation among project participants, implemented through a workshop after contract award, aimed at developing a healthy cooperative attitude",
+      "A type of joint venture used only on public-private partnership projects",
+      "A binding alternative dispute resolution mechanism"
+    ],
+    answer: 1,
+    rationale: "Partnering aims to promote cooperation among all project participants. A partnering workshop is conducted after contract award to focus participants on good communications, team spirit, and mutual project goals. The partnering document does not replace the project contract — it outlines cooperative goals in a general way."
+  },
+  {
+    ch: 28,
+    q: "A senior engineering manager is considering whether to support partnering on a major infrastructure project. For partnering to succeed, the most critical element is typically:",
+    options: [
+      "Detailed legal documentation of every cooperative obligation",
+      "The commitment of senior management",
+      "The exclusion of subcontractors from the partnering process",
+      "Mandatory binding decisions by the partnering facilitator"
+    ],
+    answer: 1,
+    rationale: "For partnering to work, the commitment of senior management is very important. That commitment sends a significant message to other representatives of the parties involved in the project, signalling that cooperative behaviour is expected from the top down."
+  },
+  {
+    ch: 28,
+    q: "Dispute resolution boards and project neutrals are ADR mechanisms most consistent with the objective of:",
+    options: [
+      "Replacing the contract administrator with an outside professional",
+      "Providing experienced, independent, unbiased professionals who stay abreast of project developments to offer advice, recommendations, or decisions as disputes arise",
+      "Eliminating the need for arbitration or litigation in all cases",
+      "Providing technical training to junior engineers on the project"
+    ],
+    answer: 1,
+    rationale: "Dispute resolution boards and project neutrals engage independent and unbiased professionals experienced in the construction industry. They stay abreast of developments and offer advice, recommendations, and decisions to help parties resolve disputes as they arise — particularly suited to technical disputes."
+  },
+  {
+    ch: 28,
+    q: "A fundamental difference between mediation and arbitration is that:",
+    options: [
+      "Mediation must be conducted by a lawyer; arbitration need not be",
+      "Only arbitration produces an adjudication that is binding on the parties — in mediation, it is up to the parties to work out their differences",
+      "Only mediation can occur before litigation is commenced",
+      "Mediation results in a public record, while arbitration is confidential"
+    ],
+    answer: 1,
+    rationale: "A fundamental difference is that litigation and arbitration result in binding adjudications. In mediation, it is up to the parties themselves to work out their differences — the mediator facilitates settlement but does not impose a decision."
+  },
+  {
+    ch: 28,
+    q: "A construction industry mediator's primary role is to:",
+    options: [
+      "Act as an arbitrator and decide the dispute",
+      "Provide guidance to the parties and facilitate settlement by acting as a go-between in communicating proposed settlement positions",
+      "Investigate the dispute and report findings to the courts",
+      "Represent the weaker party in negotiations with the owner"
+    ],
+    answer: 1,
+    rationale: "The mediator does not act as arbitrator or judge. The mediator provides guidance and facilitates settlement by acting as a go-between in communicating proposed settlement positions. The mediator does not impose a decision on the parties."
+  },
+
+  /* ---------- CHAPTER 29 — ADR ON INTERNATIONAL PROJECTS ---------- */
+  {
+    ch: 29,
+    q: "The contemporary focus on alternative dispute resolution in the construction industry was primarily generated from:",
+    options: [
+      "The Hong Kong International Arbitration Centre",
+      "The United States",
+      "The United Nations Commission on International Trade Law",
+      "The London Court of International Arbitration"
+    ],
+    answer: 1,
+    rationale: "The focus of attention on ADR was primarily generated from the United States. It has since become a topic of frequent discussion among industry participants in many countries around the world, with acceptance evolving through different stages of development internationally."
+  },
+  {
+    ch: 29,
+    q: "Which of the following is NOT typically identified as a leading cause of disputes on construction projects?",
+    options: [
+      "Aggressive contracting approaches that unreasonably shift risks",
+      "Adequate financing of the project from inception",
+      "Inability to deal promptly with changes or unexpected conditions",
+      "Litigious mind-sets among project participants"
+    ],
+    answer: 1,
+    rationale: "Insufficient financing is identified as a leading cause of disputes. Adequate financing is not a cause of disputes — it is the absence of adequate financing that contributes to project problems and disputes."
+  },
+  {
+    ch: 29,
+    q: "The consultant's conflict referred to in connection with traditional construction dispute resolution arises because:",
+    options: [
+      "Consultants are typically paid by both the owner and the contractor",
+      "The consultant who decides on-site disputes is often the project's designer, and disputes about construction quality often involve allegations of design deficiencies",
+      "Consultants lack legal authority to issue binding decisions",
+      "Consultants are required to be members of the bonding industry"
+    ],
+    answer: 1,
+    rationale: "On-site disputes are typically left to the contract administrator — the consultant — who is also often the project's designer. When disputes about construction quality arise, contractors often point to alleged design deficiencies, placing the consultant in a position of deciding issues that relate to the consultant's own design work."
+  },
+  {
+    ch: 29,
+    q: "Under the Canadian Construction Documents Committee dispute resolution approach, claims relating to performance of the work or interpretation of the contract documents are initially determined by:",
+    options: [
+      "A panel of three arbitrators chosen by the parties",
+      "The consultant, in writing",
+      "A pre-arbitral referee appointed under provincial legislation",
+      "A dispute resolution board sitting throughout the project"
+    ],
+    answer: 1,
+    rationale: "Under the C C D C approach, claims relating to performance of the work or interpretation of the contract documents are initially determined by the consultant in writing. Unless a written dispute notice is provided within the specified period, the parties are deemed to have accepted the consultant's decision."
+  },
+  {
+    ch: 29,
+    q: "Under the C C D C contract dispute resolution mechanism, if a party fails to provide written notice of dispute within the specified period after the consultant's decision, the consequence is that the party:",
+    options: [
+      "May still proceed to arbitration but not to mediation",
+      "Is conclusively deemed to have accepted the consultant's decision",
+      "May appeal to the provincial court within thirty days",
+      "Forfeits all rights under the contract"
+    ],
+    answer: 1,
+    rationale: "Under the C C D C approach, unless a written dispute notice is provided within fifteen working days, the parties are conclusively deemed to have accepted the consultant's decision. This makes close administration of the contract particularly important."
+  },
+  {
+    ch: 29,
+    q: "Under the C C D C dispute resolution sequence, after a notice of dispute has been given, the next step before binding arbitration becomes available is generally:",
+    options: [
+      "Direct submission to the provincial court",
+      "Mediation in accordance with the contract provisions",
+      "Reference to the engineering association",
+      "A statutory cooling-off period"
+    ],
+    answer: 1,
+    rationale: "Where a notice of dispute is provided, the C C D C contract obligates the parties to proceed to mediate the dispute in accordance with the contract's provisions. If mediation fails to resolve the dispute, a party may then require binding arbitration."
+  },
+  {
+    ch: 29,
+    q: "Which of the following is an internationally recognized arbitration body for the resolution of commercial disputes?",
+    options: [
+      "The International Chamber of Commerce Court of Arbitration in Paris",
+      "The Canadian Construction Documents Committee",
+      "The American Bar Association's Forum on the Construction Industry",
+      "The Federation of Canadian Municipalities"
+    ],
+    answer: 0,
+    rationale: "The I C C Court of Arbitration in Paris, established in 1923, is one of several long-established international arbitration bodies — along with the International Centre for Dispute Resolution, the London Court of International Arbitration, and the Hong Kong International Arbitration Centre."
+  },
+  {
+    ch: 29,
+    q: "The UNCITRAL Arbitration Rules referenced in connection with international arbitration were established by:",
+    options: [
+      "The International Chamber of Commerce in 1923",
+      "The United Nations Commission on International Trade Law in 1976",
+      "The American Arbitration Association in 1976",
+      "The Canadian Bar Association in 1991"
+    ],
+    answer: 1,
+    rationale: "The UNCITRAL Arbitration Rules were established by the United Nations Commission on International Trade Law in 1976 and were adopted by the General Assembly of the United Nations — evidence of broad international support for arbitration as a dispute resolution mechanism."
+  },
+  {
+    ch: 29,
+    q: "The New York Convention is important to international construction arbitration because it:",
+    options: [
+      "Standardizes construction contract language worldwide",
+      "Enables arbitral awards to be recognized and enforced in ratifying countries, including Canada",
+      "Provides international funding for infrastructure projects",
+      "Establishes uniform performance bond requirements globally"
+    ],
+    answer: 1,
+    rationale: "The New York Convention has been ratified in more than one hundred and fifty countries and states. It enables arbitral awards to be recognized and enforced in ratifying countries, including Canada — providing practical international support for arbitration."
+  },
+  {
+    ch: 29,
+    q: "The Northumberland Strait Crossing Project, now the Confederation Bridge, is referenced as an example of a Canadian infrastructure project that featured:",
+    options: [
+      "Mandatory court litigation of all technical disputes",
+      "Binding arbitration of technical disputes before a single agreed-upon arbitrator or an appropriate panel of a technically qualified dispute review board",
+      "The exclusive use of mediation without further escalation",
+      "A statutory dispute resolution scheme administered by the federal government"
+    ],
+    answer: 1,
+    rationale: "On the Northumberland Strait Crossing development contract, resolution of technical disputes was to be by way of binding arbitration, before a single agreed-upon arbitrator or an appropriate panel of a technically qualified dispute review board — an example of a non-traditional Canadian approach."
+  },
+  {
+    ch: 29,
+    q: "The Boston Central Artery Tunnel Project provides an example of a very substantial mega-project on which:",
+    options: [
+      "Dispute review boards were used on the larger contracts, and partnering was addressed in the project specifications (although partnering was voluntary)",
+      "All disputes were resolved exclusively by court litigation",
+      "The arbitration provisions were governed by the laws of Ontario",
+      "Project participants were prohibited from using mediation"
+    ],
+    answer: 0,
+    rationale: "Dispute review boards were provided for the larger of the many contracts on the Boston Central Artery Project. Partnering, though voluntary, was addressed as part of the specifications, with stated objectives including effective and efficient contract performance and completion within project specifications."
+  },
+  {
+    ch: 29,
+    q: "An owner inserts a clause in a contract precluding the contractor from claiming additional reimbursement even where the owner's own delay in providing approvals caused the contractor's loss. This is best described as:",
+    options: [
+      "A balanced approach to risk allocation",
+      "An example of an aggressive adversarial contracting approach that has contributed to disputes",
+      "A standard requirement in C C D C contracts",
+      "An efficient mechanism for handling design changes"
+    ],
+    answer: 1,
+    rationale: "Owners determined to avoid or minimize claims have gone so far as to include wording precluding contractor claims even where the cause is the owner's own delay in approvals or interference with the work. This is among the aggressive contracting realities that have elevated the potential for construction litigation."
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_quiz_ch26_29_v1';
+
+const state = {
+  mode: 'practice',             // 'practice' | 'exam'
+  shuffle: true,
+  order: [],                    // permutation of QUESTIONS indices
+  current: 0,                   // pointer into `order`
+  answers: {},                  // { originalIndex: selectedOptionIndex }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  started: false,
+  finished: false
+};
+
+/* ============================================================
+   DOM HELPERS
+   ============================================================ */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function showScreen(id) {
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  $('#'+id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   PERSISTENCE
+   ============================================================ */
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      mode: state.mode,
+      shuffle: state.shuffle,
+      order: state.order,
+      current: state.current,
+      answers: state.answers,
+      score: state.score,
+      streak: state.streak,
+      bestStreak: state.bestStreak,
+      started: state.started,
+      finished: state.finished
+    }));
+  } catch(e){ /* ignore quota errors */ }
+}
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ return null; }
+}
+function clearSaved() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+}
+
+/* ============================================================
+   FISHER-YATES SHUFFLE
+   ============================================================ */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ============================================================
+   QUIZ LIFECYCLE
+   ============================================================ */
+function startQuiz() {
+  const baseOrder = QUESTIONS.map((_, i) => i);
+  state.order = state.shuffle ? shuffle(baseOrder) : baseOrder;
+  state.current = 0;
+  state.answers = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.started = true;
+  state.finished = false;
+  save();
+  renderQuiz();
+  showScreen('screen-quiz');
+}
+
+function resumeQuiz() {
+  if (state.finished) {
+    renderResults();
+    showScreen('screen-results');
+  } else {
+    renderQuiz();
+    showScreen('screen-quiz');
+  }
+}
+
+/* ============================================================
+   RENDER QUIZ SCREEN
+   ============================================================ */
+function renderQuiz() {
+  const idx = state.order[state.current];
+  const q = QUESTIONS[idx];
+
+  $('#hud-score').textContent = state.score;
+  $('#hud-streak').textContent = state.streak;
+  $('#hud-streak').classList.toggle('lit', state.streak >= 3);
+  const answeredCount = Object.keys(state.answers).length;
+  $('#hud-answered').textContent = `${answeredCount} / ${QUESTIONS.length}`;
+  $('#hud-mode').textContent = state.mode === 'practice' ? 'Practice' : 'Exam';
+
+  $('#progress-fill').style.width =
+    ((state.current + 1) / QUESTIONS.length * 100) + '%';
+
+  $('#q-num').textContent = `Question ${state.current + 1} of ${QUESTIONS.length}`;
+  $('#q-chapter').textContent = `Chapter ${q.ch}`;
+  $('#q-text').textContent = q.q;
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const opts = $('#options');
+  opts.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.dataset.idx = i;
+    btn.innerHTML = `<span class="lt">${letters[i]}.</span><span>${opt}</span>`;
+    btn.addEventListener('click', e => handleOptionClick(idx, i, btn));
+    opts.appendChild(btn);
+  });
+
+  const rationaleEl = $('#rationale');
+  rationaleEl.classList.remove('show');
+
+  // If already answered (practice mode), restore feedback
+  if (state.mode === 'practice' && state.answers[idx] !== undefined) {
+    paintAnswerState(idx);
+    showRationale(idx);
+  } else if (state.mode === 'exam' && state.answers[idx] !== undefined) {
+    // Highlight selected in exam mode without revealing correctness
+    const sel = state.answers[idx];
+    const sb = opts.querySelector(`[data-idx="${sel}"]`);
+    if (sb) sb.classList.add('selected');
+  }
+
+  // Buttons
+  $('#btn-prev').disabled = state.current === 0;
+  const last = state.current === QUESTIONS.length - 1;
+  if (state.mode === 'exam' && last) {
+    $('#btn-next').classList.add('hidden');
+    $('#btn-submit').classList.remove('hidden');
+  } else {
+    $('#btn-next').classList.remove('hidden');
+    $('#btn-submit').classList.add('hidden');
+    $('#btn-next').textContent = last ? 'Finish →' : 'Next →';
+  }
+
+  renderNavGrid();
+  save();
+}
+
+function paintAnswerState(originalIdx) {
+  const q = QUESTIONS[originalIdx];
+  const selected = state.answers[originalIdx];
+  $$('#options .option').forEach(opt => {
+    const i = parseInt(opt.dataset.idx);
+    opt.classList.add('disabled');
+    if (i === q.answer) opt.classList.add('correct');
+    if (i === selected && selected !== q.answer) opt.classList.add('incorrect');
+  });
+}
+
+function showRationale(originalIdx) {
+  const q = QUESTIONS[originalIdx];
+  const selected = state.answers[originalIdx];
+  const correct = selected === q.answer;
+  const header = $('#r-header');
+  const body = $('#r-body');
+  if (correct) {
+    header.textContent = '✓ Correct — Explanation';
+    header.style.color = 'var(--success)';
+  } else {
+    header.textContent = '✗ Incorrect — Explanation';
+    header.style.color = 'var(--danger)';
+  }
+  const letters = ['A','B','C','D'];
+  body.innerHTML = `<strong>Correct answer: ${letters[q.answer]}.</strong> ${q.rationale}`;
+  $('#rationale').classList.add('show');
+}
+
+/* ============================================================
+   ANSWER HANDLING
+   ============================================================ */
+function handleOptionClick(originalIdx, selectedIdx, btnEl) {
+  // Already answered in practice mode — ignore
+  if (state.mode === 'practice' && state.answers[originalIdx] !== undefined) return;
+
+  const q = QUESTIONS[originalIdx];
+  const wasAnswered = state.answers[originalIdx] !== undefined;
+  state.answers[originalIdx] = selectedIdx;
+
+  if (state.mode === 'practice') {
+    const correct = selectedIdx === q.answer;
+    if (correct) {
+      handleCorrect(btnEl);
+    } else {
+      handleIncorrect();
+    }
+    paintAnswerState(originalIdx);
+    showRationale(originalIdx);
+  } else {
+    // Exam mode — just mark selection
+    $$('#options .option').forEach(o => o.classList.remove('selected'));
+    btnEl.classList.add('selected');
+  }
+  // Update HUD
+  $('#hud-score').textContent = state.score;
+  $('#hud-streak').textContent = state.streak;
+  $('#hud-streak').classList.toggle('lit', state.streak >= 3);
+  $('#hud-answered').textContent =
+    `${Object.keys(state.answers).length} / ${QUESTIONS.length}`;
+  renderNavGrid();
+  save();
+}
+
+function handleCorrect(btnEl) {
+  state.streak++;
+  if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+  const basePts = 10;
+  const streakBonus = Math.max(0, state.streak - 1) * 2;
+  const pts = basePts + streakBonus;
+  state.score += pts;
+
+  // Visual celebrations
+  const rect = btnEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  fireConfetti(cx, cy);
+  fireGoldBurst(cx, cy);
+  if (state.streak >= 3) fireFireworks();
+  showFloatPopup(`+${pts}`, cx, cy - 20, 'gold');
+  if (streakBonus > 0) {
+    showFloatPopup(`+${streakBonus} streak bonus`, cx, cy + 30, 'streak');
+  }
+  if (state.streak === 3 || state.streak === 5 || state.streak === 10) {
+    showStreakBanner(state.streak);
+  }
+}
+
+function handleIncorrect() {
+  state.streak = 0;
+  // Subtle shake on the card
+  const card = $('.q-card');
+  card.animate(
+    [
+      { transform: 'translateX(0)' },
+      { transform: 'translateX(-6px)' },
+      { transform: 'translateX(6px)' },
+      { transform: 'translateX(-4px)' },
+      { transform: 'translateX(0)' }
+    ],
+    { duration: 320, easing: 'ease-out' }
+  );
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function goNext() {
+  if (state.current < QUESTIONS.length - 1) {
+    state.current++;
+    renderQuiz();
+  } else {
+    if (state.mode === 'practice') finishQuiz();
+  }
+}
+function goPrev() {
+  if (state.current > 0) {
+    state.current--;
+    renderQuiz();
+  }
+}
+function goTo(navIdx) {
+  state.current = navIdx;
+  renderQuiz();
+}
+function finishQuiz() {
+  // Compute final score for exam mode (already accumulated in practice mode)
+  if (state.mode === 'exam') {
+    state.score = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    // Walk through in display order so streak bonuses are deterministic
+    for (const oIdx of state.order) {
+      const sel = state.answers[oIdx];
+      if (sel === undefined) { state.streak = 0; continue; }
+      const correct = sel === QUESTIONS[oIdx].answer;
+      if (correct) {
+        state.streak++;
+        if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+        const bonus = Math.max(0, state.streak - 1) * 2;
+        state.score += 10 + bonus;
+      } else {
+        state.streak = 0;
+      }
+    }
+  }
+  state.finished = true;
+  save();
+  renderResults();
+  showScreen('screen-results');
+}
+
+/* ============================================================
+   NAV GRID
+   ============================================================ */
+function renderNavGrid() {
+  const grid = $('#nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < state.order.length; i++) {
+    const oIdx = state.order[i];
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    cell.title = `Question ${i+1} — Chapter ${QUESTIONS[oIdx].ch}`;
+    if (i === state.current) cell.classList.add('current');
+    if (state.answers[oIdx] !== undefined) {
+      cell.classList.add('answered');
+      if (state.mode === 'practice') {
+        if (state.answers[oIdx] === QUESTIONS[oIdx].answer) cell.classList.add('correct');
+        else cell.classList.add('incorrect');
+      }
+    }
+    cell.addEventListener('click', () => goTo(i));
+    grid.appendChild(cell);
+  }
+}
+
+/* ============================================================
+   RESULTS RENDER
+   ============================================================ */
+function renderResults() {
+  let correctCount = 0;
+  for (const oIdx of state.order) {
+    if (state.answers[oIdx] === QUESTIONS[oIdx].answer) correctCount++;
+  }
+  const total = QUESTIONS.length;
+  const pct = Math.round((correctCount / total) * 100);
+  const passed = pct >= 65;
+
+  $('#result-pct').textContent = pct + '%';
+  $('#result-fraction').textContent = `${correctCount} / ${total}`;
+  $('#rs-correct').textContent = correctCount;
+  $('#rs-incorrect').textContent = total - correctCount;
+  $('#rs-points').textContent = state.score;
+  $('#rs-best-streak').textContent = state.bestStreak;
+
+  // Tiered messaging
+  let tier = '', greet = '';
+  if (pct >= 90) {
+    greet = 'Exceptional Performance';
+    tier = 'You have a commanding grasp of these chapters. Move on with confidence.';
+  } else if (pct >= 80) {
+    greet = 'Strong Performance';
+    tier = 'Solid mastery with room for fine-tuning on a few topics.';
+  } else if (pct >= 65) {
+    greet = 'You Passed';
+    tier = 'Above the NPPE passing threshold — review the missed items for full coverage.';
+  } else if (pct >= 50) {
+    greet = 'Below Threshold';
+    tier = 'Close to passing, but more review needed before the real exam.';
+  } else {
+    greet = 'Significant Review Needed';
+    tier = 'Revisit each chapter carefully — focus on the rationales below.';
+  }
+  $('#result-greet').textContent = greet;
+  $('#result-tier').textContent = tier;
+
+  const badge = $('#pass-fail-badge');
+  badge.classList.remove('pass','fail');
+  if (passed) {
+    badge.classList.add('pass');
+    badge.textContent = '★ Pass — Above 65% Threshold';
+  } else {
+    badge.classList.add('fail');
+    badge.textContent = '✗ Below 65% Threshold';
+  }
+
+  // Animate ring
+  const circ = 2 * Math.PI * 86;
+  const offset = circ - (pct/100) * circ;
+  const ring = $('#ring-fg');
+  ring.setAttribute('stroke-dasharray', circ.toFixed(1));
+  ring.setAttribute('stroke-dashoffset', circ.toFixed(1));
+  requestAnimationFrame(() => {
+    ring.setAttribute('stroke-dashoffset', offset.toFixed(1));
+  });
+
+  // Review list
+  const review = $('#review-list');
+  review.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  state.order.forEach((oIdx, displayPos) => {
+    const q = QUESTIONS[oIdx];
+    const sel = state.answers[oIdx];
+    const isCorrect = sel === q.answer;
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (sel === undefined ? 'incorrect' : (isCorrect ? 'correct' : 'incorrect'));
+    item.innerHTML = `
+      <div class="ri-head">
+        <span>Question ${displayPos + 1} · Chapter ${q.ch}</span>
+        <span>${sel === undefined ? '— Not answered —' : (isCorrect ? '✓ Correct' : '✗ Incorrect')}</span>
+      </div>
+      <div class="ri-q">${escapeHtml(q.q)}</div>
+      <div class="ri-ans ${isCorrect ? 'correct' : ''}">Your answer: <strong>${sel === undefined ? '(none)' : letters[sel] + '. ' + escapeHtml(q.options[sel])}</strong></div>
+      ${isCorrect ? '' : `<div class="ri-ans correct">Correct answer: <strong>${letters[q.answer]}. ${escapeHtml(q.options[q.answer])}</strong></div>`}
+      <div class="ri-rationale">${escapeHtml(q.rationale)}</div>
+    `;
+    review.appendChild(item);
+  });
+
+  // Big celebration if passed strongly
+  if (pct >= 80) {
+    setTimeout(() => fireFireworks(8), 300);
+    setTimeout(() => fireFireworks(8), 900);
+  } else if (passed) {
+    setTimeout(() => fireFireworks(4), 300);
+  }
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/* ============================================================
+   CANVAS EFFECTS: confetti, gold burst, fireworks, stars
+   ============================================================ */
+const canvas = $('#fx-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function tick() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update();
+    p.draw(ctx);
+    if (p.dead) particles.splice(i, 1);
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+class Particle {
+  constructor(x, y, opts={}) {
+    this.x = x; this.y = y;
+    this.vx = opts.vx || (Math.random() - 0.5) * 8;
+    this.vy = opts.vy || (Math.random() - 1.2) * 9;
+    this.gravity = opts.gravity ?? 0.22;
+    this.drag   = opts.drag   ?? 0.992;
+    this.size   = opts.size   ?? (2 + Math.random() * 4);
+    this.color  = opts.color  ?? '#d4af37';
+    this.life   = opts.life   ?? 90;
+    this.age    = 0;
+    this.shape  = opts.shape  ?? 'square'; // square | circle | star
+    this.rot    = Math.random() * Math.PI * 2;
+    this.drot   = (Math.random() - 0.5) * 0.3;
+    this.dead   = false;
+  }
+  update() {
+    this.vy += this.gravity;
+    this.vx *= this.drag;
+    this.vy *= this.drag;
+    this.x  += this.vx;
+    this.y  += this.vy;
+    this.rot += this.drot;
+    this.age++;
+    if (this.age > this.life || this.y > canvas.height + 30) this.dead = true;
+  }
+  draw(ctx) {
+    const a = 1 - (this.age / this.life);
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, a);
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.fillStyle = this.color;
+    if (this.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.shape === 'star') {
+      drawStar(ctx, 0, 0, 5, this.size * 1.5, this.size * 0.7);
+      ctx.fill();
+    } else {
+      ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+    }
+    ctx.restore();
+  }
+}
+
+function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+  let rot = Math.PI / 2 * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outerRadius);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outerRadius;
+    y = cy + Math.sin(rot) * outerRadius;
+    ctx.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * innerRadius;
+    y = cy + Math.sin(rot) * innerRadius;
+    ctx.lineTo(x, y);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outerRadius);
+  ctx.closePath();
+}
+
+function fireConfetti(x, y) {
+  const colors = ['#d4af37','#f4d03f','#ffeb99','#e8c87a','#fff7d6','#ffffff','#4ade80'];
+  for (let i = 0; i < 60; i++) {
+    particles.push(new Particle(x, y, {
+      vx: (Math.random() - 0.5) * 14,
+      vy: (Math.random() - 0.8) * 13,
+      size: 3 + Math.random() * 5,
+      color: colors[(Math.random() * colors.length) | 0],
+      life: 80 + Math.random() * 50,
+      shape: Math.random() < 0.35 ? 'star' : 'square'
+    }));
+  }
+}
+
+function fireGoldBurst(x, y) {
+  // Tight golden particle burst with high luminance — "golden shower"
+  for (let i = 0; i < 50; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * 9;
+    particles.push(new Particle(x, y, {
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      gravity: 0.15,
+      size: 2 + Math.random() * 3,
+      color: ['#f4d03f','#ffeb99','#fff7d6','#d4af37'][(Math.random()*4)|0],
+      life: 70 + Math.random() * 40,
+      shape: 'circle'
+    }));
+  }
+  // Falling sparkles from above
+  for (let i = 0; i < 24; i++) {
+    particles.push(new Particle(
+      x - 120 + Math.random() * 240,
+      y - 250 - Math.random() * 100,
+      {
+        vx: (Math.random() - 0.5) * 1.6,
+        vy: 1 + Math.random() * 2,
+        gravity: 0.08,
+        size: 2 + Math.random() * 3,
+        color: ['#f4d03f','#ffeb99','#d4af37'][(Math.random()*3)|0],
+        life: 130,
+        shape: 'star'
+      }
+    ));
+  }
+}
+
+function fireFireworks(count = 3) {
+  for (let n = 0; n < count; n++) {
+    setTimeout(() => {
+      const x = canvas.width * (0.15 + Math.random() * 0.7);
+      const y = canvas.height * (0.15 + Math.random() * 0.45);
+      const hue = ['#f4d03f','#d4af37','#4ade80','#ff8a3d','#ffeb99','#ffffff'][(Math.random()*6)|0];
+      // Burst
+      for (let i = 0; i < 70; i++) {
+        const angle = (Math.PI * 2 * i) / 70 + Math.random() * 0.2;
+        const speed = 3 + Math.random() * 6;
+        particles.push(new Particle(x, y, {
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          gravity: 0.09,
+          drag: 0.97,
+          size: 2 + Math.random() * 2,
+          color: hue,
+          life: 80 + Math.random() * 30,
+          shape: 'circle'
+        }));
+      }
+      // Trail sparkles
+      for (let i = 0; i < 14; i++) {
+        particles.push(new Particle(x, y, {
+          vx: (Math.random() - 0.5) * 3,
+          vy: (Math.random() - 0.5) * 3,
+          gravity: 0.05,
+          size: 1.5,
+          color: '#fff7d6',
+          life: 50,
+          shape: 'circle'
+        }));
+      }
+    }, n * 220);
+  }
+}
+
+/* ============================================================
+   FLOATING POPUPS & STREAK BANNER
+   ============================================================ */
+function showFloatPopup(text, x, y, variant='gold') {
+  const el = document.createElement('div');
+  el.className = 'float-popup ' + variant;
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+function showStreakBanner(streak) {
+  const labels = {
+    3: '🔥 On Fire! 3-Streak Bonus',
+    5: '⚡ Unstoppable! 5-Streak',
+    10: '👑 Legendary! 10-Streak'
+  };
+  let el = $('#streak-banner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'streak-banner';
+    el.className = 'streak-banner';
+    document.body.appendChild(el);
+  }
+  el.textContent = labels[streak] || `🔥 ${streak}-Streak!`;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function showModal(title, body, onConfirm) {
+  $('#modal-title').textContent = title;
+  $('#modal-body').textContent = body;
+  $('#modal').classList.add('show');
+  const confirmBtn = $('#modal-confirm');
+  const cancelBtn  = $('#modal-cancel');
+  const cleanup = () => {
+    confirmBtn.removeEventListener('click', onYes);
+    cancelBtn.removeEventListener('click', onNo);
+    $('#modal').classList.remove('show');
+  };
+  const onYes = () => { cleanup(); onConfirm(); };
+  const onNo  = () => { cleanup(); };
+  confirmBtn.addEventListener('click', onYes);
+  cancelBtn.addEventListener('click', onNo);
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+// Mode toggle
+$$('#mode-toggle .mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('#mode-toggle .mode-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.mode = btn.dataset.mode;
+  });
+});
+
+// Shuffle toggle
+$('#btn-shuffle-toggle').addEventListener('click', () => {
+  state.shuffle = !state.shuffle;
+  $('#btn-shuffle-toggle').textContent = 'Shuffle: ' + (state.shuffle ? 'On' : 'Off');
+});
+
+// Start
+$('#btn-start').addEventListener('click', startQuiz);
+
+// Resume (only shown if saved progress exists)
+$('#btn-resume').addEventListener('click', resumeQuiz);
+
+// Next / Prev / Submit
+$('#btn-next').addEventListener('click', goNext);
+$('#btn-prev').addEventListener('click', goPrev);
+$('#btn-submit').addEventListener('click', () => {
+  // In exam mode, warn if unanswered
+  const unanswered = state.order.filter(o => state.answers[o] === undefined).length;
+  if (unanswered > 0) {
+    showModal(
+      `${unanswered} unanswered ${unanswered === 1 ? 'question' : 'questions'}`,
+      `You still have ${unanswered} unanswered ${unanswered === 1 ? 'question' : 'questions'}. Submit anyway?`,
+      () => finishQuiz()
+    );
+  } else {
+    finishQuiz();
+  }
+});
+
+// Reset during quiz
+$('#btn-reset-mid').addEventListener('click', () => {
+  showModal(
+    'Reset Quiz?',
+    'This will erase your current progress, score, and saved session. Are you sure?',
+    () => { resetEverything(); showScreen('screen-start'); refreshResumeBtn(); }
+  );
+});
+
+// Results actions
+$('#btn-retry').addEventListener('click', () => {
+  showModal(
+    'Start over?',
+    'This will reset your score, streak, and all answers. Continue?',
+    () => { resetEverything(); startQuiz(); }
+  );
+});
+$('#btn-back-start').addEventListener('click', () => {
+  resetEverything();
+  showScreen('screen-start');
+  refreshResumeBtn();
+});
+
+function resetEverything() {
+  state.order = [];
+  state.current = 0;
+  state.answers = {};
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.started = false;
+  state.finished = false;
+  clearSaved();
+}
+
+/* ============================================================
+   BOOTSTRAP
+   ============================================================ */
+function refreshResumeBtn() {
+  const saved = loadSaved();
+  const btn = $('#btn-resume');
+  if (saved && saved.started && saved.order && saved.order.length) {
+    btn.classList.remove('hidden');
+    const progress = Object.keys(saved.answers || {}).length;
+    const total = saved.order.length;
+    btn.textContent = saved.finished
+      ? 'View Last Results'
+      : `Resume Saved Session (${progress} / ${total})`;
+  } else {
+    btn.classList.add('hidden');
+  }
+}
+
+(function init() {
+  const saved = loadSaved();
+  if (saved && typeof saved === 'object') {
+    Object.assign(state, saved);
+    // Reflect saved mode/shuffle in start screen
+    $$('#mode-toggle .mode-btn').forEach(b =>
+      b.classList.toggle('selected', b.dataset.mode === state.mode));
+    $('#btn-shuffle-toggle').textContent = 'Shuffle: ' + (state.shuffle ? 'On' : 'Off');
+  }
+  refreshResumeBtn();
+})();
+</script>
+</body>
+</html>

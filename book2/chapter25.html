@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice — Chapter 25: Risks in Construction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0a1628;
+    --navy: #0f2138;
+    --navy-light: #1a3151;
+    --navy-card: #14283f;
+    --gold: #d4af37;
+    --gold-bright: #e8c863;
+    --gold-soft: #b8941f;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --cream: #f4ecd8;
+    --text: #e8ddc4;
+    --text-dim: #a89878;
+    --green: #6fbf7a;
+    --green-bg: rgba(111, 191, 122, 0.12);
+    --red: #d96062;
+    --red-bg: rgba(217, 96, 98, 0.12);
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--navy-deep);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: radial-gradient(ellipse at top, var(--navy-light) 0%, var(--navy-deep) 70%);
+    padding: 32px 16px 64px;
+    line-height: 1.6;
+  }
+
+  #fxCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* HEADER */
+  header.title-block {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 36px 24px 28px;
+    border-top: 1px solid var(--gold-soft);
+    border-bottom: 1px solid var(--gold-soft);
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.05), transparent);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 42px);
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 2vw, 18px);
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  .ornament {
+    color: var(--gold);
+    font-size: 18px;
+    margin: 12px 0 8px;
+    letter-spacing: 8px;
+  }
+
+  /* CONTROL BAR */
+  .control-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--navy-deep);
+    border: 1px solid var(--navy-light);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .mode-btn {
+    background: transparent;
+    color: var(--text-dim);
+    border: none;
+    padding: 8px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mode-btn.active {
+    background: var(--gold);
+    color: var(--navy-deep);
+    font-weight: 600;
+  }
+
+  .control-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .ctrl-btn {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-soft);
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+
+  .ctrl-btn:hover {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  .ctrl-btn.danger {
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  .ctrl-btn.danger:hover {
+    background: var(--red);
+    color: var(--navy-deep);
+  }
+
+  /* SCORE BAR */
+  .score-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--navy-card), var(--navy));
+    border: 1px solid var(--gold-soft);
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold-bright);
+  }
+
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: var(--navy-deep);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+
+  .streak-flame {
+    animation: flicker 1s infinite;
+    display: inline-block;
+  }
+
+  @keyframes flicker {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* PROGRESS */
+  .progress-track {
+    height: 4px;
+    background: var(--navy-light);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    width: 0%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 12px var(--gold-glow);
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-light);
+    border-radius: 10px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .q-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(19px, 2.3vw, 22px);
+    line-height: 1.45;
+    color: var(--cream);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--navy);
+    border: 1px solid var(--navy-light);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    color: var(--text);
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+
+  .option:hover:not(.disabled):not(.correct):not(.incorrect) {
+    background: var(--navy-light);
+    border-color: var(--gold-soft);
+    transform: translateX(2px);
+  }
+
+  .option-letter {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 50%;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .option.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--cream);
+  }
+
+  .option.correct .option-letter {
+    background: var(--green);
+    color: var(--navy-deep);
+    border-color: var(--green);
+  }
+
+  .option.incorrect {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--cream);
+  }
+
+  .option.incorrect .option-letter {
+    background: var(--red);
+    color: var(--navy-deep);
+    border-color: var(--red);
+  }
+
+  .option.disabled { cursor: not-allowed; opacity: 0.55; }
+  .option.selected-exam {
+    background: var(--navy-light);
+    border-color: var(--gold);
+  }
+
+  /* RATIONALE */
+  .rationale {
+    margin-top: 24px;
+    padding: 18px 22px;
+    background: rgba(212, 175, 55, 0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text);
+    display: none;
+    animation: slideIn 0.3s ease;
+  }
+
+  .rationale.show { display: block; }
+
+  .rationale-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--gold);
+    color: var(--navy-deep);
+    border: none;
+    padding: 14px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--gold-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px var(--gold-glow);
+  }
+
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .nav-btn.secondary {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-soft);
+  }
+
+  .nav-btn.secondary:hover:not(:disabled) {
+    background: var(--navy-light);
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* QUESTION NAVIGATOR GRID */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+    gap: 6px;
+    padding: 18px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .nav-dot {
+    aspect-ratio: 1;
+    background: var(--navy-deep);
+    border: 1px solid var(--navy-light);
+    color: var(--text-dim);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav-dot:hover { border-color: var(--gold); color: var(--gold); }
+  .nav-dot.current { border-color: var(--gold); background: var(--gold); color: var(--navy-deep); }
+  .nav-dot.answered-correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+  .nav-dot.answered-wrong { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+  .nav-dot.answered-exam { background: var(--navy-light); border-color: var(--gold-soft); color: var(--gold); }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    background: var(--navy-card);
+    border: 1px solid var(--gold-soft);
+    border-radius: 12px;
+    padding: 48px 32px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+
+  .result-screen.show { display: block; animation: slideIn 0.5s ease; }
+
+  .result-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--cream);
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  .score-ring {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 30px;
+    position: relative;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--navy-light); stroke-width: 12; }
+  .score-ring-fg {
+    fill: none;
+    stroke: var(--gold-bright);
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s ease;
+    filter: drop-shadow(0 0 8px var(--gold-glow));
+  }
+
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .score-percent {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 600;
+    color: var(--gold-bright);
+    line-height: 1;
+  }
+
+  .score-fraction {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .result-tier {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+
+  .result-feedback {
+    color: var(--text-dim);
+    font-size: 15px;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* FLOATING POINTS POPUP */
+  .points-pop {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.6);
+    z-index: 10000;
+    animation: floatUp 1.4s ease-out forwards;
+  }
+
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+    20%  { opacity: 1; transform: translateY(-12px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-80px) scale(1); }
+  }
+
+  /* MODAL */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 22, 40, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-backdrop.show { display: flex; }
+
+  .modal {
+    background: var(--navy-card);
+    border: 1px solid var(--gold-soft);
+    border-radius: 10px;
+    padding: 32px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: var(--shadow);
+  }
+
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+
+  .modal p { color: var(--text-dim); margin-bottom: 22px; font-size: 14px; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* HELPER NOTES */
+  .small-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 24px;
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 10px 40px; }
+    .question-card { padding: 22px 18px; }
+    .control-bar, .score-bar { padding: 12px 14px; }
+    .nav-row { flex-direction: column; }
+    h1 { font-size: 26px; }
+    .result-title { font-size: 28px; }
+    .score-percent { font-size: 44px; }
+    .score-ring { width: 160px; height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+
+<div class="container">
+
+  <header class="title-block">
+    <div class="eyebrow">NPPE Ontario Practice Examination</div>
+    <h1>Risks in Construction</h1>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="subtitle">Chapter 25 — Law for Professional Engineers: Canadian and Global Insights</div>
+  </header>
+
+  <div class="control-bar">
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="practice">Practice Mode</button>
+      <button class="mode-btn" data-mode="exam">Exam Mode</button>
+    </div>
+    <div class="control-group">
+      <button class="ctrl-btn" id="shuffleBtn">⇄ Shuffle</button>
+      <button class="ctrl-btn danger" id="resetBtn">↻ Reset</button>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <div class="stat"><span class="stat-label">Points</span><span class="stat-val" id="pointsVal">0</span></div>
+    <div class="stat"><span class="stat-label">Correct</span><span class="stat-val" id="correctVal">0</span></div>
+    <div class="stat"><span class="stat-label">Answered</span><span class="stat-val" id="answeredVal">0 / 50</span></div>
+    <div class="streak-badge" id="streakBadge" style="display:none;">
+      <span class="streak-flame">🔥</span>
+      <span>Streak <span id="streakVal">0</span></span>
+    </div>
+  </div>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="nav-grid" id="navGrid"></div>
+
+  <div id="quizArea"></div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="result-eyebrow">Examination Complete</div>
+    <h2 class="result-title">Your Result</h2>
+    <div class="score-ring">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle class="score-ring-bg" cx="100" cy="100" r="86"></circle>
+        <circle class="score-ring-fg" id="ringFg" cx="100" cy="100" r="86"
+                stroke-dasharray="540" stroke-dashoffset="540"></circle>
+      </svg>
+      <div class="score-ring-text">
+        <div class="score-percent" id="finalPercent">0%</div>
+        <div class="score-fraction" id="finalFraction">0 / 50</div>
+      </div>
+    </div>
+    <div class="result-tier" id="resultTier"></div>
+    <div class="result-feedback" id="resultFeedback"></div>
+    <div class="result-actions">
+      <button class="nav-btn secondary" id="reviewBtn">Review Answers</button>
+      <button class="nav-btn" id="restartBtn">Retake Quiz</button>
+    </div>
+  </div>
+
+  <div class="small-note">NPPE pass threshold: 65 percent. Progress saves automatically in your browser.</div>
+
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-backdrop" id="resetModal">
+  <div class="modal">
+    <h3>Reset the quiz?</h3>
+    <p>This clears all your answers, points, and streak. You will start fresh from question one.</p>
+    <div class="modal-actions">
+      <button class="ctrl-btn" id="cancelReset">Cancel</button>
+      <button class="ctrl-btn danger" id="confirmReset">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════════
+// 50 QUESTIONS — Chapter 25: Risks in Construction
+// ════════════════════════════════════════════════════════════════════════
+const QUESTIONS = [
+  {
+    q: "An owner is structuring a major construction project and wants to minimize the likelihood of claims and disputes. According to the chapter, which up-front approach offers the greatest benefit?",
+    options: [
+      "Inserting the harshest possible risk-shifting clauses to discourage claims",
+      "A careful and considered approach to risk identification, assessment, allocation, and contract administration",
+      "Awarding the project to whichever contractor submits the lowest bid price",
+      "Delegating all risk decisions to the consultant after the contract is signed"
+    ],
+    answer: 1,
+    rationale: "An enlightened approach to dealing with risks at the outset, through risk identification, assessment, allocation, and disciplined contract administration, leads to lower project costs and reduces the likelihood of claims and disputes."
+  },
+  {
+    q: "An owner inserts a 'no damages for delay' clause and unusually harsh subsurface condition provisions into a stipulated price contract. What is the most likely commercial consequence highlighted in the chapter?",
+    options: [
+      "Bidders will price the work at or below cost to win the contract",
+      "Bid prices will be substantially higher than they would have otherwise been",
+      "The consultant will refuse to administer the contract",
+      "The provincial regulator will void the contract"
+    ],
+    answer: 1,
+    rationale: "Owners who insist on draconian provisions such as 'no liability for delay' clauses and harsh subsurface provisions may well wind up paying much higher bid prices than they otherwise would have, because contractors price the assumed risk into their bids."
+  },
+  {
+    q: "What underlying principle does the chapter recommend for the fair contractual allocation of risk between an owner and a contractor?",
+    options: [
+      "The party with the greater bargaining power should bear all risk",
+      "Each risk should be allocated to the party best positioned to assess and manage it",
+      "All risks should be shared equally regardless of who controls the source of the risk",
+      "Risk should always rest with the contractor because of its bonding and insurance"
+    ],
+    answer: 1,
+    rationale: "A helpful principle for equitable contract drafting is that each particular risk should be assumed by the contracting party that is in the best position to assess and manage that risk, and the reasonableness of this presumption should be tested project by project."
+  },
+  {
+    q: "A contractor is engaged on a build-operate-transfer project in a developing country, financed in Canadian dollars but generating revenue in the local currency. Which risk category is most distinctive to this arrangement?",
+    options: [
+      "Risk that the consultant will be appointed late",
+      "Currency exchange, convertibility, and inflation risks affecting the revenue stream",
+      "Risk that the contractor will be unable to obtain a building permit in Canada",
+      "Risk that the local labour union will refuse to negotiate"
+    ],
+    answer: 1,
+    rationale: "International BOT projects often involve additional risks relating to currency exchange, convertibility of foreign currencies, and inflation, which can dramatically depress the actual revenue stream below the projections in the economic feasibility analysis."
+  },
+  {
+    q: "An engineer is advising a Canadian client on a large infrastructure project in a politically unstable foreign jurisdiction. Which of the following is the chapter's recommended consideration?",
+    options: [
+      "Refuse the project outright in all circumstances",
+      "Treat political risk as a routine commercial risk no different from domestic projects",
+      "Carefully consider political risk and whether political risk insurance is available and affordable",
+      "Rely solely on the contractor's bid contingency to cover any political disruption"
+    ],
+    answer: 2,
+    rationale: "International projects typically add political risk considerations. Political risk insurance should be considered; it may or may not be available or affordable, but the risk warrants careful evaluation, particularly in less stable countries."
+  },
+  {
+    q: "Under a public-private partnership for a toll highway, the private partner takes on responsibilities that extend for decades into the future. According to the chapter, what is the principal contracting risk?",
+    options: [
+      "That the cost of asphalt may decline during the operating period",
+      "That contract wording must anticipate future events over many years, and interpretation difficulties may arise as personnel change",
+      "That the consultant cannot be added as a contracting party",
+      "That construction lien legislation does not apply to highways"
+    ],
+    answer: 1,
+    rationale: "P3 projects expose contractors to operational risks for many years, requiring careful contract wording to anticipate future events. The risk of contract interpretation difficulties always warrants a considered approach and early involvement of legal counsel."
+  },
+  {
+    q: "Under the traditional Canadian construction project structure described in the chapter, who contracts directly with the general contractor?",
+    options: [
+      "The consultant",
+      "The owner",
+      "The subcontractors collectively",
+      "The financial institution providing project funding"
+    ],
+    answer: 1,
+    rationale: "In the traditional project structure, the owner contracts directly with the consultant and the owner contracts directly with the general contractor. Subcontractors and material suppliers are then engaged by the general contractor."
+  },
+  {
+    q: "A contractor is concerned about being held responsible for the performance of various trades on a project. Which structural choice can typically limit that contractual exposure?",
+    options: [
+      "Acting as a general contractor under a stipulated price contract",
+      "Acting as a construction manager rather than as a general contractor",
+      "Acting as the consultant",
+      "Acting as a material supplier"
+    ],
+    answer: 1,
+    rationale: "Providing services as a construction manager rather than as a general contractor typically enables the construction manager to avoid contractual responsibility for the performance of trades that would otherwise be its subcontractors."
+  },
+  {
+    q: "In the 'hybrid construction management, multi-prime' structure illustrated in the chapter, the owner enters into separate prime contracts with which of the following?",
+    options: [
+      "A single general contractor who manages all trades",
+      "Civil, mechanical, and electrical prime contractors, plus a construction manager and design consultants",
+      "Only the architect, who then engages all trades",
+      "Only subcontractors and material suppliers"
+    ],
+    answer: 1,
+    rationale: "In the multi-prime structure, the owner contracts directly with the construction manager, the architect, the structural, mechanical, and electrical engineers, and with separate civil, mechanical, and electrical prime contractors, each of whom engages its own subcontractors."
+  },
+  {
+    q: "An owner is being advised on whether to engage a single general contractor or to contract with multiple primes. When should that decision ideally be made?",
+    options: [
+      "After bids have been received and opened",
+      "After the consultant has issued certified payment certificates",
+      "At as early a stage as possible, before instructions to bidders are assembled",
+      "Only after substantial performance has been certified"
+    ],
+    answer: 2,
+    rationale: "The advisability of a particular project structure should be carefully considered at as early a stage as possible, before the assembly of instructions to bidders, so that the resultant contractual responsibilities reflect the owner's intended risk allocation."
+  },
+  {
+    q: "Which Canadian organization publishes the widely used standard-form construction contract documents referenced throughout the chapter?",
+    options: [
+      "The Canadian Construction Association alone",
+      "The Royal Architectural Institute of Canada alone",
+      "The Canadian Construction Documents Committee",
+      "The Canadian Bar Association"
+    ],
+    answer: 2,
+    rationale: "The standard-form construction contract documents widely used in Canada are published by the Canadian Construction Documents Committee, commonly referred to as the CCDC."
+  },
+  {
+    q: "Which of the following organizations is NOT identified in the chapter as appointing representatives to the Canadian Construction Documents Committee?",
+    options: [
+      "The Canadian Construction Association",
+      "The Royal Architectural Institute of Canada",
+      "Construction Specifications Canada",
+      "The Canadian Bar Association"
+    ],
+    answer: 3,
+    rationale: "The CCDC is composed of representatives appointed by the Association of Consulting Engineers of Canada, the Canadian Construction Association, the Canadian Council of Professional Engineers, Construction Specifications Canada, and the Royal Architectural Institute of Canada. The Canadian Bar Association is not on that list."
+  },
+  {
+    q: "Although owners benefit from CCDC standard-form documents, the chapter notes that one group is NOT directly represented on the CCDC. Which group is that?",
+    options: [
+      "Owners",
+      "Contractors",
+      "Architects",
+      "Consulting engineers"
+    ],
+    answer: 0,
+    rationale: "While CCDC documents reflect a broad range of contractor and consultant perspectives (and consultants typically act for owners), strictly speaking, owners are not represented on the CCDC."
+  },
+  {
+    q: "Who are the parties to a CCDC standard-form construction contract?",
+    options: [
+      "The owner and the consultant",
+      "The owner and the contractor",
+      "The consultant and the contractor",
+      "The owner, the consultant, and the contractor"
+    ],
+    answer: 1,
+    rationale: "The CCDC standard-form construction contracts referred to in the chapter are between the owner and the contractor. The consultant is not a party but plays a significant administrative role."
+  },
+  {
+    q: "Although the consultant is not a party to the CCDC owner-contractor contract, what role does the consultant typically play under that contract?",
+    options: [
+      "Surety on the contractor's performance bond",
+      "Trustee for the holdback fund",
+      "Contract administrator with extensive duties and responsibilities as set out in the contract documents",
+      "Arbitrator of all disputes between owner and contractor"
+    ],
+    answer: 2,
+    rationale: "The engineer or other consultant acts as contract administrator with extensive duties and responsibilities as set out in the construction contract, and those duties are typically cross-referenced in the client-consultant agreement."
+  },
+  {
+    q: "Why is it important for both parties to review CCDC standard-form documents carefully rather than treat them as untouchable boilerplate?",
+    options: [
+      "The CCDC forms always favour the contractor and must be balanced",
+      "Particular project circumstances may necessitate tailoring, and risk identification can be addressed through contract pricing adjustments",
+      "The forms have no legal effect until they are notarized",
+      "The forms must be entirely rewritten for every project as a regulatory requirement"
+    ],
+    answer: 1,
+    rationale: "Understanding the potential significance of proposed contract terms is a vital part of the risk assessment process. Some risks can be appropriately shifted and covered through contract pricing adjustments, and the standard forms may need tailoring for particular project circumstances."
+  },
+  {
+    q: "A contractor on a CCDC 2 stipulated price contract is concerned about whether the owner will be able to pay over the course of a long project. Which general condition addresses this?",
+    options: [
+      "GC 5.1 — Financing Information Required of the Owner",
+      "GC 6.4 — Concealed or Unknown Conditions",
+      "GC 9.2 — Toxic and Hazardous Substances",
+      "GC 12.3 — Warranty"
+    ],
+    answer: 0,
+    rationale: "GC 5.1 of the CCDC form is intended to provide information and comfort to the contractor about the owner's ability to fund the project. The owner must furnish reasonable evidence of financial arrangements on request, and must give notice in writing of any material change."
+  },
+  {
+    q: "Under GC 5.1, when must the owner give the contractor notice of a material change in the owner's financial arrangements?",
+    options: [
+      "Only after substantial performance is reached",
+      "During the performance of the contract, by notice in writing",
+      "Only if the contractor first issues a stop-work notice",
+      "Only at the annual project review meeting"
+    ],
+    answer: 1,
+    rationale: "GC 5.1 requires the owner to give the contractor notice in writing of any material change in the owner's financial arrangements during the performance of the contract."
+  },
+  {
+    q: "Subsurface conditions on a project turn out to differ materially from those indicated in the contract documents. Which CCDC 2 general condition governs the contractor's right to seek an adjustment?",
+    options: [
+      "GC 3.1 — Control of the Work",
+      "GC 6.4 — Concealed or Unknown Conditions",
+      "GC 11.1 — Insurance",
+      "GC 12.2 — Indemnification"
+    ],
+    answer: 1,
+    rationale: "GC 6.4, Concealed or Unknown Conditions, provides a basis upon which a change order can be issued where subsurface or otherwise concealed physical conditions differ materially from those indicated in the contract documents."
+  },
+  {
+    q: "Under GC 6.4 of CCDC 2, within what time frame must a party give notice in writing of discovered concealed or unknown conditions?",
+    options: [
+      "Within 24 hours of discovery, regardless of disturbance",
+      "Before the conditions are disturbed, and in no event later than 5 working days after the first observance",
+      "Within 30 calendar days of substantial performance",
+      "Within 60 calendar days of contract award"
+    ],
+    answer: 1,
+    rationale: "Under GC 6.4, the observing party must give notice in writing to the other party of the concealed or unknown conditions before they are disturbed, and in no event later than 5 working days after the first observance."
+  },
+  {
+    q: "Under GC 6.4, conditions caused by which factor are specifically excluded from triggering an adjustment for differing physical conditions?",
+    options: [
+      "Subsurface soils",
+      "Buried debris",
+      "Weather",
+      "Concealed mechanical services"
+    ],
+    answer: 2,
+    rationale: "GC 6.4.1.2 refers to physical conditions, other than conditions due to weather, that are of a nature differing materially from those ordinarily found. Weather conditions are expressly excluded from this category."
+  },
+  {
+    q: "Under GC 6.4, after notice of concealed conditions is given, who investigates the conditions and decides whether they materially differ?",
+    options: [
+      "The contractor unilaterally",
+      "The owner unilaterally",
+      "The consultant, who promptly investigates and makes a finding",
+      "An independent arbitrator appointed by the parties"
+    ],
+    answer: 2,
+    rationale: "Under GC 6.4.2, the consultant will promptly investigate the conditions and make a finding. If the conditions differ materially and affect cost or time, the consultant, with the owner's approval, issues appropriate instructions for a change."
+  },
+  {
+    q: "If concealed or unknown conditions relate to toxic and hazardous substances, artifacts and fossils, or mould, which approach does GC 6.4 require?",
+    options: [
+      "They are handled the same as ordinary differing site conditions",
+      "They are governed by GC 9.2, GC 9.3, and GC 9.5 respectively",
+      "They are excluded from the contract entirely and require a separate agreement",
+      "The contractor must absorb all costs"
+    ],
+    answer: 1,
+    rationale: "GC 6.4.4 provides that if such concealed or unknown conditions relate to toxic and hazardous substances and materials, artifacts and fossils, or mould, the parties will be governed by GC 9.2, GC 9.3, and GC 9.5 respectively."
+  },
+  {
+    q: "Under the CCDC delay provisions, a delay is caused by an act or omission of the owner. What is the contractor entitled to?",
+    options: [
+      "Only an extension of contract time, but no reimbursement",
+      "Only reimbursement of costs, but no extension of contract time",
+      "Both reimbursement and an extension of contract time",
+      "Liquidated damages from the owner"
+    ],
+    answer: 2,
+    rationale: "Under the CCDC delay provisions, the contractor is entitled to both reimbursement and an extension of contract time in the event of a delay caused by an act or omission of the owner or the consultant."
+  },
+  {
+    q: "A strike entirely beyond the contractor's control delays the project by six weeks. Under the typical CCDC force majeure provisions, what is the contractor entitled to?",
+    options: [
+      "Both an extension of time and reimbursement of costs",
+      "An extension of contract time, but generally not payment of additional costs",
+      "Termination of the contract without notice",
+      "Liquidated damages from the owner"
+    ],
+    answer: 1,
+    rationale: "Under the force majeure provisions covering events beyond the contractor's control (such as strikes, lockouts, fires, or unavoidable casualties), contract time is to be appropriately extended, but the contractor is not entitled to payment for costs unless the delay results from actions of the owner, consultant, or those they engage."
+  },
+  {
+    q: "A court issues a stop-work order that is unrelated to any fault of the contractor. Under the CCDC delay provisions, what is the contractor's entitlement?",
+    options: [
+      "No entitlement whatsoever",
+      "Only an extension of time",
+      "Reimbursement and an extension of contract time",
+      "Liquidated damages payable to the owner"
+    ],
+    answer: 2,
+    rationale: "The CCDC delay provisions contemplate that a contractor is entitled to both reimbursement and an extension of time where a stop-work order is issued by a court or other public authority, provided the order was not issued as a result of the fault of the contractor."
+  },
+  {
+    q: "After bid closing, the federal government raises certain duties applicable to imported equipment on the project. Under the CCDC form, what is the result?",
+    options: [
+      "The contractor absorbs the cost increase entirely",
+      "The contractor's price is increased to reflect the change in duties",
+      "The contract is automatically terminated",
+      "The owner pays a flat 10 percent surcharge"
+    ],
+    answer: 1,
+    rationale: "The CCDC form provides that any increase or decrease in cost to the contractor due to changes in taxes and duties after the time of bid closing shall increase or decrease the contract price accordingly."
+  },
+  {
+    q: "A new building code provision takes effect after bid closing and increases the cost of compliance. How does the CCDC form treat this change?",
+    options: [
+      "The contractor must absorb the cost as a normal business risk",
+      "A change order is contemplated because the risk of subsequent legal changes should not rest with the contractor",
+      "The contract is automatically void",
+      "The change is only addressed if the consultant agrees in writing"
+    ],
+    answer: 1,
+    rationale: "The CCDC form contemplates the issuance of change orders where laws, regulations, or codes change subsequent to bid closing, consistent with the principle that the contractor should not bear the risk of post-bid legal changes."
+  },
+  {
+    q: "Under the CCDC form, who has primary responsibility for construction safety at the place of the work?",
+    options: [
+      "The consultant",
+      "The owner",
+      "The contractor, solely",
+      "The provincial Ministry of Labour"
+    ],
+    answer: 2,
+    rationale: "The CCDC form provides that the contractor is solely responsible for construction safety at the place of the work, including compliance with applicable health and safety legislation and the initiation, maintenance, and supervision of all safety precautions and programs."
+  },
+  {
+    q: "The Metron Construction case referred to in the chapter resulted in what outcome for the construction manager?",
+    options: [
+      "An administrative fine with no criminal record",
+      "A suspended sentence with community service",
+      "A jail sentence of three and a half years for criminal negligence",
+      "Acquittal on all charges"
+    ],
+    answer: 2,
+    rationale: "In the 2013 Metron Construction case, the construction manager was sentenced to three and a half years of jail time for criminal negligence after four workers without lifelines fell to their deaths from a collapsed swing stage."
+  },
+  {
+    q: "How does the CCDC form attempt to minimize prolonged construction litigation or arbitration?",
+    options: [
+      "By prohibiting any reference to courts at all",
+      "By a mandatory sequential process of negotiation, then mediation, then arbitration",
+      "By requiring all disputes to go directly to the Supreme Court of Canada",
+      "By awarding all disputes to the consultant's final decision"
+    ],
+    answer: 1,
+    rationale: "The CCDC form includes a mandatory sequential approach to negotiation, mediation, and finally arbitration of disputes, designed to bring disputing parties to the settlement table early."
+  },
+  {
+    q: "Under the CCDC dispute-resolution provisions, when does arbitration become mandatory?",
+    options: [
+      "Only if both parties agree in writing at the time of dispute",
+      "Whenever the dispute exceeds one million dollars",
+      "If either party elects to proceed to arbitration after the earlier negotiation and mediation steps",
+      "Only after a court has refused jurisdiction"
+    ],
+    answer: 2,
+    rationale: "Under the CCDC form, if a dispute is still unresolved after the mandatory negotiation and mediation steps, arbitration is mandatory if either party elects to proceed to arbitration; otherwise, the parties may refer the dispute to the courts."
+  },
+  {
+    q: "An owner needs the contractor to start additional work immediately, before the parties can agree on the price or time impact. Which CCDC mechanism allows this to happen without exposing the contractor to the risk of proceeding without an agreed change?",
+    options: [
+      "A signed change order",
+      "A change directive",
+      "A stop-work notice",
+      "A certificate of substantial performance"
+    ],
+    answer: 1,
+    rationale: "Where the owner requires the contractor to proceed prior to agreement on the adjustment in contract price and time, a separate administrative document called a change directive will suffice. This protects the contractor from the risk of proceeding without a fully agreed change order."
+  },
+  {
+    q: "According to the chapter, which type of risk is most likely to produce the highest 'contingency' or 'risk premium' in a contractor's bid price?",
+    options: [
+      "Risk of receiving timely payment",
+      "Risk of concealed or unknown conditions",
+      "Risk of consultant turnover",
+      "Risk of routine weather"
+    ],
+    answer: 1,
+    rationale: "The risk of concealed or unknown conditions assumed by the contractor is one of the best examples of a risk likely to result in a higher contract price. The difficulty of quantifying that risk may lead to a very high contingency, subject to marketplace restrictions."
+  },
+  {
+    q: "An owner has very little construction experience and tends to move slowly through approvals. From the contractor's perspective, what does the chapter suggest?",
+    options: [
+      "Decline the project automatically",
+      "Factor those risks into the project plan and provide for an appropriate contingency",
+      "Ignore the issue because risk rests with the owner anyway",
+      "Demand a fixed price with no escalation"
+    ],
+    answer: 1,
+    rationale: "From the contractor's perspective, an inexperienced owner whose decision-making is bureaucratic or slow can drag the project. The chapter advises the contractor to factor those risks into its project plans and provide for an appropriate contingency."
+  },
+  {
+    q: "An owner asks the engineer how to minimize the risk of awarding the contract to an unsuitable contractor. What does the chapter recommend?",
+    options: [
+      "Awarding always to the lowest bidder",
+      "Using prequalification procedures and not relying on the lowest price alone",
+      "Eliminating the bonding requirement",
+      "Awarding only to large national firms"
+    ],
+    answer: 1,
+    rationale: "Awarding to the lowest price may not be advisable in all circumstances. Minimizing this risk through prequalification procedures is strongly recommended."
+  },
+  {
+    q: "An owner wants security against the risk that its general contractor will go bankrupt or fail to perform the work. Which bond is the appropriate instrument?",
+    options: [
+      "A performance bond",
+      "A labour and material payment bond",
+      "A holdback release bond",
+      "A bid bond only"
+    ],
+    answer: 0,
+    rationale: "Performance bonds provide a contractual basis upon which the owner can look to the surety in the event the contractor fails to perform, is adjudged bankrupt, or has a receiver appointed."
+  },
+  {
+    q: "What is the function of a labour and material payment bond on a construction project?",
+    options: [
+      "To protect the contractor from delay damages",
+      "To obligate the surety to provide funds if the general contractor fails to pay its subcontractors or material suppliers",
+      "To pay for the consultant's fees",
+      "To indemnify the owner against design errors"
+    ],
+    answer: 1,
+    rationale: "Labour and material payment bonds set out the contractual basis upon which a surety company is obligated to provide funds if the general contractor fails to pay its subcontractors or material suppliers."
+  },
+  {
+    q: "An owner wishes to release holdback funds early, before the expiry of statutory lien rights. Which security instrument can be used to protect against unpaid lien claims?",
+    options: [
+      "A performance bond",
+      "A labour and material payment bond",
+      "A holdback release bond",
+      "A consent of surety"
+    ],
+    answer: 2,
+    rationale: "Special bonding coverage in the form of a holdback release bond can be used as security where an owner is prepared to release holdback funds prior to the expiry of lien rights. Its nature and sufficiency should be considered and legal advice taken."
+  },
+  {
+    q: "On a design-build project, which type of insurance does the chapter say should be carefully considered, particularly with respect to amount and term of coverage?",
+    options: [
+      "Automobile liability insurance",
+      "Professional liability insurance",
+      "Tenant insurance",
+      "Crop insurance"
+    ],
+    answer: 1,
+    rationale: "Where design risks are involved, as in design-build or client-consultant agreements, professional liability insurance coverage should be carefully considered, particularly in terms of amount and term of coverage."
+  },
+  {
+    q: "On an international contract, what term is often used for the financial instrument that operates similarly to a performance bond?",
+    options: [
+      "Performance guarantee",
+      "Statutory declaration",
+      "Bid security",
+      "Holdback certificate"
+    ],
+    answer: 0,
+    rationale: "On international contracts, unconditional or conditional letters of credit, or similar instruments under which payment can be demanded on contract default, are often referred to as performance guarantees, or sometimes performance bonds."
+  },
+  {
+    q: "A drafter is preparing a clause requiring the contractor to pay a fixed sum per day for late completion. What must the drafter be careful to do for the clause to be enforceable as liquidated damages in Canadian common-law courts?",
+    options: [
+      "Call it a 'penalty clause' so the obligation is clear",
+      "Ensure the amount is a genuine pre-estimate of damages from non-performance",
+      "Make the amount substantially exceed any conceivable actual damage",
+      "Require payment without any link to actual harm"
+    ],
+    answer: 1,
+    rationale: "Canadian common-law courts will not enforce penalty provisions as a matter of policy. To be enforceable, the amount of liquidated damages must represent a genuine pre-estimate of the damages resulting from non-performance, and the term 'penalty clause' should be avoided in drafting."
+  },
+  {
+    q: "An ambiguous clause limiting liability is included in a contract drafted by the owner. The contractor argues that it should be construed against the owner. What legal rule supports this argument?",
+    options: [
+      "The rule against perpetuities",
+      "The rule of contra proferentum",
+      "The parol evidence rule",
+      "The doctrine of frustration"
+    ],
+    answer: 1,
+    rationale: "Courts strictly construe clauses limiting liability. An ambiguous clause capable of more than one reasonable interpretation can be attacked under the rule of contra proferentum, meaning it will be interpreted against the party that drafted it."
+  },
+  {
+    q: "How do Canadian courts generally approach the interpretation of clauses that purport to limit liability in a construction contract?",
+    options: [
+      "They expand them liberally to give effect to commercial intent",
+      "They construe them strictly, requiring the party relying on the clause to show the loss falls clearly within its scope",
+      "They ignore them as a matter of public policy",
+      "They enforce them only if a regulator has approved them"
+    ],
+    answer: 1,
+    rationale: "Clauses limiting liability are strictly construed by Canadian courts. Provisions should be carefully and clearly expressed so the party relying on the clause can demonstrate that the loss or damage in question falls within the scope of the provision."
+  },
+  {
+    q: "Which two cases referenced in the chapter (and discussed in detail in Chapter 20) are cited for the enforceability of exemption clauses limiting liability?",
+    options: [
+      "Hunter Engineering and Tercon",
+      "Donoghue and Carlill",
+      "Rylands and Fletcher",
+      "Metron and Charterhouse"
+    ],
+    answer: 0,
+    rationale: "The enforceability of exemption clauses limiting liability is reviewed in Chapter 20, particularly through the Hunter Engineering and Tercon decisions."
+  },
+  {
+    q: "Within the 2008 CCDC 2 form, which two general conditions specifically relate to the length of time during which the contractor may be liable in common-law provinces?",
+    options: [
+      "GC 5.1 and GC 6.4",
+      "GC 6.2 and GC 6.3",
+      "GC 12.2 and GC 12.3",
+      "GC 9.2 and GC 9.5"
+    ],
+    answer: 2,
+    rationale: "Two general conditions in the CCDC standard forms relate to the length of time during which the contractor may be liable in the common-law provinces: GC 12.3 (warranty) and the longer period of up to six years from substantial performance covered by GC 12.2."
+  },
+  {
+    q: "In CCDC 2, GC 12.2 contemplates a contractor liability period of approximately how long, calculated from substantial performance?",
+    options: [
+      "Six months",
+      "Two years",
+      "Up to six years from substantial performance",
+      "Twenty-one years"
+    ],
+    answer: 2,
+    rationale: "GC 12.2 relates to a longer period of up to six years from substantial performance, while GC 12.3 deals with the warranty period. Engineers are advised to obtain legal advice when handling these provisions due to their complexity."
+  },
+  {
+    q: "An alliancing contract structure is being considered for a major infrastructure project. Which of the following is characteristic of an alliancing arrangement?",
+    options: [
+      "Strictly fixed price with no incentives",
+      "Cost reimbursement with profit margins and overheads at risk if the project incurs losses, plus bonus incentives for success",
+      "Pure cost-plus with no risk to the contractor",
+      "Lump-sum bidding with adversarial dispute resolution"
+    ],
+    answer: 1,
+    rationale: "Alliancing typically features reimbursement of costs to contractors, with only agreed profit margins and overheads at risk if the project incurs losses. Incentives for a successful project can be by way of bonus payments, often combined with gain-and-pain-sharing arrangements."
+  },
+  {
+    q: "Which of the following is identified in the chapter as a typical feature of an alliancing arrangement?",
+    options: [
+      "Adversarial 'every party for itself' negotiation",
+      "Open book accounting and transparency",
+      "Allocation of all risks to the contractor",
+      "Mandatory exclusion of the consultant from project management"
+    ],
+    answer: 1,
+    rationale: "Transparency and open book accounting are typically important factors in an alliance arrangement, alongside reasonable risk allocation, performance incentives, and a collaborative team approach amongst owner, contractor, designers, and suppliers."
+  },
+  {
+    q: "Under a typical alliancing arrangement, how are most disputes resolved, and what is the usual exception?",
+    options: [
+      "All disputes go straight to litigation, with no exceptions",
+      "Disputes are resolved by the alliancing management organization, except disputes arising from wilful default, which can proceed to arbitration or litigation",
+      "Disputes are referred to the owner alone, whose decision is final",
+      "Disputes are deferred until the project is fully complete"
+    ],
+    answer: 1,
+    rationale: "Alliancing typically features a 'no-fault' approach, with disputes resolved by the alliancing management organization. The exception is disputes arising because of a wilful default, which could proceed to arbitration or litigation."
+  }
+];
+
+// ════════════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════════════
+const STORAGE_KEY = 'nppe_ch25_construction_risks_v1';
+
+let state = {
+  mode: 'practice',
+  order: [...QUESTIONS.keys()],
+  current: 0,
+  answers: {},        // questionIdx -> selectedOptionIdx
+  points: 0,
+  streak: 0,
+  maxStreak: 0,
+  completed: false
+};
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.order) && parsed.order.length === QUESTIONS.length) {
+        state = Object.assign(state, parsed);
+      }
+    }
+  } catch (e) {}
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// FX CANVAS — fireworks, gold rain, stars, points popup
+// ════════════════════════════════════════════════════════════════════════
+const canvas = document.getElementById('fxCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let fxRunning = false;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function randomGold() {
+  const golds = ['#d4af37', '#e8c863', '#b8941f', '#f4ecd8', '#ffd95a'];
+  return golds[Math.floor(Math.random() * golds.length)];
+}
+
+function spawnConfetti(x, y, count = 60) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 10,
+      vy: Math.random() * -10 - 4,
+      gravity: 0.32,
+      size: Math.random() * 5 + 3,
+      color: randomGold(),
+      life: 90 + Math.random() * 40,
+      shape: Math.random() < 0.4 ? 'star' : (Math.random() < 0.5 ? 'rect' : 'circle'),
+      rot: Math.random() * Math.PI,
+      vr: (Math.random() - 0.5) * 0.3
+    });
+  }
+  ensureFx();
+}
+
+function spawnGoldRain() {
+  const w = canvas.width;
+  for (let i = 0; i < 40; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: -10,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: Math.random() * 4 + 2,
+      gravity: 0.1,
+      size: Math.random() * 4 + 2,
+      color: randomGold(),
+      life: 180,
+      shape: Math.random() < 0.5 ? 'star' : 'circle',
+      rot: 0, vr: 0
+    });
+  }
+  ensureFx();
+}
+
+function spawnFirework(x, y) {
+  const hueBase = Math.random() * 360;
+  for (let i = 0; i < 50; i++) {
+    const angle = (Math.PI * 2 * i) / 50;
+    const speed = Math.random() * 5 + 3;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      gravity: 0.06,
+      size: Math.random() * 3 + 2,
+      color: `hsl(${hueBase + Math.random() * 40}, 90%, ${55 + Math.random() * 20}%)`,
+      life: 70 + Math.random() * 30,
+      shape: 'circle',
+      rot: 0, vr: 0,
+      fade: 0.018
+    });
+  }
+  ensureFx();
+}
+
+function drawStar(ctx, x, y, r, color) {
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const ang = (Math.PI / 2.5) * i - Math.PI / 2;
+    const px = x + Math.cos(ang) * r;
+    const py = y + Math.sin(ang) * r;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    const ang2 = ang + Math.PI / 5;
+    ctx.lineTo(x + Math.cos(ang2) * r * 0.45, y + Math.sin(ang2) * r * 0.45);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function tickFx() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => {
+    p.vy += p.gravity;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life -= 1;
+    const alpha = p.fade ? Math.max(0, 1 - (1 - p.life / 100) * 1.8) : Math.min(1, p.life / 60);
+    ctx.globalAlpha = Math.max(0, alpha);
+    if (p.shape === 'star') {
+      drawStar(ctx, p.x, p.y, p.size + 2, p.color);
+    } else if (p.shape === 'rect') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size, -p.size, p.size * 2, p.size * 2);
+      ctx.restore();
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    return p.life > 0 && p.y < canvas.height + 50;
+  });
+  if (particles.length > 0) {
+    requestAnimationFrame(tickFx);
+  } else {
+    fxRunning = false;
+  }
+}
+
+function ensureFx() {
+  if (!fxRunning) { fxRunning = true; requestAnimationFrame(tickFx); }
+}
+
+function floatPoints(text, x, y) {
+  const el = document.createElement('div');
+  el.className = 'points-pop';
+  el.textContent = text;
+  el.style.left = (x - 30) + 'px';
+  el.style.top = (y - 20) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function celebrate(streak, rect) {
+  const cx = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+  const cy = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+  spawnConfetti(cx, cy, 50);
+  if (streak >= 3) spawnGoldRain();
+  if (streak >= 5) {
+    spawnFirework(Math.random() * canvas.width, canvas.height * 0.3);
+    setTimeout(() => spawnFirework(Math.random() * canvas.width, canvas.height * 0.4), 200);
+  }
+  const basePts = 10;
+  const bonus = streak >= 2 ? (streak - 1) * 5 : 0;
+  const total = basePts + bonus;
+  floatPoints(`+${total}${bonus ? ` (🔥×${streak})` : ''}`, cx, cy);
+  return total;
+}
+
+function finaleFireworks() {
+  let n = 0;
+  const burst = () => {
+    if (n++ > 10) return;
+    spawnFirework(Math.random() * canvas.width, canvas.height * (0.2 + Math.random() * 0.4));
+    setTimeout(burst, 250);
+  };
+  burst();
+  spawnGoldRain();
+  setTimeout(spawnGoldRain, 700);
+  setTimeout(spawnGoldRain, 1400);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════════════════════
+const quizArea = document.getElementById('quizArea');
+const resultScreen = document.getElementById('resultScreen');
+
+function letterFor(i) { return ['A', 'B', 'C', 'D'][i]; }
+
+function render() {
+  if (state.completed) {
+    showResult();
+    return;
+  }
+  resultScreen.classList.remove('show');
+
+  const qIdx = state.order[state.current];
+  const q = QUESTIONS[qIdx];
+  const userAnswer = state.answers[qIdx];
+  const answered = userAnswer !== undefined;
+
+  let optionsHtml = '';
+  q.options.forEach((opt, i) => {
+    let cls = 'option';
+    if (answered) {
+      cls += ' disabled';
+      if (state.mode === 'practice') {
+        if (i === q.answer) cls += ' correct';
+        else if (i === userAnswer) cls += ' incorrect';
+      } else {
+        if (i === userAnswer) cls += ' selected-exam';
+      }
+    }
+    optionsHtml += `
+      <button class="${cls}" data-opt="${i}">
+        <span class="option-letter">${letterFor(i)}</span>
+        <span>${opt}</span>
+      </button>
+    `;
+  });
+
+  const showRationale = answered && state.mode === 'practice';
+
+  quizArea.innerHTML = `
+    <div class="question-card">
+      <div class="q-num">Question ${state.current + 1} of ${QUESTIONS.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="rationale ${showRationale ? 'show' : ''}">
+        <div class="rationale-label">Rationale</div>
+        ${q.rationale}
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn secondary" id="prevBtn" ${state.current === 0 ? 'disabled' : ''}>← Previous</button>
+        <button class="nav-btn" id="nextBtn">
+          ${state.current === QUESTIONS.length - 1 ? 'Finish ▸' : 'Next →'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  quizArea.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.opt);
+      onAnswer(i, btn);
+    });
+  });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (state.current > 0) { state.current--; save(); render(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (state.current < QUESTIONS.length - 1) {
+      state.current++; save(); render();
+    } else {
+      finishQuiz();
+    }
+  });
+
+  renderNavGrid();
+  updateStats();
+}
+
+function onAnswer(optIdx, btn) {
+  const qIdx = state.order[state.current];
+  if (state.answers[qIdx] !== undefined) return;
+  state.answers[qIdx] = optIdx;
+
+  const q = QUESTIONS[qIdx];
+  const correct = (optIdx === q.answer);
+
+  if (correct) {
+    state.streak++;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+    const rect = btn.getBoundingClientRect();
+    const pts = celebrate(state.streak, rect);
+    state.points += pts;
+  } else {
+    state.streak = 0;
+  }
+
+  save();
+  render();
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('navGrid');
+  let html = '';
+  state.order.forEach((qIdx, displayIdx) => {
+    let cls = 'nav-dot';
+    if (displayIdx === state.current) cls += ' current';
+    else if (state.answers[qIdx] !== undefined) {
+      if (state.mode === 'practice') {
+        cls += state.answers[qIdx] === QUESTIONS[qIdx].answer ? ' answered-correct' : ' answered-wrong';
+      } else {
+        cls += ' answered-exam';
+      }
+    }
+    html += `<button class="${cls}" data-jump="${displayIdx}">${displayIdx + 1}</button>`;
+  });
+  grid.innerHTML = html;
+  grid.querySelectorAll('.nav-dot').forEach(d => {
+    d.addEventListener('click', () => {
+      state.current = parseInt(d.dataset.jump);
+      save();
+      render();
+    });
+  });
+}
+
+function updateStats() {
+  document.getElementById('pointsVal').textContent = state.points;
+  const correctCount = Object.entries(state.answers)
+    .filter(([qIdx, a]) => a === QUESTIONS[qIdx].answer).length;
+  const answeredCount = Object.keys(state.answers).length;
+  document.getElementById('correctVal').textContent = state.mode === 'exam' && !state.completed ? '—' : correctCount;
+  document.getElementById('answeredVal').textContent = `${answeredCount} / ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = (answeredCount / QUESTIONS.length * 100) + '%';
+  const sb = document.getElementById('streakBadge');
+  if (state.streak >= 2) {
+    sb.style.display = 'inline-flex';
+    document.getElementById('streakVal').textContent = state.streak;
+  } else {
+    sb.style.display = 'none';
+  }
+}
+
+function finishQuiz() {
+  state.completed = true;
+  save();
+  showResult();
+}
+
+function showResult() {
+  quizArea.innerHTML = '';
+  resultScreen.classList.add('show');
+  const correctCount = Object.entries(state.answers)
+    .filter(([qIdx, a]) => a === QUESTIONS[qIdx].answer).length;
+  const pct = Math.round(correctCount / QUESTIONS.length * 100);
+  document.getElementById('finalPercent').textContent = pct + '%';
+  document.getElementById('finalFraction').textContent = `${correctCount} / ${QUESTIONS.length}`;
+
+  const ring = document.getElementById('ringFg');
+  const circumference = 2 * Math.PI * 86;
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = circumference;
+  setTimeout(() => {
+    ring.style.strokeDashoffset = circumference * (1 - pct / 100);
+  }, 100);
+
+  let tier = '', fb = '';
+  if (pct >= 90) {
+    tier = 'Outstanding — exam-ready mastery';
+    fb = 'You have a confident command of construction-risk allocation, CCDC general conditions, and security mechanisms. Continue light review across chapters and you are well positioned for examination day.';
+    finaleFireworks();
+  } else if (pct >= 75) {
+    tier = 'Strong performance';
+    fb = 'You hold the major concepts firmly. Review any items you missed, particularly the specific CCDC clause numbers and the distinctions between performance bonds, payment bonds, and holdback release bonds.';
+    spawnFirework(canvas.width / 2, canvas.height * 0.35);
+    spawnGoldRain();
+  } else if (pct >= 65) {
+    tier = 'Pass — at the NPPE threshold';
+    fb = 'You are at the 65 percent NPPE threshold. Strengthen weak areas by re-reading the risk-summary section and the alliancing material before sitting the exam. Targeted review of force majeure and limiting clauses will pay off.';
+    spawnConfetti(canvas.width / 2, canvas.height * 0.35, 40);
+  } else {
+    tier = 'Below the NPPE pass threshold';
+    fb = 'Below the 65 percent NPPE pass mark. Revisit the chapter focusing on traditional versus multi-prime structures, CCDC dispute resolution, GC 5.1 and GC 6.4 obligations, security instruments, and contra proferentum. Retake the quiz once you have reviewed.';
+  }
+  document.getElementById('resultTier').textContent = tier;
+  document.getElementById('resultFeedback').textContent = fb;
+
+  document.getElementById('reviewBtn').onclick = () => {
+    state.completed = false;
+    state.mode = 'practice';
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === 'practice'));
+    state.current = 0;
+    save();
+    render();
+  };
+  document.getElementById('restartBtn').onclick = () => doReset(true);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// CONTROLS
+// ════════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.mode-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.mode = b.dataset.mode;
+    save();
+    render();
+  });
+});
+
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  // Fisher-Yates shuffle of the order array
+  const o = [...state.order];
+  for (let i = o.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [o[i], o[j]] = [o[j], o[i]];
+  }
+  state.order = o;
+  state.current = 0;
+  save();
+  render();
+});
+
+const resetModal = document.getElementById('resetModal');
+document.getElementById('resetBtn').addEventListener('click', () => {
+  resetModal.classList.add('show');
+});
+document.getElementById('cancelReset').addEventListener('click', () => {
+  resetModal.classList.remove('show');
+});
+document.getElementById('confirmReset').addEventListener('click', () => {
+  doReset(false);
+  resetModal.classList.remove('show');
+});
+
+function doReset(keepShuffle) {
+  const order = keepShuffle ? state.order : [...QUESTIONS.keys()];
+  state = {
+    mode: 'practice',
+    order,
+    current: 0,
+    answers: {},
+    points: 0,
+    streak: 0,
+    maxStreak: 0,
+    completed: false
+  };
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === 'practice'));
+  save();
+  render();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════════════════════════════════
+load();
+render();
+
+</script>
+</body>
+</html>

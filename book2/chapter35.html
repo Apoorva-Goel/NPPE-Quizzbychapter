@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Chapter 35 — Laws Relating to Employment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0a1929;
+    --navy-mid: #122c4a;
+    --navy-light: #1d3e63;
+    --navy-card: #15294a;
+    --gold-primary: #d4af37;
+    --gold-bright: #f4d27a;
+    --gold-soft: #c9a961;
+    --gold-dim: #8a7339;
+    --cream: #f5ecd7;
+    --paper: #ede4c8;
+    --crimson: #b94a47;
+    --emerald: #4a8a6a;
+    --shadow-deep: rgba(0,0,0,0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--navy-deep);
+    color: var(--cream);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top left, rgba(212,175,55,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(29,62,99,0.4) 0%, transparent 50%),
+      linear-gradient(180deg, var(--navy-deep) 0%, #060f1c 100%);
+    padding: 28px 16px 80px;
+    line-height: 1.55;
+  }
+
+  #celebration-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ========= HEADER ========= */
+  .header {
+    text-align: center;
+    padding: 24px 18px 32px;
+    border-bottom: 1px solid rgba(212,175,55,0.25);
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--gold-primary);
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 44px);
+    color: var(--gold-bright);
+    letter-spacing: 0.01em;
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--cream);
+    opacity: 0.75;
+  }
+
+  /* ========= CONTROL BAR ========= */
+  .control-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    background: rgba(29,62,99,0.35);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: var(--navy-deep);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .mode-btn {
+    background: transparent;
+    color: var(--cream);
+    border: none;
+    padding: 8px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mode-btn:hover { background: rgba(212,175,55,0.1); }
+
+  .mode-btn.active {
+    background: var(--gold-primary);
+    color: var(--navy-deep);
+    font-weight: 700;
+  }
+
+  .score-display {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 500;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--gold-bright);
+    font-weight: 600;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .stat-value.streak {
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .stat-value.streak.hot {
+    color: #ff6b3d;
+    transform: scale(1.15);
+    text-shadow: 0 0 12px rgba(255,107,61,0.6);
+  }
+
+  /* ========= PROGRESS ========= */
+  .progress-wrap {
+    margin-bottom: 22px;
+  }
+
+  .progress-bar {
+    background: rgba(29,62,99,0.5);
+    border: 1px solid rgba(212,175,55,0.2);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    transition: width 0.4s ease;
+    box-shadow: 0 0 12px rgba(244,210,122,0.4);
+  }
+
+  .progress-text {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-top: 8px;
+  }
+
+  /* ========= QUESTION CARD ========= */
+  .question-card {
+    background: linear-gradient(135deg, var(--navy-card) 0%, var(--navy-mid) 100%);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 8px;
+    padding: 32px 30px 26px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px var(--shadow-deep);
+    position: relative;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gold-primary);
+    border-radius: 8px 0 0 8px;
+  }
+
+  .question-number {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--cream);
+    line-height: 1.4;
+    margin-bottom: 24px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .option {
+    background: rgba(10,25,41,0.5);
+    border: 1px solid rgba(212,175,55,0.18);
+    border-radius: 5px;
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--cream);
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .option:hover:not(.disabled) {
+    background: rgba(29,62,99,0.6);
+    border-color: var(--gold-soft);
+    transform: translateX(2px);
+  }
+
+  .option-letter {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: rgba(212,175,55,0.12);
+    border: 1px solid var(--gold-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    color: var(--gold-bright);
+    font-size: 14px;
+  }
+
+  .option.selected {
+    background: rgba(212,175,55,0.15);
+    border-color: var(--gold-primary);
+  }
+
+  .option.selected .option-letter {
+    background: var(--gold-primary);
+    color: var(--navy-deep);
+  }
+
+  .option.correct {
+    background: rgba(74,138,106,0.2);
+    border-color: var(--emerald);
+  }
+
+  .option.correct .option-letter {
+    background: var(--emerald);
+    color: var(--cream);
+    border-color: var(--emerald);
+  }
+
+  .option.incorrect {
+    background: rgba(185,74,71,0.2);
+    border-color: var(--crimson);
+  }
+
+  .option.incorrect .option-letter {
+    background: var(--crimson);
+    color: var(--cream);
+    border-color: var(--crimson);
+  }
+
+  .option.disabled { cursor: default; }
+
+  /* ========= RATIONALE ========= */
+  .rationale {
+    margin-top: 22px;
+    background: rgba(10,25,41,0.55);
+    border-left: 3px solid var(--gold-primary);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    animation: slideDown 0.3s ease;
+  }
+
+  .rationale-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .rationale-text {
+    color: var(--cream);
+    opacity: 0.92;
+  }
+
+  .rationale-text strong {
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========= BUTTONS ========= */
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--gold-primary);
+    color: var(--navy-deep);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--gold-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold-soft);
+    border: 1px solid var(--gold-soft);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(212,175,55,0.1);
+    color: var(--gold-bright);
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+  }
+
+  .btn-danger:hover {
+    background: rgba(185,74,71,0.15);
+  }
+
+  /* ========= NAV GRID ========= */
+  .nav-grid-wrap {
+    background: rgba(29,62,99,0.3);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+
+  .nav-grid-title {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+  }
+
+  .nav-cell {
+    aspect-ratio: 1;
+    border: 1px solid rgba(212,175,55,0.25);
+    background: rgba(10,25,41,0.6);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+
+  .nav-cell:hover { transform: scale(1.1); }
+  .nav-cell.current {
+    background: var(--gold-primary);
+    color: var(--navy-deep);
+    font-weight: 700;
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 8px rgba(212,175,55,0.5);
+  }
+  .nav-cell.answered-correct {
+    background: rgba(74,138,106,0.6);
+    border-color: var(--emerald);
+  }
+  .nav-cell.answered-incorrect {
+    background: rgba(185,74,71,0.5);
+    border-color: var(--crimson);
+  }
+  .nav-cell.answered-exam {
+    background: rgba(212,175,55,0.3);
+    border-color: var(--gold-primary);
+  }
+
+  /* ========= RESULTS SCREEN ========= */
+  .results {
+    background: linear-gradient(135deg, var(--navy-card) 0%, var(--navy-mid) 100%);
+    border: 2px solid var(--gold-primary);
+    border-radius: 10px;
+    padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 12px 40px var(--shadow-deep);
+  }
+
+  .results-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--gold-bright);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .results-percent {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 86px;
+    font-weight: 700;
+    color: var(--gold-primary);
+    line-height: 1;
+    margin: 20px 0 8px;
+    text-shadow: 0 4px 20px rgba(212,175,55,0.3);
+  }
+
+  .results-fraction {
+    font-size: 16px;
+    color: var(--cream);
+    opacity: 0.85;
+    margin-bottom: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  .results-tier {
+    display: inline-block;
+    padding: 10px 28px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 999px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .results-tier.pass {
+    color: var(--emerald);
+    border-color: var(--emerald);
+    background: rgba(74,138,106,0.1);
+  }
+
+  .results-tier.fail {
+    color: var(--crimson);
+    border-color: var(--crimson);
+    background: rgba(185,74,71,0.1);
+  }
+
+  .results-feedback {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--cream);
+    opacity: 0.88;
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+
+  .results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin: 24px 0 32px;
+    flex-wrap: wrap;
+  }
+
+  .result-stat {
+    text-align: center;
+  }
+
+  .result-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+
+  .result-stat-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-top: 2px;
+  }
+
+  .results-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ========= FLOATING POPUPS ========= */
+  .score-popup {
+    position: fixed;
+    pointer-events: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow: 0 0 12px rgba(244,210,122,0.8);
+    z-index: 1001;
+    animation: floatUp 1.4s ease-out forwards;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -10px) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -80px) scale(1); }
+  }
+
+  .streak-badge {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-primary));
+    color: var(--navy-deep);
+    padding: 14px 32px;
+    border-radius: 999px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: 0 12px 40px rgba(212,175,55,0.5);
+    z-index: 1002;
+    pointer-events: none;
+    animation: badgePop 2s ease forwards;
+  }
+
+  @keyframes badgePop {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); opacity: 1; }
+    35% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(0.8); opacity: 0; }
+  }
+
+  /* ========= MODAL ========= */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--navy-card);
+    border: 1px solid var(--gold-primary);
+    border-radius: 8px;
+    padding: 32px;
+    max-width: 420px;
+    width: 92%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--gold-bright);
+    margin-bottom: 12px;
+  }
+
+  .modal p {
+    color: var(--cream);
+    opacity: 0.85;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ========= RESPONSIVE ========= */
+  @media (max-width: 640px) {
+    .question-card { padding: 24px 20px; }
+    .question-text { font-size: 18px; }
+    .option { padding: 12px 14px; font-size: 14px; }
+    .nav-grid { grid-template-columns: repeat(8, 1fr); }
+    .control-bar { padding: 12px 14px; }
+    .stat-value { font-size: 22px; }
+    .score-display { gap: 12px; }
+    .button-row { justify-content: center; }
+    .results-percent { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="celebration-canvas"></canvas>
+
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">NPPE Exam Preparation · Chapter 35</div>
+    <h1>Laws Relating to Employment</h1>
+    <p class="subtitle">Federal &amp; Provincial Statutes — Ontario Focus</p>
+  </header>
+
+  <div class="control-bar">
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="practice">Practice</button>
+      <button class="mode-btn" data-mode="exam">Exam</button>
+    </div>
+    <div class="score-display">
+      <div class="stat">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="score-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value streak" id="streak-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Correct</div>
+        <div class="stat-value" id="correct-value">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 2%"></div>
+    </div>
+    <div class="progress-text" id="progress-text">Question 1 of 50</div>
+  </div>
+
+  <div id="quiz-view">
+    <div class="question-card" id="question-card">
+      <div class="question-number" id="q-number">Question 01</div>
+      <div class="question-text" id="q-text"></div>
+      <div class="options" id="q-options"></div>
+      <div id="q-rationale"></div>
+    </div>
+
+    <div class="button-row">
+      <button class="btn btn-secondary" id="prev-btn">◀ Previous</button>
+      <button class="btn btn-danger" id="reset-btn">Reset Quiz</button>
+      <button class="btn btn-primary" id="next-btn">Next ▶</button>
+    </div>
+
+    <div class="nav-grid-wrap">
+      <div class="nav-grid-title">Question Navigation</div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </div>
+
+    <div class="button-row" style="justify-content: center;">
+      <button class="btn btn-primary hidden" id="submit-btn">Submit Exam</button>
+    </div>
+  </div>
+
+  <div id="results-view" class="hidden"></div>
+
+</div>
+
+<!-- Reset modal -->
+<div class="modal-overlay" id="reset-modal">
+  <div class="modal">
+    <h3>Reset Quiz?</h3>
+    <p>All your answers, score, and streak will be cleared. Questions will be reshuffled for a fresh attempt.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cancel-reset">Cancel</button>
+      <button class="btn btn-danger" id="confirm-reset">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// QUESTION BANK — 50 NPPE-style questions, Chapter 35
+// ============================================================
+const QUESTIONS = [
+  {
+    q: "A telecommunications company operates infrastructure across multiple Canadian provinces. Which jurisdiction's labour laws primarily govern its employment relations?",
+    options: [
+      "Provincial labour law of the headquarters province",
+      "Provincial labour law of each province where workers are based",
+      "Federal labour law under the Canada Labour Code",
+      "International labour conventions adopted by Canada"
+    ],
+    correct: 2,
+    rationale: "Industries that are <strong>interprovincial, national, or international</strong> in nature — including telecommunications, transportation, and works for the general advantage of Canada — fall under federal labour jurisdiction. The Canada Labour Code applies regardless of which individual province the worker is based in."
+  },
+  {
+    q: "The Canada Labour Code is organized into three main parts. Which combination correctly identifies these subject areas?",
+    options: [
+      "Hiring practices, performance management, and termination",
+      "Industrial relations, occupational health and safety, and minimum employment standards",
+      "Pension contributions, employment insurance, and tax withholding",
+      "Human rights, accessibility, and pay equity"
+    ],
+    correct: 1,
+    rationale: "The three parts address: <strong>(1)</strong> union–employer relations, <strong>(2)</strong> employee safety including the right to refuse dangerous work, and <strong>(3)</strong> minimum employment standards (hours, wages, leaves, termination notice). Pension and EI provisions exist in separate federal statutes."
+  },
+  {
+    q: "Which administrative body oversees union certification and addresses unfair labour practice claims under the Canada Labour Code?",
+    options: [
+      "Canadian Human Rights Commission",
+      "Canada Industrial Relations Board",
+      "Federal Labour Tribunal",
+      "Department of Employment and Social Development"
+    ],
+    correct: 1,
+    rationale: "The <strong>Canada Industrial Relations Board</strong> administers Part I of the Code: certifying unions as bargaining agents, investigating unfair labour practice claims, addressing illegal strikes, and establishing procedures for lawful strikes and lockouts in federally regulated workplaces."
+  },
+  {
+    q: "A federally regulated employee believes work assigned to them poses an imminent risk to their health. Under the Canada Labour Code, what right does the employee have?",
+    options: [
+      "The right to demand alternative work without notice to the employer",
+      "The right to refuse to perform the work, subject to prescribed procedures",
+      "The right to leave the workplace permanently with full severance",
+      "The right to file an immediate complaint with provincial authorities"
+    ],
+    correct: 1,
+    rationale: "Part II of the Code gives employees the right to refuse work where there is <strong>imminent danger</strong> to their health and safety. The right is exercised through prescribed procedures — notifying the employer, allowing investigation, and potentially escalating to a Ministry inspector."
+  },
+  {
+    q: "With respect to Canada Pension Plan contributions, which statement most accurately describes the employer's role?",
+    options: [
+      "The employer voluntarily matches the employee's contribution as a benefit",
+      "The employer deducts a portion of pensionable earnings and remits both employee and employer portions",
+      "The employer pays the full amount on behalf of all employees",
+      "The employer is only required to inform employees of available pension options"
+    ],
+    correct: 1,
+    rationale: "Under the CPP, the employer must <strong>deduct a prescribed percentage</strong> of pensionable earnings from the employee's wages and remit that amount, together with a <strong>matching employer contribution</strong>, to the federal government. This is a statutory obligation, not voluntary."
+  },
+  {
+    q: "Federal employment equity legislation imposes mandatory annual reporting obligations on which category of employer?",
+    options: [
+      "All Canadian employers regardless of size or jurisdiction",
+      "Provincially regulated employers with 50 or more employees",
+      "Federally regulated private sector employers and Crown corporations with 100 or more employees",
+      "Only Crown corporations with multinational operations"
+    ],
+    correct: 2,
+    rationale: "The federal Employment Equity Act applies to all federally regulated private sector employers and Crown corporations with <strong>100 or more employees</strong>. Provincially regulated employers can become subject to similar obligations through the Federal Contractors Program."
+  },
+  {
+    q: "A provincially regulated company wishes to bid on a federal goods or services contract. Which condition would bring the company under the Federal Contractors Program?",
+    options: [
+      "A contract value of $250,000 or more, regardless of workforce size",
+      "A contract value of $1 million or more, including taxes, with at least 100 permanent Canadian employees",
+      "Any federal contract if the company has more than 50 employees",
+      "Only contracts involving construction services"
+    ],
+    correct: 1,
+    rationale: "The Federal Contractors Program applies to provincially regulated employers receiving federal contracts of <strong>$1 million or more</strong> (including applicable taxes) with a Canadian workforce of <strong>100 or more permanent employees</strong>. As a condition of bidding, contractors must certify their commitment to employment equity in writing."
+  },
+  {
+    q: "An employer subject to the federal Employment Equity Act must file its annual Employment Equity Report by what date?",
+    options: [
+      "March 31 of each year",
+      "April 30 of each year",
+      "June 1 of each year",
+      "December 31 of each year"
+    ],
+    correct: 2,
+    rationale: "The report covering the preceding calendar year must be submitted to the Minister of Labour <strong>on or before June 1</strong>. It must contain numerical data (industrial sector, occupational groups, salary ranges, hires, promotions, terminations) and a narrative describing implementation measures and employee-management consultations."
+  },
+  {
+    q: "Which province has repealed its employment equity legislation while retaining pay equity legislation?",
+    options: [
+      "British Columbia",
+      "Ontario",
+      "Quebec",
+      "Alberta"
+    ],
+    correct: 1,
+    rationale: "<strong>Ontario</strong> repealed its employment equity legislation but retained pay equity legislation. This illustrates that while the two regimes have related goals, they are distinct: pay equity addresses equal pay for work of equal value, while employment equity focuses on proactive hiring and advancement of designated groups."
+  },
+  {
+    q: "The Ontario Employment Standards Act, 2000 was designed primarily to protect which group?",
+    options: [
+      "Senior executives in publicly traded corporations",
+      "Professional engineers in private practice",
+      "Non-unionized employees, with broad coverage of most employees subject to limited exceptions",
+      "Independent contractors and consultants"
+    ],
+    correct: 2,
+    rationale: "The Act was designed primarily to protect <strong>non-union employees</strong> by establishing minimum terms and conditions of employment. However, it covers all employees with certain limited exceptions, regardless of union status. Independent contractors are generally not employees under the Act."
+  },
+  {
+    q: "An Ontario employee with twelve years of continuous service is dismissed without cause. Under the Employment Standards Act, 2000, what is the maximum notice of termination required by Section 57?",
+    options: [
+      "4 weeks",
+      "8 weeks",
+      "12 weeks",
+      "26 weeks"
+    ],
+    correct: 1,
+    rationale: "Section 57 caps statutory notice of termination at <strong>eight weeks</strong> for employees with eight or more years of service. This is a statutory minimum only — the employee may still pursue a common law claim for reasonable notice that significantly exceeds this period."
+  },
+  {
+    q: "In Ontario, an employer with a payroll of $3 million terminates an employee with seven years of service without cause. What severance pay obligation arises under the Employment Standards Act, 2000?",
+    options: [
+      "No severance obligation — the employee has fewer than ten years of service",
+      "Severance pay of seven weeks, calculated as one week per year of service",
+      "Severance pay of seven weeks, in addition to required termination notice or pay in lieu",
+      "No severance obligation — the payroll threshold is $5 million"
+    ],
+    correct: 2,
+    rationale: "Employers with payroll of <strong>$2.5 million or more</strong> must pay statutory severance to employees with <strong>5 or more years of service</strong>, at one week per year (capped at 26 weeks). Severance pay is <strong>in addition to</strong>, not in lieu of, statutory notice of termination or pay in lieu of notice."
+  },
+  {
+    q: "An employer purchases a business and retains the existing employees for only one day before terminating them. For purposes of statutory notice and severance, how is their period of employment calculated?",
+    options: [
+      "From the date of purchase only — the prior employment with the vendor is disregarded",
+      "The entire period of employment with the vendor is included",
+      "Only half of the prior employment with the vendor counts",
+      "The employees are treated as terminated by the vendor at the time of sale"
+    ],
+    correct: 1,
+    rationale: "Where an employer sells a business and the purchaser retains the vendor's employees, the employees are <strong>deemed not to be terminated</strong> by the sale. Their service with the vendor is treated as continuous for purposes of notice, severance, vacation, and pregnancy leave — even if the purchaser terminates them the next day."
+  },
+  {
+    q: "A professional engineer with 22 years of service is terminated without cause. Her employment contract is silent on notice. Which statement best describes her notice entitlement?",
+    options: [
+      "She is limited to the statutory minimum under the Employment Standards Act",
+      "She is entitled to common law reasonable notice, which generally exceeds the statutory minimum",
+      "She has no notice entitlement because the contract is silent",
+      "Her notice is determined exclusively by industry custom"
+    ],
+    correct: 1,
+    rationale: "Where a contract does not validly limit notice to the statutory minimum, the common law implies a term requiring <strong>reasonable notice</strong> of termination (or pay in lieu). Common law notice is determined case-by-case and generally exceeds the ESA minimum. The Act expressly preserves civil remedies."
+  },
+  {
+    q: "When assessing common law reasonable notice for a dismissed employee, which factor is NOT typically considered?",
+    options: [
+      "The employee's length of service",
+      "The employee's age",
+      "The employee's marital status",
+      "The availability of similar employment given the employee's experience and qualifications"
+    ],
+    correct: 2,
+    rationale: "Common law notice considers length of service, age, position, salary, and the availability of comparable employment given experience, training, and qualifications. <strong>Marital status</strong> is not a recognized factor — and would be improper to consider, since it is also a prohibited ground of discrimination."
+  },
+  {
+    q: "Which approach to assessing common law reasonable notice has been criticized by the Ontario Court of Appeal?",
+    options: [
+      "Considering the employee's age and position in addition to service",
+      "Applying a rough rule of thumb of one month per year of service",
+      "Looking at the availability of similar employment",
+      "Assessing each case on its individual facts"
+    ],
+    correct: 1,
+    rationale: "The rough rule of thumb of approximately <strong>one month per year of service</strong> has been criticized by the Ontario Court of Appeal for placing too much weight on length of service at the expense of other relevant factors. A multi-factor case-by-case analysis is preferred."
+  },
+  {
+    q: "In Zander v. Tractel Limited, the court awarded sixteen months of notice to a professional engineer. Which combination of facts best matches the case?",
+    options: [
+      "A 35-year-old engineer with three years of service",
+      "A 49-year-old engineer with twelve years of service",
+      "A 60-year-old engineer with thirty years of service",
+      "A 25-year-old engineer with one year of service"
+    ],
+    correct: 1,
+    rationale: "In <em>Zander v. Tractel Limited</em>, a <strong>49-year-old</strong> professional engineer with <strong>12 years</strong> of service was awarded <strong>16 months</strong> of reasonable notice. The court characterized the period as appropriate and conservative, and the employer's appeal was unsuccessful."
+  },
+  {
+    q: "A fundamental feature of workers' compensation legislation in Canada is that injured workers receive benefits regardless of fault. This principle is best described as:",
+    options: [
+      "A pure tort system retained for industrial accidents",
+      "A no-fault insurance scheme that replaces or limits the right to sue",
+      "A voluntary insurance arrangement employees may opt into",
+      "A government welfare program funded by general tax revenues"
+    ],
+    correct: 1,
+    rationale: "Workers' compensation provides a <strong>no-fault insurance scheme</strong> — benefits without proving negligence. As part of this historic compromise, the legislation also <strong>replaces or limits the worker's right to sue</strong> the employer and co-workers in tort."
+  },
+  {
+    q: "How are employer premiums to the workers' compensation accident fund typically calculated?",
+    options: [
+      "A flat fee per employee regardless of industry",
+      "Based on the employer's payroll combined with a risk factor for the employer's industry, adjusted by experience rating",
+      "A percentage of the company's gross revenue",
+      "Voluntary contributions determined by the employer"
+    ],
+    correct: 1,
+    rationale: "Premiums are calculated based on <strong>payroll</strong> and an <strong>industry risk factor</strong>, adjusted up or down by the employer's <strong>experience rating</strong>. Poor experience can also trigger financial penalties. The system is funded entirely by employers, not employees."
+  },
+  {
+    q: "Which body administers Ontario's workers' compensation system?",
+    options: [
+      "Ontario Labour Relations Board",
+      "Workplace Safety and Insurance Board (WSIB)",
+      "Ministry of Labour, Training and Skills Development",
+      "Workers' Compensation Tribunal of Ontario"
+    ],
+    correct: 1,
+    rationale: "Ontario's workers' compensation system is administered by the <strong>Workplace Safety and Insurance Board (WSIB)</strong> under the Workplace Safety and Insurance Act, 1997. Other provinces use bodies typically referred to as workers' compensation boards."
+  },
+  {
+    q: "Which of the following is NOT one of the primary categories of benefits financed by a workers' compensation accident fund?",
+    options: [
+      "Income-replacement benefits",
+      "Permanent-impairment benefits",
+      "Punitive damages benefits",
+      "Rehabilitation services"
+    ],
+    correct: 2,
+    rationale: "The five financed benefit types are: <strong>income-replacement, permanent-impairment, survivor death benefits, health care benefits, and rehabilitation services</strong>. <strong>Punitive damages</strong> are a tort remedy — they are not part of the no-fault scheme that workers' compensation replaces."
+  },
+  {
+    q: "A small Ontario professional services firm operates in an industry not subject to mandatory workers' compensation coverage. Can the firm obtain coverage for its employees?",
+    options: [
+      "No — coverage is strictly limited to industries with mandatory designation",
+      "Yes — the firm can typically apply for optional coverage",
+      "Only if it has more than 50 employees",
+      "Only with approval from the provincial legislature"
+    ],
+    correct: 1,
+    rationale: "Although Ontario does not require coverage for many white-collar businesses, employers in non-mandatory classes can generally apply for <strong>optional coverage</strong>. This allows businesses outside mandatory sectors to access the no-fault benefits regime."
+  },
+  {
+    q: "What is the primary funding mechanism for the Ontario Health Insurance Plan (OHIP)?",
+    options: [
+      "Individual premiums paid by Ontario residents",
+      "Federal transfer payments alone",
+      "The Employer Health Tax paid by employers",
+      "A levy on private insurance providers"
+    ],
+    correct: 2,
+    rationale: "OHIP is funded by the <strong>Employer Health Tax (EHT)</strong>, paid by the employer based on payroll. The tax applies to wages paid to employees who either report for work at a permanent Ontario establishment or are paid from one. The full Ontario rate is 1.95%, applying to payroll over $400,000."
+  },
+  {
+    q: "The Smoke-Free Ontario Act, 2017 expanded earlier smoking prohibitions to include which additional substances?",
+    options: [
+      "Alcohol-based products only",
+      "Vapour products and cannabis",
+      "Prescription medications used at work",
+      "All combustible substances regardless of legal status"
+    ],
+    correct: 1,
+    rationale: "The 2017 Act replaced earlier legislation and broadened the prohibitions to include <strong>vapour products and cannabis</strong> in addition to tobacco. It bans these in enclosed workplaces and enclosed public places — defined broadly to capture buildings and roofed vehicles used by workers or open to the public."
+  },
+  {
+    q: "An employee complains under the Smoke-Free Ontario Act, 2017 that her employer is permitting smoking in an enclosed workplace. What protection does she have?",
+    options: [
+      "None — the Act does not protect complainants",
+      "Protection from intimidation, coercion, discipline, suspension, or dismissal",
+      "Protection only if she has been employed for more than two years",
+      "Protection only if the complaint is made anonymously"
+    ],
+    correct: 1,
+    rationale: "The Act includes <strong>anti-reprisal provisions</strong>. Employees who exercise their right to complain are protected from <strong>intimidation, coercion, discipline, suspension, or dismissal</strong> as a consequence of making the complaint."
+  },
+  {
+    q: "Which of the following is NOT a protected ground of discrimination in employment under the Ontario Human Rights Code?",
+    options: [
+      "Gender identity and gender expression",
+      "Record of offences",
+      "Political affiliation",
+      "Creed"
+    ],
+    correct: 2,
+    rationale: "Enumerated grounds include age, ancestry, colour, race, citizenship, ethnic origin, place of origin, creed, disability, family status, marital status, gender identity, gender expression, record of offences, sex, and sexual orientation. <strong>Political affiliation</strong> is not an enumerated ground under the Ontario Code."
+  },
+  {
+    q: "A workplace policy is neutral on its face but has a disproportionate negative impact on members of a group protected by the Human Rights Code. This is best described as:",
+    options: [
+      "Direct discrimination",
+      "Adverse effect or constructive discrimination",
+      "Reverse discrimination",
+      "Permissible business necessity"
+    ],
+    correct: 1,
+    rationale: "A facially neutral requirement that excludes, restricts, or prefers persons based on a protected ground is <strong>adverse effect</strong> (or <strong>constructive</strong>) discrimination. The law examines whether such requirements are reasonable and bona fide, applying a multi-part test."
+  },
+  {
+    q: "When an employer's policy is found to be prima facie discriminatory, what three-part test from the Supreme Court of Canada must the employer satisfy to justify it?",
+    options: [
+      "Cost, convenience, and employee morale",
+      "Rational connection to job performance, good faith adoption, and reasonable necessity including accommodation to undue hardship",
+      "Industry custom, business judgment, and operational efficiency",
+      "Statutory authorization, regulatory approval, and stakeholder consultation"
+    ],
+    correct: 1,
+    rationale: "Once prima facie discrimination is shown, the employer must prove on a balance of probabilities: <strong>(1)</strong> the standard was adopted for a purpose rationally connected to job performance; <strong>(2)</strong> it was adopted in honest and good faith belief in its necessity; and <strong>(3)</strong> it is reasonably necessary, including being impossible to accommodate without undue hardship."
+  },
+  {
+    q: "A professional engineer requests workplace accommodation related to a disability. What is the employer's obligation under the Ontario Human Rights Code?",
+    options: [
+      "Provide the requested accommodation regardless of cost",
+      "Determine whether the engineer can be appropriately accommodated short of undue hardship",
+      "Refer the matter to the Human Rights Tribunal for adjudication",
+      "Provide accommodation only if the engineer agrees to limit duties"
+    ],
+    correct: 1,
+    rationale: "The employer must take steps to determine whether the employee can be <strong>appropriately accommodated short of undue hardship</strong>. This is both a procedural and substantive duty — good faith inquiry plus actual accommodation up to the undue hardship threshold."
+  },
+  {
+    q: "The Accessibility for Ontarians with Disabilities Act, 2005 (AODA) requires companies to take which combination of actions?",
+    options: [
+      "Pay accessibility levies and provide annual disability benefits",
+      "Implement accessibility policies, provide accessible customer service and information, and make employment practices accessible",
+      "Establish disability quotas equal to provincial demographic ratios",
+      "Build only fully wheelchair-accessible facilities going forward"
+    ],
+    correct: 1,
+    rationale: "The AODA requires <strong>accessibility policies</strong>, <strong>accessible customer service</strong>, accessible information on request, emergency plans for staff with disabilities, <strong>accessible websites</strong>, accessible public spaces, accessible employment practices, and employee/volunteer training on accessibility."
+  },
+  {
+    q: "Under Ontario's Occupational Health and Safety Act, who bears statutory duties?",
+    options: [
+      "Only the employer that pays the workers",
+      "Those who have any degree of control over the workplace, materials, equipment, or direction of the workforce — including workers themselves",
+      "Only management personnel designated as safety officers",
+      "Only certified workplace safety committee members"
+    ],
+    correct: 1,
+    rationale: "The Act imposes <strong>overlapping duties</strong> on multiple parties — employers, constructors, supervisors, suppliers, owners, and workers — based on their degree of control. Workers must also take reasonable precautions for their own safety and that of co-workers."
+  },
+  {
+    q: "An Ontario worker believes a particular task poses a danger to her health and safety. Under the Occupational Health and Safety Act, what right does she have?",
+    options: [
+      "The right to refuse to perform the work, without fear of reprisal",
+      "The right to leave the workplace and continue receiving full pay",
+      "The right to demand immediate termination of the supervisor",
+      "The right to sue the employer in tort for the dangerous assignment"
+    ],
+    correct: 0,
+    rationale: "The Act grants workers a statutory right to <strong>refuse work they believe is dangerous</strong> to their own or others' safety, <strong>without fear of reprisal</strong>. A statutory process governs investigation, and workers are protected from discipline when exercising the right in good faith."
+  },
+  {
+    q: "An Ontario workplace employs 75 workers. Under the Occupational Health and Safety Act, what is the minimum size of the joint health and safety committee?",
+    options: [
+      "1 representative chosen by management",
+      "2 persons",
+      "4 persons, with at least half selected by the workers",
+      "6 persons, with full union representation"
+    ],
+    correct: 2,
+    rationale: "Where 20 or more workers are employed, a JHSC is generally required. For workplaces with <strong>fewer than 50</strong> employees, the committee must have at least <strong>2 members</strong>; for <strong>50 or more</strong>, at least <strong>4 members</strong>. <strong>At least half</strong> of the members must be worker-selected."
+  },
+  {
+    q: "How frequently must an Ontario joint health and safety committee meet at minimum?",
+    options: [
+      "Once per month",
+      "Once every three months",
+      "Once every six months",
+      "Once per year"
+    ],
+    correct: 1,
+    rationale: "The committee must meet at least <strong>once every three months</strong>. More frequent meetings may be required by workplace circumstances, but quarterly meetings constitute the statutory minimum."
+  },
+  {
+    q: "What is the maximum fine for a corporation found guilty of contravening Ontario's Occupational Health and Safety Act (as described in this chapter)?",
+    options: [
+      "$100,000",
+      "$500,000",
+      "$1.5 million",
+      "$5 million"
+    ],
+    correct: 2,
+    rationale: "Penalties can reach <strong>$100,000 for individuals</strong> and <strong>$1.5 million for corporations</strong>. Charges typically follow critical injuries or fatalities, and ministries have inspection, investigation, and prosecution authority."
+  },
+  {
+    q: "The Criminal Code of Canada imposes a duty on which category of persons to take reasonable steps to prevent bodily harm in workplace tasks?",
+    options: [
+      "Only registered professional engineers",
+      "Anyone who undertakes or has authority to direct how another performs work",
+      "Only corporate directors and officers",
+      "Only government-appointed safety inspectors"
+    ],
+    correct: 1,
+    rationale: "The Criminal Code duty applies to <strong>everyone who undertakes, or has the authority, to direct how another does work or performs a task</strong>. Unlike health and safety legislation, this duty focuses specifically on those who direct work — not rank-and-file workers."
+  },
+  {
+    q: "A breach of the Criminal Code duty to take reasonable steps to prevent workplace harm becomes a criminal offence in which circumstance?",
+    options: [
+      "Whenever the duty is breached, regardless of consequences",
+      "Only when accompanied by reckless disregard for safety and resulting death or injury",
+      "Only when the breach is intentional and pre-planned",
+      "Only when committed by a corporation, not an individual"
+    ],
+    correct: 1,
+    rationale: "A breach does not automatically constitute an offence. It becomes criminal where committed with <strong>wanton and reckless disregard</strong> for the lives or safety of others and <strong>causes death or injury</strong>. This high mental element distinguishes criminal liability from regulatory health and safety violations."
+  },
+  {
+    q: "When sentencing an organization for criminal negligence, which factor must courts consider under the Criminal Code?",
+    options: [
+      "The political affiliation of the directors",
+      "Moral blameworthiness, public interest, and prospects of rehabilitation",
+      "The total revenue of all related corporations worldwide",
+      "The personal wealth of the chief executive officer"
+    ],
+    correct: 1,
+    rationale: "Enumerated sentencing factors include <strong>moral blameworthiness</strong> (such as economic advantage gained), <strong>public interest</strong> (such as costs of investigation/prosecution and the need to keep the organization in business), and <strong>prospects of rehabilitation</strong>."
+  },
+  {
+    q: "In the 2013 Ontario Court of Appeal case involving the collapse of a swing stage in Toronto where four workers fell to their deaths, what penalties were ultimately imposed?",
+    options: [
+      "A $250,000 fine on the company only",
+      "A $750,000 fine on the construction company and 3.5 years imprisonment for the project manager",
+      "Suspended sentences for all individuals involved",
+      "A $5 million corporate fine with no individual liability"
+    ],
+    correct: 1,
+    rationale: "The Court of Appeal increased the corporate penalty to <strong>$750,000</strong>, and the <strong>project manager received 3.5 years in jail</strong> for criminal negligence. He had been aware that only two lifelines were available for six workers but permitted them to board the swing stage with their tools."
+  },
+  {
+    q: "In addition to fines, what other type of sanction may a court impose on an organization convicted under the Criminal Code in connection with workplace safety offences?",
+    options: [
+      "Mandatory dissolution of the corporation",
+      "Corporate probation, which may include restitution, media publication, and policy implementation",
+      "Loss of the right to employ workers anywhere in Canada",
+      "Transfer of corporate assets to the victims' families"
+    ],
+    correct: 1,
+    rationale: "Courts can place an organization on <strong>corporate probation</strong>. Conditions may include providing <strong>restitution</strong>, <strong>publishing the offence in the media</strong>, and <strong>implementing policies and procedures</strong> to prevent recurrence. This sanction targets systemic prevention rather than just punishment."
+  },
+  {
+    q: "The Elliot Lake Commission of Inquiry, established after a 2012 mall roof collapse in Ontario, attributed the failure principally to:",
+    options: [
+      "An act of God beyond human control",
+      "Decades of neglect, inadequate inspection, insufficient oversight, and profit-driven owner conduct",
+      "Sabotage by disgruntled former employees",
+      "An undetectable manufacturing defect in the original construction"
+    ],
+    correct: 1,
+    rationale: "The Commission concluded the collapse resulted from a poorly conceived and engineered surface, <strong>decades of neglect</strong>, lack of <strong>competent and thorough inspection</strong>, inadequate <strong>official oversight</strong>, and <strong>profit-seeking</strong> owners. While a rusted weld was the immediate cause, the real story was one of human failure."
+  },
+  {
+    q: "In the case of R. v. Wood arising from the Elliot Lake collapse, the engineer was charged with criminal negligence causing death and bodily harm. What was the outcome?",
+    options: [
+      "Conviction on all three charges with a lengthy sentence",
+      "Conviction on two charges, acquittal on one",
+      "Acquittal on all charges because the Crown could not prove unrestrained disregard for consequences beyond a reasonable doubt",
+      "The case was withdrawn before trial"
+    ],
+    correct: 2,
+    rationale: "Mr. Wood was found <strong>not guilty</strong>. The Crown failed to prove beyond a reasonable doubt that he had acted with <strong>unrestrained disregard for the consequences</strong> of his behaviour. The case illustrates the high mental element required for criminal negligence — separate from his professional discipline by Professional Engineers Ontario."
+  },
+  {
+    q: "Under Ontario's Labour Relations Act, an employer's conduct during a union organizing campaign is restricted. Which of the following actions is prohibited?",
+    options: [
+      "Communicating factually about the consequences of unionization",
+      "Coercion, intimidation, threats, promises, or undue influence interfering with formation, selection, or administration of the union",
+      "Continuing normal business operations during the organizing period",
+      "Maintaining existing employee compensation and benefits"
+    ],
+    correct: 1,
+    rationale: "The Act prohibits interference through <strong>coercion, intimidation, threats, promises, or undue influence</strong> with the formation, selection, or administration of a trade union. The broad term <strong>\"undue influence\"</strong> gives the OLRB significant discretion to identify violating conduct."
+  },
+  {
+    q: "Following a union's application for certification, by when must the Ontario employer file its response?",
+    options: [
+      "Within 24 hours of receiving notice",
+      "No later than two days after receiving the certification package",
+      "Within 30 days of the application",
+      "At any time before the representation vote"
+    ],
+    correct: 1,
+    rationale: "The employer must deliver its response to the union and file it with the OLRB <strong>no later than two days</strong> after receiving the certification package. The response includes schedules identifying bargaining-unit employees, used to determine voting eligibility."
+  },
+  {
+    q: "Professional engineers in Ontario have a particular right under the Labour Relations Act with respect to bargaining unit composition. What is this right?",
+    options: [
+      "Engineers are categorically excluded from union representation",
+      "Engineers are entitled to a bargaining unit composed exclusively of professional engineers unless a majority wishes inclusion with other employees",
+      "Engineers must always be combined with managerial staff",
+      "Engineers are automatically certified into the dominant union at the workplace"
+    ],
+    correct: 1,
+    rationale: "Professional engineers are entitled to a <strong>bargaining unit composed exclusively of professional engineers</strong>, unless a majority of the engineers wish to be included with other employees. This recognizes the distinct professional character of engineering work."
+  },
+  {
+    q: "Persons exercising managerial functions or employed in a confidential capacity in matters related to labour relations are typically:",
+    options: [
+      "Required to vote in any representation vote",
+      "Excluded from the bargaining unit by the Ontario Labour Relations Board",
+      "Granted enhanced voting rights as senior employees",
+      "Designated as automatic union officers"
+    ],
+    correct: 1,
+    rationale: "The OLRB will <strong>exclude</strong> from a bargaining unit persons exercising managerial functions or employed in a confidential capacity in matters related to labour relations. The rationale is to avoid conflicts between management responsibility and union membership."
+  },
+  {
+    q: "For an Ontario certification application outside the construction industry, what level of employee support triggers a representation vote?",
+    options: [
+      "25% of employees in the proposed bargaining unit",
+      "40% of employees in the proposed bargaining unit",
+      "50% plus one of employees",
+      "75% of employees"
+    ],
+    correct: 1,
+    rationale: "The OLRB must conduct a representation vote if the union has the support of <strong>40% or more</strong> of employees in the proposed bargaining unit on the application date. The secret ballot is held <strong>within five days</strong>; if <strong>more than 50%</strong> of those voting support the union, it is certified."
+  },
+  {
+    q: "In Ontario's construction industry, the certification process differs from other sectors in what important respect?",
+    options: [
+      "Unions cannot be certified in construction",
+      "The Board may certify a union without a vote if more than 55% of bargaining unit employees are union members on the application date",
+      "Construction certification requires unanimous employee consent",
+      "Only employers can initiate certification"
+    ],
+    correct: 1,
+    rationale: "In construction, the Board may certify a union as bargaining agent if satisfied that <strong>more than 55%</strong> of bargaining-unit employees are union members on the filing date. This <strong>card-based</strong> certification reflects the mobile, project-based nature of construction work."
+  },
+  {
+    q: "When a collective agreement is in operation between an Ontario employer and a union, which dispute-resolution measure is mandatory for disagreements over interpretation, discipline, or compliance?",
+    options: [
+      "Voluntary mediation arranged by the parties",
+      "Compulsory arbitration by an independent arbitrator",
+      "Trial in the Superior Court of Justice",
+      "Referral to the Ontario Human Rights Tribunal"
+    ],
+    correct: 1,
+    rationale: "The Act provides for <strong>compulsory arbitration</strong> by an independent arbitrator in three circumstances: where an employee is <strong>disciplined or discharged</strong>, where a party is <strong>not complying</strong> with the collective agreement, or where there is <strong>disagreement as to interpretation</strong>. This keeps disputes out of court during the agreement's life."
+  },
+  {
+    q: "A professional engineer working as a project manager directs other workers on a construction site. A serious incident occurs because of clearly unsafe conditions the engineer knowingly permitted. Which combination of legal exposure does the engineer potentially face?",
+    options: [
+      "Only professional discipline by the regulator",
+      "Civil liability only",
+      "Provincial occupational health and safety prosecution and potential Criminal Code criminal negligence charges",
+      "Federal employment standards penalties only"
+    ],
+    correct: 2,
+    rationale: "A project manager who directs the work of others falls within the Criminal Code duty to take reasonable steps to prevent bodily harm. They are also subject to prosecution under provincial <strong>OHSA</strong> as a supervisor. Where reckless disregard causes death or injury, <strong>criminal negligence charges</strong> may follow — as in the swing stage case, where the project manager received 3.5 years in jail."
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+const STORAGE_KEY = 'nppe_ch35_v1';
+const PASS_THRESHOLD = 0.65;
+
+let state = {
+  mode: 'practice',          // 'practice' or 'exam'
+  questionOrder: [],         // shuffled indices
+  currentIdx: 0,             // position in questionOrder
+  answers: {},               // { originalIdx: chosenOptionIdx }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  finished: false
+};
+
+// ============================================================
+// PERSISTENCE
+// ============================================================
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* storage may be unavailable */ }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.questionOrder && parsed.questionOrder.length === QUESTIONS.length) {
+        state = parsed;
+        return true;
+      }
+    }
+  } catch (e) { /* ignore */ }
+  return false;
+}
+
+// ============================================================
+// SHUFFLE (Fisher-Yates)
+// ============================================================
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function freshState(mode) {
+  state = {
+    mode: mode || 'practice',
+    questionOrder: shuffle(QUESTIONS.map((_, i) => i)),
+    currentIdx: 0,
+    answers: {},
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    finished: false
+  };
+  saveState();
+}
+
+// ============================================================
+// CANVAS CELEBRATIONS
+// ============================================================
+const canvas = document.getElementById('celebration-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function sizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+sizeCanvas();
+window.addEventListener('resize', sizeCanvas);
+
+class Particle {
+  constructor(x, y, type) {
+    this.x = x; this.y = y;
+    this.type = type || 'firework';
+    if (this.type === 'firework') {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 5;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.life = 1;
+      this.decay = 0.012 + Math.random() * 0.015;
+      this.size = 2 + Math.random() * 3;
+      const colors = ['#f4d27a','#d4af37','#ffe28a','#ffb84d','#fff2c7'];
+      this.color = colors[Math.floor(Math.random()*colors.length)];
+      this.gravity = 0.05;
+    } else if (this.type === 'star') {
+      this.angle = Math.random() * Math.PI * 2;
+      this.distance = 0;
+      this.maxDistance = 80 + Math.random() * 120;
+      this.speed = 3 + Math.random() * 3;
+      this.size = 8 + Math.random() * 10;
+      this.life = 1;
+      this.decay = 0.015;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.spin = (Math.random() - 0.5) * 0.2;
+      this.color = '#f4d27a';
+    } else if (this.type === 'sparkle') {
+      this.vx = (Math.random() - 0.5) * 1.5;
+      this.vy = -1 - Math.random() * 2;
+      this.life = 1;
+      this.decay = 0.02;
+      this.size = 1 + Math.random() * 2;
+      this.color = Math.random() > 0.5 ? '#f4d27a' : '#fff8e0';
+    }
+  }
+  update() {
+    if (this.type === 'firework') {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += this.gravity;
+      this.vx *= 0.98;
+      this.life -= this.decay;
+    } else if (this.type === 'star') {
+      this.distance += this.speed;
+      this.rotation += this.spin;
+      this.life -= this.decay;
+    } else if (this.type === 'sparkle') {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += 0.08;
+      this.life -= this.decay;
+    }
+  }
+  draw() {
+    ctx.save();
+    if (this.type === 'firework') {
+      ctx.globalAlpha = Math.max(0, this.life);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.type === 'star') {
+      const px = this.x + Math.cos(this.angle) * this.distance;
+      const py = this.y + Math.sin(this.angle) * this.distance;
+      ctx.globalAlpha = Math.max(0, this.life);
+      ctx.translate(px, py);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = this.color;
+      drawStar(ctx, 0, 0, 5, this.size, this.size / 2);
+      ctx.fill();
+    } else if (this.type === 'sparkle') {
+      ctx.globalAlpha = Math.max(0, this.life);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+function drawStar(c, cx, cy, spikes, outer, inner) {
+  let rot = Math.PI / 2 * 3;
+  let x = cx, y = cy;
+  const step = Math.PI / spikes;
+  c.beginPath();
+  c.moveTo(cx, cy - outer);
+  for (let i = 0; i < spikes; i++) {
+    x = cx + Math.cos(rot) * outer;
+    y = cy + Math.sin(rot) * outer;
+    c.lineTo(x, y);
+    rot += step;
+    x = cx + Math.cos(rot) * inner;
+    y = cy + Math.sin(rot) * inner;
+    c.lineTo(x, y);
+    rot += step;
+  }
+  c.lineTo(cx, cy - outer);
+  c.closePath();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+function fireworkBurst(x, y) {
+  for (let i = 0; i < 60; i++) particles.push(new Particle(x, y, 'firework'));
+}
+
+function starBurst(x, y) {
+  for (let i = 0; i < 12; i++) particles.push(new Particle(x, y, 'star'));
+}
+
+function sparkleRain(x, y) {
+  for (let i = 0; i < 25; i++) {
+    particles.push(new Particle(x + (Math.random()-0.5)*100, y, 'sparkle'));
+  }
+}
+
+function celebrate() {
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 3;
+  fireworkBurst(cx, cy);
+  setTimeout(() => fireworkBurst(cx - 200 + Math.random()*400, cy - 50 + Math.random()*100), 200);
+  setTimeout(() => fireworkBurst(cx - 200 + Math.random()*400, cy - 50 + Math.random()*100), 400);
+  starBurst(cx, cy);
+  sparkleRain(cx, cy);
+}
+
+function showScorePopup(text, x, y) {
+  const el = document.createElement('div');
+  el.className = 'score-popup';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function showStreakBadge(text) {
+  const el = document.createElement('div');
+  el.className = 'streak-badge';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2100);
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+const els = {
+  qNumber: document.getElementById('q-number'),
+  qText: document.getElementById('q-text'),
+  qOptions: document.getElementById('q-options'),
+  qRationale: document.getElementById('q-rationale'),
+  progressFill: document.getElementById('progress-fill'),
+  progressText: document.getElementById('progress-text'),
+  scoreValue: document.getElementById('score-value'),
+  streakValue: document.getElementById('streak-value'),
+  correctValue: document.getElementById('correct-value'),
+  prevBtn: document.getElementById('prev-btn'),
+  nextBtn: document.getElementById('next-btn'),
+  resetBtn: document.getElementById('reset-btn'),
+  submitBtn: document.getElementById('submit-btn'),
+  navGrid: document.getElementById('nav-grid'),
+  quizView: document.getElementById('quiz-view'),
+  resultsView: document.getElementById('results-view'),
+  resetModal: document.getElementById('reset-modal'),
+  cancelReset: document.getElementById('cancel-reset'),
+  confirmReset: document.getElementById('confirm-reset')
+};
+
+function correctCount() {
+  let n = 0;
+  for (const k in state.answers) {
+    if (state.answers[k] === QUESTIONS[k].correct) n++;
+  }
+  return n;
+}
+
+function answeredCount() {
+  return Object.keys(state.answers).length;
+}
+
+function updateStats() {
+  els.scoreValue.textContent = state.score;
+  els.streakValue.textContent = state.streak;
+  els.correctValue.textContent = correctCount();
+  els.streakValue.classList.toggle('hot', state.streak >= 3);
+}
+
+function updateProgress() {
+  const pct = ((state.currentIdx + 1) / QUESTIONS.length) * 100;
+  els.progressFill.style.width = pct + '%';
+  els.progressText.textContent = `Question ${state.currentIdx + 1} of ${QUESTIONS.length}`;
+}
+
+function renderNavGrid() {
+  els.navGrid.innerHTML = '';
+  state.questionOrder.forEach((origIdx, navPos) => {
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.textContent = navPos + 1;
+    if (navPos === state.currentIdx) cell.classList.add('current');
+    else if (origIdx in state.answers) {
+      if (state.mode === 'exam' && !state.finished) {
+        cell.classList.add('answered-exam');
+      } else {
+        const correct = state.answers[origIdx] === QUESTIONS[origIdx].correct;
+        cell.classList.add(correct ? 'answered-correct' : 'answered-incorrect');
+      }
+    }
+    cell.addEventListener('click', () => {
+      state.currentIdx = navPos;
+      saveState();
+      renderQuestion();
+    });
+    els.navGrid.appendChild(cell);
+  });
+}
+
+function renderQuestion() {
+  const origIdx = state.questionOrder[state.currentIdx];
+  const q = QUESTIONS[origIdx];
+  const answered = origIdx in state.answers;
+  const chosen = state.answers[origIdx];
+
+  els.qNumber.textContent = `Question ${String(state.currentIdx + 1).padStart(2,'0')} of ${QUESTIONS.length}`;
+  els.qText.textContent = q.q;
+
+  els.qOptions.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    const letters = ['A','B','C','D','E'];
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+
+    if (answered) {
+      btn.classList.add('disabled');
+      if (state.mode === 'practice' || state.finished) {
+        if (i === q.correct) btn.classList.add('correct');
+        else if (i === chosen) btn.classList.add('incorrect');
+      } else {
+        // exam in progress — just show selection
+        if (i === chosen) btn.classList.add('selected');
+      }
+    }
+
+    btn.addEventListener('click', () => onAnswer(origIdx, i, btn));
+    els.qOptions.appendChild(btn);
+  });
+
+  // Rationale (practice mode after answer, or any mode after exam finished)
+  els.qRationale.innerHTML = '';
+  if (answered && (state.mode === 'practice' || state.finished)) {
+    const isCorrect = chosen === q.correct;
+    const div = document.createElement('div');
+    div.className = 'rationale';
+    div.innerHTML = `
+      <div class="rationale-label">${isCorrect ? '✓ Correct' : '✕ Incorrect — Explanation'}</div>
+      <div class="rationale-text">${q.rationale}</div>
+    `;
+    els.qRationale.appendChild(div);
+  }
+
+  // Buttons
+  els.prevBtn.disabled = state.currentIdx === 0;
+  els.nextBtn.disabled = state.currentIdx === QUESTIONS.length - 1;
+
+  // Show submit button in exam mode if all answered (and not yet finished)
+  if (state.mode === 'exam' && !state.finished && answeredCount() === QUESTIONS.length) {
+    els.submitBtn.classList.remove('hidden');
+  } else {
+    els.submitBtn.classList.add('hidden');
+  }
+
+  updateProgress();
+  updateStats();
+  renderNavGrid();
+}
+
+function onAnswer(origIdx, choice, btnEl) {
+  if (origIdx in state.answers) return; // already answered
+
+  state.answers[origIdx] = choice;
+  const q = QUESTIONS[origIdx];
+  const isCorrect = choice === q.correct;
+
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+
+    // Score: base 100 + streak bonus
+    let points = 100;
+    let bonus = 0;
+    if (state.streak >= 2) bonus = (state.streak - 1) * 25;
+    const total = points + bonus;
+    state.score += total;
+
+    // Celebration
+    celebrate();
+    const rect = btnEl.getBoundingClientRect();
+    const popupX = rect.left + rect.width / 2;
+    const popupY = rect.top;
+    showScorePopup(bonus > 0 ? `+${total} (×${state.streak})` : `+${total}`, popupX, popupY);
+
+    // Streak milestones
+    if (state.streak === 3) showStreakBadge('🔥 Triple Streak!');
+    else if (state.streak === 5) showStreakBadge('⭐ Five in a Row!');
+    else if (state.streak === 10) showStreakBadge('👑 Perfect Ten!');
+    else if (state.streak === 15) showStreakBadge('💎 Fifteen Strong!');
+    else if (state.streak === 20) showStreakBadge('🏆 Twenty Flawless!');
+    else if (state.streak > 0 && state.streak % 25 === 0) showStreakBadge(`✨ ${state.streak} in a Row!`);
+
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+  renderQuestion();
+}
+
+// ============================================================
+// RESULTS
+// ============================================================
+function showResults() {
+  state.finished = true;
+  saveState();
+
+  const correct = correctCount();
+  const total = QUESTIONS.length;
+  const pct = correct / total;
+  const pctDisplay = Math.round(pct * 100);
+  const passed = pct >= PASS_THRESHOLD;
+
+  let tierLabel, feedback;
+  if (pct >= 0.90) {
+    tierLabel = 'Distinction';
+    feedback = "Outstanding mastery. You can discuss federal, provincial, and Criminal Code employment exposures with the precision the NPPE expects.";
+  } else if (pct >= 0.80) {
+    tierLabel = 'Strong Pass';
+    feedback = "Solid command of the material — well above the NPPE pass mark. Tighten any rationales you missed and you are exam-ready.";
+  } else if (pct >= 0.65) {
+    tierLabel = 'Pass';
+    feedback = "You cleared the 65% NPPE threshold. Revisit incorrect items closely; statutory thresholds and numerical facts are easy points to recover.";
+  } else if (pct >= 0.50) {
+    tierLabel = 'Below Threshold';
+    feedback = "Close — but the NPPE pass mark is 65%. Re-read the chapter focusing on statutory thresholds, the BFOR test, and the Criminal Code workplace duty.";
+  } else {
+    tierLabel = 'Needs Review';
+    feedback = "More foundational review is needed. Work through the rationales, then re-attempt; this material rewards repeated exposure.";
+  }
+
+  els.quizView.classList.add('hidden');
+  els.resultsView.classList.remove('hidden');
+  els.resultsView.innerHTML = `
+    <div class="results">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-percent">${pctDisplay}%</div>
+      <div class="results-fraction">${correct} correct out of ${total}</div>
+      <div class="results-tier ${passed ? 'pass' : 'fail'}">${passed ? '✓' : '✕'} ${tierLabel}</div>
+      <div class="results-feedback">${feedback}</div>
+      <div class="results-stats">
+        <div class="result-stat">
+          <div class="result-stat-value">${state.score}</div>
+          <div class="result-stat-label">Final Score</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-value">${state.bestStreak}</div>
+          <div class="result-stat-label">Best Streak</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-value">${pctDisplay}%</div>
+          <div class="result-stat-label">Accuracy</div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-secondary" id="review-btn">Review Answers</button>
+        <button class="btn btn-primary" id="restart-btn">Take Quiz Again</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('review-btn').addEventListener('click', () => {
+    els.quizView.classList.remove('hidden');
+    els.resultsView.classList.add('hidden');
+    state.currentIdx = 0;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    freshState(state.mode);
+    els.quizView.classList.remove('hidden');
+    els.resultsView.classList.add('hidden');
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Big celebration on pass
+  if (passed) {
+    setTimeout(() => {
+      celebrate();
+      setTimeout(celebrate, 300);
+      setTimeout(celebrate, 600);
+    }, 400);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// MODE TOGGLE
+// ============================================================
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const newMode = btn.dataset.mode;
+    if (newMode === state.mode) return;
+    if (answeredCount() > 0 && !state.finished) {
+      if (!confirm("Switching modes will reset your current progress. Continue?")) return;
+    }
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    freshState(newMode);
+    els.quizView.classList.remove('hidden');
+    els.resultsView.classList.add('hidden');
+    renderQuestion();
+  });
+});
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+els.prevBtn.addEventListener('click', () => {
+  if (state.currentIdx > 0) {
+    state.currentIdx--;
+    saveState();
+    renderQuestion();
+  }
+});
+
+els.nextBtn.addEventListener('click', () => {
+  if (state.currentIdx < QUESTIONS.length - 1) {
+    state.currentIdx++;
+    saveState();
+    renderQuestion();
+  }
+});
+
+els.submitBtn.addEventListener('click', () => {
+  if (confirm("Submit your exam? You will not be able to change answers afterward.")) {
+    showResults();
+  }
+});
+
+// Keyboard nav
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (state.finished) return;
+  if (e.key === 'ArrowLeft' && state.currentIdx > 0) els.prevBtn.click();
+  else if (e.key === 'ArrowRight' && state.currentIdx < QUESTIONS.length - 1) els.nextBtn.click();
+  else if (['1','2','3','4'].includes(e.key)) {
+    const idx = parseInt(e.key) - 1;
+    const origIdx = state.questionOrder[state.currentIdx];
+    if (!(origIdx in state.answers)) {
+      const btn = els.qOptions.children[idx];
+      if (btn) btn.click();
+    }
+  }
+});
+
+// ============================================================
+// RESET
+// ============================================================
+els.resetBtn.addEventListener('click', () => {
+  els.resetModal.classList.add('active');
+});
+
+els.cancelReset.addEventListener('click', () => {
+  els.resetModal.classList.remove('active');
+});
+
+els.confirmReset.addEventListener('click', () => {
+  freshState(state.mode);
+  els.resetModal.classList.remove('active');
+  els.quizView.classList.remove('hidden');
+  els.resultsView.classList.add('hidden');
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Close modal on overlay click
+els.resetModal.addEventListener('click', (e) => {
+  if (e.target === els.resetModal) els.resetModal.classList.remove('active');
+});
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  if (!loadState()) {
+    freshState('practice');
+  }
+  // sync mode toggle UI
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === state.mode);
+  });
+  if (state.finished) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Quiz — Chapters 17, 18, 19 (Contract Interpretation, Discharge, Breach)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #0a1428;
+    --navy-800: #0f1d3a;
+    --navy-700: #16284f;
+    --navy-600: #1d3464;
+    --navy-500: #2a4684;
+    --gold-300: #f5d98a;
+    --gold-400: #e8c46a;
+    --gold-500: #d4a84a;
+    --gold-600: #b48a36;
+    --cream: #f4ead5;
+    --white-soft: #f8f5ec;
+    --green-correct: #4ea672;
+    --red-wrong: #d35a5a;
+    --text-light: #e8ddc3;
+    --text-muted: #b8a98a;
+    --shadow-deep: 0 14px 40px rgba(0,0,0,0.45);
+    --radius-md: 12px;
+    --radius-lg: 18px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: radial-gradient(ellipse at top, var(--navy-700) 0%, var(--navy-900) 75%) fixed;
+    color: var(--text-light);
+    min-height: 100vh;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* Fireworks canvas overlay */
+  #celebrate-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Floating popup score messages */
+  #popup-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10000;
+  }
+  .popup {
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    color: var(--gold-300);
+    text-shadow: 0 0 14px rgba(245, 217, 138, 0.8), 0 2px 6px rgba(0,0,0,0.6);
+    font-size: 38px;
+    animation: float-up 1.6s ease-out forwards;
+    white-space: nowrap;
+  }
+  @keyframes float-up {
+    0% { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+    20% { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
+    100% { transform: translate(-50%, -120px) scale(1.2); opacity: 0; }
+  }
+
+  /* Streak badge */
+  .streak-flame {
+    position: absolute;
+    font-size: 48px;
+    animation: flame-burst 1.4s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes flame-burst {
+    0% { transform: translate(-50%, 0) scale(0.5) rotate(-10deg); opacity: 0; }
+    25% { transform: translate(-50%, -30px) scale(1.3) rotate(5deg); opacity: 1; }
+    100% { transform: translate(-50%, -150px) scale(0.9) rotate(-5deg); opacity: 0; }
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 24px 0 18px;
+    border-bottom: 1px solid rgba(212, 168, 74, 0.25);
+    margin-bottom: 28px;
+  }
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--gold-300);
+    margin: 0 0 6px;
+    letter-spacing: 0.3px;
+  }
+  .header .subtitle {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  /* HUD bar */
+  .hud {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-800));
+    border: 1px solid rgba(212, 168, 74, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow-deep);
+  }
+  .hud-item {
+    text-align: center;
+    min-width: 90px;
+  }
+  .hud-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+  .hud-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold-300);
+  }
+
+  /* Mode buttons */
+  .mode-bar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    background: transparent;
+    border: 1.5px solid rgba(212, 168, 74, 0.55);
+    color: var(--text-light);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+  .mode-btn:hover {
+    background: rgba(212, 168, 74, 0.12);
+  }
+  .mode-btn.active {
+    background: var(--gold-500);
+    color: var(--navy-900);
+    border-color: var(--gold-500);
+    box-shadow: 0 0 18px rgba(212, 168, 74, 0.45);
+  }
+
+  /* Action buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .action-btn {
+    background: rgba(212, 168, 74, 0.08);
+    border: 1px solid rgba(212, 168, 74, 0.4);
+    color: var(--gold-300);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+  }
+  .action-btn:hover {
+    background: rgba(212, 168, 74, 0.18);
+    transform: translateY(-1px);
+  }
+  .action-btn.danger {
+    border-color: rgba(211, 90, 90, 0.55);
+    color: #ecaaaa;
+  }
+  .action-btn.danger:hover {
+    background: rgba(211, 90, 90, 0.12);
+  }
+
+  /* Question navigator grid */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    background: var(--navy-800);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: 22px;
+    border: 1px solid rgba(212, 168, 74, 0.18);
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy-600);
+    color: var(--text-muted);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1.5px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .nav-cell:hover {
+    transform: scale(1.08);
+    border-color: var(--gold-400);
+  }
+  .nav-cell.current {
+    border-color: var(--gold-300);
+    background: var(--navy-500);
+    color: var(--gold-300);
+  }
+  .nav-cell.answered {
+    background: rgba(78, 166, 114, 0.35);
+    color: var(--cream);
+  }
+  .nav-cell.correct-pm {
+    background: var(--green-correct);
+    color: white;
+  }
+  .nav-cell.wrong-pm {
+    background: var(--red-wrong);
+    color: white;
+  }
+
+  /* Question card */
+  .card {
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-700));
+    border: 1px solid rgba(212, 168, 74, 0.22);
+    border-radius: var(--radius-lg);
+    padding: 30px 30px 26px;
+    box-shadow: var(--shadow-deep);
+    margin-bottom: 22px;
+  }
+  .qnum {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    color: var(--gold-400);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .qtext {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--white-soft);
+    margin-bottom: 22px;
+    line-height: 1.45;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    background: var(--navy-600);
+    border: 1.5px solid rgba(212, 168, 74, 0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    color: var(--text-light);
+    font-size: 14.5px;
+  }
+  .option:hover:not(.disabled) {
+    border-color: var(--gold-400);
+    background: var(--navy-500);
+    transform: translateX(3px);
+  }
+  .option.selected {
+    border-color: var(--gold-300);
+    background: var(--navy-500);
+    box-shadow: 0 0 0 2px rgba(245, 217, 138, 0.18);
+  }
+  .option.correct {
+    border-color: var(--green-correct);
+    background: rgba(78, 166, 114, 0.18);
+  }
+  .option.wrong {
+    border-color: var(--red-wrong);
+    background: rgba(211, 90, 90, 0.18);
+  }
+  .option.disabled {
+    cursor: default;
+  }
+  .opt-letter {
+    background: var(--gold-500);
+    color: var(--navy-900);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .option.correct .opt-letter {
+    background: var(--green-correct);
+    color: white;
+  }
+  .option.wrong .opt-letter {
+    background: var(--red-wrong);
+    color: white;
+  }
+  .opt-text { flex: 1; padding-top: 3px; }
+
+  /* Rationale */
+  .rationale {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: rgba(212, 168, 74, 0.07);
+    border-left: 3px solid var(--gold-500);
+    border-radius: 6px;
+    font-size: 13.5px;
+    color: var(--cream);
+    line-height: 1.6;
+    display: none;
+  }
+  .rationale.show { display: block; }
+  .rationale-label {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-300);
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Nav buttons */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 22px;
+    gap: 10px;
+  }
+  .nav-btn {
+    background: var(--gold-500);
+    color: var(--navy-900);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+  }
+  .nav-btn:hover:not(:disabled) {
+    background: var(--gold-300);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 168, 74, 0.35);
+  }
+  .nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .nav-btn.secondary {
+    background: transparent;
+    color: var(--gold-300);
+    border: 1.5px solid var(--gold-500);
+  }
+  .nav-btn.secondary:hover:not(:disabled) {
+    background: rgba(212, 168, 74, 0.12);
+  }
+
+  /* Progress bar */
+  .progress {
+    height: 6px;
+    background: var(--navy-800);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-500), var(--gold-300));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* Results */
+  .results {
+    text-align: center;
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-700));
+    border: 1.5px solid var(--gold-500);
+    border-radius: var(--radius-lg);
+    padding: 44px 32px;
+    box-shadow: var(--shadow-deep);
+  }
+  .results h2 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-300);
+    font-size: 38px;
+    margin: 0 0 10px;
+  }
+  .results .score-big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 78px;
+    font-weight: 700;
+    color: var(--gold-300);
+    margin: 16px 0;
+    text-shadow: 0 0 30px rgba(245, 217, 138, 0.4);
+  }
+  .results .verdict {
+    font-size: 18px;
+    margin: 8px 0 22px;
+    color: var(--cream);
+  }
+  .results .verdict.pass { color: #aef0c5; }
+  .results .verdict.fail { color: #ffb6b6; }
+  .results .breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 22px 0;
+    flex-wrap: wrap;
+  }
+  .results .breakdown div {
+    text-align: center;
+  }
+  .results .breakdown .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold-300);
+  }
+  .results .breakdown .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+  }
+
+  /* Modal */
+  .modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 20, 40, 0.78);
+    z-index: 11000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--navy-800);
+    border: 1px solid var(--gold-500);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow-deep);
+  }
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-300);
+    margin: 0 0 12px;
+    font-size: 26px;
+  }
+  .modal p {
+    color: var(--cream);
+    font-size: 14px;
+    margin: 0 0 22px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 30px; }
+    .qtext { font-size: 18px; }
+    .results .score-big { font-size: 62px; }
+    .nav-grid { grid-template-columns: repeat(5, 1fr); }
+    .container { padding: 20px 14px 60px; }
+    .card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="celebrate-canvas"></canvas>
+<div id="popup-layer"></div>
+
+<div class="container">
+  <div class="header">
+    <h1>NPPE Practice Quiz</h1>
+    <div class="subtitle">Chapters 17 &middot; 18 &middot; 19 &mdash; Interpretation &middot; Discharge &middot; Breach</div>
+  </div>
+
+  <div class="hud">
+    <div class="hud-item">
+      <div class="hud-label">Score</div>
+      <div class="hud-value" id="hud-score">0</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Streak</div>
+      <div class="hud-value" id="hud-streak">0</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Best</div>
+      <div class="hud-value" id="hud-best">0</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Answered</div>
+      <div class="hud-value" id="hud-answered">0 / 50</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Accuracy</div>
+      <div class="hud-value" id="hud-accuracy">&mdash;</div>
+    </div>
+  </div>
+
+  <div class="mode-bar">
+    <button class="mode-btn active" data-mode="practice" id="btn-practice">Practice Mode</button>
+    <button class="mode-btn" data-mode="exam" id="btn-exam">Exam Mode</button>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn" id="btn-shuffle">Shuffle Questions</button>
+    <button class="action-btn" id="btn-submit-exam" style="display:none;">Submit Exam</button>
+    <button class="action-btn danger" id="btn-reset">Reset Quiz</button>
+  </div>
+
+  <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="nav-grid" id="nav-grid"></div>
+
+  <div id="quiz-area"></div>
+</div>
+
+<!-- Reset confirmation modal -->
+<div class="modal-bg" id="reset-modal">
+  <div class="modal">
+    <h3>Reset Quiz?</h3>
+    <p>This will clear your current progress, score, and answers. Your best score will remain. Continue?</p>
+    <div class="modal-actions">
+      <button class="nav-btn secondary" id="reset-cancel">Cancel</button>
+      <button class="nav-btn" id="reset-confirm" style="background:var(--red-wrong);color:white;">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===========================
+   QUESTION BANK (50 items)
+   =========================== */
+const QUESTIONS = [
+  // ===== Chapter 17: Contract Interpretation (Q1–15) =====
+  {
+    q: "A dispute arises between an engineering firm and its client regarding the meaning of a clause in their consulting agreement. The court is asked to interpret the clause. Which approach to contract interpretation focuses primarily on the precise wording of the agreement and, in the extreme, relies on dictionary meanings?",
+    options: [
+      "The liberal approach",
+      "The strict approach",
+      "The reasonableness approach",
+      "The intent-only approach"
+    ],
+    answer: 1,
+    rationale: "The strict construction approach focuses on the precise words in the agreement and, in the extreme, relies on dictionary definitions. The liberal approach, by contrast, takes into account the intent of the parties and, in the extreme, may lead to too much speculation about that intent."
+  },
+  {
+    q: "In Hunter Engineering Company v Syncrude Canada Ltd, what approach to contract interpretation did the majority of the Supreme Court of Canada endorse (where the contract is not unconscionable)?",
+    options: [
+      "Liberal construction emphasising party intent",
+      "Strict construction of contract wording",
+      "Mandatory arbitration of all disputes",
+      "Reliance solely on extrinsic evidence"
+    ],
+    answer: 1,
+    rationale: "In its 1989 decision, the Supreme Court majority endorsed strict construction of contract wording, provided the contract is not unconscionable. Two justices favoured an alternative 'fair and reasonable in all the circumstances' test, but they were in the minority."
+  },
+  {
+    q: "Two engineering parties dispute an ambiguously drafted indemnity clause. The clause was drafted by the larger party and presented to the smaller party on a take-it-or-leave-it basis. Which rule of interpretation is the smaller party most likely to invoke?",
+    options: [
+      "The parol evidence rule",
+      "The doctrine of frustration",
+      "The rule of contra proferentem",
+      "The doctrine of substantial compliance"
+    ],
+    answer: 2,
+    rationale: "Contra proferentem provides that where a contract is ambiguous, it will be construed against the party that drafted the provision. It is a convenient basis on which to attack a poorly drafted, ambiguous document."
+  },
+  {
+    q: "What does the rule of contra proferentem state?",
+    options: [
+      "Ambiguous contract terms are construed against the party who drafted them",
+      "Verbal agreements always override written agreements",
+      "Implied terms always override express terms",
+      "The party with greater bargaining power bears the burden of proof in all disputes"
+    ],
+    answer: 0,
+    rationale: "The rule provides that ambiguous wording is interpreted against the drafter. The lesson for engineers and drafters is that clarity matters: ambiguity creates risk for the party who wrote the clause."
+  },
+  {
+    q: "An engineering firm verbally agrees with a contractor that a particular payment milestone will not apply if steel prices rise sharply. The final written contract makes no mention of this. The contractor later attempts to lead evidence of the verbal arrangement. Which rule most likely prevents that evidence?",
+    options: [
+      "The rule of contra proferentem",
+      "The parol evidence rule",
+      "The doctrine of frustration",
+      "The rule of substantial compliance"
+    ],
+    answer: 1,
+    rationale: "The parol evidence rule generally precludes extrinsic evidence of terms agreed verbally before signing that were not included in the final written contract. The practical takeaway is to ensure all agreed terms are captured in the written contract."
+  },
+  {
+    q: "Which case involved a contract for shared ownership of an invention, in which the parties had verbally agreed the purchase would be conditional on approval by two engineers, even though that condition was not written into the contract?",
+    options: [
+      "The Moorcock",
+      "Pym v Campbell",
+      "Hadley v Baxendale",
+      "Hunter Engineering v Syncrude Canada"
+    ],
+    answer: 1,
+    rationale: "In Pym v Campbell, the court admitted extrinsic evidence of a condition precedent — the requirement of two engineers' approval. The case illustrates an exception to the parol evidence rule: where it can be substantiated that the written document was never intended to operate as a binding contract unless a condition was first satisfied."
+  },
+  {
+    q: "After a contract has been signed, can the parties alter its terms?",
+    options: [
+      "No — contracts are immutable after signing",
+      "Only with a court order",
+      "Yes, provided both parties agree and the essential contract elements are present in the amendment",
+      "Only if the contract contains an express force majeure provision"
+    ],
+    answer: 2,
+    rationale: "The parol evidence rule relates to extrinsic evidence prior to execution. After execution, parties remain free to alter the contract by mutual agreement, provided the essential contract elements (offer, acceptance, consideration, intention, capacity, lawful purpose) are present in the amendment."
+  },
+  {
+    q: "A steamship was damaged when, at low tide, it settled on a hard ridge of ground at a jetty where it had been moored under a paid mooring arrangement. There was no express term about safe mooring at low tide. The court implied a term to give business efficacy to the arrangement. Which case is this?",
+    options: [
+      "Davis Contractors v Fareham",
+      "The Moorcock",
+      "Pym v Campbell",
+      "Alkok v Grymek"
+    ],
+    answer: 1,
+    rationale: "The Moorcock (1889) is the leading authority for the implication of terms to give business efficacy to a contract. The court reasoned that the parties must have intended the vessel would be safe at low tide and implied a term accordingly."
+  },
+  {
+    q: "In Markland Associates Ltd v Lohnes, the Nova Scotia Supreme Court held that, absent express terms, certain implied terms applied to a building contract. Which of the following was NOT identified as an implied term in that decision?",
+    options: [
+      "Materials and workmanship would be of a proper standard or quality",
+      "The work would be carried out in a proper and workmanlike manner",
+      "The completed work and materials would be fit for the purposes intended",
+      "The contractor would automatically receive a ten percent premium for unforeseen complications"
+    ],
+    answer: 3,
+    rationale: "The implied terms identified in Markland addressed quality, workmanship, fitness for purpose, and completion within a reasonable time without undue delay. Automatic premiums for unforeseen complications are not part of that list and would generally require an express clause."
+  },
+  {
+    q: "In G Ford Homes Ltd v Draft Masonry (York) Co Ltd, the Ontario Court of Appeal implied a term that staircases would comply with the Ontario Building Code. The court applied the principle from which earlier landmark decision?",
+    options: [
+      "The Moorcock",
+      "Hadley v Baxendale",
+      "Pym v Campbell",
+      "Hunter Engineering v Syncrude Canada"
+    ],
+    answer: 0,
+    rationale: "The Court of Appeal applied the business-efficacy principle from The Moorcock. Because the subcontractor was an expert in stair manufacture and installation and was aware of code requirements, it was natural and reasonable to imply a term requiring code-compliant work."
+  },
+  {
+    q: "Per the Pigott Construction Co v W J Crowe case, when will a court imply a stipulation into a written contract?",
+    options: [
+      "Whenever one party requests it",
+      "Whenever the contract appears unfair to one side",
+      "Only when, considering the contract reasonably and in a business manner, an implication necessarily arises that the parties must have intended the term to exist",
+      "Only when the contract is completely silent on a matter"
+    ],
+    answer: 2,
+    rationale: "The Ontario Court of Appeal in Pigott Construction held that the court has no right to imply a stipulation unless, on a reasonable, business-like reading, an implication necessarily arises that the parties must have intended it. The test is one of necessity, not mere desirability."
+  },
+  {
+    q: "What is the most important practical takeaway from Canadian contract-interpretation principles for engineering practice?",
+    options: [
+      "Engineers should rely on verbal arrangements wherever possible",
+      "Engineers should avoid seeking legal advice on contracts to control costs",
+      "Engineers and clients should ensure contracts are drafted with sufficient clarity to minimise the need for court interpretation, and should obtain appropriate legal advice",
+      "Engineers should draft all their own contracts to retain control"
+    ],
+    answer: 2,
+    rationale: "The text emphasises that engineering projects involve important contract documents and that appropriate legal advice should be obtained. Clear drafting reduces the likelihood of disputes and the need for court interpretation."
+  },
+  {
+    q: "An experienced subcontractor in residential stair manufacture and installation declines to review the architectural drawings, supplies stairs based on its own measurements, and the installed stairs fail to meet building-code headroom requirements. Based on G Ford Homes v Draft Masonry, what is the likely result?",
+    options: [
+      "No implied term applies because none was expressly agreed",
+      "The subcontractor recovers in full because the owner had the plans",
+      "An implied term that the work would comply with the building code applies, and the subcontractor's claim fails",
+      "The contract is automatically discharged by frustration"
+    ],
+    answer: 2,
+    rationale: "Because the subcontractor was an expert aware of code requirements, the Court of Appeal implied a term requiring code-compliant installation. To sanction the non-compliant stairs would, the court said, be tantamount to sanctioning an illegal contract."
+  },
+  {
+    q: "When a court interprets an ambiguous contract, it may listen to witnesses. What may such witnesses testify about?",
+    options: [
+      "Only the financial circumstances of the parties",
+      "Only matters of public policy",
+      "The intention of those who signed the contract and the subject matter of the contract",
+      "Only the physical structure of the contract document itself"
+    ],
+    answer: 2,
+    rationale: "Witnesses may testify as to the intention of the persons who signed the contract and as to the contract's subject matter. The court may be required to judge the relative credibility of those witnesses."
+  },
+  {
+    q: "Two justices in Hunter Engineering v Syncrude favoured an alternative approach to the majority's strict-construction view. What was that alternative?",
+    options: [
+      "Considering whether, in all the circumstances, it would be 'fair and reasonable' to enforce a contract clause",
+      "Strict reliance on dictionary definitions and nothing else",
+      "Mandatory referral of all contract disputes to arbitration",
+      "A refusal to enforce contracts between commercial parties"
+    ],
+    answer: 0,
+    rationale: "Two justices favoured a 'fair and reasonable in all the circumstances' test for enforcement of contract clauses. The majority, however, adopted strict construction so long as the contract is not unconscionable."
+  },
+
+  // ===== Chapter 18: Discharge of Contracts (Q16–30) =====
+  {
+    q: "Which of the following is NOT recognised as a means of discharging a contract?",
+    options: [
+      "Performance of all contractual obligations",
+      "Mutual agreement of the parties",
+      "Operation of an express termination clause",
+      "Unilateral cancellation by either party at will, without cause"
+    ],
+    answer: 3,
+    rationale: "Performance, agreement, discharge pursuant to express terms, and discharge by frustration are recognised means of discharging a contract. Unilateral cancellation at will is not — a party who walks away without justification is in breach."
+  },
+  {
+    q: "A construction contractor completes all work under a contract, but the contract contains a one-year warranty for remedying defects. Has the contract been fully discharged by performance?",
+    options: [
+      "Yes — completion of the work always discharges the contract immediately",
+      "No — the contract remains in effect until the warranty obligations are also fulfilled",
+      "Yes — warranty obligations are not part of the contract",
+      "No — contracts are never discharged by performance alone"
+    ],
+    answer: 1,
+    rationale: "Performance discharges a contract only when all obligations are fulfilled. Where warranty or other ongoing obligations remain (a common feature of construction and equipment supply contracts), the contract remains in effect until those are satisfied."
+  },
+  {
+    q: "Two parties to an equipment supply contract decide, owing to changed business conditions, that they no longer wish to proceed. May they discharge the contract by mutual agreement?",
+    options: [
+      "No — contracts can only be discharged by performance",
+      "Only if a court approves the cancellation",
+      "Yes — parties are always free to amend or cancel a contract on mutually agreeable terms",
+      "Only if neither party has yet started performance"
+    ],
+    answer: 2,
+    rationale: "Parties to a contract are always free to amend or cancel the contract by mutual agreement. This is one of the four recognised means of discharge."
+  },
+  {
+    q: "A construction contract provides that if the engineer determines the contractor has failed to substantially comply with contract requirements, the owner may terminate the contract. This is an example of:",
+    options: [
+      "Discharge by frustration",
+      "Discharge by repudiation",
+      "Discharge pursuant to express terms",
+      "Quantum meruit"
+    ],
+    answer: 2,
+    rationale: "It is good practice to include termination triggers — such as bankruptcy or failure to perform — in the contract. These are express-term discharge mechanisms that avoid the difficulty of arguing breach of a fundamental term."
+  },
+  {
+    q: "Which of the following best defines the doctrine of frustration?",
+    options: [
+      "A doctrine that allows a party to discharge a contract simply because it has become unprofitable",
+      "A common-law doctrine that discharges a contract where, without default by either party, exceptional unforeseen circumstances radically change the obligations of the parties",
+      "A doctrine that allows courts to imply terms into contracts",
+      "A doctrine that excuses parties for any delay caused by labour shortages"
+    ],
+    answer: 1,
+    rationale: "Frustration applies only where, without default, exceptional and unforeseen circumstances radically change the obligations of the parties and discharge by frustration is the only practical and reasonable solution."
+  },
+  {
+    q: "In Metropolitan Water Board v Dick, Kerr and Company, a contract for the construction of a reservoir over a six-year period was interrupted in 1916 when the Ministry of Munitions ordered the contractor to cease work. The House of Lords held that:",
+    options: [
+      "The contract was discharged by frustration",
+      "The contract's force majeure provision applied and time should simply be extended",
+      "The contractor was in breach",
+      "The contract was discharged by performance"
+    ],
+    answer: 0,
+    rationale: "Although the contract contained a force majeure clause, the House of Lords held that the wartime cessation order so radically changed the character and duration of the contract that the doctrine of frustration applied. The case is the classic example of frustration applied despite the presence of a force majeure clause."
+  },
+  {
+    q: "In Davis Contractors Ltd v Fareham Urban District Council, completion of a building contract for 78 houses was delayed by 14 months because of a labour shortage. The House of Lords held that:",
+    options: [
+      "The contract was frustrated",
+      "The contract was not frustrated; the events made performance more onerous but did not satisfy the test for frustration",
+      "The contract was discharged by repudiation",
+      "The contractor was entitled to a quantum meruit award"
+    ],
+    answer: 1,
+    rationale: "The House of Lords held there had been an unexpected turn of events but that this rendered performance more onerous, not radically different. Frustration applies only where the obligation would, if performed, be a fundamentally different thing — not merely a more difficult one."
+  },
+  {
+    q: "In Swanson Construction Co Ltd v Government of Manitoba, the Manitoba Court of Appeal refused to apply the doctrine of frustration. Why?",
+    options: [
+      "Because some delay is foreseeable in construction and the contractor should have priced the risk into its tender",
+      "Because the contract had not been signed",
+      "Because the defendant had repudiated the contract",
+      "Because the contractor had not pleaded the doctrine correctly"
+    ],
+    answer: 0,
+    rationale: "The court pointed out that in many building contracts some delay is foreseeable. A contractor pushed from summer to winter conditions because of a delayed site handover should have adjusted its tender accordingly — that is not the radical, unforeseen change frustration requires."
+  },
+  {
+    q: "A force majeure clause in an equipment supply contract typically provides for an extension of time in the event of all but which of the following?",
+    options: [
+      "War, riot, or insurrection",
+      "Flood or other natural events beyond either party's control",
+      "Labour disputes",
+      "Routine fluctuations in the supplier's production schedule"
+    ],
+    answer: 3,
+    rationale: "Force majeure provisions typically capture extraordinary events outside the control of either party: war, riot, insurrection, flood, labour dispute, and similar events. Routine production scheduling is well within the supplier's control and is not a force majeure event."
+  },
+  {
+    q: "Which of the following best reflects the Canadian and English courts' approach to the doctrine of frustration?",
+    options: [
+      "Frustration is widely available whenever a contract becomes inconvenient",
+      "Frustration may not be invoked merely because performance has become more onerous; it applies only in exceptional, unforeseen circumstances",
+      "Frustration must always be expressly written into a contract to be available",
+      "Frustration discharges all obligations, including obligations to pay for work already performed"
+    ],
+    answer: 1,
+    rationale: "The cases — Metropolitan Water Board, Davis Contractors, and Swanson — together emphasise that frustration is reserved for exceptional, unforeseen circumstances that radically change the contract. Onerousness, inconvenience, or material loss alone are not enough."
+  },
+  {
+    q: "A construction company contracts to build 45 houses at a remote mine site within twelve months. Owing to a local labour shortage, only 30 are completed. The company abandons the project, claiming frustration. Based on Davis Contractors and Swanson, the company's argument is:",
+    options: [
+      "Likely to succeed, because labour shortages always discharge a contract",
+      "Likely to fail, because the labour shortage made performance more onerous but did not radically change the nature of the contract",
+      "Likely to succeed, but only if a force majeure clause exists",
+      "Irrelevant to contract law"
+    ],
+    answer: 1,
+    rationale: "This scenario closely parallels Davis Contractors and Swanson. Labour shortages are foreseeable and a tendering contractor should have priced the risk. The argument that the contract was frustrated would almost certainly fail."
+  },
+  {
+    q: "A renovation contract becomes impossible to perform because the building involved has burned to the ground before work began. This is an example of:",
+    options: [
+      "Repudiation",
+      "Liquidated damages",
+      "Discharge by frustration",
+      "Substantial compliance"
+    ],
+    answer: 2,
+    rationale: "Destruction of the subject matter of the contract — without fault of either party — is the textbook example of frustration. The thing contracted for no longer exists, so the contract is discharged."
+  },
+  {
+    q: "An equipment supply contract states that the manufacturer must remedy defects for 24 months after delivery. This is an example of:",
+    options: [
+      "An obligation that survives initial performance, keeping the contract in effect until the warranty obligations are fulfilled",
+      "Discharge by frustration",
+      "Repudiation",
+      "An implied term that cannot be expressly written"
+    ],
+    answer: 0,
+    rationale: "Some contracts contemplate obligations that extend beyond initial performance and payment. Warranty obligations in equipment supply and construction contracts are a common example; the contract remains in effect for the warranty period."
+  },
+  {
+    q: "In Davis Contractors v Fareham, what factors did the House of Lords identify as preventing the application of frustration?",
+    options: [
+      "The cause of delay (labour shortage) was reasonably foreseeable and was not provided for by special contractual stipulation, and timely completion was not equally significant for both sides",
+      "The contract was unconscionable",
+      "The contractor had already received full payment",
+      "The contract did not contain a force majeure clause"
+    ],
+    answer: 0,
+    rationale: "The Lords held that frustration was unavailable because (a) the labour shortage was foreseeable and could have been the subject of a special stipulation, and (b) the contractor had built risk margins into its tender; delay risk was thus part of the bargain."
+  },
+  {
+    q: "Which statement best describes the relationship between a force majeure clause and the common-law doctrine of frustration?",
+    options: [
+      "Force majeure clauses entirely replace the common-law doctrine",
+      "Force majeure clauses provide a contractual mechanism for specific listed events; the doctrine of frustration is a separate common-law doctrine applicable only in exceptional circumstances",
+      "Force majeure clauses always prevent a finding of frustration",
+      "Force majeure and frustration are identical in effect"
+    ],
+    answer: 1,
+    rationale: "The clauses operate alongside the doctrine. Metropolitan Water Board v Dick, Kerr is the leading illustration: even where a force majeure clause exists, frustration may still apply if the circumstances radically change the contract beyond what the clause addresses."
+  },
+
+  // ===== Chapter 19: Breach of Contract (Q31–50) =====
+  {
+    q: "An obligation that is essential or vital to a contract is properly called a:",
+    options: [
+      "Warranty",
+      "Condition",
+      "Covenant",
+      "Stipulation"
+    ],
+    answer: 1,
+    rationale: "An essential or vital obligation is called a condition. A non-essential obligation is called a warranty. Breach of either may entitle the innocent party to damages, but only breach of a fundamental condition entitles the innocent party to treat the contract as discharged."
+  },
+  {
+    q: "Which statement about breach of contract is most accurate?",
+    options: [
+      "Any breach, however minor, allows the innocent party to treat the contract as discharged",
+      "Only breach of a condition of fundamental importance entitles the innocent party to treat the contract as discharged; both breach of a condition and breach of a warranty may entitle the innocent party to damages",
+      "Breach of warranty always entitles the innocent party to discharge the contract",
+      "Breach of warranty never entitles the innocent party to damages"
+    ],
+    answer: 1,
+    rationale: "Damages are available for breach of either a condition or a warranty. Only breach of a fundamental condition that renders further performance purposeless for the innocent party justifies treating the contract as discharged."
+  },
+  {
+    q: "The word 'warranty' has more than one meaning in contract law. In addition to describing a minor term of a contract, it may also mean:",
+    options: [
+      "Penalty",
+      "Guarantee — for example, a manufacturer's warranty of equipment performance, which may itself be an essential term of the supply contract",
+      "Force majeure",
+      "Quantum meruit"
+    ],
+    answer: 1,
+    rationale: "A warranty may describe a minor term, or it may mean a guarantee. A manufacturer's warranty of performance, despite the label, may well be an essential term of the equipment supply contract."
+  },
+  {
+    q: "Part-way through a construction project, a contractor expressly tells the owner that it has no intention of completing the work. The contractor's conduct is best described as:",
+    options: [
+      "Substantial compliance",
+      "Repudiation",
+      "Frustration",
+      "An implied term"
+    ],
+    answer: 1,
+    rationale: "Repudiation occurs when one party — either expressly, or by conduct — indicates that it will not perform its contractual obligations. The non-defaulting party may then elect either to ignore the breach (so the contract continues) or to treat the contract as discharged."
+  },
+  {
+    q: "Upon repudiation by one party, what options does the non-defaulting party have?",
+    options: [
+      "Only sue for an injunction",
+      "Either ignore the breach so the contract continues, or treat the contract as discharged and claim damages",
+      "Only seek specific performance",
+      "Demand criminal sanctions against the repudiator"
+    ],
+    answer: 1,
+    rationale: "The right to elect prevents a defaulting party from escaping its obligations simply by announcing it will not perform. The non-defaulting party may treat the contract as discharged and sue for damages, or insist on performance."
+  },
+  {
+    q: "If the non-defaulting party elects to treat the contract as discharged after repudiation, what is required?",
+    options: [
+      "Notice must be filed with a court before any election is effective",
+      "The election must be made within seven days",
+      "The election must be communicated to the defaulting party with reasonable dispatch",
+      "The election must be approved by a regulator"
+    ],
+    answer: 2,
+    rationale: "The election to discharge a contract for repudiation must be communicated to the defaulting party with reasonable dispatch. Delay can be interpreted as treating the contract as continuing."
+  },
+  {
+    q: "What is the foundational rule for calculating damages for breach of contract set out in Hadley v Baxendale?",
+    options: [
+      "Damages are limited to nominal amounts",
+      "Damages are those that fairly and reasonably arise naturally from the breach, or that were reasonably in the contemplation of both parties at the time of contracting as the probable result of breach",
+      "Damages are unlimited and include all losses, foreseen or not",
+      "Damages are limited to the value of the contract itself"
+    ],
+    answer: 1,
+    rationale: "Hadley v Baxendale (1854) established the two-branch test: damages either arising naturally (the usual course of things) or reasonably in the contemplation of the parties at contract formation. Special losses must have been communicated at the time of contracting to be recoverable."
+  },
+  {
+    q: "In Hadley v Baxendale itself, the plaintiff mill owners asked the defendant carriers to deliver a broken crankshaft to its manufacturer for repair. The shaft's importance to ongoing mill operation was not communicated. The plaintiffs sued for lost profits during the delay. The court held:",
+    options: [
+      "The defendants were liable for all the lost profits",
+      "The defendants were not liable for the lost profits, since the special circumstances had not been communicated",
+      "The plaintiffs were entitled to specific performance",
+      "The contract was discharged by frustration"
+    ],
+    answer: 1,
+    rationale: "Because the defendants had not been informed that the mill would be shut down without the shaft, lost profits were not in the contemplation of both parties and were not recoverable. The case underlines the importance of communicating special circumstances at the time of contracting."
+  },
+  {
+    q: "An owner takes three bids on a project and awards the contract to the lowest bidder, who refuses to perform. The owner then awards the contract to the next-lowest bidder at a higher price. The difference between the two bid prices is best described as:",
+    options: [
+      "Indirect damages",
+      "Direct damages",
+      "Liquidated damages",
+      "A penalty"
+    ],
+    answer: 1,
+    rationale: "Direct damages are the additional cost beyond the original contract price that the innocent party must incur to obtain the bargain it was promised — here, the difference between the lowest and next-lowest bid prices."
+  },
+  {
+    q: "An outside contractor working inside a plant negligently cuts a power line. The plant's production line is shut down, causing substantial lost profits and a regulatory fine. These losses are best described as:",
+    options: [
+      "Direct damages",
+      "Specific performance",
+      "Indirect or consequential damages",
+      "Liquidated damages"
+    ],
+    answer: 2,
+    rationale: "Lost profits from a plant shutdown and a regulatory fine are 'consequential' to the breach — they flow from the breach but are not the direct cost of substitute performance. Indirect damages are often referred to as 'special, indirect, or consequential damages.'"
+  },
+  {
+    q: "Why are limitation-of-liability clauses (for example, 'in no event will the manufacturer be responsible for any indirect or consequential damages howsoever caused') common in equipment supply contracts?",
+    options: [
+      "Because indirect damages are illegal in Canada",
+      "Because, under Hadley v Baxendale, damages reasonably contemplated at the time of contracting based on known special circumstances may be substantial; an express limitation provides certainty and reduces the supplier's exposure",
+      "Because the parol evidence rule requires them",
+      "Because contra proferentem requires them"
+    ],
+    answer: 1,
+    rationale: "Suppliers want to avoid creative interpretations of what was reasonably contemplated. Express limitation clauses give certainty and preclude indirect or consequential damage claims regardless of what was communicated."
+  },
+  {
+    q: "A buyer suffers a loss when a seller breaches a supply contract. Replacement goods are readily available, but the buyer makes no effort to source them and damages continue to mount. When the buyer sues, the court will most likely:",
+    options: [
+      "Award all damages claimed without inquiry",
+      "Reduce the damage award to reflect the buyer's failure to take reasonable steps to mitigate",
+      "Award double damages because the seller was at fault",
+      "Discharge the contract by frustration"
+    ],
+    answer: 1,
+    rationale: "A party that suffers a loss through breach of contract has a duty to take reasonable steps to mitigate. Failure to mitigate will reduce the damage award accordingly."
+  },
+  {
+    q: "A construction contract states that the contractor must pay the owner $10,000 for every day the project is late. For the clause to be enforceable, it must:",
+    options: [
+      "Be labelled as a 'penalty'",
+      "Represent a genuine pre-estimate, made at the time of contracting, of the damages likely to occur as a result of the breach (in which case it is called 'liquidated damages')",
+      "Exceed actual damages by at least 50 percent",
+      "Be approved in advance by a court"
+    ],
+    answer: 1,
+    rationale: "Courts will not enforce true penalty clauses. The amount must be a genuine pre-estimate of probable damages, made at the time the contract is formed. Such pre-estimates are called liquidated damages."
+  },
+  {
+    q: "What is the best drafting practice for a clause that requires a contractor to pay a daily amount for late completion?",
+    options: [
+      "Label the clause as a 'penalty' to emphasise its punitive effect",
+      "Use the term 'liquidated damages' and ensure the amount represents a genuine pre-estimate of damages",
+      "Avoid quantifying the amount, leaving it to the court",
+      "Make the amount unreasonably high to ensure compliance"
+    ],
+    answer: 1,
+    rationale: "The text expressly advises avoiding the connotation of penalising the contractor. Use the term 'liquidated damages' and make a genuine pre-estimate; a labelled penalty is at risk of being struck down."
+  },
+  {
+    q: "An engineering firm performs additional services at the client's request, but no express agreement is reached on payment. On what basis will the court most likely award payment?",
+    options: [
+      "The engineer will receive nothing",
+      "Quantum meruit — as much as is reasonably deserved for time spent and materials supplied",
+      "Specific performance",
+      "Injunction"
+    ],
+    answer: 1,
+    rationale: "Quantum meruit means 'as much as is reasonably deserved.' Where services are requested and performed without express agreement on price, the court will imply that the performer is entitled to a reasonable amount."
+  },
+  {
+    q: "In Alkok v Grymek, the Supreme Court of Canada found that an owner's termination of a construction contract was not justified. The contractor's failure to satisfy the architect that subcontractors had been paid was not breach of an essential term, and the defects and delay did not go to the root of the contract. On what basis did the contractor recover for work done?",
+    options: [
+      "Liquidated damages",
+      "Quantum meruit",
+      "Specific performance",
+      "Injunction"
+    ],
+    answer: 1,
+    rationale: "Where the owner repudiated the contract and the contractor elected to treat it as discharged, the contractor was entitled to recover the reasonable value of the work performed on a quantum meruit basis."
+  },
+  {
+    q: "A contractor has substantially completed a building, but a few minor defects remain that can be remedied at a modest cost. What is the contractor entitled to?",
+    options: [
+      "Nothing, because completion was not absolute",
+      "The contract price less the cost of remedying the minor defects, under the doctrine of substantial compliance",
+      "The full contract price without deduction",
+      "Damages for breach of contract by the owner"
+    ],
+    answer: 1,
+    rationale: "Under the doctrine of substantial compliance, where the deficiencies are minor and remediable without excessive cost, the contractor is entitled to the contract price less the cost of the necessary adjustments."
+  },
+  {
+    q: "The Ontario Court of Appeal in Fairbanks Soap Co v Sheppard endorsed the doctrine of substantial compliance by reference to which leading earlier decision?",
+    options: [
+      "Hadley v Baxendale",
+      "The Moorcock",
+      "H Dakin and Co v Lee",
+      "Pym v Campbell"
+    ],
+    answer: 2,
+    rationale: "The principle in H Dakin and Co v Lee — that where a building or repairing contract has been substantially (though not absolutely) completed, the party who benefits from the work must pay for it — was applied in Fairbanks Soap."
+  },
+  {
+    q: "A purchaser contracts to buy a parcel of land with unique features. The vendor refuses to convey. Which remedy is the court most likely to grant?",
+    options: [
+      "Damages only",
+      "Specific performance",
+      "An injunction",
+      "Quantum meruit"
+    ],
+    answer: 1,
+    rationale: "Specific performance is most often granted in contracts for the sale of land, because each parcel is presumed unique and damages will not provide an adequate remedy. The vendor will be required to convey the property in accordance with the agreement."
+  },
+  {
+    q: "An employee signs an agreement containing a covenant not to compete with the employer for a defined period within a defined geographic area after leaving employment. If the former employee threatens to breach the covenant, the employer's most appropriate remedy is to seek:",
+    options: [
+      "Specific performance of the employment contract",
+      "An injunction, provided the negative covenant satisfies tests of reasonableness as to time, geography, and public policy concerning restraint of trade",
+      "Liquidated damages only",
+      "Quantum meruit"
+    ],
+    answer: 1,
+    rationale: "Injunctions restrain a party from doing something (breaching a negative covenant). Courts apply reasonableness tests as to time and geographic scope and consider public policy on restraint of trade before granting an injunction."
+  }
+];
+
+/* ===========================
+   STATE
+   =========================== */
+const STORAGE_KEY = 'nppe_ch171819_state_v1';
+const BEST_KEY = 'nppe_ch171819_best_v1';
+
+let state = {
+  order: [],          // shuffle indices
+  current: 0,
+  answers: {},        // questionIndex -> selectedOptionIndex
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  mode: 'practice',
+  examSubmitted: false,
+  shown: {}           // questionIndex -> true (rationale shown in practice)
+};
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* ignore */ }
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.order) && parsed.order.length === QUESTIONS.length) {
+        state = { ...state, ...parsed };
+        return true;
+      }
+    }
+  } catch (e) { /* ignore */ }
+  return false;
+}
+function getBest() {
+  try { return parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0; }
+  catch(e) { return 0; }
+}
+function setBest(n) {
+  try { localStorage.setItem(BEST_KEY, String(n)); } catch(e){}
+}
+
+/* ===========================
+   SHUFFLE
+   =========================== */
+function fisherYates(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function initOrder(shuffle = false) {
+  const indices = QUESTIONS.map((_, i) => i);
+  state.order = shuffle ? fisherYates(indices) : indices;
+}
+
+/* ===========================
+   CELEBRATION ENGINE
+   =========================== */
+const canvas = document.getElementById('celebrate-canvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const particles = [];
+function spawnFireworks(x, y, kind = 'gold') {
+  const colors = kind === 'gold'
+    ? ['#f5d98a','#e8c46a','#d4a84a','#fff5d0','#ffd95b']
+    : ['#9be2bb','#ffd95b','#f5d98a','#aedcff'];
+  const count = 70 + Math.floor(Math.random()*30);
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random()*0.3;
+    const speed = 3 + Math.random()*4;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: 0.012 + Math.random()*0.012,
+      size: 2 + Math.random()*3,
+      color: colors[Math.floor(Math.random()*colors.length)]
+    });
+  }
+}
+function spawnStars(x, y) {
+  for (let i = 0; i < 14; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1 + Math.random()*3;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - 2,
+      life: 1,
+      decay: 0.014,
+      size: 6 + Math.random()*6,
+      color: '#f5d98a',
+      star: true
+    });
+  }
+}
+function drawStar(ctx, x, y, r, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = color;
+  ctx.shadowBlur = 14;
+  ctx.shadowColor = color;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    ctx.lineTo(0, -r);
+    ctx.rotate(Math.PI / 5);
+    ctx.lineTo(0, -(r/2.2));
+    ctx.rotate(Math.PI / 5);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08;
+    p.life -= p.decay;
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+      continue;
+    }
+    ctx.globalAlpha = Math.max(0, p.life);
+    if (p.star) {
+      drawStar(ctx, p.x, p.y, p.size, p.color);
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  requestAnimationFrame(animate);
+}
+animate();
+
+function showPopup(text, x, y, color = 'gold') {
+  const layer = document.getElementById('popup-layer');
+  const el = document.createElement('div');
+  el.className = 'popup';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.textContent = text;
+  if (color === 'red') el.style.color = '#ecaaaa';
+  layer.appendChild(el);
+  setTimeout(() => el.remove(), 1700);
+}
+
+function showStreakBadge(streak, x, y) {
+  const layer = document.getElementById('popup-layer');
+  const el = document.createElement('div');
+  el.className = 'streak-flame';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  let icon = '🔥';
+  if (streak >= 10) icon = '⭐🔥⭐';
+  else if (streak >= 5) icon = '🔥🔥';
+  el.textContent = icon + ' ' + streak + '!';
+  layer.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+/* ===========================
+   RENDER
+   =========================== */
+function updateHud() {
+  document.getElementById('hud-score').textContent = state.score;
+  document.getElementById('hud-streak').textContent = state.streak;
+  document.getElementById('hud-best').textContent = getBest();
+  const answered = Object.keys(state.answers).length;
+  document.getElementById('hud-answered').textContent = answered + ' / ' + QUESTIONS.length;
+  let correctCount = 0;
+  Object.keys(state.answers).forEach(k => {
+    if (state.answers[k] === QUESTIONS[k].answer) correctCount++;
+  });
+  document.getElementById('hud-accuracy').textContent =
+    answered === 0 ? '—' : Math.round((correctCount/answered)*100) + '%';
+  document.getElementById('progress-fill').style.width =
+    ((state.current+1)/QUESTIONS.length*100) + '%';
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < state.order.length; i++) {
+    const realIdx = state.order[i];
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    if (i === state.current) cell.classList.add('current');
+    if (state.answers[realIdx] !== undefined) {
+      if (state.mode === 'practice' || state.examSubmitted) {
+        if (state.answers[realIdx] === QUESTIONS[realIdx].answer) {
+          cell.classList.add('correct-pm');
+        } else {
+          cell.classList.add('wrong-pm');
+        }
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    cell.addEventListener('click', () => {
+      state.current = i;
+      saveState();
+      renderQuestion();
+      renderNavGrid();
+      updateHud();
+    });
+    grid.appendChild(cell);
+  }
+}
+
+function renderQuestion() {
+  const area = document.getElementById('quiz-area');
+
+  // If exam submitted, show results
+  if (state.mode === 'exam' && state.examSubmitted) {
+    renderResults();
+    return;
+  }
+
+  const idx = state.order[state.current];
+  const q = QUESTIONS[idx];
+  const answered = state.answers[idx];
+  const showRationale = state.mode === 'practice' && state.shown[idx];
+
+  area.innerHTML = `
+    <div class="card" id="qcard">
+      <div class="qnum">Question ${state.current + 1} of ${QUESTIONS.length}</div>
+      <div class="qtext">${q.q}</div>
+      <div class="options" id="opts"></div>
+      ${showRationale ? `
+        <div class="rationale show">
+          <div class="rationale-label">${answered === q.answer ? '✓ Correct.' : '✗ Not quite.'} Why:</div>
+          ${q.rationale}
+        </div>
+      ` : ''}
+      <div class="nav-bar">
+        <button class="nav-btn secondary" id="btn-prev" ${state.current === 0 ? 'disabled' : ''}>◀ Previous</button>
+        <button class="nav-btn" id="btn-next" ${state.current === QUESTIONS.length-1 ? 'disabled' : ''}>Next ▶</button>
+      </div>
+    </div>
+  `;
+
+  const opts = document.getElementById('opts');
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+
+    if (answered !== undefined) {
+      div.classList.add('disabled');
+      if (state.mode === 'practice' || state.examSubmitted) {
+        if (i === q.answer) div.classList.add('correct');
+        if (i === answered && answered !== q.answer) div.classList.add('wrong');
+      } else {
+        if (i === answered) div.classList.add('selected');
+      }
+    }
+
+    div.addEventListener('click', (ev) => {
+      handleAnswer(idx, i, ev);
+    });
+    opts.appendChild(div);
+  });
+
+  document.getElementById('btn-prev').addEventListener('click', () => {
+    if (state.current > 0) {
+      state.current--;
+      saveState();
+      renderQuestion();
+      renderNavGrid();
+      updateHud();
+    }
+  });
+  document.getElementById('btn-next').addEventListener('click', () => {
+    if (state.current < QUESTIONS.length - 1) {
+      state.current++;
+      saveState();
+      renderQuestion();
+      renderNavGrid();
+      updateHud();
+    }
+  });
+}
+
+function handleAnswer(qIdx, choice, ev) {
+  const q = QUESTIONS[qIdx];
+
+  if (state.mode === 'practice') {
+    // Allow re-answer in practice mode only if not yet answered
+    if (state.answers[qIdx] !== undefined) return;
+    state.answers[qIdx] = choice;
+    state.shown[qIdx] = true;
+    const correct = choice === q.answer;
+    const rect = ev.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top + rect.height/2;
+    if (correct) {
+      state.streak++;
+      let pts = 10;
+      let bonusText = '';
+      if (state.streak >= 3) {
+        pts += 5;
+        bonusText = ' +Streak';
+      }
+      if (state.streak >= 5) {
+        pts += 5;
+      }
+      state.score += pts;
+      if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+      // Update best
+      if (state.score > getBest()) setBest(state.score);
+      spawnFireworks(cx, cy, 'gold');
+      spawnStars(cx, cy);
+      showPopup('+' + pts + bonusText, cx, cy - 20, 'gold');
+      if (state.streak >= 3) {
+        showStreakBadge(state.streak, cx, cy);
+      }
+    } else {
+      state.streak = 0;
+      showPopup('—', cx, cy - 20, 'red');
+    }
+  } else {
+    // Exam mode: allow change until submission
+    if (state.examSubmitted) return;
+    state.answers[qIdx] = choice;
+  }
+  saveState();
+  renderQuestion();
+  renderNavGrid();
+  updateHud();
+}
+
+/* ===========================
+   RESULTS
+   =========================== */
+function renderResults() {
+  const area = document.getElementById('quiz-area');
+  let correct = 0;
+  QUESTIONS.forEach((q, i) => {
+    if (state.answers[i] === q.answer) correct++;
+  });
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  const passed = pct >= 65;
+  let verdict, verdictClass, headline;
+  if (pct >= 90) {
+    headline = 'Exceptional';
+    verdict = 'Outstanding work — well above the NPPE pass threshold. You have mastered this material.';
+    verdictClass = 'pass';
+  } else if (pct >= 80) {
+    headline = 'Strong Pass';
+    verdict = 'Strong performance, comfortably above the NPPE pass threshold.';
+    verdictClass = 'pass';
+  } else if (pct >= 65) {
+    headline = 'Pass';
+    verdict = 'You met the NPPE pass threshold of 65%. Review the questions you missed to reinforce.';
+    verdictClass = 'pass';
+  } else if (pct >= 50) {
+    headline = 'Close';
+    verdict = 'Below the 65% NPPE pass threshold. Review the rationales and try again.';
+    verdictClass = 'fail';
+  } else {
+    headline = 'Keep Studying';
+    verdict = 'Well below the NPPE pass threshold. Revisit the chapter content and try again.';
+    verdictClass = 'fail';
+  }
+
+  area.innerHTML = `
+    <div class="results">
+      <h2>${headline}</h2>
+      <div class="score-big">${pct}%</div>
+      <div class="verdict ${verdictClass}">${verdict}</div>
+      <div class="breakdown">
+        <div><div class="num">${correct}</div><div class="lbl">Correct</div></div>
+        <div><div class="num">${QUESTIONS.length - correct}</div><div class="lbl">Incorrect</div></div>
+        <div><div class="num">${state.bestStreak}</div><div class="lbl">Best Streak</div></div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="nav-btn secondary" id="btn-review">Review Answers</button>
+        <button class="nav-btn" id="btn-reset-results">Try Again</button>
+      </div>
+    </div>
+  `;
+
+  // Big celebration if passed
+  if (passed) {
+    setTimeout(() => {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const x = Math.random() * window.innerWidth;
+          const y = 100 + Math.random() * (window.innerHeight/2);
+          spawnFireworks(x, y, i % 2 === 0 ? 'gold' : 'mix');
+        }, i * 250);
+      }
+    }, 200);
+  }
+
+  document.getElementById('btn-review').addEventListener('click', () => {
+    state.examSubmitted = false;
+    state.mode = 'practice';
+    // Reveal rationales for all answered
+    Object.keys(state.answers).forEach(k => state.shown[k] = true);
+    document.getElementById('btn-practice').classList.add('active');
+    document.getElementById('btn-exam').classList.remove('active');
+    document.getElementById('btn-submit-exam').style.display = 'none';
+    state.current = 0;
+    saveState();
+    renderQuestion();
+    renderNavGrid();
+    updateHud();
+  });
+  document.getElementById('btn-reset-results').addEventListener('click', () => {
+    doReset();
+  });
+}
+
+/* ===========================
+   CONTROLS
+   =========================== */
+document.getElementById('btn-practice').addEventListener('click', () => {
+  state.mode = 'practice';
+  state.examSubmitted = false;
+  document.getElementById('btn-practice').classList.add('active');
+  document.getElementById('btn-exam').classList.remove('active');
+  document.getElementById('btn-submit-exam').style.display = 'none';
+  saveState();
+  renderQuestion();
+  renderNavGrid();
+});
+
+document.getElementById('btn-exam').addEventListener('click', () => {
+  state.mode = 'exam';
+  state.examSubmitted = false;
+  // Clear practice-shown rationales for clean exam UI
+  state.shown = {};
+  document.getElementById('btn-exam').classList.add('active');
+  document.getElementById('btn-practice').classList.remove('active');
+  document.getElementById('btn-submit-exam').style.display = 'inline-block';
+  saveState();
+  renderQuestion();
+  renderNavGrid();
+});
+
+document.getElementById('btn-submit-exam').addEventListener('click', () => {
+  const answered = Object.keys(state.answers).length;
+  if (answered < QUESTIONS.length) {
+    if (!confirm('You have only answered ' + answered + ' of ' + QUESTIONS.length + ' questions. Submit anyway?')) {
+      return;
+    }
+  }
+  state.examSubmitted = true;
+  // Compute final score (no per-answer celebrations in exam, but apply scoring now)
+  let correct = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  let runStreak = 0;
+  state.order.forEach((realIdx) => {
+    if (state.answers[realIdx] === QUESTIONS[realIdx].answer) {
+      correct++;
+      runStreak++;
+      if (runStreak > state.bestStreak) state.bestStreak = runStreak;
+    } else {
+      runStreak = 0;
+    }
+  });
+  state.score = correct * 10 + state.bestStreak * 5;
+  if (state.score > getBest()) setBest(state.score);
+  saveState();
+  renderResults();
+  renderNavGrid();
+  updateHud();
+});
+
+document.getElementById('btn-shuffle').addEventListener('click', () => {
+  if (!confirm('Shuffle question order? Your current answers will be kept against their original questions.')) return;
+  initOrder(true);
+  state.current = 0;
+  saveState();
+  renderQuestion();
+  renderNavGrid();
+  updateHud();
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.add('show');
+});
+document.getElementById('reset-cancel').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.remove('show');
+});
+document.getElementById('reset-confirm').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.remove('show');
+  doReset();
+});
+
+function doReset() {
+  state = {
+    order: [],
+    current: 0,
+    answers: {},
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    mode: 'practice',
+    examSubmitted: false,
+    shown: {}
+  };
+  initOrder(false);
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  document.getElementById('btn-practice').classList.add('active');
+  document.getElementById('btn-exam').classList.remove('active');
+  document.getElementById('btn-submit-exam').style.display = 'none';
+  renderQuestion();
+  renderNavGrid();
+  updateHud();
+}
+
+/* ===========================
+   INIT
+   =========================== */
+if (!loadState()) {
+  initOrder(false);
+}
+// Sync UI mode buttons with state
+if (state.mode === 'exam') {
+  document.getElementById('btn-exam').classList.add('active');
+  document.getElementById('btn-practice').classList.remove('active');
+  document.getElementById('btn-submit-exam').style.display = 'inline-block';
+}
+renderQuestion();
+renderNavGrid();
+updateHud();
+</script>
+</body>
+</html>

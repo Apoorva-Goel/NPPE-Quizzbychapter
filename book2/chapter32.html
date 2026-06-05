@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NPPE Quiz — Ch. 32 Regulatory Ethics & Ch. 33 Intellectual Property</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #060e1d;
+    --navy: #0a1628;
+    --navy-light: #14243f;
+    --navy-card: #122038;
+    --gold: #d4af37;
+    --gold-bright: #f0c75e;
+    --gold-soft: #b8932a;
+    --cream: #f5ecd5;
+    --text: #e8e4d4;
+    --muted: #8a9bb3;
+    --green: #5fb37a;
+    --red: #d96d6d;
+    --shadow: 0 12px 40px rgba(0,0,0,0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(ellipse at top, #1a2e52 0%, var(--navy) 35%, var(--navy-deep) 100%);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  #fireworks-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 30px 24px 80px; position: relative; }
+
+  /* ---- Header ---- */
+  header {
+    text-align: center;
+    padding: 36px 20px;
+    border-bottom: 1px solid rgba(212,175,55,0.18);
+    margin-bottom: 36px;
+  }
+  header .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-style: italic;
+  }
+  header .gold-rule {
+    width: 70px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 22px auto 0;
+  }
+
+  /* ---- Start Screen ---- */
+  .start-screen, .quiz-screen, .results-screen { display: none; }
+  .start-screen.active, .quiz-screen.active, .results-screen.active { display: block; }
+
+  .start-card {
+    background: linear-gradient(160deg, var(--navy-card) 0%, var(--navy-light) 100%);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 16px;
+    padding: 44px 38px;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+  }
+  .start-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .start-card p { color: var(--text); margin-bottom: 14px; font-size: 0.97rem; }
+  .start-card ul { list-style: none; margin: 18px 0 28px; }
+  .start-card ul li {
+    padding: 9px 0 9px 28px;
+    position: relative;
+    color: var(--text);
+    font-size: 0.93rem;
+  }
+  .start-card ul li::before {
+    content: '◆';
+    position: absolute; left: 0;
+    color: var(--gold);
+    font-size: 0.7rem;
+    top: 14px;
+  }
+
+  .mode-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  @media (max-width: 600px) { .mode-row { grid-template-columns: 1fr; } }
+
+  .mode-btn {
+    background: var(--navy);
+    border: 1.5px solid var(--gold-soft);
+    color: var(--cream);
+    padding: 22px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .mode-btn:hover {
+    border-color: var(--gold-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.18);
+  }
+  .mode-btn .mode-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .mode-btn .mode-desc { font-size: 0.85rem; color: var(--muted); }
+
+  /* ---- Quiz Screen ---- */
+  .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, var(--navy-card), var(--navy-light));
+    border: 1px solid rgba(212,175,55,0.2);
+    border-radius: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; align-items: center; gap: 8px; }
+  .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; }
+  .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--gold); }
+  .stat-streak { color: var(--gold-bright); }
+
+  .progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold-bright));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* Nav grid */
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    gap: 6px;
+    margin-bottom: 22px;
+    padding: 14px;
+    background: rgba(10,22,40,0.6);
+    border: 1px solid rgba(212,175,55,0.12);
+    border-radius: 10px;
+    max-height: 140px;
+    overflow-y: auto;
+  }
+  .nav-cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--navy-deep);
+    border: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .nav-cell:hover { border-color: var(--gold); color: var(--gold); }
+  .nav-cell.current { background: var(--gold); color: var(--navy-deep); border-color: var(--gold-bright); font-weight: 700; }
+  .nav-cell.answered { background: rgba(95,179,122,0.18); color: var(--green); border-color: rgba(95,179,122,0.4); }
+  .nav-cell.correct { background: rgba(95,179,122,0.28); color: var(--green); border-color: var(--green); }
+  .nav-cell.incorrect { background: rgba(217,109,109,0.22); color: var(--red); border-color: var(--red); }
+
+  /* Question card */
+  .question-card {
+    background: linear-gradient(160deg, var(--navy-card) 0%, var(--navy-light) 100%);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 16px;
+    padding: 34px 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+  }
+  .q-number {
+    font-size: 0.78rem;
+    color: var(--gold);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-weight: 500;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    background: var(--navy);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 16px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.96rem;
+    line-height: 1.5;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .option:hover:not(.disabled) {
+    border-color: var(--gold);
+    background: var(--navy-light);
+    transform: translateX(4px);
+  }
+  .option-letter {
+    background: rgba(212,175,55,0.18);
+    color: var(--gold);
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .option.disabled { cursor: default; }
+  .option.selected { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+  .option.correct { border-color: var(--green); background: rgba(95,179,122,0.15); }
+  .option.correct .option-letter { background: var(--green); color: var(--navy-deep); }
+  .option.incorrect { border-color: var(--red); background: rgba(217,109,109,0.12); }
+  .option.incorrect .option-letter { background: var(--red); color: var(--navy-deep); }
+
+  .rationale {
+    margin-top: 22px;
+    padding: 18px 22px;
+    background: rgba(10,22,40,0.55);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    display: none;
+  }
+  .rationale.show { display: block; animation: fadeIn 0.35s ease; }
+  .rationale-label {
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .rationale-text { font-size: 0.93rem; color: var(--text); line-height: 1.6; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    padding: 12px 26px;
+    border-radius: 9px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+    color: var(--navy-deep);
+    border-color: var(--gold-bright);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(212,175,55,0.32); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--gold);
+    border-color: rgba(212,175,55,0.4);
+  }
+  .btn-ghost:hover { border-color: var(--gold); background: rgba(212,175,55,0.06); }
+  .btn-danger {
+    background: transparent;
+    color: var(--red);
+    border-color: rgba(217,109,109,0.35);
+  }
+  .btn-danger:hover { background: rgba(217,109,109,0.1); border-color: var(--red); }
+
+  /* Results */
+  .results-card {
+    background: linear-gradient(160deg, var(--navy-card) 0%, var(--navy-light) 100%);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 18px;
+    padding: 48px 38px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 9vw, 5.5rem);
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .results-pct { font-size: 1.2rem; color: var(--muted); margin-bottom: 24px; }
+  .results-tier {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .results-feedback { color: var(--text); margin-bottom: 28px; line-height: 1.7; max-width: 580px; margin-left: auto; margin-right: auto; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin: 28px 0;
+  }
+  .result-stat {
+    background: rgba(10,22,40,0.55);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(212,175,55,0.15);
+  }
+  .result-stat .label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+  .result-stat .value { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; color: var(--gold); font-weight: 600; }
+  .results-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+
+  .pass-banner {
+    display: inline-block;
+    padding: 8px 22px;
+    border-radius: 99px;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .pass-banner.passed { background: rgba(95,179,122,0.15); color: var(--green); border: 1px solid rgba(95,179,122,0.4); }
+  .pass-banner.failed { background: rgba(217,109,109,0.12); color: var(--red); border: 1px solid rgba(217,109,109,0.35); }
+
+  /* Floating score popup */
+  .score-popup {
+    position: fixed;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    pointer-events: none;
+    z-index: 10000;
+    text-shadow: 0 0 18px rgba(240,199,94,0.7);
+  }
+
+  /* Streak badge */
+  .streak-badge {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    color: var(--navy-deep);
+    padding: 10px 18px;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    box-shadow: 0 8px 24px rgba(212,175,55,0.45);
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: all 0.35s ease;
+  }
+  .streak-badge.show { opacity: 1; transform: translateY(0); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 11000;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--navy-card);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .modal h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+  .modal p { color: var(--text); margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 12px; justify-content: center; }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(212,175,55,0.12);
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fireworks-canvas"></canvas>
+<div id="streak-badge" class="streak-badge"></div>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">NPPE Practice — Ontario</div>
+    <h1>Regulatory Ethics & Intellectual Property</h1>
+    <div class="subtitle">Chapters 32 &amp; 33 · Fifty exam-style questions</div>
+    <div class="gold-rule"></div>
+  </header>
+
+  <!-- START SCREEN -->
+  <section id="start-screen" class="start-screen active">
+    <div class="start-card">
+      <h2>Before You Begin</h2>
+      <p>This set covers two distinct domains examined together on the NPPE: the regulatory and ethical framework that governs Ontario engineering practice, and the federal intellectual-property regime that engineers routinely encounter through patents, trademarks, copyright, industrial designs, and trade secrets.</p>
+      <ul>
+        <li>50 multiple-choice questions, four options each, with full rationales</li>
+        <li>Passing threshold set at <strong>65%</strong>, consistent with NPPE conventions</li>
+        <li>Questions are shuffled (Fisher-Yates) on each fresh attempt</li>
+        <li>Progress is saved automatically — close the tab and resume later</li>
+        <li>Streak bonuses, score popups, and confetti reward correct answers</li>
+      </ul>
+      <h2 style="margin-top: 8px;">Choose a Mode</h2>
+      <div class="mode-row">
+        <button class="mode-btn" onclick="startQuiz('practice')">
+          <div class="mode-title">Practice Mode</div>
+          <div class="mode-desc">Immediate feedback after each answer, with the full rationale shown before you move on. Best for learning.</div>
+        </button>
+        <button class="mode-btn" onclick="startQuiz('exam')">
+          <div class="mode-title">Exam Mode</div>
+          <div class="mode-desc">No feedback during the quiz — answers are revealed only on the results screen. Best for self-assessment.</div>
+        </button>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <button class="btn btn-ghost" onclick="resumeIfAvailable()">Resume Last Session</button>
+    </div>
+  </section>
+
+  <!-- QUIZ SCREEN -->
+  <section id="quiz-screen" class="quiz-screen">
+    <div class="stats-bar">
+      <div class="stat">
+        <div>
+          <div class="stat-label">Question</div>
+          <div class="stat-value"><span id="q-current">1</span> <span style="color: var(--muted); font-size: 1rem;">/ 50</span></div>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <div class="stat-label">Score</div>
+          <div class="stat-value" id="score-display">0</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <div class="stat-label">Streak</div>
+          <div class="stat-value stat-streak" id="streak-display">0</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <div class="stat-label">Mode</div>
+          <div class="stat-value" id="mode-display" style="font-size: 1.05rem; text-transform: capitalize;">Practice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="nav-grid" id="nav-grid"></div>
+
+    <div class="question-card">
+      <div class="q-number" id="q-number">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="rationale" id="rationale">
+        <div class="rationale-label">Rationale</div>
+        <div class="rationale-text" id="rationale-text"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-ghost" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-danger" onclick="confirmReset()">Reset Quiz</button>
+        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS SCREEN -->
+  <section id="results-screen" class="results-screen">
+    <div class="results-card">
+      <div id="pass-banner-wrap"></div>
+      <div class="results-score" id="final-score">0</div>
+      <div class="results-pct" id="final-pct">0% correct</div>
+      <div class="results-tier" id="results-tier">—</div>
+      <div class="results-feedback" id="results-feedback"></div>
+
+      <div class="results-grid">
+        <div class="result-stat">
+          <div class="label">Correct</div>
+          <div class="value" id="rs-correct">0</div>
+        </div>
+        <div class="result-stat">
+          <div class="label">Incorrect</div>
+          <div class="value" id="rs-incorrect">0</div>
+        </div>
+        <div class="result-stat">
+          <div class="label">Total Points</div>
+          <div class="value" id="rs-points">0</div>
+        </div>
+        <div class="result-stat">
+          <div class="label">Best Streak</div>
+          <div class="value" id="rs-streak">0</div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
+        <button class="btn btn-ghost" onclick="reviewAnswers()">Review Answers</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    NPPE practice set · 65% pass threshold · For educational use during exam preparation.
+  </footer>
+</div>
+
+<!-- Reset confirmation modal -->
+<div class="modal-overlay" id="reset-modal">
+  <div class="modal">
+    <h3>Reset Quiz?</h3>
+    <p>Your current progress, score, and streak will be cleared. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeResetModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="resetQuiz()">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   QUESTION BANK — 50 questions covering Ch. 32 & 33
+   Questions paraphrase principles; no copyrighted text reproduced.
+   ============================================================ */
+const QUESTION_BANK = [
+  // ===== Chapter 32 — Regulatory Aspects and Ethics =====
+  {
+    q: "What is the principal purpose of provincial legislation regulating professional engineering in Canada?",
+    options: [
+      "To increase compensation for engineers",
+      "To regulate the practice of professional engineering and protect the public interest",
+      "To limit the number of practising engineers in each province",
+      "To set educational standards for engineering schools"
+    ],
+    answer: 1,
+    rationale: "Statutes such as Ontario's Professional Engineers Act exist principally to regulate the practice and govern members so that the public interest is served and protected. Self-regulation in the public interest is the foundational rationale for the profession's legislated authority."
+  },
+  {
+    q: "Which of the following is NOT one of the additional objects of Professional Engineers Ontario?",
+    options: [
+      "Establishing standards of knowledge and skill among members",
+      "Developing standards of professional ethics",
+      "Promoting public awareness of the Association's role",
+      "Negotiating wage rates on behalf of members"
+    ],
+    answer: 3,
+    rationale: "The Association's additional objects relate to standards (knowledge, skill, qualification, practice, and ethics) and public awareness. Collective bargaining or wage negotiation is not within the Association's statutory mandate — it is a regulator, not a union."
+  },
+  {
+    q: "Under Ontario's Professional Engineers Act, the practice of professional engineering includes any act of planning, designing, evaluating, advising, reporting, or directing that:",
+    options: [
+      "Is performed by anyone holding an engineering degree",
+      "Requires application of engineering principles and concerns the safeguarding of life, health, property, economic interests, public welfare, or the environment",
+      "Involves any use of mathematics or physics",
+      "Is carried out within an engineering firm"
+    ],
+    answer: 1,
+    rationale: "The statutory definition links the act to two elements: the application of engineering principles, AND a concern for safeguarding life, health, property, economic interests, public welfare, or the environment. Both elements are required."
+  },
+  {
+    q: "An engineer's seal, as used in Canadian common-law jurisdictions, signifies that:",
+    options: [
+      "The drawings have been approved by a government inspector",
+      "The work has been peer-reviewed by another firm",
+      "The engineer is a registered Professional Engineer",
+      "The work complies with international standards"
+    ],
+    answer: 2,
+    rationale: "The seal is issued by the provincial association and indicates that the engineer is registered. It does not itself confer government approval — it identifies the work as having been done under the responsibility of a licensed practitioner."
+  },
+  {
+    q: "In Ontario, improper use of an engineer's seal can result in:",
+    options: [
+      "A verbal warning only",
+      "Loss of academic credentials",
+      "Disciplinary proceedings and substantial fines for individuals, corporations, and partnerships",
+      "Mandatory professional development only"
+    ],
+    answer: 2,
+    rationale: "Misuse of the seal can give rise to formal discipline and significant monetary penalties. The seal must be controlled tightly because it represents both the engineer's professional accountability and the regulator's recognition of competence."
+  },
+  {
+    q: "Under Ontario regulations, a licence holder who provides professional engineering services to the public must:",
+    options: [
+      "Seal only structural and load-bearing drawings",
+      "Sign, date, and affix the seal to every final drawing, specification, plan, report, or other document prepared or checked by the holder",
+      "Have all documents pre-approved by another licensed engineer",
+      "Submit all documents to the Association before they are released"
+    ],
+    answer: 1,
+    rationale: "The regulation extends to every final document the licence holder prepares or checks — not only certain categories. Signing, dating, and sealing must all occur before the document is issued."
+  },
+  {
+    q: "Signing or sealing a final drawing, specification, or report that was not actually prepared or checked by the practitioner is:",
+    options: [
+      "Permitted with the client's written consent",
+      "Acceptable when the preparer is well-trusted",
+      "Defined as an act of professional misconduct",
+      "Permitted for routine, low-risk documents"
+    ],
+    answer: 2,
+    rationale: "Sealing work the practitioner did not prepare or check is expressly listed among the acts constituting professional misconduct. The seal carries personal professional responsibility and cannot be lent or applied vicariously."
+  },
+  {
+    q: "For a partnership or corporation to practise professional engineering in Ontario, the practice must be:",
+    options: [
+      "Wholly owned by licensed engineers",
+      "Carried on under the responsibility and supervision of a licensed member or professional engineer",
+      "Composed of at least three licensed partners",
+      "Federally rather than provincially incorporated"
+    ],
+    answer: 1,
+    rationale: "The statutes do not require complete engineer ownership of firms, but they do require that the practice itself be carried out under the responsibility and supervision of a licensed individual, with the firm holding a Certificate of Authorization."
+  },
+  {
+    q: "In Ontario, disciplinary proceedings against an engineer typically begin when:",
+    options: [
+      "The Council issues a direct order",
+      "A complaint is submitted to the Complaints Committee",
+      "A court orders an inquiry",
+      "The Registrar performs an annual audit"
+    ],
+    answer: 1,
+    rationale: "The usual point of entry is a complaint to the Complaints Committee, which examines the matter and may refer it to the Discipline Committee. Discipline hearings flow from a structured complaint process rather than ad hoc intervention."
+  },
+  {
+    q: "A finding of professional misconduct in Ontario may result in any of the following EXCEPT:",
+    options: [
+      "Reprimand",
+      "Suspension of licence",
+      "Imprisonment ordered by the discipline committee",
+      "Cancellation of membership and licence"
+    ],
+    answer: 2,
+    rationale: "Discipline committees may reprimand, suspend, fine, or cancel membership and licences. Imprisonment is a criminal sanction within the jurisdiction of the courts, not the disciplinary tribunal of a self-regulating body."
+  },
+  {
+    q: "In Ontario, the penalty for practising professional engineering without a licence, on a first offence, includes a fine of up to:",
+    options: [
+      "$5,000",
+      "$25,000",
+      "$100,000",
+      "$250,000"
+    ],
+    answer: 1,
+    rationale: "The Act provides for a maximum fine of $25,000 for a first offence, with subsequent offences subject to a higher cap. The penalty structure reflects the seriousness of unauthorised practice as a threat to public safety."
+  },
+  {
+    q: "In Ontario, in addition to engineering membership, what is required for an engineer (or firm) to offer engineering services to the public?",
+    options: [
+      "A municipal business permit",
+      "A Certificate of Authorization",
+      "A federal practice endorsement",
+      "A signed declaration of indemnity"
+    ],
+    answer: 1,
+    rationale: "A licence to practise allows the individual to call themselves a professional engineer; a Certificate of Authorization is the additional credential that permits offering services to the public. The two are distinct and serve different regulatory purposes."
+  },
+  {
+    q: "Under Ontario regulations, the minimum professional liability insurance coverage required for a single occurrence (subject to certain exceptions) is generally:",
+    options: [
+      "$100,000",
+      "$250,000",
+      "$500,000",
+      "$1,000,000"
+    ],
+    answer: 1,
+    rationale: "The regulation sets a floor of $250,000 per single occurrence, paired with an aggregate annual limit of $500,000 (or, alternatively, an automatic policy-limit-reinstatement feature). Practitioners must verify their coverage matches current regulatory requirements."
+  },
+  {
+    q: "The Joint Practice Board, composed of architects and professional engineers, was established in Ontario primarily to:",
+    options: [
+      "Approve all building permits in the province",
+      "Train new architects and engineers jointly",
+      "Address scope-of-practice disputes between architects and professional engineers",
+      "Set fee schedules for both professions"
+    ],
+    answer: 2,
+    rationale: "The Board emerged from the agreement between P E O and the O A A to resolve historical scope-of-practice disputes. It also coordinates guidelines and handles complaints of an interprofessional nature."
+  },
+  {
+    q: "Under the Ontario Professional Engineers Act, a scope-of-practice dispute between an engineer and an architect generally may not be litigated until:",
+    options: [
+      "Cabinet approval has been obtained",
+      "The Joint Practice Board has considered the matter and the chair has certified that the Board could not resolve the dispute",
+      "The Court of Appeal has been consulted",
+      "The Registrar has issued a final order"
+    ],
+    answer: 1,
+    rationale: "The Act channels these disputes through the Joint Practice Board first; court proceedings cannot be commenced unless the chair certifies the Board has considered the matter and been unable to resolve it. This preserves professional resolution before judicial escalation."
+  },
+  {
+    q: "A key distinction between a civil lawsuit and disciplinary proceedings under the Professional Engineers Act is that:",
+    options: [
+      "Lawyers may not appear in disciplinary hearings",
+      "Disciplinary proceedings do not require proof of damages to support a finding of professional misconduct",
+      "Civil suits require less evidence than discipline cases",
+      "Disciplinary proceedings are always held in private"
+    ],
+    answer: 1,
+    rationale: "Damages are a prerequisite to civil liability in tort or contract, but they are NOT required for a finding of professional misconduct. An engineer may face discipline for negligent work even where no harm resulted — for example, where flawed drawings were never built from."
+  },
+  {
+    q: "In Ontario's regulations, \"negligence\" is defined as:",
+    options: [
+      "Any computational mistake by an engineer",
+      "An act or omission in the carrying out of work that fails to maintain the standards a reasonable and prudent practitioner would maintain in the circumstances",
+      "An intentional disregard of safety",
+      "A failure to maintain insurance"
+    ],
+    answer: 1,
+    rationale: "The regulatory definition mirrors the common-law standard of care: comparison to the reasonable and prudent practitioner in the circumstances. This means tort-standard negligence is also professional misconduct under the regulation."
+  },
+  {
+    q: "Under the Code of Ethics, which duty is to be regarded as paramount by a practitioner?",
+    options: [
+      "Duty to the employer",
+      "Duty to the client",
+      "Duty to public welfare",
+      "Duty to colleagues"
+    ],
+    answer: 2,
+    rationale: "The Code states explicitly that the practitioner shall regard the duty to public welfare as paramount. Where duties conflict, public welfare overrides obligations to clients, employers, or colleagues."
+  },
+  {
+    q: "Under the Code of Ethics, an engineer acting for an employer is expected to:",
+    options: [
+      "Disclose all internal information publicly to ensure transparency",
+      "Act as a faithful agent or trustee and treat business affairs, methods, and processes as confidential",
+      "Defer to every employer decision without comment",
+      "Avoid all engineering activity outside the employer's projects"
+    ],
+    answer: 1,
+    rationale: "The engineer owes the employer the loyalty of a faithful agent or trustee, including the obligation to maintain confidentiality regarding business affairs, technical methods, and processes — and to disclose or avoid conflicts of interest."
+  },
+  {
+    q: "Under the Code of Ethics, when an engineer is asked to review the work of another practitioner for the same employer, the engineer should generally:",
+    options: [
+      "Decline the engagement outright",
+      "Notify the other practitioner, unless that practitioner's connection with the work has been terminated",
+      "Submit the review only to the most senior manager",
+      "Charge a premium fee for the review"
+    ],
+    answer: 1,
+    rationale: "The Code requires notice to the other practitioner as a matter of professional courtesy, except where the other practitioner's involvement with the project has ended. This preserves trust among colleagues."
+  },
+  {
+    q: "Under the Code of Ethics, an engineer who becomes aware of unprofessional, dishonest, or unethical conduct by another practitioner should:",
+    options: [
+      "Conceal it to protect the profession's image",
+      "Report it only if personally affected",
+      "Expose it without fear or favour before the proper tribunals",
+      "Wait for the Association's annual review"
+    ],
+    answer: 2,
+    rationale: "Maintaining the honour and integrity of the profession requires that practitioners report serious misconduct to the appropriate tribunals. Silence in the face of misconduct itself becomes an ethical failure."
+  },
+  {
+    q: "Which of the following is included in the definition of \"professional misconduct\" under Ontario regulations?",
+    options: [
+      "Charging fees below the prevailing market rate",
+      "Failure to make reasonable provision for the safeguarding of life, health, or property of persons affected by the work",
+      "Declining to take on a particular engagement",
+      "Practising part-time"
+    ],
+    answer: 1,
+    rationale: "Failure to safeguard persons affected by the practitioner's work is expressly listed as professional misconduct, reflecting the paramountcy of public welfare in both the Code and the regulations."
+  },
+  {
+    q: "Undertaking engineering work that the practitioner is not competent to perform by virtue of training and experience is:",
+    options: [
+      "Permitted if the work is insured",
+      "Acceptable for academic or hobby purposes",
+      "An act of professional misconduct",
+      "Allowed with the employer's written approval"
+    ],
+    answer: 2,
+    rationale: "The regulation lists working outside one's competence as misconduct. Insurance does not cure the ethical breach, nor does employer authorisation override the practitioner's professional obligation to stay within their qualifications."
+  },
+  {
+    q: "If a non-technical authority overrules an engineer's professional judgement on a matter for which the engineer is technically responsible, the engineer must:",
+    options: [
+      "Resign immediately",
+      "Comply silently to preserve employment",
+      "Clearly present to the employer the consequences expected from the proposed deviation",
+      "Notify only the regulatory authority"
+    ],
+    answer: 2,
+    rationale: "The regulation requires the engineer to clearly inform the employer of the consequences of any deviation when the engineer's technical judgement is overridden. The duty is communicative — silent compliance is itself misconduct."
+  },
+  {
+    q: "Engaging in a course of vexatious comment or conduct that is unwelcome and could reasonably be regarded as interfering in a professional engineering relationship is defined in the regulations as:",
+    options: [
+      "Negligence",
+      "Conflict of interest",
+      "Harassment",
+      "Misrepresentation"
+    ],
+    answer: 2,
+    rationale: "The regulation defines harassment in terms tracking the broader human-rights formulation, and it is enumerated as professional misconduct. It applies in the engineering workplace and to interactions within professional relationships."
+  },
+  {
+    q: "An employer-engineer who contracts in their own name to perform engineering work for someone other than their employer must:",
+    options: [
+      "Resign from the employer before performing the outside work",
+      "Provide the client with a written statement describing employment status and inform the employer of the work",
+      "Use the employer's seal on the outside work",
+      "Notify only the regulator"
+    ],
+    answer: 1,
+    rationale: "The Code requires written disclosure of employment status to the client, satisfaction that the work will not conflict with employer duties, and notice to the employer. Transparency, not concealment, is the ethical baseline."
+  },
+  {
+    q: "Without prior disclosure, which of the following would constitute a conflict of interest under Ontario regulations?",
+    options: [
+      "Accepting compensation in any form for a particular service from more than one party",
+      "Sharing public-domain technical information at a conference",
+      "Teaching engineering as a side activity",
+      "Volunteering with a community organisation"
+    ],
+    answer: 0,
+    rationale: "Accepting compensation from more than one party for the same service — without disclosure — is among the enumerated conflict-of-interest situations. The remedy is prompt, voluntary, and complete disclosure to all interested parties."
+  },
+  {
+    q: "Why does the regulatory framework permit disciplinary sanctions for negligence even when no damages have resulted?",
+    options: [
+      "To generate fines for the Association",
+      "To allow the profession to maintain standards and protect the public interest independently of civil litigation",
+      "To replace the civil courts",
+      "To deter clients from suing"
+    ],
+    answer: 1,
+    rationale: "Self-regulation requires the profession to be able to act on substandard conduct before harm materialises. Discipline thus serves the public-protection mandate proactively, not merely after damage is done."
+  },
+
+  // ===== Chapter 33 — Intellectual Property =====
+  {
+    q: "Under the Patent Act, an \"invention\" is defined to include:",
+    options: [
+      "Any new commercial product idea",
+      "Any new and useful art, process, machine, manufacture, or composition of matter, or any new and useful improvement thereof",
+      "Any artistic or literary work",
+      "Any registered industrial design"
+    ],
+    answer: 1,
+    rationale: "The statutory definition is intentionally broad but precise: it requires both novelty and utility, applied to one of the enumerated categories (art, process, machine, manufacture, composition of matter) or to an improvement on one."
+  },
+  {
+    q: "To be patentable, an invention must be:",
+    options: [
+      "Aesthetically pleasing",
+      "Novel and useful (and non-obvious)",
+      "Originally conceived in Canada",
+      "Capable of mass production"
+    ],
+    answer: 1,
+    rationale: "The two foundational requirements are novelty and utility, and the invention must also be non-obvious to a skilled but uninventive person in the relevant field. Aesthetics belong to industrial designs, not patents."
+  },
+  {
+    q: "Canadian patent jurisprudence holds that an idea alone cannot be patented; the invention must:",
+    options: [
+      "Be designed by a registered engineer",
+      "Have physical existence or manifest a discernible effect or change",
+      "Be reduced to written form",
+      "Be commercially profitable"
+    ],
+    answer: 1,
+    rationale: "Per cases such as Permutit v. Borrowman, a mere idea is not patentable subject matter. There must be a definite and practical shape — something tangible or a discernible effect — before invention has occurred in the legal sense."
+  },
+  {
+    q: "The obviousness test for patentability is essentially:",
+    options: [
+      "Whether ordinary consumers would recognise the product",
+      "Whether a skilled but uninventive person in the field would, in light of the state of the art, have come directly and without difficulty to the solution taught by the patent",
+      "Whether actual inventors would have arrived at the solution",
+      "Whether the invention can be reproduced cheaply"
+    ],
+    answer: 1,
+    rationale: "The classical touchstone is the technician skilled in the art but devoid of inventiveness. If that person would have arrived directly at the solution from the prior art, the invention is obvious and not patentable."
+  },
+  {
+    q: "The term of a Canadian patent is generally:",
+    options: [
+      "10 years from grant",
+      "15 years from grant",
+      "20 years from the date of the patent application",
+      "The life of the inventor plus 50 years"
+    ],
+    answer: 2,
+    rationale: "Patent term runs 20 years from the application date — not the grant date — bringing Canada into line with international treaty obligations. After that period, the invention enters the public domain."
+  },
+  {
+    q: "For an assignment of a patent to be effective against later assignees who register, the assignment must be:",
+    options: [
+      "Filed with the Federal Court",
+      "In writing and registered with the patent office",
+      "Notarised by a lawyer",
+      "Published in a public registry"
+    ],
+    answer: 1,
+    rationale: "Patent assignments must be in writing, and registration at the patent office is what protects the assignee's priority against subsequent assignees who register. Without registration, the unregistered assignment is void against a later registered assignee."
+  },
+  {
+    q: "If a patent has been infringed, the patent owner generally has the option to:",
+    options: [
+      "Recover damages OR, alternatively, an accounting of the infringer's profits",
+      "Pursue criminal penalties only",
+      "Recover only legal costs",
+      "Have the infringer's business licence cancelled"
+    ],
+    answer: 0,
+    rationale: "After establishing infringement, the patentee typically elects between damages (the loss the patentee suffered) and an accounting of the infringer's profits. Injunctive relief is also available, and damages may include a reasonable royalty where lost sales cannot be proven."
+  },
+  {
+    q: "In the absence of an express agreement, an invention made by an employee using the employer's time, materials, and resources:",
+    options: [
+      "Always belongs to the employer",
+      "Generally does not become the property of the employer, unless the employee was employed for the express purpose of inventing or innovating",
+      "Belongs jointly to employer and employee by default",
+      "Belongs to the Crown"
+    ],
+    answer: 1,
+    rationale: "There is a common-law presumption of employee ownership. It is displaced only where (1) an express contract assigns rights to the employer, or (2) the employee was hired specifically to invent — applying their inventive faculties is part of what they are paid to do."
+  },
+  {
+    q: "In Comstock Canada v. Electec, the court set out factors for determining whether an employee's invention belongs to the employer absent express agreement. These factors include:",
+    options: [
+      "The employee's seniority alone",
+      "Whether the employee was hired for the express purpose of inventing, their prior inventions, whether the invention solved a problem the employee was instructed to address, and whether confidential information was involved",
+      "Industry custom only",
+      "The employee's age and education level"
+    ],
+    answer: 1,
+    rationale: "The court enumerated a multi-factor test: hiring purpose, prior inventive history, incentive plans, the employee's conduct after invention, whether the invention solved an assigned problem, channels of consultation, confidentiality of the work, and any limits on the employee using ideas they developed."
+  },
+  {
+    q: "For a trademark to be registrable, it must be:",
+    options: [
+      "Clearly descriptive of the wares' character",
+      "Primarily a surname of a living person",
+      "Distinctive — actually distinguishing the owner's wares or services from those of others, or adapted to do so",
+      "Identical with a registered mark in a different industry"
+    ],
+    answer: 2,
+    rationale: "Distinctiveness is the defining requirement. A trademark that fails to distinguish — or that becomes generic — loses its protection. Marks that are clearly descriptive, primarily surnames, or confusing with registered marks face specific bars to registration."
+  },
+  {
+    q: "Which of the following is an essential characteristic of a valid trademark?",
+    options: [
+      "Originality of artistic design",
+      "Distinctiveness",
+      "Length of continuous use",
+      "National advertising recognition"
+    ],
+    answer: 1,
+    rationale: "Distinctiveness — the capacity to distinguish one trader's wares or services from another's — is the heart of trademark law. A mark that ceases to be distinctive may have its registration expunged."
+  },
+  {
+    q: "Under the Trade-marks Act as historically framed, a trademark registration was effective for:",
+    options: [
+      "5 years",
+      "10 years",
+      "15 years, renewable for further 15-year terms",
+      "25 years"
+    ],
+    answer: 2,
+    rationale: "Historically, registrations ran for 15 years and were renewable for further 15-year periods. Subsequent amendments adopted in 2014 contemplated changing this to a 10-year renewal term once proclaimed."
+  },
+  {
+    q: "To succeed in a passing-off action involving an unregistered mark, the plaintiff must generally show:",
+    options: [
+      "That the mark was registered",
+      "That the mark is identified with the plaintiff's wares or services in the relevant marketplace, AND the defendant's use of the same or a similar mark is causing customers to deal with the defendant under the mistaken belief they are dealing with the plaintiff",
+      "That the defendant intentionally copied the mark",
+      "That the defendant's logo is identical"
+    ],
+    answer: 1,
+    rationale: "Passing off has three classic elements: existence of goodwill (the mark identifies the plaintiff), misrepresentation by the defendant causing confusion, and resulting (or likely) damage. It is more difficult and costly than enforcing a registered mark because reputation must be proven evidentially."
+  },
+  {
+    q: "Where a registered trademark is used by a licensee under the Trade-marks Act, the trademark owner must:",
+    options: [
+      "Personally approve every sale",
+      "Have direct or indirect control over the character or quality of the licensee's wares or services",
+      "Hold majority ownership in the licensee",
+      "Audit the licensee's books annually"
+    ],
+    answer: 1,
+    rationale: "The licence must give the owner direct or indirect quality control. Without such control, the mark's distinctiveness is undermined and the registration may be vulnerable to challenge. Notice of licence in packaging provides a deemed quality-control benefit."
+  },
+  {
+    q: "Copyright generally subsists in:",
+    options: [
+      "Industrial machinery and mechanical constructions",
+      "Original literary, dramatic, musical, and artistic works, as well as communication signals, sound recordings, and performers' performances",
+      "Trade names only",
+      "Methods of manufacture"
+    ],
+    answer: 1,
+    rationale: "Copyright protects original expression across the enumerated categories. It does not cover ideas alone, methods of manufacture, or mass-produced useful articles (where copies exceed 50 — those are the domain of industrial designs)."
+  },
+  {
+    q: "The general term of copyright in Canada, as described in the text, is:",
+    options: [
+      "10 years from creation",
+      "20 years from publication",
+      "The life of the author plus 50 years (subject to statutory exceptions)",
+      "The life of the author plus 100 years"
+    ],
+    answer: 2,
+    rationale: "The general rule is life of the author plus 50 years, with statutory exceptions for particular categories. (Note that legislative amendments may extend this in line with international treaty obligations.)"
+  },
+  {
+    q: "Which of the following accurately describes copyright registration in Canada?",
+    options: [
+      "It is required for copyright protection to exist",
+      "It is not required for protection, but may assist in obtaining damages for infringement and in protecting assignees and licensees",
+      "It must be renewed every five years",
+      "It is available only for published works"
+    ],
+    answer: 1,
+    rationale: "Copyright arises automatically on creation of a qualifying original work. Registration is optional but practically valuable: it can assist with damages and provides priority for registered assignments and licences against later registrants."
+  },
+  {
+    q: "Where an employee creates a copyrightable work in the course of employment under a contract of service, the first owner of copyright is generally:",
+    options: [
+      "The author personally",
+      "The employer, in the absence of an agreement to the contrary",
+      "The Crown",
+      "The author's estate"
+    ],
+    answer: 1,
+    rationale: "The Copyright Act's general rule for works made in the course of employment is that the employer is the first owner. This is subject to any agreement to the contrary, so engineers and their employers may negotiate alternative arrangements in writing."
+  },
+  {
+    q: "Moral rights in a copyrighted work:",
+    options: [
+      "Can be both assigned and waived",
+      "Can be waived but cannot be assigned",
+      "Cannot be either assigned or waived",
+      "Lapse automatically on first publication"
+    ],
+    answer: 1,
+    rationale: "Moral rights — including the right of attribution and the right to integrity of the work — may be waived in writing but cannot be assigned. They remain personal to the author even after copyright in the underlying work is transferred."
+  },
+  {
+    q: "Where an engineer prepares plans for a client, and absent any agreement otherwise, the client:",
+    options: [
+      "Owns the copyright in the plans",
+      "May not reproduce the plans or repeat the design in a new structure without the engineer's express or implied consent",
+      "Has unlimited rights to use and modify the plans",
+      "May freely assign the plans to third parties"
+    ],
+    answer: 1,
+    rationale: "Copyright in the plans generally remains with the engineer (or the engineering employer). The client receives an implied licence for the contracted project but cannot reuse the design elsewhere without permission. Well-drafted engagement letters address this expressly."
+  },
+  {
+    q: "An industrial design protects:",
+    options: [
+      "The mechanical construction of an article",
+      "The method of manufacture of an article",
+      "Features of shape, configuration, pattern, or ornament applied to a finished article that appeal to and are judged solely by the eye",
+      "The brand name applied to the article"
+    ],
+    answer: 2,
+    rationale: "Industrial design protects ornamental/aesthetic features visible to the eye, not function. Mechanical construction and methods of manufacture are functional and may instead be patentable, but they fall outside industrial design protection."
+  },
+  {
+    q: "The term of an industrial design registration is:",
+    options: [
+      "5 years",
+      "10 years from the date of registration",
+      "20 years",
+      "The life of the designer plus 50 years"
+    ],
+    answer: 1,
+    rationale: "Industrial designs are protected for a fixed 10-year term from registration. (Reforms in some jurisdictions and treaty obligations have prompted updates to design terms — practitioners should verify current limits.)"
+  },
+  {
+    q: "Trade secrets in Canada are protected primarily through:",
+    options: [
+      "A dedicated federal statute",
+      "Common-law actions such as breach of confidence, breach of express or implied contract, breach of fiduciary duty, and the tort of unlawful appropriation",
+      "Provincial trade-secret registries",
+      "International treaty registration"
+    ],
+    answer: 1,
+    rationale: "Unlike patents or trademarks, trade secrets are not the subject of a registration statute. Protection arises from contract, equitable duties of confidence, and tort law. The right continues as long as the secrecy is maintained — there is no term."
+  },
+  {
+    q: "To succeed in a misappropriation-of-trade-secrets claim, the rights holder generally must establish:",
+    options: [
+      "That the information is locked in a vault",
+      "Three elements: that the information qualifies as a trade secret, that it has been misused, and that it was imparted in circumstances importing an obligation of confidence",
+      "That the information is unique to one industry only",
+      "That the information has been confidential for more than ten years"
+    ],
+    answer: 1,
+    rationale: "Courts balance multiple factors — extent of internal/external knowledge, secrecy measures, value, effort expended, and ease of reverse engineering — but the three-part framework remains: qualifying information, misuse, and a circumstance of confidence. Even partly public information may qualify if assembled with skill and effort."
+  }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'nppe_ch32_33_quiz_v1';
+let state = {
+  mode: 'practice',
+  order: [],           // shuffled indices into QUESTION_BANK
+  currentIndex: 0,
+  answers: {},         // { questionIndex: selectedOption }
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  reviewMode: false
+};
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function fisherYates(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function clearState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+}
+
+/* ============================================================
+   FLOW
+   ============================================================ */
+function startQuiz(mode) {
+  state = {
+    mode: mode,
+    order: fisherYates([...Array(QUESTION_BANK.length).keys()]),
+    currentIndex: 0,
+    answers: {},
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    reviewMode: false
+  };
+  saveState();
+  showQuizScreen();
+}
+
+function resumeIfAvailable() {
+  const saved = loadState();
+  if (!saved || !saved.order || saved.order.length === 0) {
+    alert('No saved session found. Choose a mode to begin a fresh quiz.');
+    return;
+  }
+  state = saved;
+  showQuizScreen();
+}
+
+function showQuizScreen() {
+  document.getElementById('start-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  document.getElementById('mode-display').textContent = state.mode;
+  renderNavGrid();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const qIdx = state.order[state.currentIndex];
+  const q = QUESTION_BANK[qIdx];
+
+  document.getElementById('q-current').textContent = state.currentIndex + 1;
+  document.getElementById('q-number').textContent = `Question ${state.currentIndex + 1} of ${state.order.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('score-display').textContent = state.score;
+  document.getElementById('streak-display').textContent = state.streak;
+
+  const pct = ((state.currentIndex) / state.order.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  const userAnswer = state.answers[qIdx];
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+
+    if (userAnswer !== undefined) {
+      btn.classList.add('disabled');
+      if (state.mode === 'practice' || state.reviewMode) {
+        if (i === q.answer) btn.classList.add('correct');
+        else if (i === userAnswer) btn.classList.add('incorrect');
+      } else {
+        if (i === userAnswer) btn.classList.add('selected');
+      }
+    } else {
+      btn.onclick = () => selectAnswer(i);
+    }
+    optionsDiv.appendChild(btn);
+  });
+
+  const rationale = document.getElementById('rationale');
+  if (userAnswer !== undefined && (state.mode === 'practice' || state.reviewMode)) {
+    document.getElementById('rationale-text').textContent = q.rationale;
+    rationale.classList.add('show');
+  } else {
+    rationale.classList.remove('show');
+  }
+
+  document.getElementById('prev-btn').disabled = state.currentIndex === 0;
+  const nextBtn = document.getElementById('next-btn');
+  if (state.currentIndex === state.order.length - 1) {
+    nextBtn.textContent = state.reviewMode ? 'Back to Results' : 'Finish →';
+  } else {
+    nextBtn.textContent = 'Next →';
+  }
+  renderNavGrid();
+}
+
+function selectAnswer(optionIdx) {
+  const qIdx = state.order[state.currentIndex];
+  const q = QUESTION_BANK[qIdx];
+
+  if (state.answers[qIdx] !== undefined) return;
+
+  state.answers[qIdx] = optionIdx;
+  const isCorrect = optionIdx === q.answer;
+
+  if (isCorrect) {
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    const basePoints = 10;
+    const streakBonus = Math.min(state.streak - 1, 10) * 2;
+    const pointsEarned = basePoints + streakBonus;
+    state.score += pointsEarned;
+    triggerCelebration(pointsEarned);
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (state.currentIndex < state.order.length - 1) {
+    state.currentIndex += 1;
+    saveState();
+    renderQuestion();
+  } else {
+    if (state.reviewMode) {
+      showResults();
+    } else {
+      showResults();
+    }
+  }
+}
+
+function prevQuestion() {
+  if (state.currentIndex > 0) {
+    state.currentIndex -= 1;
+    saveState();
+    renderQuestion();
+  }
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  state.order.forEach((qIdx, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.textContent = i + 1;
+    if (i === state.currentIndex) cell.classList.add('current');
+    else if (state.answers[qIdx] !== undefined) {
+      if (state.mode === 'practice' || state.reviewMode) {
+        cell.classList.add(state.answers[qIdx] === QUESTION_BANK[qIdx].answer ? 'correct' : 'incorrect');
+      } else {
+        cell.classList.add('answered');
+      }
+    }
+    cell.onclick = () => {
+      state.currentIndex = i;
+      saveState();
+      renderQuestion();
+    };
+    grid.appendChild(cell);
+  });
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function confirmReset() {
+  document.getElementById('reset-modal').classList.add('show');
+}
+function closeResetModal() {
+  document.getElementById('reset-modal').classList.remove('show');
+}
+function resetQuiz() {
+  closeResetModal();
+  clearState();
+  state = { mode:'practice', order:[], currentIndex:0, answers:{}, score:0, streak:0, bestStreak:0, reviewMode:false };
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('start-screen').classList.add('active');
+}
+
+/* ============================================================
+   RESULTS
+   ============================================================ */
+function showResults() {
+  let correct = 0, incorrect = 0;
+  state.order.forEach(qIdx => {
+    if (state.answers[qIdx] === undefined) return;
+    if (state.answers[qIdx] === QUESTION_BANK[qIdx].answer) correct++;
+    else incorrect++;
+  });
+  const total = state.order.length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const passed = pct >= 65;
+
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  const bannerWrap = document.getElementById('pass-banner-wrap');
+  bannerWrap.innerHTML = `<div class="pass-banner ${passed ? 'passed' : 'failed'}">${passed ? '✓ Passed — Above 65% Threshold' : 'Below 65% Threshold'}</div>`;
+
+  document.getElementById('final-score').textContent = correct + ' / ' + total;
+  document.getElementById('final-pct').textContent = pct + '% correct';
+
+  let tier, feedback;
+  if (pct >= 90) {
+    tier = 'Exceptional Command'; 
+    feedback = 'You demonstrate mastery across regulatory ethics and intellectual property. Continue light review of edge cases before sitting the NPPE.';
+  } else if (pct >= 80) {
+    tier = 'Strong Performance';
+    feedback = 'A solid grasp of the core material. Revisit any sections involving conflict-of-interest scenarios and trade-secret elements for refinement.';
+  } else if (pct >= 65) {
+    tier = 'Passing — Keep Building';
+    feedback = 'You cleared the threshold but should spend more time on the Code of Ethics, professional-misconduct categories, and the distinctions between IP regimes.';
+  } else if (pct >= 50) {
+    tier = 'Below Threshold';
+    feedback = 'Significant review needed. Focus on the structure of the Code of Ethics, what constitutes professional misconduct, and the elements of patent/trademark/copyright/trade-secret protection.';
+  } else {
+    tier = 'Foundational Review Required';
+    feedback = 'Return to the source chapters and rebuild fundamentals before retesting. Concentrate on what each regulatory body does and how the four IP regimes differ in scope and duration.';
+  }
+  document.getElementById('results-tier').textContent = tier;
+  document.getElementById('results-feedback').textContent = feedback;
+
+  document.getElementById('rs-correct').textContent = correct;
+  document.getElementById('rs-incorrect').textContent = incorrect;
+  document.getElementById('rs-points').textContent = state.score;
+  document.getElementById('rs-streak').textContent = state.bestStreak;
+
+  if (passed) {
+    setTimeout(() => triggerFireworks(8), 400);
+  }
+}
+
+function reviewAnswers() {
+  state.reviewMode = true;
+  state.currentIndex = 0;
+  saveState();
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+/* ============================================================
+   CELEBRATION FX
+   ============================================================ */
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function triggerCelebration(points) {
+  spawnFloatingScore(points);
+  triggerFireworks(2);
+  if (state.streak >= 3) showStreakBadge();
+}
+
+function spawnFloatingScore(points) {
+  const popup = document.createElement('div');
+  popup.className = 'score-popup';
+  popup.textContent = `+${points}`;
+  const x = window.innerWidth / 2 + (Math.random() * 200 - 100);
+  const y = window.innerHeight / 2;
+  popup.style.left = x + 'px';
+  popup.style.top = y + 'px';
+  document.body.appendChild(popup);
+
+  let pos = 0;
+  const start = performance.now();
+  function animate(now) {
+    pos = (now - start) / 1100;
+    if (pos >= 1) { popup.remove(); return; }
+    popup.style.transform = `translateY(-${pos * 140}px) scale(${1 + pos * 0.4})`;
+    popup.style.opacity = 1 - pos;
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+}
+
+function showStreakBadge() {
+  const badge = document.getElementById('streak-badge');
+  badge.textContent = `🔥 ${state.streak}-Streak!`;
+  badge.classList.add('show');
+  clearTimeout(showStreakBadge.t);
+  showStreakBadge.t = setTimeout(() => badge.classList.remove('show'), 1800);
+}
+
+function triggerFireworks(bursts = 2) {
+  const colors = ['#d4af37','#f0c75e','#fff3b0','#5fb37a','#ffd700','#ff9d4d'];
+  for (let b = 0; b < bursts; b++) {
+    setTimeout(() => {
+      const cx = Math.random() * canvas.width * 0.7 + canvas.width * 0.15;
+      const cy = Math.random() * canvas.height * 0.45 + canvas.height * 0.15;
+      const count = 60 + Math.floor(Math.random() * 30);
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count;
+        const speed = 2 + Math.random() * 4;
+        particles.push({
+          x: cx, y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1.2,
+          life: 1,
+          decay: 0.012 + Math.random() * 0.012,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: 2 + Math.random() * 2,
+          shape: Math.random() > 0.7 ? 'star' : 'circle'
+        });
+      }
+    }, b * 220);
+  }
+  if (!animationRunning) animateParticles();
+}
+
+let animationRunning = false;
+function animateParticles() {
+  animationRunning = true;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05; // gravity
+    p.vx *= 0.99;
+    p.life -= p.decay;
+    if (p.life <= 0) return false;
+
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    if (p.shape === 'star') {
+      drawStar(p.x, p.y, p.size * 1.3);
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = p.color;
+    return true;
+  });
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+
+  if (particles.length > 0) {
+    requestAnimationFrame(animateParticles);
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    animationRunning = false;
+  }
+}
+
+function drawStar(cx, cy, r) {
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const a = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    const innerA = a + Math.PI / 5;
+    ctx.lineTo(cx + Math.cos(innerA) * r * 0.45, cy + Math.sin(innerA) * r * 0.45);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* ============================================================
+   AUTO-RESUME ON LOAD
+   ============================================================ */
+window.addEventListener('load', () => {
+  const saved = loadState();
+  if (saved && saved.order && saved.order.length > 0 && Object.keys(saved.answers || {}).length > 0) {
+    // session exists — leave the user on the start screen so they can choose
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPPE Practice Quiz — Chapters 30 &amp; 31 · Lien Legislation &amp; Competition Act</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a1a2e;
+  --navy-deep: #050d1a;
+  --navy-light: #142540;
+  --gold: #d4af37;
+  --gold-light: #f0d878;
+  --gold-dim: #8a7028;
+  --text: #e8e8e8;
+  --text-dim: #a8b0c0;
+  --correct: #4ade80;
+  --incorrect: #ef4444;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--navy-deep);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body {
+  background: radial-gradient(ellipse at top, var(--navy) 0%, var(--navy-deep) 70%);
+  background-attachment: fixed;
+}
+#canvas-fx {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+.container { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; position: relative; z-index: 1; }
+header { text-align: center; margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid rgba(212,175,55,0.2); }
+header h1 { font-family: var(--serif); font-weight: 600; font-size: 2.4rem; color: var(--gold); letter-spacing: 0.02em; line-height: 1.1; }
+header .sub { color: var(--text-dim); font-size: 0.95rem; margin-top: 8px; letter-spacing: 0.04em; }
+header .book { color: var(--gold-dim); font-size: 0.78rem; margin-top: 4px; font-style: italic; }
+
+.screen { display: none; }
+.screen.active { display: block; animation: fade 0.4s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Start screen */
+.start-card {
+  background: linear-gradient(180deg, rgba(20,37,64,0.6), rgba(10,26,46,0.4));
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 12px;
+  padding: 36px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.start-card h2 { font-family: var(--serif); font-size: 1.9rem; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.start-card .lede { color: var(--text-dim); margin-bottom: 22px; line-height: 1.7; font-size: 0.98rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 26px 0; }
+.stat-tile { background: rgba(10,26,46,0.6); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 18px 14px; }
+.stat-tile .num { font-family: var(--serif); font-size: 1.9rem; color: var(--gold); font-weight: 600; line-height: 1; }
+.stat-tile .lbl { font-size: 0.74rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
+.coverage { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 18px 0 4px; }
+.coverage-pill { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; color: var(--gold-light); }
+.mode-select { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.mode-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 16px 28px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 200px;
+  letter-spacing: 0.02em;
+}
+.mode-btn:hover { background: var(--gold); color: var(--navy-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.35); }
+.mode-btn .mode-desc { display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 6px; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; }
+.mode-btn:hover .mode-desc { color: var(--navy-deep); opacity: 0.75; }
+.resume-banner {
+  background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+  border: 1px solid rgba(212,175,55,0.4);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.resume-banner .icon { color: var(--gold); font-size: 1.3rem; }
+.resume-banner a { color: var(--gold); cursor: pointer; text-decoration: underline; font-weight: 500; }
+
+/* Quiz screen */
+.quiz-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  background: linear-gradient(180deg, rgba(20,37,64,0.7), rgba(10,26,46,0.5));
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.hud-item { display: flex; flex-direction: column; gap: 2px; min-width: 70px; }
+.hud-item .lbl { color: var(--text-dim); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.hud-item .val { color: var(--gold); font-family: var(--serif); font-weight: 600; font-size: 1.3rem; line-height: 1; }
+.hud-item .mode-val { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--sans); font-weight: 500; padding-top: 4px; }
+.streak-flame { color: #ff9d3a; }
+
+.progress-track { height: 6px; background: rgba(212,175,55,0.12); border-radius: 3px; overflow: hidden; margin-bottom: 26px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light)); transition: width 0.5s ease; box-shadow: 0 0 12px var(--gold); }
+
+.question-card {
+  background: linear-gradient(180deg, rgba(20,37,64,0.7), rgba(10,26,46,0.5));
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 22px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+}
+.q-num { color: var(--gold); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px; }
+.q-num .ch-tag { display: inline-block; background: rgba(212,175,55,0.12); padding: 3px 10px; border-radius: 4px; margin-left: 8px; color: var(--gold-light); font-size: 0.72rem; }
+.q-text { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; line-height: 1.5; color: var(--text); margin-bottom: 26px; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  background: rgba(10,26,46,0.7);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 8px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--text);
+  text-align: left;
+  font-family: var(--sans);
+  width: 100%;
+}
+.option:hover:not(.disabled) { background: rgba(20,37,64,0.95); border-color: var(--gold); transform: translateX(4px); }
+.option.selected { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+.option.correct { border-color: var(--correct); background: rgba(74,222,128,0.15); }
+.option.incorrect { border-color: var(--incorrect); background: rgba(239,68,68,0.15); }
+.option.disabled { cursor: default; }
+.option-letter {
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+  color: var(--gold);
+  font-size: 0.88rem;
+  font-family: var(--serif);
+}
+.option.correct .option-letter { background: var(--correct); color: var(--navy-deep); border-color: var(--correct); }
+.option.incorrect .option-letter { background: var(--incorrect); color: white; border-color: var(--incorrect); }
+.option-text { padding-top: 4px; }
+
+.rationale {
+  margin-top: 22px;
+  padding: 18px 20px;
+  background: rgba(212,175,55,0.08);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--text);
+  display: none;
+}
+.rationale.show { display: block; animation: fade 0.35s ease; }
+.rationale strong { color: var(--gold-light); }
+.rationale .rat-label { display: block; color: var(--gold); font-family: var(--serif); font-weight: 600; font-size: 1rem; margin-bottom: 6px; letter-spacing: 0.04em; }
+
+.quiz-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+.controls-mid { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+.btn:hover:not(:disabled) { background: var(--gold); color: var(--navy-deep); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn.primary { background: var(--gold); color: var(--navy-deep); font-weight: 600; }
+.btn.primary:hover:not(:disabled) { background: var(--gold-light); box-shadow: 0 4px 16px rgba(212,175,55,0.4); }
+.btn.danger { border-color: var(--incorrect); color: var(--incorrect); }
+.btn.danger:hover { background: var(--incorrect); color: white; }
+.btn.subtle { border-color: rgba(212,175,55,0.4); color: var(--text-dim); }
+.btn.subtle:hover { border-color: var(--gold); color: var(--gold); background: transparent; }
+
+.nav-grid-section { margin-top: 24px; padding: 22px; background: rgba(10,26,46,0.5); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; }
+.nav-grid-section h3 { font-family: var(--serif); color: var(--gold); font-size: 1.15rem; margin-bottom: 4px; font-weight: 500; }
+.nav-grid-section .nav-hint { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 14px; }
+.nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 6px; }
+.nav-cell {
+  aspect-ratio: 1;
+  background: rgba(10,26,46,0.7);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 4px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: var(--sans);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s ease;
+}
+.nav-cell:hover { border-color: var(--gold); transform: scale(1.08); color: var(--gold); }
+.nav-cell.current { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); font-weight: 700; box-shadow: 0 0 12px rgba(212,175,55,0.4); }
+.nav-cell.answered { background: rgba(74,222,128,0.18); border-color: var(--correct); color: var(--correct); }
+.nav-cell.answered-incorrect { background: rgba(239,68,68,0.15); border-color: var(--incorrect); color: var(--incorrect); }
+.nav-cell.answered-pending { background: rgba(212,175,55,0.18); border-color: var(--gold); color: var(--gold); }
+
+/* Results screen */
+.results-card {
+  background: linear-gradient(180deg, rgba(20,37,64,0.7), rgba(10,26,46,0.5));
+  border: 1px solid rgba(212,175,55,0.35);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+.score-display {
+  font-family: var(--serif);
+  font-size: 5.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dim));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 14px 0;
+  line-height: 1;
+  text-shadow: 0 4px 20px rgba(212,175,55,0.2);
+}
+.score-display .pct { font-size: 1.6rem; vertical-align: super; opacity: 0.7; }
+.tier-feedback { font-family: var(--serif); font-size: 1.55rem; color: var(--gold); margin: 14px 0 8px; font-weight: 500; }
+.tier-desc { color: var(--text-dim); margin-bottom: 24px; line-height: 1.65; max-width: 580px; margin-left: auto; margin-right: auto; }
+.pass-fail { display: inline-block; padding: 7px 18px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
+.pass-fail.pass { background: var(--correct); color: var(--navy-deep); box-shadow: 0 0 16px rgba(74,222,128,0.4); }
+.pass-fail.fail { background: var(--incorrect); color: white; }
+.results-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 28px 0; }
+.results-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+
+/* Floating popup */
+.floating-popup {
+  position: fixed;
+  pointer-events: none;
+  font-family: var(--serif);
+  font-weight: 600;
+  z-index: 200;
+  animation: floatUp 1.5s ease-out forwards;
+  white-space: nowrap;
+}
+@keyframes floatUp {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+  20% { opacity: 1; transform: translate(-50%, -25px) scale(1.25); }
+  100% { opacity: 0; transform: translate(-50%, -180px) scale(1); }
+}
+.popup-correct { color: var(--gold); text-shadow: 0 0 20px var(--gold); font-size: 2.2rem; }
+.popup-streak { color: var(--gold-light); text-shadow: 0 0 24px var(--gold); font-size: 1.8rem; }
+.popup-smile { font-size: 3rem; }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 300;
+  backdrop-filter: blur(6px);
+  padding: 20px;
+}
+.modal-backdrop.show { display: flex; animation: fade 0.2s ease; }
+.modal {
+  background: linear-gradient(180deg, var(--navy-light), var(--navy));
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.modal h3 { font-family: var(--serif); color: var(--gold); font-size: 1.5rem; margin-bottom: 12px; font-weight: 500; }
+.modal p { color: var(--text-dim); margin-bottom: 22px; line-height: 1.65; }
+.modal-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+footer { text-align: center; padding: 30px 20px 20px; color: var(--text-dim); font-size: 0.82rem; }
+footer .source { color: var(--gold-dim); margin-top: 6px; font-size: 0.76rem; }
+
+@media (max-width: 640px) {
+  header h1 { font-size: 1.7rem; }
+  .q-text { font-size: 1.12rem; }
+  .start-card, .question-card, .results-card { padding: 22px; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .stat-tile { padding: 12px 8px; }
+  .stat-tile .num { font-size: 1.4rem; }
+  .score-display { font-size: 3.8rem; }
+  .quiz-hud { padding: 12px 14px; gap: 10px; }
+  .hud-item .val { font-size: 1.1rem; }
+  .nav-grid { grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); }
+  .mode-btn { min-width: 100%; }
+  .option { padding: 14px; gap: 10px; font-size: 0.93rem; }
+  .option-letter { width: 26px; height: 26px; font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+<canvas id="canvas-fx"></canvas>
+
+<div class="container">
+<header>
+  <h1>NPPE Practice Quiz</h1>
+  <div class="sub">Chapters 30 &amp; 31 — Lien Legislation &amp; The Competition Act</div>
+  <div class="book">Concepts from <em>Law for Professional Engineers: Canadian and Global Insights</em></div>
+</header>
+
+<!-- ============= START SCREEN ============= -->
+<section id="screen-start" class="screen active">
+  <div id="resume-banner" class="resume-banner" style="display:none">
+    <span class="icon">⟳</span>
+    <span>A saved session was found. <a id="resume-link">Resume from question <span id="resume-q"></span></a>, or start fresh below.</span>
+  </div>
+  <div class="start-card">
+    <h2>Begin your practice session</h2>
+    <p class="lede">Fifty scenario-based multiple-choice questions covering Ontario's <em>Construction Act</em> (lien legislation) and the federal <em>Competition Act</em>. Pass threshold is sixty-five percent, the standard NPPE benchmark.</p>
+    <div class="coverage">
+      <span class="coverage-pill">Ch. 30 · 25 Questions · Lien Legislation</span>
+      <span class="coverage-pill">Ch. 31 · 25 Questions · Competition Act</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-tile"><div class="num">50</div><div class="lbl">Questions</div></div>
+      <div class="stat-tile"><div class="num">4</div><div class="lbl">Options each</div></div>
+      <div class="stat-tile"><div class="num">65%</div><div class="lbl">Pass mark</div></div>
+    </div>
+    <div class="mode-select">
+      <button class="mode-btn" onclick="startQuiz('practice')">Practice Mode<span class="mode-desc">Instant feedback &amp; rationale</span></button>
+      <button class="mode-btn" onclick="startQuiz('exam')">Exam Mode<span class="mode-desc">Score shown at the end</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============= QUIZ SCREEN ============= -->
+<section id="screen-quiz" class="screen">
+  <div class="quiz-hud">
+    <div class="hud-item">
+      <div class="lbl">Question</div>
+      <div class="val"><span id="hud-q">1</span><span style="color:var(--text-dim);font-size:0.85rem"> / 50</span></div>
+    </div>
+    <div class="hud-item">
+      <div class="lbl">Score</div>
+      <div class="val" id="hud-score">0</div>
+    </div>
+    <div class="hud-item">
+      <div class="lbl">Streak</div>
+      <div class="val"><span class="streak-flame" id="streak-icon" style="display:none">🔥</span> <span id="hud-streak">0</span></div>
+    </div>
+    <div class="hud-item">
+      <div class="lbl">Best</div>
+      <div class="val" id="hud-best">0</div>
+    </div>
+    <div class="hud-item">
+      <div class="lbl">Mode</div>
+      <div class="val mode-val" id="hud-mode">Practice</div>
+    </div>
+  </div>
+  <div class="progress-track"><div id="progress-fill" class="progress-fill" style="width:2%"></div></div>
+
+  <div class="question-card">
+    <div class="q-num" id="q-num">Question 1<span class="ch-tag">Ch. 30</span></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options-container"></div>
+    <div class="rationale" id="rationale"></div>
+  </div>
+
+  <div class="quiz-controls">
+    <button class="btn" id="btn-prev" onclick="prevQuestion()">← Previous</button>
+    <div class="controls-mid">
+      <button class="btn subtle" onclick="goToStart()">Home</button>
+      <button class="btn danger" onclick="confirmReset()">Reset Quiz</button>
+    </div>
+    <button class="btn primary" id="btn-next" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <div class="nav-grid-section">
+    <h3>Jump to a question</h3>
+    <div class="nav-hint">Color-coded by status. Click any cell to jump.</div>
+    <div class="nav-grid" id="nav-grid"></div>
+  </div>
+</section>
+
+<!-- ============= RESULTS SCREEN ============= -->
+<section id="screen-results" class="screen">
+  <div class="results-card">
+    <div id="pass-fail-badge" class="pass-fail"></div>
+    <div class="tier-feedback" id="tier-feedback"></div>
+    <div class="score-display"><span id="score-num">0</span><span class="pct">%</span></div>
+    <div class="tier-desc" id="tier-desc"></div>
+    <div class="results-stats">
+      <div class="stat-tile"><div class="num" id="r-correct">0</div><div class="lbl">Correct</div></div>
+      <div class="stat-tile"><div class="num" id="r-incorrect">0</div><div class="lbl">Incorrect</div></div>
+      <div class="stat-tile"><div class="num" id="r-points">0</div><div class="lbl">Points</div></div>
+      <div class="stat-tile"><div class="num" id="r-best-streak">0</div><div class="lbl">Best streak</div></div>
+    </div>
+    <div class="results-actions">
+      <button class="btn primary" onclick="reviewQuiz()">Review All Answers</button>
+      <button class="btn" onclick="restartQuiz()">Start New Session</button>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- Reset modal -->
+<div id="modal-reset" class="modal-backdrop">
+  <div class="modal">
+    <h3>Reset progress?</h3>
+    <p>This clears all your answers and starts a fresh shuffled session. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn subtle" onclick="closeModal()">Cancel</button>
+      <button class="btn danger" onclick="doReset()">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  NPPE practice questions — Lien legislation (Ontario Construction Act) &amp; Competition Act
+  <div class="source">Concepts based on standard NPPE study material · For exam-prep practice only · Not legal advice</div>
+</footer>
+
+<script>
+/* ============================================================
+   QUESTION BANK — 50 scenario-based questions
+   ============================================================ */
+const QUESTIONS = [
+  // ===== Chapter 30 — Lien Legislation (1–25) =====
+  { ch:30, q:"In what year did Ontario enact the substantial overhaul that renamed its lien statute?",
+    o:["2015","2016","2017","2018"], a:2,
+    r:"Ontario's lien legislation underwent a major modernization in <strong>2017</strong>, at which point the former statute was renamed the Construction Act. The modernizing changes took effect on July 1, 2018, while prompt-payment and statutory-adjudication provisions followed later." },
+
+  { ch:30, q:"What is the current name of Ontario's lien statute, following its 2017 renaming?",
+    o:["Construction Lien Act","Construction Act","Builders' Lien Act","Mechanics' Lien Act"], a:1,
+    r:"In 2017, Ontario renamed its statute the <strong>Construction Act</strong>, replacing the former Construction Lien Act. The new name reflects a broader scope, which now includes prompt-payment and statutory-adjudication provisions in addition to traditional lien rules." },
+
+  { ch:30, q:"On what date did the modernizing amendments to Ontario's Construction Act first take effect?",
+    o:["January 1, 2018","July 1, 2018","October 1, 2018","January 1, 2019"], a:1,
+    r:"The modernizing changes (revised definitions, holdback provisions, extended preservation and perfection periods, and similar updates) came into force on <strong>July 1, 2018</strong>. The prompt-payment and statutory-adjudication provisions were scheduled to follow on October 1, 2019." },
+
+  { ch:30, q:"Ontario's prompt-payment and statutory-adjudication framework was most directly inspired by legislation in which jurisdiction?",
+    o:["Australia","England","United States","Germany"], a:1,
+    r:"The Ontario approach is modeled on the <strong>English</strong> regime introduced in 1996, which required adjudicators to render binding interim decisions on construction payment disputes within a short timeframe. Australia, New Zealand, Singapore, and Malaysia later adopted similar regimes based on the English model." },
+
+  { ch:30, q:"Under England's statutory-adjudication scheme, an adjudicator is generally required to render a binding interim decision within approximately what period after referral?",
+    o:["Fourteen days","Twenty-one days","Twenty-eight days","Sixty days"], a:2,
+    r:"England's regime calls for an interim decision within about <strong>twenty-eight days</strong> of referral. Adjudicators need not be lawyers; quantity surveyors and others with industry experience routinely serve, and the speed of decision-making is the defining feature." },
+
+  { ch:30, q:"Which of the following countries has NOT adopted statutory-adjudication legislation patterned on the English model?",
+    o:["Australia","New Zealand","France","Singapore"], a:2,
+    r:"The English model has been followed in Australia, New Zealand, Singapore, and Malaysia. <strong>France</strong> is not among the jurisdictions that have adopted this approach. Ontario's 2017 reforms brought a comparable model to Canada." },
+
+  { ch:30, q:"In Alberta, British Columbia, and Manitoba, the construction-lien statute is generally known as the:",
+    o:["Mechanics' Lien Act","Construction Act","Builders' Lien Act","Property Lien Act"], a:2,
+    r:"These three provinces use the title <strong>Builders' Lien Act</strong>. Most other common-law provinces, along with Yukon, Nunavut, and the Northwest Territories, use the title Mechanics' Lien Act. Ontario, since 2017, uses the title Construction Act." },
+
+  { ch:30, q:"Under Ontario's Construction Act, what percentage of the price of services or materials supplied is retained as the statutory holdback?",
+    o:["Five percent","Seven and one-half percent","Ten percent","Fifteen percent"], a:2,
+    r:"Ontario imposes a <strong>ten-percent</strong> holdback on the price of services or materials supplied. This applies separately to the basic holdback (until substantial performance) and to the finishing holdback (for work after substantial performance)." },
+
+  { ch:30, q:"Ontario's Construction Act creates how many distinct categories of statutory holdback?",
+    o:["One","Two","Three","Four"], a:1,
+    r:"There are <strong>two</strong> separate holdbacks: a basic holdback covering work supplied up to substantial performance, and a finishing holdback covering work supplied after substantial performance. Each is set at ten percent and protects a different class of lien claimants." },
+
+  { ch:30, q:"For the purposes of substantial-performance certification under the Construction Act, what cost percentage applies to completion or correction of known defects on the first one million dollars of contract price?",
+    o:["One percent","Two percent","Three percent","Five percent"], a:2,
+    r:"The tiered threshold begins with <strong>three percent</strong> of the first one million dollars. It then drops to two percent of the next million and one percent of the balance. These tiers determine when a contract is treated as substantially performed for triggering holdback release and lien deadlines." },
+
+  { ch:30, q:"For the next one million dollars of contract price above the first one million, the applicable substantial-performance cost threshold is:",
+    o:["One percent","Two percent","Three percent","Five percent"], a:1,
+    r:"The middle tier of the substantial-performance test is <strong>two percent</strong> of the second million dollars of contract price. Together, the three–two–one tiered structure caps the dollar value of completion or correction work that may remain when a contract is deemed substantially performed." },
+
+  { ch:30, q:"For the balance of the contract price beyond two million dollars, what percentage threshold applies under the substantial-performance test?",
+    o:["One-half of one percent","One percent","Two percent","Three percent"], a:1,
+    r:"On the balance above two million dollars, the threshold drops to <strong>one percent</strong>. This sliding scale recognizes that on very large contracts even small percentages translate into significant absolute dollar amounts of remaining work." },
+
+  { ch:30, q:"A contract is deemed completed under Ontario's Construction Act when the cost of completion or correction is no more than the lesser of one percent of the contract price and what dollar amount?",
+    o:["One thousand dollars","Two thousand five hundred dollars","Five thousand dollars","Ten thousand dollars"], a:2,
+    r:"The completion threshold is the lesser of one percent of the contract price and <strong>five thousand dollars</strong>. This deemed-completion test is distinct from the tiered substantial-performance test and serves a different purpose under the lien scheme." },
+
+  { ch:30, q:"Compared with the former Construction Lien Act, Ontario's Construction Act extended the period for preservation of a lien claim from forty-five days to:",
+    o:["Fifty days","Sixty days","Seventy-five days","Ninety days"], a:1,
+    r:"The preservation window was extended to <strong>sixty days</strong>. Preservation is the formal step by which a claim is asserted; perfection (commencing an action and registering a certificate of action) is a separate, subsequent step." },
+
+  { ch:30, q:"The Construction Act also extended the period for perfection of a preserved lien from forty-five days to:",
+    o:["Sixty days","Seventy-five days","Ninety days","One hundred twenty days"], a:2,
+    r:"A preserved lien must be perfected within <strong>ninety days</strong> after the last day on which it could have been preserved. Perfection requires commencing an action and registering a certificate of action on title where the lien attaches to the land." },
+
+  { ch:30, q:"Under Ontario's Construction Act, an owner must release statutory holdback to the contractor unless a notice of setoff is given within how many days after substantial performance?",
+    o:["Twenty days","Thirty days","Forty days","Sixty days"], a:2,
+    r:"The Act made holdback release mandatory unless a setoff notice is delivered within <strong>forty days</strong> of substantial performance. This was a significant change designed to ensure prompter movement of money down the construction pyramid." },
+
+  { ch:30, q:"Annual or phased release of accrued holdback is generally available under the Construction Act where the contract completion schedule is greater than:",
+    o:["Six months","Nine months","One year","Eighteen months"], a:2,
+    r:"Where a contract is scheduled to extend beyond <strong>one year</strong>, the Act (Sections 26.1 and 26.2) permits holdback to be released on an annual or phased basis, subject to conditions. Legal advice is recommended before relying on these provisions." },
+
+  { ch:30, q:"Scenario: An engineer is retained to prepare detailed designs for a custom facility on a specific parcel in Ontario, but construction has not yet begun and the owner refuses to pay. Under the Construction Act, the engineer:",
+    o:["Has no lien rights, since no construction has occurred","May register a lien only if the engineer also supervised construction","Is entitled to a lien if the design services enhance the value of the land","Must instead pursue arbitration under standard contract documents"], a:2,
+    r:"Even before construction begins, a designer who supplies plans, drawings, or specifications that <strong>enhance the value of the land</strong> is entitled to a lien under the Construction Act. The 1975 Armbro case applied similar reasoning at common law before the Act was amended to recognize this expressly." },
+
+  { ch:30, q:"Under the Construction Act, any term in a contract that purports to waive lien rights is:",
+    o:["Enforceable if signed by both parties","Enforceable only if a lawyer countersigns","Enforceable only against subcontractors","Void"], a:3,
+    r:"Such waivers are <strong>void</strong>. The legislature regards lien rights as a non-negotiable statutory protection that an owner or upper-tier party cannot contract around. Parties cannot bargain away another party's statutory remedy through contract drafting." },
+
+  { ch:30, q:"A contractor registers a lien claim that is grossly inflated relative to the value of services actually supplied. Under the Construction Act, the contractor:",
+    o:["Is automatically barred from registering future liens","May be liable to anyone who suffers damage as a result of the frivolous or fictitious claim","Faces criminal prosecution under the conspiracy provisions","Is exempt from liability if the inflation was unintentional"], a:1,
+    r:"The Act limits a lien claim to the price of services and materials supplied before the claim is registered, and exposes any claimant who advances a <strong>frivolous or fictitious</strong> claim to liability for resulting damages. This deters exaggeration and abuse of the lien process." },
+
+  { ch:30, q:"Crown lands occupy a distinct position under the lien scheme in Ontario because they:",
+    o:["Are entirely exempt from any lien claim","Cannot be sold to satisfy a lien claim","Require a holdback at double the usual percentage","Are governed by federal lien legislation"], a:1,
+    r:"While liens may still operate, <strong>Crown lands cannot be sold</strong> to satisfy a lien claim. This reflects the principle that public lands are not ordinarily subject to forced sale at the suit of private creditors." },
+
+  { ch:30, q:"Trust-fund obligations comparable to those in Ontario's lien legislation are also found in the lien legislation of which group of provinces?",
+    o:["British Columbia, Saskatchewan, Manitoba, and New Brunswick","All four Atlantic provinces only","Alberta and British Columbia only","Quebec and Ontario only"], a:0,
+    r:"Statutory trust-fund provisions also appear in the lien legislation of <strong>British Columbia, Saskatchewan, Manitoba, and New Brunswick</strong>. These provisions impress money received by owners, contractors, and subcontractors with a trust for the benefit of those who supplied services or materials." },
+
+  { ch:30, q:"Scenario: A payment certifier (an engineer) has no reasonable doubt that the project is substantially performed but, due to a side dispute with the owner, delays signing the certificate for several weeks. Under the Construction Act, the engineer:",
+    o:["Is immune from liability because certification is discretionary","May be liable to anyone who suffers damage as a result of failing to certify within a reasonable time","Is liable only to the owner under the contract","Is subject only to regulator discipline, not civil liability"], a:1,
+    r:"Where there is no reasonable doubt that substantial performance has been achieved, a certifier who delays unreasonably <strong>may be liable to anyone who suffers damage</strong> as a result. Certification triggers downstream rights (holdback release, lien-preservation deadlines) that the certifier should not impede." },
+
+  { ch:30, q:"After issuing a certificate of substantial performance, a payment certifier must deliver the certificate to the owner and contractor within how many days, on pain of potential liability for resulting damages?",
+    o:["Three days","Five days","Seven days","Fourteen days"], a:2,
+    r:"Delivery must occur within <strong>seven days</strong>. Failure to deliver within that window exposes the certifier to liability for damages suffered by any party who relied on timely delivery. The deadline is short, and certifiers should treat it as operational, not aspirational." },
+
+  { ch:30, q:"In the 1975 Ontario decision involving subdivision engineering plans (sewers, water mains, roads), the engineer's lien was upheld primarily because:",
+    o:["The engineer had also supervised construction","Municipal approval had been obtained and the plans were inextricably tied to that parcel, enhancing land value","The engineer was also a registered land surveyor","The retainer agreement expressly granted lien rights"], a:1,
+    r:"The court distinguished the engineering plans from generic architectural drawings: because they were <strong>specific to the parcel and had received municipal approval</strong>, they ran with the land and meaningfully enhanced its value. That value enhancement is what justified the lien." },
+
+  // ===== Chapter 31 — Competition Act (26–50) =====
+  { ch:31, q:"The Competition Act of Canada is enacted at what level of government?",
+    o:["Municipal","Provincial","Federal","Joint federal-provincial"], a:2,
+    r:"The Competition Act is a <strong>federal</strong> statute. Its objectives include maintaining and encouraging competition in Canada, promoting the efficiency of the Canadian economy, and expanding opportunities for Canadian participation in world markets." },
+
+  { ch:31, q:"Which of the following best characterizes the Competition Act?",
+    o:["It contains only criminal provisions","It contains only civil reviewable-practices provisions","It contains both criminal offences and civil reviewable practices","It applies only to publicly traded corporations"], a:2,
+    r:"The Act has a <strong>dual structure</strong>: certain conduct (such as conspiracy, bid-rigging, and the most egregious misleading advertising) is criminalized, while other conduct (such as abuse of dominance and most misleading advertising) is subject to civil review before the Competition Tribunal." },
+
+  { ch:31, q:"Section 45 of the Competition Act addresses which category of anti-competitive conduct?",
+    o:["Bid-rigging","Conspiracy among competitors","Misleading advertising","Abuse of dominance"], a:1,
+    r:"Section 45 is the criminal <strong>conspiracy</strong> provision. It targets agreements among competitors to fix prices, allocate markets or customers, or restrict output. These are treated as inherently anti-competitive and require no proof of anti-competitive effect." },
+
+  { ch:31, q:"Under Section 45, an agreement among competitors to fix prices is criminal:",
+    o:["Only after the agreement has been implemented","Only if anti-competitive effects can be proven","Even if the agreement is never carried out and without proof of anti-competitive effects","Only if the parties together hold a dominant market position"], a:2,
+    r:"The conspiracy offence is committed on <strong>entering the agreement</strong>, regardless of whether it is performed or whether any harm to competition can be shown. This per-se treatment reflects the legislature's view that such agreements are categorically harmful." },
+
+  { ch:31, q:"What is the maximum statutory fine on conviction for a conspiracy offence under Section 45?",
+    o:["Five million dollars","Ten million dollars","Twenty-five million dollars","One hundred million dollars"], a:2,
+    r:"The maximum fine is <strong>twenty-five million dollars</strong>, accompanied by potential imprisonment of up to fourteen years. The severity of these sanctions reflects the criminalization of price-fixing and similar hard-core cartel conduct." },
+
+  { ch:31, q:"The maximum term of imprisonment for a Section 45 conspiracy offence is:",
+    o:["Five years","Ten years","Fourteen years","Twenty-five years"], a:2,
+    r:"Up to <strong>fourteen years</strong> imprisonment may be imposed. Individuals — not just corporations — can be charged and incarcerated, which is one reason competition-compliance programs typically emphasize personal exposure when training employees." },
+
+  { ch:31, q:"Which of the following is one of the statutory defences available to a Section 45 conspiracy charge?",
+    o:["The agreement was profitable for both parties","The agreement is ancillary to a broader non-anti-competitive arrangement and is reasonably necessary to give effect to that arrangement","The agreement is less than five years old","The parties are not currently in direct competition"], a:1,
+    r:"The <strong>ancillary-restraints defence</strong> may apply to clauses such as non-compete provisions in a purchase and sale agreement, or restrictions in a joint venture or strategic alliance. The other recognized defence is that the conduct was authorized by valid federal or provincial legislation." },
+
+  { ch:31, q:"Scenario: A Canadian subsidiary implements within Canada a price-fixing arrangement that its foreign parent negotiated abroad. The Canadian subsidiary itself did not participate in or know of the foreign negotiations. Under Section 46:",
+    o:["The subsidiary cannot be charged because the conspiracy occurred outside Canada","The subsidiary can be charged with implementing the foreign conspiracy even without prior knowledge or participation","Only the foreign parent can be charged","The Act applies only if the parties are publicly traded"], a:1,
+    r:"Section 46 criminalizes <strong>implementation in Canada</strong> of a conspiracy entered into abroad, even where the Canadian entity had no role in forming the foreign agreement. This provision extends the reach of Canadian competition law to cross-border cartel behaviour." },
+
+  { ch:31, q:"Agreements between competitors that fall outside Section 45 may still be reviewed civilly by the Commissioner of Competition under which provision?",
+    o:["Section 36","Section 47","Section 79","Section 90.1"], a:3,
+    r:"<strong>Section 90.1</strong> permits civil review of non-criminal competitor agreements where they are likely to prevent or lessen competition substantially. The Tribunal may issue remedial orders, including prohibiting implementation of the agreement." },
+
+  { ch:31, q:"Bid-rigging is addressed in which section of the Competition Act?",
+    o:["Section 36","Section 45","Section 47","Section 52"], a:2,
+    r:"<strong>Section 47</strong> targets bid-rigging, which includes agreements among bidders not to submit a bid, to coordinate the contents of bids, or to coordinate the withdrawal of a bid in response to a tender call." },
+
+  { ch:31, q:"Scenario: Two engineering firms agree that one will not submit a bid on a particular tender. They disclose the arrangement in writing to the tendering authority before either submits a bid. Under Section 47:",
+    o:["They have committed bid-rigging regardless of disclosure","No offence is committed because disclosure occurred before bid submission","They must obtain prior Competition Bureau approval","An offence is committed, but penalties may be reduced for disclosure"], a:1,
+    r:"Section 47 contains an important <strong>disclosure defence</strong>: where the agreement is brought to the attention of the person calling for bids before any bid is submitted, no offence is committed. This permits, for example, properly disclosed joint-venture bids." },
+
+  { ch:31, q:"The maximum prison term under Section 47 for bid-rigging is:",
+    o:["Five years","Ten years","Fourteen years","Twenty-five years"], a:2,
+    r:"Up to <strong>fourteen years</strong> imprisonment, accompanied by fines in the discretion of the court. Bid-rigging is treated as a serious indictable offence, on par with conspiracy under Section 45." },
+
+  { ch:31, q:"In line with Competition Bureau guidance, which of the following practices is recommended for trade and professional associations?",
+    o:["Sharing detailed, identifiable competitor price data at meetings","Aggregating competitively sensitive information through a neutral third party so that it cannot be attributed to any single participant","Using association discipline to compel competitors to share pricing","Setting product standards designed to exclude potential new entrants"], a:1,
+    r:"<strong>Aggregation through a neutral third party</strong> is the safe path for industry benchmarking. Direct exchange of granular competitor data, coercive membership rules, and exclusionary standard-setting are all flagged risks in the Bureau's guidance." },
+
+  { ch:31, q:"To establish abuse of a dominant position under Section 79, all of the following elements must be present EXCEPT:",
+    o:["The party possesses market power","A practice of anti-competitive acts has occurred or is occurring","The practice has had or is likely to have the effect of substantially preventing or lessening competition","The party has engaged in misleading advertising"], a:3,
+    r:"<strong>Misleading advertising</strong> is a separate offence, not an element of Section 79. Abuse of dominance requires market power, a practice of anti-competitive acts, and a substantial competitive effect — that three-part test must be satisfied." },
+
+  { ch:31, q:"Under Competition Bureau guidance, a market share at or below what level would generally NOT, in itself, prompt further examination for abuse of dominance?",
+    o:["Twenty-five percent or less","Thirty-five percent or less","Fifty percent or less","Sixty-five percent or less"], a:1,
+    r:"Market shares of <strong>thirty-five percent or less</strong> generally do not trigger further examination on their own. Shares between thirty-five and fifty percent are examined where conduct could enable share growth; shares above fifty percent generally invite scrutiny. Share alone is not determinative." },
+
+  { ch:31, q:"Which of the following is identified in the Competition Act as an example of an anti-competitive act under the abuse-of-dominance provisions?",
+    o:["A vertically integrated supplier squeezing the margin available to an unintegrated competitor downstream","Engaging legal counsel for contract negotiations","Paying employees competitive wages","Donating to industry associations"], a:0,
+    r:"<strong>Margin squeezing</strong> by a vertically integrated supplier is one of the enumerated examples. The list also includes pre-emptive acquisition of suppliers or customers, freight equalization, fighting brands, pre-emption of scarce resources, and below-cost selling to discipline competitors." },
+
+  { ch:31, q:"The mere exercise of an intellectual-property right to exclude a competitor is, under the Competition Act:",
+    o:["Automatically an anti-competitive act","Anti-competitive only if the IP holder has more than fifty percent market share","Not, by itself, an anti-competitive act","Reviewable only under the Patent Act"], a:2,
+    r:"Mere exercise of an IP right is <strong>not</strong> on its own anti-competitive. The legislature recognizes that an exclusive right is the very essence of a patent, copyright, or trademark. More than the bare exercise of the right is required to engage Section 79." },
+
+  { ch:31, q:"Under Section 79, the maximum administrative monetary penalty for a first contravention of the abuse-of-dominance provisions is:",
+    o:["One million dollars","Five million dollars","Ten million dollars","Fifteen million dollars"], a:2,
+    r:"Up to <strong>ten million dollars</strong> for a first contravention, increasing to fifteen million dollars for each subsequent contravention. The Tribunal can also order the conduct to stop and require restorative measures." },
+
+  { ch:31, q:"For subsequent contraventions of the abuse-of-dominance provisions, the administrative monetary penalty rises to a maximum of:",
+    o:["Five million dollars","Ten million dollars","Fifteen million dollars","Twenty-five million dollars"], a:2,
+    r:"Subsequent contraventions can attract penalties of up to <strong>fifteen million dollars</strong> each. The escalation is designed to deter repeat misconduct by firms that have already been found to abuse a dominant position." },
+
+  { ch:31, q:"Section 52 of the Competition Act criminalizes misleading advertising, but only where the misrepresentation is made:",
+    o:["In writing only","In a language other than the consumer's first language","Knowingly or recklessly","By a corporation rather than an individual"], a:2,
+    r:"The mental element under Section 52 is that the representation must be made <strong>knowingly or recklessly</strong>. Lesser fault levels are addressed civilly under Section 74.01. Both tracks are not pursued simultaneously for the same conduct." },
+
+  { ch:31, q:"The maximum term of imprisonment under the criminal misleading-advertising provision (Section 52) is:",
+    o:["Two years","Five years","Ten years","Fourteen years"], a:3,
+    r:"Up to <strong>fourteen years</strong>, with fines in the discretion of the court (very substantial fines have been imposed historically). Egregious cases are reserved for criminal prosecution; ordinary cases are handled under the civil track in Section 74.01." },
+
+  { ch:31, q:"Which provision of the Competition Act permits a person who has suffered loss as a result of a violation of the criminal provisions to recover damages from the offender?",
+    o:["Section 36","Section 47","Section 74.01","Section 90.1"], a:0,
+    r:"<strong>Section 36</strong> creates a private right of action for damages flowing from criminal contraventions of the Act, including Section 52. This is in addition to any public enforcement action by the Commissioner." },
+
+  { ch:31, q:"Scenario: A manufacturer advertises that its new device removes ninety-nine percent of contaminants from drinking water, but has not conducted any meaningful testing before publishing the claim. Which provision is most directly engaged?",
+    o:["Section 45 (Conspiracy)","Section 47 (Bid-rigging)","Section 74.01 (Civil misleading advertising)","Section 79 (Abuse of dominance)"], a:2,
+    r:"<strong>Section 74.01</strong> addresses performance representations that are not based on adequate and proper testing performed before the claim is made. The advertiser bears the burden of proving such testing — a key feature of this provision." },
+
+  { ch:31, q:"Under Section 74.01, where a performance or efficiency representation is made about a product, the burden of proving that adequate and proper testing was conducted before the representation rests with:",
+    o:["The Commissioner of Competition","The consumer complainant","The advertiser","The testing laboratory"], a:2,
+    r:"The <strong>advertiser</strong> must prove the testing was both adequate and conducted before the claim was published. Reversing the usual onus is deliberate: it gives consumers meaningful protection where they could not realistically test such claims themselves." },
+
+  { ch:31, q:"If the Competition Tribunal concludes that a corporation made a misleading representation in violation of Section 74.01, the maximum administrative monetary penalty against the corporation is:",
+    o:["One million dollars","Five million dollars","Ten million dollars","Fifteen million dollars"], a:3,
+    r:"Up to <strong>fifteen million dollars</strong> for a corporation (and up to one million dollars for an individual). The Tribunal may also order corrective notices, restitution, and prohibition of the conduct." }
+];
+
+/* ============================================================
+   STATE MANAGEMENT
+   ============================================================ */
+const STATE_KEY = 'nppe_ch30_31_quiz_v1';
+
+let state = {
+  mode: 'practice',
+  order: [],
+  pos: 0,
+  answers: {},
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  reviewing: false
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
+}
+function saveState() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch {}
+}
+function clearState() { try { localStorage.removeItem(STATE_KEY); } catch {} }
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  const saved = loadState();
+  if (saved && saved.order && saved.order.length === QUESTIONS.length && saved.pos < QUESTIONS.length) {
+    document.getElementById('resume-banner').style.display = 'flex';
+    document.getElementById('resume-q').textContent = saved.pos + 1;
+    document.getElementById('resume-link').onclick = () => {
+      state = saved;
+      goToQuiz();
+      renderQuestion();
+    };
+  }
+  setupCanvas();
+}
+
+function startQuiz(mode) {
+  state = {
+    mode,
+    order: shuffle([...Array(QUESTIONS.length).keys()]),
+    pos: 0,
+    answers: {},
+    points: 0,
+    streak: 0,
+    bestStreak: 0,
+    reviewing: false
+  };
+  saveState();
+  goToQuiz();
+  renderQuestion();
+}
+
+function goToQuiz() {
+  showScreen('screen-quiz');
+  document.getElementById('hud-mode').textContent = state.mode;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function currentQIndex() { return state.order[state.pos]; }
+
+/* ============================================================
+   QUESTION RENDERING
+   ============================================================ */
+function renderQuestion() {
+  const qi = currentQIndex();
+  const q = QUESTIONS[qi];
+  document.getElementById('q-num').innerHTML = `Question ${state.pos + 1} of ${QUESTIONS.length}<span class="ch-tag">Ch. ${q.ch}</span>`;
+  document.getElementById('q-text').innerHTML = q.q;
+  document.getElementById('hud-q').textContent = state.pos + 1;
+  document.getElementById('hud-score').textContent = state.points;
+  document.getElementById('hud-streak').textContent = state.streak;
+  document.getElementById('hud-best').textContent = state.bestStreak;
+  document.getElementById('streak-icon').style.display = state.streak >= 2 ? 'inline' : 'none';
+  document.getElementById('progress-fill').style.width = ((state.pos + 1) / QUESTIONS.length * 100) + '%';
+
+  const cont = document.getElementById('options-container');
+  cont.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  const selected = state.answers[qi];
+  const answered = selected !== undefined;
+  const showFeedback = answered && (state.mode === 'practice' || state.reviewing);
+
+  q.o.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.type = 'button';
+    btn.innerHTML = `<div class="option-letter">${letters[idx]}</div><div class="option-text">${opt}</div>`;
+    if (answered) {
+      btn.classList.add('disabled');
+      if (showFeedback) {
+        if (idx === q.a) btn.classList.add('correct');
+        else if (idx === selected) btn.classList.add('incorrect');
+      } else {
+        if (idx === selected) btn.classList.add('selected');
+      }
+    } else {
+      btn.addEventListener('click', () => selectOption(idx));
+    }
+    cont.appendChild(btn);
+  });
+
+  const rat = document.getElementById('rationale');
+  if (showFeedback) {
+    rat.innerHTML = `<span class="rat-label">Rationale</span>${q.r}`;
+    rat.classList.add('show');
+  } else {
+    rat.classList.remove('show');
+    rat.innerHTML = '';
+  }
+
+  document.getElementById('btn-prev').disabled = state.pos === 0;
+  const btnNext = document.getElementById('btn-next');
+  if (state.pos === QUESTIONS.length - 1) btnNext.textContent = state.reviewing ? 'Back to Results' : 'Finish ✓';
+  else btnNext.textContent = 'Next →';
+
+  renderNavGrid();
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const cell = document.createElement('button');
+    cell.className = 'nav-cell';
+    cell.type = 'button';
+    cell.textContent = i + 1;
+    const qi = state.order[i];
+    const ans = state.answers[qi];
+    if (i === state.pos) cell.classList.add('current');
+    else if (ans !== undefined) {
+      if (state.mode === 'practice' || state.reviewing) {
+        cell.classList.add(ans === QUESTIONS[qi].a ? 'answered' : 'answered-incorrect');
+      } else {
+        cell.classList.add('answered-pending');
+      }
+    }
+    cell.addEventListener('click', () => { state.pos = i; saveState(); renderQuestion(); });
+    grid.appendChild(cell);
+  }
+}
+
+function selectOption(idx) {
+  const qi = currentQIndex();
+  if (state.answers[qi] !== undefined) return;
+  const q = QUESTIONS[qi];
+  state.answers[qi] = idx;
+  const isCorrect = idx === q.a;
+
+  if (isCorrect) {
+    const base = 100;
+    const streakBonus = state.streak * 25;
+    const earned = base + streakBonus;
+    state.points += earned;
+    state.streak += 1;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    celebrate(earned);
+  } else {
+    state.streak = 0;
+  }
+
+  saveState();
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (state.pos < QUESTIONS.length - 1) {
+    state.pos++;
+    saveState();
+    renderQuestion();
+  } else {
+    if (state.reviewing) {
+      showResults(true);
+    } else {
+      finishQuiz();
+    }
+  }
+}
+
+function prevQuestion() {
+  if (state.pos > 0) {
+    state.pos--;
+    saveState();
+    renderQuestion();
+  }
+}
+
+function finishQuiz() {
+  showResults(false);
+}
+
+function showResults(skipFinale) {
+  let correct = 0;
+  Object.keys(state.answers).forEach(qi => {
+    if (state.answers[qi] === QUESTIONS[qi].a) correct++;
+  });
+  const pct = Math.round((correct / QUESTIONS.length) * 100);
+
+  document.getElementById('score-num').textContent = pct;
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-incorrect').textContent = QUESTIONS.length - correct;
+  document.getElementById('r-points').textContent = state.points;
+  document.getElementById('r-best-streak').textContent = state.bestStreak;
+
+  const passBadge = document.getElementById('pass-fail-badge');
+  if (pct >= 65) {
+    passBadge.textContent = 'Pass';
+    passBadge.className = 'pass-fail pass';
+  } else {
+    passBadge.textContent = 'Below Pass Threshold';
+    passBadge.className = 'pass-fail fail';
+  }
+
+  const tier = getTier(pct);
+  document.getElementById('tier-feedback').textContent = tier.title;
+  document.getElementById('tier-desc').textContent = tier.desc;
+
+  showScreen('screen-results');
+  state.reviewing = false;
+
+  if (!skipFinale && pct >= 65) {
+    setTimeout(() => grandFinale(), 250);
+  }
+}
+
+function getTier(pct) {
+  if (pct >= 90) return { title: 'Exceptional Performance', desc: 'You have demonstrated mastery of both the construction-lien framework and the Competition Act. You are very well prepared for these topics on the NPPE.' };
+  if (pct >= 80) return { title: 'Strong Performance', desc: 'A solid command of both chapters. Review the questions you missed; you are comfortably above the NPPE pass mark.' };
+  if (pct >= 65) return { title: 'Passing — NPPE Threshold Met', desc: 'You met the standard NPPE benchmark. Revisit incorrect answers, especially around statutory time periods and dollar thresholds, to consolidate your knowledge.' };
+  if (pct >= 50) return { title: 'Below Pass — Approaching Competency', desc: 'You are close to the pass mark. Focus your revision on the specific provisions and percentages used in the questions you missed.' };
+  return { title: 'Significant Review Recommended', desc: 'Work through the chapter material again, paying close attention to statutory thresholds, section numbers, and definitions, then retry the quiz.' };
+}
+
+function reviewQuiz() {
+  state.reviewing = true;
+  state.pos = 0;
+  saveState();
+  goToQuiz();
+  renderQuestion();
+}
+
+function restartQuiz() {
+  clearState();
+  showScreen('screen-start');
+  document.getElementById('resume-banner').style.display = 'none';
+}
+
+function goToStart() {
+  showScreen('screen-start');
+}
+
+function confirmReset() { document.getElementById('modal-reset').classList.add('show'); }
+function closeModal() { document.getElementById('modal-reset').classList.remove('show'); }
+function doReset() {
+  closeModal();
+  clearState();
+  showScreen('screen-start');
+  document.getElementById('resume-banner').style.display = 'none';
+}
+
+/* ============================================================
+   CELEBRATIONS — canvas particle effects
+   ============================================================ */
+let canvas, ctx, particles = [];
+
+function setupCanvas() {
+  canvas = document.getElementById('canvas-fx');
+  ctx = canvas.getContext('2d');
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(animate);
+}
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => {
+    p.update();
+    p.draw();
+    return p.life > 0;
+  });
+  requestAnimationFrame(animate);
+}
+
+class Particle {
+  constructor(x, y, opts = {}) {
+    this.x = x; this.y = y;
+    const angle = opts.angle ?? Math.random() * Math.PI * 2;
+    const speed = opts.speed ?? (2 + Math.random() * 6);
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.gravity = opts.gravity ?? 0.12;
+    this.life = opts.life ?? 60;
+    this.maxLife = this.life;
+    this.size = opts.size ?? (2 + Math.random() * 3);
+    this.color = opts.color ?? '#d4af37';
+    this.shape = opts.shape ?? 'circle';
+    this.rotation = Math.random() * Math.PI * 2;
+    this.spin = (Math.random() - 0.5) * 0.2;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.vx *= 0.99;
+    this.rotation += this.spin;
+    this.life--;
+  }
+  draw() {
+    const alpha = Math.min(1, this.life / this.maxLife);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = this.color;
+    if (this.shape === 'star') {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      drawStarPath(0, 0, this.size * 1.6, this.size * 0.7, 5);
+      ctx.fill();
+      ctx.restore();
+    } else if (this.shape === 'rect') {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillRect(-this.size, -this.size / 2, this.size * 2, this.size);
+      ctx.restore();
+    } else {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+function drawStarPath(cx, cy, outerR, innerR, points) {
+  ctx.beginPath();
+  let rot = -Math.PI / 2;
+  const step = Math.PI / points;
+  ctx.moveTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+  for (let i = 0; i < points; i++) {
+    rot += step;
+    ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+    rot += step;
+    ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+  }
+  ctx.closePath();
+}
+
+function celebrate(points) {
+  // Rotate through celebration styles for variety
+  const styles = ['fireworks', 'goldenShower', 'starBurst', 'confetti', 'happyFace'];
+  const choice = styles[Math.floor(Math.random() * styles.length)];
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2 - 50;
+
+  if (choice === 'fireworks') fireworks(cx, cy);
+  else if (choice === 'goldenShower') goldenShower();
+  else if (choice === 'starBurst') starBurst(cx, cy);
+  else if (choice === 'confetti') confetti();
+  else if (choice === 'happyFace') happyFacePop();
+
+  pointsPopup(points);
+
+  // Streak milestones
+  if (state.streak > 0 && state.streak % 5 === 0) {
+    setTimeout(() => streakPopup(state.streak), 250);
+  }
+}
+
+function fireworks(cx, cy) {
+  const colors = ['#d4af37', '#f0d878', '#ffd700', '#ffed85', '#fff4b0'];
+  for (let burst = 0; burst < 3; burst++) {
+    setTimeout(() => {
+      const x = cx + (Math.random() - 0.5) * canvas.width * 0.6;
+      const y = cy + (Math.random() - 0.5) * canvas.height * 0.4;
+      for (let i = 0; i < 60; i++) {
+        const angle = (i / 60) * Math.PI * 2 + Math.random() * 0.2;
+        particles.push(new Particle(x, y, {
+          angle,
+          speed: 3 + Math.random() * 5,
+          life: 50 + Math.random() * 30,
+          size: 2 + Math.random() * 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          gravity: 0.08
+        }));
+      }
+    }, burst * 220);
+  }
+}
+
+function goldenShower() {
+  const colors = ['#d4af37', '#f0d878', '#ffd700', '#fff4b0', '#ffed85'];
+  for (let i = 0; i < 140; i++) {
+    setTimeout(() => {
+      particles.push(new Particle(Math.random() * canvas.width, -10, {
+        angle: Math.PI / 2 + (Math.random() - 0.5) * 0.4,
+        speed: 4 + Math.random() * 4,
+        life: 100 + Math.random() * 40,
+        size: 2 + Math.random() * 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        gravity: 0.18
+      }));
+    }, i * 8);
+  }
+}
+
+function starBurst(cx, cy) {
+  const colors = ['#d4af37', '#f0d878', '#ffd700'];
+  for (let i = 0; i < 36; i++) {
+    const angle = (i / 36) * Math.PI * 2;
+    particles.push(new Particle(cx, cy, {
+      angle,
+      speed: 3 + Math.random() * 4,
+      life: 70 + Math.random() * 30,
+      size: 4 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: 'star',
+      gravity: 0.06
+    }));
+  }
+}
+
+function confetti() {
+  const colors = ['#d4af37', '#f0d878', '#4ade80', '#60a5fa', '#f472b6', '#fff4b0'];
+  for (let i = 0; i < 100; i++) {
+    particles.push(new Particle(canvas.width / 2 + (Math.random() - 0.5) * 220, 80, {
+      angle: -Math.PI / 2 + (Math.random() - 0.5) * Math.PI,
+      speed: 4 + Math.random() * 6,
+      life: 90 + Math.random() * 40,
+      size: 3 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: 'rect',
+      gravity: 0.15
+    }));
+  }
+}
+
+function happyFacePop() {
+  // emoji popup + supporting sparkle
+  const emoji = ['😊', '🎉', '⭐', '✨', '👏'][Math.floor(Math.random() * 5)];
+  const popup = document.createElement('div');
+  popup.className = 'floating-popup popup-smile';
+  popup.textContent = emoji;
+  popup.style.left = (40 + Math.random() * 20) + '%';
+  popup.style.top = '40%';
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1500);
+  // a small spray of gold
+  for (let i = 0; i < 24; i++) {
+    particles.push(new Particle(canvas.width / 2, canvas.height / 2, {
+      angle: Math.random() * Math.PI * 2,
+      speed: 2 + Math.random() * 3,
+      life: 50,
+      size: 2 + Math.random() * 2,
+      color: '#d4af37',
+      gravity: 0.05
+    }));
+  }
+}
+
+function grandFinale() {
+  // Six bursts across the screen, then a golden shower
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height * 0.6;
+      fireworks(x, y);
+    }, i * 400);
+  }
+  setTimeout(goldenShower, 800);
+  setTimeout(() => starBurst(canvas.width / 2, canvas.height / 2), 1600);
+}
+
+function pointsPopup(pts) {
+  const popup = document.createElement('div');
+  popup.className = 'floating-popup popup-correct';
+  popup.textContent = `+${pts}`;
+  popup.style.left = '50%';
+  popup.style.top = '38%';
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1500);
+}
+
+function streakPopup(streak) {
+  const popup = document.createElement('div');
+  popup.className = 'floating-popup popup-streak';
+  popup.innerHTML = `🔥 ${streak} streak!`;
+  popup.style.left = '50%';
+  popup.style.top = '30%';
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1500);
+}
+
+/* Boot */
+init();
+</script>
+</body>
+</html>
