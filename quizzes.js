@@ -86,7 +86,17 @@ window.QUIZZES_DATA = {
         { num: 6,  title: "Proof & Contracts",                       file: "book2/chapter6.html",  questions: 25 },
         { num: 8,  title: "Offer, Intent, Consideration & Capacity", file: "book2/chapter8.html",  questions: 52 },
         { num: 12,  title: "Contract Law for the Engineer",          file: "book2/chapter12.html",  questions: 50 },
-        { num: 16,  title: "Tendering Issues — Contract A",          file: "book2/chapter16.html",  questions: 50 }
+        { num: 16,  title: "Tendering Issues — Contract A",          file: "book2/chapter16.html",  questions: 50 },
+        { num: 17,  title: "Interpretation, Discharge, Breach",      file: "book2/chapter17.html",  questions: 50 },
+        { num: 20,  title: "Liability and Agreements",               file: "book2/chapter20.html",  questions: 50 },
+        { num: 24,  title: "Construction Contracts",                 file: "book2/chapter24.html",  questions: 50 },
+        { num: 25,  title: "Risks in Construction",                  file: "book2/chapter25.html",  questions: 50 },
+        { num: 26,  title: "Bonds, Subsurface Risk, Arbitration & A D R", file: "book2/chapter26.html",  questions: 50 },
+        { num: 30,  title: "Lien Legislation & The Competition Act", file: "book2/chapter30.html",  questions: 50 },
+        { num: 32,  title: "Regulatory Ethics & Intellectual Property", file: "book2/chapter32.html",  questions: 50 },
+        { num: 34,  title: "The Law of Quebec",                      file: "book2/chapter34.html",  questions: 50 },
+        { num: 35,  title: "Laws Relating to Employment",            file: "book2/chapter35.html",  questions: 50 }
+        
         // EXAMPLE — when ready, add chapters like this:
         // { num: 1, title: "Introduction to Engineering Law", file: "book2/chapter1.html", questions: 50 }
       ]
